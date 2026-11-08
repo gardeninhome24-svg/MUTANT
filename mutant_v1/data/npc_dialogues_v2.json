@@ -1,0 +1,129 @@
+{
+  "status": "SCRIPTED_NO_PAID_AI",
+  "lead_cast": [
+    {
+      "id": "Mara",
+      "name": "Mara",
+      "role": "Dowódczyni",
+      "personality": "stanowcza, oszczędna w słowach",
+      "animations": [
+        "idle",
+        "talk",
+        "gesture",
+        "turn_to_player"
+      ],
+      "implementation_status": "ASSETS_MISSING"
+    },
+    {
+      "id": "Iwo",
+      "name": "Iwo",
+      "role": "Inżynier",
+      "personality": "dociekliwy, techniczny",
+      "animations": [
+        "idle",
+        "talk",
+        "gesture",
+        "turn_to_player"
+      ],
+      "implementation_status": "ASSETS_MISSING"
+    },
+    {
+      "id": "Nina",
+      "name": "Nina",
+      "role": "Medyk",
+      "personality": "empatyczna, odpowiedzialna",
+      "animations": [
+        "idle",
+        "talk",
+        "gesture",
+        "turn_to_player"
+      ],
+      "implementation_status": "ASSETS_MISSING"
+    },
+    {
+      "id": "Kira",
+      "name": "Kira",
+      "role": "Zwiadowczyni",
+      "personality": "ironiczna, czujna",
+      "animations": [
+        "idle",
+        "talk",
+        "gesture",
+        "turn_to_player"
+      ],
+      "implementation_status": "ASSETS_MISSING"
+    }
+  ],
+  "dialogue_lines": [
+    {
+      "stage": 10,
+      "speaker": "Mara",
+      "intro": "Mara: Dotarliśmy do źródła zagrożenia. Matka Roju już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Mara: Operacja 010 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 20,
+      "speaker": "Iwo",
+      "intro": "Iwo: Dotarliśmy do źródła zagrożenia. Nadzorca Skażenia już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Iwo: Operacja 020 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 30,
+      "speaker": "Nina",
+      "intro": "Nina: Dotarliśmy do źródła zagrożenia. Król Kriostazy już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Nina: Operacja 030 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Nina: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 40,
+      "speaker": "Kira",
+      "intro": "Kira: Dotarliśmy do źródła zagrożenia. Doktor Szron już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Kira: Operacja 040 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Kira: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 50,
+      "speaker": "Iwo",
+      "intro": "Iwo: Dotarliśmy do źródła zagrożenia. Lewiatan Kwaśny już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Iwo: Operacja 050 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 60,
+      "speaker": "Nina",
+      "intro": "Nina: Dotarliśmy do źródła zagrożenia. Serce Zarazy już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Nina: Operacja 060 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Nina: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 70,
+      "speaker": "Mara",
+      "intro": "Mara: Dotarliśmy do źródła zagrożenia. Król Martwego Miasta już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Mara: Operacja 070 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 80,
+      "speaker": "Kira",
+      "intro": "Kira: Dotarliśmy do źródła zagrożenia. Egzekutor Omega już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Kira: Operacja 080 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Kira: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 90,
+      "speaker": "Iwo",
+      "intro": "Iwo: Dotarliśmy do źródła zagrożenia. Strażnik Rdzenia już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Iwo: Operacja 090 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    },
+    {
+      "stage": 100,
+      "speaker": "Mara",
+      "intro": "Mara: Dotarliśmy do źródła zagrożenia. Architekt Zero już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS.",
+      "progress": "Mara: Operacja 100 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki.",
+      "complete": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+    }
+  ]
+}

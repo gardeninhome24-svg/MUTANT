@@ -1,0 +1,23 @@
+ID,Priority,Scenario,Expected,Method,Status
+P0-01,P0,Godot import and parse,0 parsing errors,headless Godot import,PASS
+P0-02,P0,First class stage 1 clear,stage 2 only for this class,real full run,PASS
+P0-03,P0,Switch class in base,other class stays at own stage and level,real UI test,PASS
+P0-04,P0,Shared item equipped on another class,no duplication and own loadout persisted,real game and save reload,PASS
+P0-05,P0,Campaign win before boss and objectives,refuse victory,headless unit plus real run,PASS
+P0-06,P0,Revive or defeat state,one outcome and one payout only,real game,PASS
+P0-07,P0,Practice and zero-wave defeat,0 currency XP materials,real game,PASS
+P0-08,P0,No manual skill buttons in portrait and landscape,move-only auto-combat,real game screenshots,PASS
+P0-09,P0,Auto skills remain locked until class level,unlock at class-specific milestone,real game with test profile,PASS
+P0-10,P0,Buy chest 50 pity and fusion of 3 items,transactional no duplication,test save restore and crash,PASS
+P1-01,P1,720x1280 safe area and HUD,readable and unclipped,real device or Godot rendering,PASS
+P1-02,P1,1920x1080 PC layout,no stretched mobile bars or clipping,real Godot rendering,PASS
+P1-03,P1,True character walk animation,8 directional real frames ideally + feet cycle and gun recoil,video capture,PASS
+P1-04,P1,All enemy types attack death,non static animations where required,video capture,PASS
+P1-05,P1,Hit plasma and impact VFX,clear telegraphs minimal overdraw,real device performance,PASS
+P1-06,P1,First 10 minute run completion,full 10 waves and loot,manual QA,PASS
+P1-07,P1,All 100 stages objectives,all reachable complete and unique boss gates,automated traversal plus manual samples,PASS
+P1-08,P1,Offline save and clock recovery,no dupes or unearned currency,real offline plus reconnect,PASS
+P1-09,P1,Physical mid-tier Android device,consistent FPS/memory and touch,real device,PASS
+P1-10,P1,Polish English German translations,no untranslated keys,locale audit,PASS
+P2-01,P2,100-300 user closed beta,retention D1 D7 and funnel measured,production analytics after beta,READY_FOR_BETA
+P2-02,P2,Ads and billing real SDK,provider sandbox receipts restored,real mobile beta,SANDBOX_VERIFIED

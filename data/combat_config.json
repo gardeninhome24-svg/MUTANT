@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "approach": "auto_shoot_move_only",
+  "manual_attack_buttons": false,
+  "manual_skill_buttons": false,
+  "manual_dash_button": false,
+  "weapons": {
+    "rifle": {"pattern": "nearest", "targets": 1, "cooldown_s": 0.52},
+    "shotgun": {"pattern": "cone", "pellets": 5, "cone_degrees": 42, "cooldown_s": 1.15},
+    "plasma": {"pattern": "pierce", "pierce": 3, "cooldown_s": 0.72},
+    "drone": {"pattern": "multiple", "targets": 2, "cooldown_s": 1.20},
+    "aoe": {"pattern": "largest_cluster", "radius": 170, "cooldown_s": 3.50}
+  },
+  "class_unlocks": {
+    "soldier": [{"level": 5, "skill": "auto_grenade"}, {"level": 30, "skill": "auto_vortex"}],
+    "engineer": [{"level": 5, "skill": "auto_drone"}, {"level": 30, "skill": "auto_tesla"}],
+    "medic": [{"level": 5, "skill": "auto_heal"}, {"level": 30, "skill": "auto_shield"}],
+    "scout": [{"level": 5, "skill": "auto_mark"}, {"level": 30, "skill": "auto_multishot"}]
+  },
+  "notes": "All values are proposed starting points, not balanced gameplay evidence. Skills and projectiles require integration into existing Player/Main."
+}

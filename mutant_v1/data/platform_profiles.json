@@ -1,0 +1,39 @@
+{
+  "mobile_portrait": {
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "orientation": "portrait",
+    "reference_resolution": [
+      720,
+      1280
+    ],
+    "minimum_touch_target_dp": 48,
+    "safe_areas": true,
+    "rendering_method": "mobile_or_gl_compatibility_test_on_devices",
+    "auto_fire": true
+  },
+  "desktop_landscape": {
+    "platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "orientation": "landscape",
+    "reference_resolution": [
+      1280,
+      720
+    ],
+    "keyboard_mouse": true,
+    "auto_fire": true,
+    "mobile_joystick_hidden": true
+  },
+  "shared_rules": {
+    "single_player": true,
+    "same_stage_data": true,
+    "same_balance_rules": true,
+    "same_item_catalog": true,
+    "save_schema_version": 1
+  }
+}

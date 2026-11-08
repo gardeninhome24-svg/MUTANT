@@ -1,0 +1,20 @@
+# MUTANT SURVIVOR - START GRY
+
+Projekt gry znajduje sie w folderze:
+C:\Users\patry\Desktop\2026\MutantSurvivor
+
+ABY URUCHOMIC GRE:
+1. Otworz Godot Engine (wersja Godot 4.x).
+2. Kliknij 'Import' i wybierz folder: C:\Users\patry\Desktop\2026\MutantSurvivor
+3. Kliknij 'Uruchom' (F5) lub kliknij dwukrotnie plik 'run_game.bat' w tym folderze.
+
+STEROWANIE:
+- Klawiatura: WSAD lub Strzalki
+- Telefon / Ekran dotykowy / Mysz: Wirtualny Joystick w lewym dolnym rogu ekranu
+- Strzelanie: Automatyczne (auto-aim do najblizszego mutanta)
+
+SYSTEM 100 POZIOMOW I MONETYZACJI:
+- Poziomy 1-100 podzielone na 10 Rozdzialow (Wasteland, Chemical Swamp, Ruined Metro...)
+- System Energii (Bateria 50/50, -5 za wejscie)
+- Karty ulepszen (Plazma, Wirujace Pily, Wyładowania Tesli, Tarcza Energetyczna)
+- Sklep Premium z waluta Dark Matter i opcja ogladania reklam za energie i wskrzeszenie po smierci.

@@ -1,0 +1,400 @@
+{
+  "bosses_and_elites": [
+    {
+      "id": "boss_ch01",
+      "name": "Matka Roju",
+      "chapter": 1,
+      "base_hp": 2258,
+      "attack_templates": [
+        "telegraphed_cone",
+        "summon_minions"
+      ],
+      "phases": [
+        1,
+        0.45
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch01_stage05",
+      "chapter": 1,
+      "name": "Elita 1-5",
+      "base_hp": 532,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch01_stage07",
+      "chapter": 1,
+      "name": "Elita 1-7",
+      "base_hp": 532,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch02",
+      "name": "Nadzorca Skażenia",
+      "chapter": 2,
+      "base_hp": 2768,
+      "attack_templates": [
+        "shockwave",
+        "charge"
+      ],
+      "phases": [
+        1,
+        0.45
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch02_stage05",
+      "chapter": 2,
+      "name": "Elita 2-5",
+      "base_hp": 634,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch02_stage07",
+      "chapter": 2,
+      "name": "Elita 2-7",
+      "base_hp": 634,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch03",
+      "name": "Król Kriostazy",
+      "chapter": 3,
+      "base_hp": 3329,
+      "attack_templates": [
+        "freeze_sweep",
+        "summon_minions"
+      ],
+      "phases": [
+        1,
+        0.45
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch03_stage05",
+      "chapter": 3,
+      "name": "Elita 3-5",
+      "base_hp": 744,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch03_stage07",
+      "chapter": 3,
+      "name": "Elita 3-7",
+      "base_hp": 744,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch04",
+      "name": "Doktor Szron",
+      "chapter": 4,
+      "base_hp": 3943,
+      "attack_templates": [
+        "freeze_trap",
+        "beam"
+      ],
+      "phases": [
+        1,
+        0.45
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch04_stage05",
+      "chapter": 4,
+      "name": "Elita 4-5",
+      "base_hp": 862,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch04_stage07",
+      "chapter": 4,
+      "name": "Elita 4-7",
+      "base_hp": 862,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch05",
+      "name": "Lewiatan Kwaśny",
+      "chapter": 5,
+      "base_hp": 4608,
+      "attack_templates": [
+        "acid_waves",
+        "tentacle_slam"
+      ],
+      "phases": [
+        1,
+        0.45
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch05_stage05",
+      "chapter": 5,
+      "name": "Elita 5-5",
+      "base_hp": 990,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch05_stage07",
+      "chapter": 5,
+      "name": "Elita 5-7",
+      "base_hp": 990,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch06",
+      "name": "Serce Zarazy",
+      "chapter": 6,
+      "base_hp": 5325,
+      "attack_templates": [
+        "toxic_cloud",
+        "add_spawns"
+      ],
+      "phases": [
+        1.0,
+        0.55,
+        0.2
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch06_stage05",
+      "chapter": 6,
+      "name": "Elita 6-5",
+      "base_hp": 1126,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch06_stage07",
+      "chapter": 6,
+      "name": "Elita 6-7",
+      "base_hp": 1126,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch07",
+      "name": "Król Martwego Miasta",
+      "chapter": 7,
+      "base_hp": 6094,
+      "attack_templates": [
+        "dash",
+        "ranged_burst"
+      ],
+      "phases": [
+        1.0,
+        0.55,
+        0.2
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch07_stage05",
+      "chapter": 7,
+      "name": "Elita 7-5",
+      "base_hp": 1272,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch07_stage07",
+      "chapter": 7,
+      "name": "Elita 7-7",
+      "base_hp": 1272,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch08",
+      "name": "Egzekutor Omega",
+      "chapter": 8,
+      "base_hp": 6915,
+      "attack_templates": [
+        "targeted_mines",
+        "shockwave"
+      ],
+      "phases": [
+        1.0,
+        0.55,
+        0.2
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch08_stage05",
+      "chapter": 8,
+      "name": "Elita 8-5",
+      "base_hp": 1426,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch08_stage07",
+      "chapter": 8,
+      "name": "Elita 8-7",
+      "base_hp": 1426,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch09",
+      "name": "Strażnik Rdzenia",
+      "chapter": 9,
+      "base_hp": 7788,
+      "attack_templates": [
+        "pulse_lanes",
+        "energy_beam"
+      ],
+      "phases": [
+        1.0,
+        0.55,
+        0.2
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch09_stage05",
+      "chapter": 9,
+      "name": "Elita 9-5",
+      "base_hp": 1588,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch09_stage07",
+      "chapter": 9,
+      "name": "Elita 9-7",
+      "base_hp": 1588,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "boss_ch10",
+      "name": "Architekt Zero",
+      "chapter": 10,
+      "base_hp": 8712,
+      "attack_templates": [
+        "phase_shift",
+        "multi_telegraph"
+      ],
+      "phases": [
+        1.0,
+        0.55,
+        0.2
+      ],
+      "telegraph_min_seconds": 0.8,
+      "drop": "chapter_boss_chest",
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch10_stage05",
+      "chapter": 10,
+      "name": "Elita 10-5",
+      "base_hp": 1760,
+      "attack_templates": [
+        "charge",
+        "toxic_puddle"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    },
+    {
+      "id": "elite_ch10_stage07",
+      "chapter": 10,
+      "name": "Elita 10-7",
+      "base_hp": 1760,
+      "attack_templates": [
+        "charge",
+        "projectile_spread"
+      ],
+      "art_status": "MISSING_PRODUCTION_ASSET"
+    }
+  ],
+  "warning": "All new boss IDs need real in-game behavior, illustrations and animations; do not claim production readiness."
+}

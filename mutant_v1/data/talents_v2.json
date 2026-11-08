@@ -1,0 +1,281 @@
+{
+  "version": 2,
+  "trees": [
+    {
+      "id": "offense",
+      "nodes": [
+        {
+          "id": "calibrated_trigger",
+          "title": "Kalibrowany spust",
+          "stat": "attack_pct",
+          "value_per_rank": 2,
+          "ranks": 5,
+          "requires": [],
+          "node_id": "offense_00"
+        },
+        {
+          "id": "sharpshooter",
+          "title": "Celne oko",
+          "stat": "crit_chance_pct",
+          "value_per_rank": 1,
+          "ranks": 5,
+          "requires": [
+            "offense_00"
+          ],
+          "node_id": "offense_01"
+        },
+        {
+          "id": "rapid_feed",
+          "title": "Szybki podajnik",
+          "stat": "attack_speed_pct",
+          "value_per_rank": 2,
+          "ranks": 5,
+          "requires": [
+            "offense_01"
+          ],
+          "node_id": "offense_02"
+        },
+        {
+          "id": "pierce",
+          "title": "Przebicie",
+          "stat": "pierce_count",
+          "value_per_rank": 1,
+          "ranks": 5,
+          "requires": [
+            "offense_02"
+          ],
+          "node_id": "offense_03"
+        },
+        {
+          "id": "expose_weakness",
+          "title": "Słaby punkt",
+          "stat": "elite_damage_pct",
+          "value_per_rank": 3,
+          "ranks": 5,
+          "requires": [
+            "offense_03"
+          ],
+          "node_id": "offense_04"
+        },
+        {
+          "id": "blast_master",
+          "title": "Saper",
+          "stat": "area_damage_pct",
+          "value_per_rank": 4,
+          "ranks": 5,
+          "requires": [
+            "offense_04"
+          ],
+          "node_id": "offense_05"
+        },
+        {
+          "id": "headshot",
+          "title": "Strzał precyzyjny",
+          "stat": "crit_damage_pct",
+          "value_per_rank": 5,
+          "ranks": 5,
+          "requires": [
+            "offense_05"
+          ],
+          "node_id": "offense_06"
+        },
+        {
+          "id": "overdrive",
+          "title": "Przeciążenie",
+          "stat": "all_damage_pct",
+          "value_per_rank": 6,
+          "ranks": 1,
+          "requires": [
+            "offense_06"
+          ],
+          "node_id": "offense_07"
+        }
+      ]
+    },
+    {
+      "id": "defense",
+      "nodes": [
+        {
+          "id": "reinforced_vest",
+          "title": "Wzmocnienie",
+          "stat": "hp_pct",
+          "value_per_rank": 3,
+          "ranks": 5,
+          "requires": [],
+          "node_id": "defense_00"
+        },
+        {
+          "id": "thick_skin",
+          "title": "Twarda skóra",
+          "stat": "armor_flat",
+          "value_per_rank": 2,
+          "ranks": 5,
+          "requires": [
+            "defense_00"
+          ],
+          "node_id": "defense_01"
+        },
+        {
+          "id": "field_rations",
+          "title": "Racje polowe",
+          "stat": "heal_pickup_pct",
+          "value_per_rank": 5,
+          "ranks": 5,
+          "requires": [
+            "defense_01"
+          ],
+          "node_id": "defense_02"
+        },
+        {
+          "id": "dodge_drill",
+          "title": "Ćwiczenie uniku",
+          "stat": "dodge_chance_pct",
+          "value_per_rank": 1,
+          "ranks": 5,
+          "requires": [
+            "defense_02"
+          ],
+          "node_id": "defense_03"
+        },
+        {
+          "id": "toxic_filter",
+          "title": "Filtr toksyn",
+          "stat": "poison_resistance_pct",
+          "value_per_rank": 4,
+          "ranks": 5,
+          "requires": [
+            "defense_03"
+          ],
+          "node_id": "defense_04"
+        },
+        {
+          "id": "cold_insulation",
+          "title": "Izolacja",
+          "stat": "freeze_resistance_pct",
+          "value_per_rank": 4,
+          "ranks": 5,
+          "requires": [
+            "defense_04"
+          ],
+          "node_id": "defense_05"
+        },
+        {
+          "id": "second_chance",
+          "title": "Ostatnia szansa",
+          "stat": "death_save_per_run",
+          "value_per_rank": 1,
+          "ranks": 5,
+          "requires": [
+            "defense_05"
+          ],
+          "node_id": "defense_06"
+        },
+        {
+          "id": "bulwark",
+          "title": "Bastion",
+          "stat": "damage_reduction_pct",
+          "value_per_rank": 3,
+          "ranks": 1,
+          "requires": [
+            "defense_06"
+          ],
+          "node_id": "defense_07"
+        }
+      ]
+    },
+    {
+      "id": "technology",
+      "nodes": [
+        {
+          "id": "capacitor",
+          "title": "Kondensator",
+          "stat": "cooldown_reduction_pct",
+          "value_per_rank": 2,
+          "ranks": 5,
+          "requires": [],
+          "node_id": "technology_00"
+        },
+        {
+          "id": "magnet",
+          "title": "Magnes",
+          "stat": "pickup_radius_pct",
+          "value_per_rank": 5,
+          "ranks": 5,
+          "requires": [
+            "technology_00"
+          ],
+          "node_id": "technology_01"
+        },
+        {
+          "id": "plasma_focus",
+          "title": "Ogniskowanie",
+          "stat": "energy_damage_pct",
+          "value_per_rank": 3,
+          "ranks": 5,
+          "requires": [
+            "technology_01"
+          ],
+          "node_id": "technology_02"
+        },
+        {
+          "id": "battery",
+          "title": "Bateria",
+          "stat": "ability_duration_pct",
+          "value_per_rank": 4,
+          "ranks": 5,
+          "requires": [
+            "technology_02"
+          ],
+          "node_id": "technology_03"
+        },
+        {
+          "id": "field_repair",
+          "title": "Naprawa polowa",
+          "stat": "turret_hp_pct",
+          "value_per_rank": 8,
+          "ranks": 5,
+          "requires": [
+            "technology_03"
+          ],
+          "node_id": "technology_04"
+        },
+        {
+          "id": "scavenger",
+          "title": "Recykling",
+          "stat": "material_bonus_pct",
+          "value_per_rank": 3,
+          "ranks": 5,
+          "requires": [
+            "technology_04"
+          ],
+          "node_id": "technology_05"
+        },
+        {
+          "id": "afterburn",
+          "title": "Dopalacz",
+          "stat": "movement_speed_pct",
+          "value_per_rank": 2,
+          "ranks": 5,
+          "requires": [
+            "technology_05"
+          ],
+          "node_id": "technology_06"
+        },
+        {
+          "id": "singularity",
+          "title": "Osobliwość",
+          "stat": "ability_area_pct",
+          "value_per_rank": 7,
+          "ranks": 1,
+          "requires": [
+            "technology_06"
+          ],
+          "node_id": "technology_07"
+        }
+      ]
+    }
+  ],
+  "points_from_account_levels": "1 per level 2..100",
+  "respec": "soft_credits",
+  "rules": "Account-level points must not affect run-level XP; enforce cap and prerequisites."
+}

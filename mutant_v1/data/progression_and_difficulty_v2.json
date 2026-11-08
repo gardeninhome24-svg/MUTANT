@@ -1,0 +1,21 @@
+{
+  "stage_scaling_draft": {
+    "enemy_hp_multiplier": "(1+0.035*(stage-1)+0.0007*(stage-1)^2)*difficulty_multiplier",
+    "enemy_damage_multiplier": "(1+0.025*(stage-1))*difficulty_multiplier",
+    "enemy_spawn_budget_multiplier": "min(2.4,1+0.014*(stage-1))",
+    "cap_simultaneous_enemies_mobile": "profiled_by_device_not_fixed"
+  },
+  "milestones": {
+    "1-10": "new player onboarding",
+    "11-29": "introduce enemy combos",
+    "30-49": "positioning, armor counters, target priorities",
+    "50-79": "dual hazards, specialist elites",
+    "80-100": "phase bosses, multi-objective and careful build choices"
+  },
+  "tuning_targets": {
+    "stage_1_10_first_attempt_win_rate": "65-85%",
+    "stage_30_49_prepared_player_win_rate": "40-60%",
+    "stage_80_100_prepared_player_win_rate": "25-45%"
+  },
+  "warning": "Targets are design proposals, not measured player statistics. Do not tune toward coercing purchase."
+}

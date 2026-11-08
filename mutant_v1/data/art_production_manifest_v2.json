@@ -1,0 +1,954 @@
+{
+  "status": "REFERENCE_ART_ONLY",
+  "required_assets": [
+    {
+      "asset_id": "soldier_idle",
+      "target_path": "assets/characters/soldier/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "soldier_run",
+      "target_path": "assets/characters/soldier/run.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "soldier_attack",
+      "target_path": "assets/characters/soldier/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "soldier_hurt",
+      "target_path": "assets/characters/soldier/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "soldier_death",
+      "target_path": "assets/characters/soldier/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "engineer_idle",
+      "target_path": "assets/characters/engineer/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "engineer_run",
+      "target_path": "assets/characters/engineer/run.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "engineer_attack",
+      "target_path": "assets/characters/engineer/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "engineer_hurt",
+      "target_path": "assets/characters/engineer/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "engineer_death",
+      "target_path": "assets/characters/engineer/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "medic_idle",
+      "target_path": "assets/characters/medic/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "medic_run",
+      "target_path": "assets/characters/medic/run.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "medic_attack",
+      "target_path": "assets/characters/medic/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "medic_hurt",
+      "target_path": "assets/characters/medic/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "medic_death",
+      "target_path": "assets/characters/medic/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "scout_idle",
+      "target_path": "assets/characters/scout/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "scout_run",
+      "target_path": "assets/characters/scout/run.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "scout_attack",
+      "target_path": "assets/characters/scout/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "scout_hurt",
+      "target_path": "assets/characters/scout/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "scout_death",
+      "target_path": "assets/characters/scout/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_01_idle",
+      "target_path": "assets/bosses/boss_ch01/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_01_move",
+      "target_path": "assets/bosses/boss_ch01/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_01_attack",
+      "target_path": "assets/bosses/boss_ch01/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_01_hurt",
+      "target_path": "assets/bosses/boss_ch01/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_01_death",
+      "target_path": "assets/bosses/boss_ch01/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_02_idle",
+      "target_path": "assets/bosses/boss_ch02/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_02_move",
+      "target_path": "assets/bosses/boss_ch02/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_02_attack",
+      "target_path": "assets/bosses/boss_ch02/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_02_hurt",
+      "target_path": "assets/bosses/boss_ch02/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_02_death",
+      "target_path": "assets/bosses/boss_ch02/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_03_idle",
+      "target_path": "assets/bosses/boss_ch03/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_03_move",
+      "target_path": "assets/bosses/boss_ch03/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_03_attack",
+      "target_path": "assets/bosses/boss_ch03/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_03_hurt",
+      "target_path": "assets/bosses/boss_ch03/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_03_death",
+      "target_path": "assets/bosses/boss_ch03/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_04_idle",
+      "target_path": "assets/bosses/boss_ch04/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_04_move",
+      "target_path": "assets/bosses/boss_ch04/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_04_attack",
+      "target_path": "assets/bosses/boss_ch04/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_04_hurt",
+      "target_path": "assets/bosses/boss_ch04/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_04_death",
+      "target_path": "assets/bosses/boss_ch04/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_05_idle",
+      "target_path": "assets/bosses/boss_ch05/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_05_move",
+      "target_path": "assets/bosses/boss_ch05/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_05_attack",
+      "target_path": "assets/bosses/boss_ch05/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_05_hurt",
+      "target_path": "assets/bosses/boss_ch05/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_05_death",
+      "target_path": "assets/bosses/boss_ch05/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_06_idle",
+      "target_path": "assets/bosses/boss_ch06/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_06_move",
+      "target_path": "assets/bosses/boss_ch06/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_06_attack",
+      "target_path": "assets/bosses/boss_ch06/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_06_hurt",
+      "target_path": "assets/bosses/boss_ch06/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_06_death",
+      "target_path": "assets/bosses/boss_ch06/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_07_idle",
+      "target_path": "assets/bosses/boss_ch07/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_07_move",
+      "target_path": "assets/bosses/boss_ch07/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_07_attack",
+      "target_path": "assets/bosses/boss_ch07/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_07_hurt",
+      "target_path": "assets/bosses/boss_ch07/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_07_death",
+      "target_path": "assets/bosses/boss_ch07/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_08_idle",
+      "target_path": "assets/bosses/boss_ch08/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_08_move",
+      "target_path": "assets/bosses/boss_ch08/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_08_attack",
+      "target_path": "assets/bosses/boss_ch08/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_08_hurt",
+      "target_path": "assets/bosses/boss_ch08/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_08_death",
+      "target_path": "assets/bosses/boss_ch08/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_09_idle",
+      "target_path": "assets/bosses/boss_ch09/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_09_move",
+      "target_path": "assets/bosses/boss_ch09/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_09_attack",
+      "target_path": "assets/bosses/boss_ch09/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_09_hurt",
+      "target_path": "assets/bosses/boss_ch09/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_09_death",
+      "target_path": "assets/bosses/boss_ch09/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_10_idle",
+      "target_path": "assets/bosses/boss_ch10/idle.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_10_move",
+      "target_path": "assets/bosses/boss_ch10/move.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_10_attack",
+      "target_path": "assets/bosses/boss_ch10/attack.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_10_hurt",
+      "target_path": "assets/bosses/boss_ch10/hurt.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "boss_10_death",
+      "target_path": "assets/bosses/boss_ch10/death.png",
+      "type": "sprite_animation",
+      "required": true,
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "wasteland_floor_seamless",
+      "target_path": "assets/biomes/wasteland/floor_seamless.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "wasteland_wall_modular",
+      "target_path": "assets/biomes/wasteland/wall_modular.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "wasteland_cover_objects",
+      "target_path": "assets/biomes/wasteland/cover_objects.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "wasteland_hazard_visual",
+      "target_path": "assets/biomes/wasteland/hazard_visual.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "wasteland_stage_background",
+      "target_path": "assets/biomes/wasteland/stage_background.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "wasteland_ambient_effect",
+      "target_path": "assets/biomes/wasteland/ambient_effect.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_floor_seamless",
+      "target_path": "assets/biomes/cryo_lab/floor_seamless.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_wall_modular",
+      "target_path": "assets/biomes/cryo_lab/wall_modular.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_cover_objects",
+      "target_path": "assets/biomes/cryo_lab/cover_objects.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_hazard_visual",
+      "target_path": "assets/biomes/cryo_lab/hazard_visual.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_stage_background",
+      "target_path": "assets/biomes/cryo_lab/stage_background.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "cryo_lab_ambient_effect",
+      "target_path": "assets/biomes/cryo_lab/ambient_effect.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_floor_seamless",
+      "target_path": "assets/biomes/toxic_sewers/floor_seamless.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_wall_modular",
+      "target_path": "assets/biomes/toxic_sewers/wall_modular.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_cover_objects",
+      "target_path": "assets/biomes/toxic_sewers/cover_objects.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_hazard_visual",
+      "target_path": "assets/biomes/toxic_sewers/hazard_visual.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_stage_background",
+      "target_path": "assets/biomes/toxic_sewers/stage_background.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "toxic_sewers_ambient_effect",
+      "target_path": "assets/biomes/toxic_sewers/ambient_effect.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_floor_seamless",
+      "target_path": "assets/biomes/dead_city/floor_seamless.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_wall_modular",
+      "target_path": "assets/biomes/dead_city/wall_modular.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_cover_objects",
+      "target_path": "assets/biomes/dead_city/cover_objects.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_hazard_visual",
+      "target_path": "assets/biomes/dead_city/hazard_visual.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_stage_background",
+      "target_path": "assets/biomes/dead_city/stage_background.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "dead_city_ambient_effect",
+      "target_path": "assets/biomes/dead_city/ambient_effect.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_floor_seamless",
+      "target_path": "assets/biomes/reactor/floor_seamless.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_wall_modular",
+      "target_path": "assets/biomes/reactor/wall_modular.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_cover_objects",
+      "target_path": "assets/biomes/reactor/cover_objects.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_hazard_visual",
+      "target_path": "assets/biomes/reactor/hazard_visual.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_stage_background",
+      "target_path": "assets/biomes/reactor/stage_background.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "reactor_ambient_effect",
+      "target_path": "assets/biomes/reactor/ambient_effect.png",
+      "type": "map_asset",
+      "status": "MISSING_PRODUCTION_READY"
+    },
+    {
+      "asset_id": "icon_weapon_common",
+      "target_path": "assets/items/weapon_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_weapon_rare",
+      "target_path": "assets/items/weapon_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_weapon_epic",
+      "target_path": "assets/items/weapon_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_weapon_legendary",
+      "target_path": "assets/items/weapon_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_weapon_mythic",
+      "target_path": "assets/items/weapon_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_helmet_common",
+      "target_path": "assets/items/helmet_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_helmet_rare",
+      "target_path": "assets/items/helmet_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_helmet_epic",
+      "target_path": "assets/items/helmet_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_helmet_legendary",
+      "target_path": "assets/items/helmet_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_helmet_mythic",
+      "target_path": "assets/items/helmet_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_chest_common",
+      "target_path": "assets/items/chest_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_chest_rare",
+      "target_path": "assets/items/chest_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_chest_epic",
+      "target_path": "assets/items/chest_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_chest_legendary",
+      "target_path": "assets/items/chest_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_chest_mythic",
+      "target_path": "assets/items/chest_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_gloves_common",
+      "target_path": "assets/items/gloves_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_gloves_rare",
+      "target_path": "assets/items/gloves_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_gloves_epic",
+      "target_path": "assets/items/gloves_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_gloves_legendary",
+      "target_path": "assets/items/gloves_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_gloves_mythic",
+      "target_path": "assets/items/gloves_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_boots_common",
+      "target_path": "assets/items/boots_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_boots_rare",
+      "target_path": "assets/items/boots_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_boots_epic",
+      "target_path": "assets/items/boots_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_boots_legendary",
+      "target_path": "assets/items/boots_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_boots_mythic",
+      "target_path": "assets/items/boots_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_amulet_common",
+      "target_path": "assets/items/amulet_common.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_amulet_rare",
+      "target_path": "assets/items/amulet_rare.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_amulet_epic",
+      "target_path": "assets/items/amulet_epic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_amulet_legendary",
+      "target_path": "assets/items/amulet_legendary.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "icon_amulet_mythic",
+      "target_path": "assets/items/amulet_mythic.png",
+      "type": "item_icon",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_home",
+      "target_path": "assets/ui/home.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_character",
+      "target_path": "assets/ui/character.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_inventory",
+      "target_path": "assets/ui/inventory.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_equipment_details",
+      "target_path": "assets/ui/equipment_details.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_skill_tree",
+      "target_path": "assets/ui/skill_tree.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_stage_select",
+      "target_path": "assets/ui/stage_select.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_shop",
+      "target_path": "assets/ui/shop.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_vip",
+      "target_path": "assets/ui/vip.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_battle_pass",
+      "target_path": "assets/ui/battle_pass.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_daily_rewards",
+      "target_path": "assets/ui/daily_rewards.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_victory",
+      "target_path": "assets/ui/victory.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_defeat",
+      "target_path": "assets/ui/defeat.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    },
+    {
+      "asset_id": "ui_settings",
+      "target_path": "assets/ui/settings.png",
+      "type": "ui_panels_and_icons",
+      "status": "MISSING"
+    }
+  ],
+  "reference_pngs": [
+    "elite_boss_REFERENCE.png",
+    "pickup_vfx_REFERENCE.png",
+    "enemy_roster_REFERENCE.png",
+    "art_direction.png",
+    "hud_ui_REFERENCE.png",
+    "weapons_REFERENCE.png",
+    "environment_objects_REFERENCE.png",
+    "hero_and_skins_REFERENCE.png",
+    "tileset_concept_REFERENCE.png",
+    "biomes_5_REFERENCE.png"
+  ],
+  "quality_gate": [
+    "Each sprite has no labels, adjacent imagery, or black poster background",
+    "Transparent actual alpha for independently moving objects",
+    "Full silhouette intact and consistent pivot",
+    "Animated sheet frames have consistent positions and cells",
+    "Tile texture verified seamless in repeat 5x5",
+    "Image has matching perspective and dimensions",
+    "Proof screenshot from actual Godot scene"
+  ]
+}

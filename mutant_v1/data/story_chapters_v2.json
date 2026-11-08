@@ -1,0 +1,114 @@
+{
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Sygnał z Pustkowi",
+      "first_stage": 1,
+      "last_stage": 10,
+      "biome": "wasteland",
+      "lead_npc": "Mara",
+      "plot": "Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero",
+      "final_boss_id": "boss_ch01",
+      "boss_name": "Matka Roju"
+    },
+    {
+      "id": 2,
+      "title": "Protokół Ewakuacja",
+      "first_stage": 11,
+      "last_stage": 20,
+      "biome": "wasteland",
+      "lead_npc": "Iwo",
+      "plot": "Ochrona konwoju i śladów personelu badawczego",
+      "final_boss_id": "boss_ch02",
+      "boss_name": "Nadzorca Skażenia"
+    },
+    {
+      "id": 3,
+      "title": "Komory Ciszy",
+      "first_stage": 21,
+      "last_stage": 30,
+      "biome": "cryo_lab",
+      "lead_npc": "Nina",
+      "plot": "Uwolnienie ocalałych z komór kriogenicznych",
+      "final_boss_id": "boss_ch03",
+      "boss_name": "Król Kriostazy"
+    },
+    {
+      "id": 4,
+      "title": "Fałszywe Lekarstwo",
+      "first_stage": 31,
+      "last_stage": 40,
+      "biome": "cryo_lab",
+      "lead_npc": "Kira",
+      "plot": "Odkrycie, że antidotum służy do kontroli mutacji",
+      "final_boss_id": "boss_ch04",
+      "boss_name": "Doktor Szron"
+    },
+    {
+      "id": 5,
+      "title": "Podpowierzchnią",
+      "first_stage": 41,
+      "last_stage": 50,
+      "biome": "toxic_sewers",
+      "lead_npc": "Iwo",
+      "plot": "Zejście do kanałów i odkrycie gniazda",
+      "final_boss_id": "boss_ch05",
+      "boss_name": "Lewiatan Kwaśny"
+    },
+    {
+      "id": 6,
+      "title": "Zatrute Źródło",
+      "first_stage": 51,
+      "last_stage": 60,
+      "biome": "toxic_sewers",
+      "lead_npc": "Nina",
+      "plot": "Oczyszczenie węzłów zasilających skażenie",
+      "final_boss_id": "boss_ch06",
+      "boss_name": "Serce Zarazy"
+    },
+    {
+      "id": 7,
+      "title": "Miasto Bez Głosu",
+      "first_stage": 61,
+      "last_stage": 70,
+      "biome": "dead_city",
+      "lead_npc": "Mara",
+      "plot": "Przeszukanie opustoszałej stolicy",
+      "final_boss_id": "boss_ch07",
+      "boss_name": "Król Martwego Miasta"
+    },
+    {
+      "id": 8,
+      "title": "Ostatni Patrol",
+      "first_stage": 71,
+      "last_stage": 80,
+      "biome": "dead_city",
+      "lead_npc": "Kira",
+      "plot": "Odblokowanie drogi do kompleksu Zero",
+      "final_boss_id": "boss_ch08",
+      "boss_name": "Egzekutor Omega"
+    },
+    {
+      "id": 9,
+      "title": "Puls Rdzenia",
+      "first_stage": 81,
+      "last_stage": 90,
+      "biome": "reactor",
+      "lead_npc": "Iwo",
+      "plot": "Stabilizacja obcych reaktorów",
+      "final_boss_id": "boss_ch09",
+      "boss_name": "Strażnik Rdzenia"
+    },
+    {
+      "id": 10,
+      "title": "Projekt Zero",
+      "first_stage": 91,
+      "last_stage": 100,
+      "biome": "reactor",
+      "lead_npc": "Mara",
+      "plot": "Wybór ocalałych i zakończenie źródła mutacji",
+      "final_boss_id": "boss_ch10",
+      "boss_name": "Architekt Zero"
+    }
+  ]
+}

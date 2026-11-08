@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "class_ids": ["soldier", "engineer", "medic", "scout"],
+  "campaign_stage_count": 100,
+  "class_level_cap_v1": 100,
+  "progression_rule": "First clear of stage N for class unlocks stage N+1 for that class and gives exactly one class level; define initial class level 1 and cap at 100.",
+  "per_class_separate": ["class_level", "highest_stage_unlocked", "first_clear_flags", "talents", "equipped_item_ids"],
+  "account_shared": ["inventory_items", "credits", "scrap", "crystals", "vip", "battle_pass", "purchased_skins", "one_time_premium_milestones"],
+  "same_items_equippable_by_all_classes": true,
+  "class_switch": "free_in_base_only",
+  "bonus_every_levels": 5,
+  "recommended_passive_bonus_caps": {"damage_pct": 5.0, "hp_pct": 10.0, "materials_pct": 5.0, "cooldown_reduction_pct": 3.0},
+  "reward_rules": {
+    "first_clear_each_class": "standard stage loot and account XP or class-specific rewards without duplicated premium milestones",
+    "premium_milestone": "once per account across all classes",
+    "practice_mode": "zero rewards"
+  },
+  "future_cap": "200+ after new stages are shipped; bonus caps must stay bounded"
+}

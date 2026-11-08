@@ -1,0 +1,834 @@
+{
+  "design_status": "CONTRACT_REQUIRES_SCENES",
+  "objective_ids": [
+    "activate_terminal",
+    "avoid_hazard_hits",
+    "clear_elites",
+    "collect_item",
+    "defeat_boss",
+    "defeat_elite",
+    "defend_node",
+    "destroy_target",
+    "escort",
+    "repair_generator",
+    "rescue_npc",
+    "survive_hazard",
+    "survive_waves"
+  ],
+  "missions": [
+    {
+      "stage": 1,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 2,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 3,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 4,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 5,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 6,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 7,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch01_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 8,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 9,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 10,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch01",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 11,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 12,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 13,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 14,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 15,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 16,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 17,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch02_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 18,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 19,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 20,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch02",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 21,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 22,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 23,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 24,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 25,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 26,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 27,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch03_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 28,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 29,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 30,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch03",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 31,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 32,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 33,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 34,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 35,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 36,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 37,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch04_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 38,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 39,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 40,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch04",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 41,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 42,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 43,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 44,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 45,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 46,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 47,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch05_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 48,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 49,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 50,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch05",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 51,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 52,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 53,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 54,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 55,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 56,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 57,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch06_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 58,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 59,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 60,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch06",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Nina"
+    },
+    {
+      "stage": 61,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 62,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 63,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 64,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 65,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 66,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 67,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch07_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 68,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 69,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 70,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 71,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 72,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 73,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 74,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 75,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 76,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 77,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch08_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 78,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 79,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 80,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch08",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Kira"
+    },
+    {
+      "stage": 81,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 82,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 83,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 84,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 85,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 86,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 87,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch09_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 88,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 89,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 90,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch09",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Iwo"
+    },
+    {
+      "stage": 91,
+      "scene_type": "activate_terminal",
+      "interaction_target": "terminal",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 92,
+      "scene_type": "defend_node",
+      "interaction_target": "signal_node",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 93,
+      "scene_type": "collect_item",
+      "interaction_target": "dna_sample",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 94,
+      "scene_type": "destroy_target",
+      "interaction_target": "incubator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 95,
+      "scene_type": "rescue_npc",
+      "interaction_target": "survivor",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 96,
+      "scene_type": "escort",
+      "interaction_target": "drone",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 97,
+      "scene_type": "clear_elites",
+      "interaction_target": "elite_ch10_stage07",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 98,
+      "scene_type": "repair_generator",
+      "interaction_target": "generator",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 99,
+      "scene_type": "survive_hazard",
+      "interaction_target": "hazard_interval",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    },
+    {
+      "stage": 100,
+      "scene_type": "defeat_boss",
+      "interaction_target": "boss_ch10",
+      "minimap_marker": true,
+      "objective_progress_server_required": false,
+      "npc": "Mara"
+    }
+  ],
+  "objective_description_pl": {
+    "activate_terminal": "aktywuj terminal",
+    "defend_object": "obroń urządzenie",
+    "repair_generator": "napraw generator",
+    "collect_data": "odzyskaj dane",
+    "escort_survivor": "eskortuj ocalałego",
+    "destroy_nest": "zniszcz gniazdo",
+    "defeat_boss": "pokonaj bossa",
+    "survive_waves": "przetrwaj fale",
+    "kill_enemies": "pokonaj mutanty",
+    "hold_zone": "utrzymaj pozycję",
+    "collect_samples": "zbierz próbki",
+    "disable_alarm": "wyłącz alarm"
+  }
+}

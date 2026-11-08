@@ -1,0 +1,77 @@
+{
+  "status": "CATALOG_DESIGN_ONLY_NO_REAL_IAP",
+  "platforms": [
+    "android",
+    "ios",
+    "pc"
+  ],
+  "currencies": [
+    {
+      "id": "credits",
+      "kind": "earned"
+    },
+    {
+      "id": "crystals",
+      "kind": "premium"
+    }
+  ],
+  "products": [
+    {
+      "id": "starter_bundle",
+      "kind": "one_time_known_bundle",
+      "contents": {
+        "credits": 3000,
+        "scrap": 25,
+        "cosmetic": "starter_armor_skin"
+      },
+      "price": "PLATFORM_CONFIG_REQUIRED"
+    },
+    {
+      "id": "attempt_refill_5",
+      "kind": "consumable",
+      "contents": {
+        "attempts": 5
+      },
+      "price": "PLATFORM_CONFIG_REQUIRED"
+    },
+    {
+      "id": "vip_30d",
+      "kind": "duration_entitlement",
+      "duration_days": 30,
+      "contents": {
+        "daily_credits": 300,
+        "cosmetic_challenges": true
+      },
+      "price": "PLATFORM_CONFIG_REQUIRED"
+    },
+    {
+      "id": "battlepass_season_1",
+      "kind": "season_entitlement",
+      "contents": {
+        "premium_rewards": true
+      },
+      "price": "PLATFORM_CONFIG_REQUIRED"
+    },
+    {
+      "id": "skin_toxic_soldier",
+      "kind": "cosmetic",
+      "contents": {
+        "skin": "toxic_soldier"
+      },
+      "price": "PLATFORM_CONFIG_REQUIRED"
+    }
+  ],
+  "purchase_rules": [
+    "No payment success from client flag",
+    "Use Apple/Google/PC-platform purchase verification or licensed backend",
+    "Grant idempotently once per transaction ID",
+    "Support restore purchases, refunds, age ratings, privacy",
+    "Do not activate store before store listing/legal review"
+  ],
+  "retry_policy": {
+    "attempts_capacity": 5,
+    "regen_seconds": 1800,
+    "free_practice_mode": true,
+    "paid_refills_optional": true
+  }
+}

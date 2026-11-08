@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dstruf3v04lvg"
+
+[deps]
+
+files=["res://mutant_v1/data/campaign_100_v2.chapter.translation", "res://mutant_v1/data/campaign_100_v2.title.translation", "res://mutant_v1/data/campaign_100_v2.npc.translation", "res://mutant_v1/data/campaign_100_v2.biome.translation", "res://mutant_v1/data/campaign_100_v2.goal.translation", "res://mutant_v1/data/campaign_100_v2.goal.translation", "res://mutant_v1/data/campaign_100_v2.boss.translation", "res://mutant_v1/data/campaign_100_v2.credits.translation", "res://mutant_v1/data/campaign_100_v2.account.translation"]
+
+source_file="res://mutant_v1/data/campaign_100_v2.csv"
+dest_files=["res://mutant_v1/data/campaign_100_v2.chapter.translation", "res://mutant_v1/data/campaign_100_v2.title.translation", "res://mutant_v1/data/campaign_100_v2.npc.translation", "res://mutant_v1/data/campaign_100_v2.biome.translation", "res://mutant_v1/data/campaign_100_v2.goal.translation", "res://mutant_v1/data/campaign_100_v2.goal.translation", "res://mutant_v1/data/campaign_100_v2.boss.translation", "res://mutant_v1/data/campaign_100_v2.credits.translation", "res://mutant_v1/data/campaign_100_v2.account.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

@@ -1,0 +1,42 @@
+{
+  "status": "DESIGN_ONLY",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "free_to_play": true,
+  "attempts": {
+    "max": 5,
+    "regeneration_minutes_per_attempt": 30,
+    "free_training": true,
+    "on_loss_consume_one": true,
+    "on_win_consume_one": true,
+    "avoid_total_gameplay_lockout": true
+  },
+  "premium": {
+    "vip": {
+      "duration_days": 30,
+      "benefits": [
+        "daily_credits",
+        "extra_cosmetic_challenges",
+        "convenience"
+      ]
+    },
+    "battle_pass": {
+      "duration_days": 30,
+      "free_track": true,
+      "premium_track": true
+    },
+    "shop": [
+      "cosmetics",
+      "known_item_bundles",
+      "attempt_refills",
+      "convenience"
+    ],
+    "real_money_transactions": "DISABLED_UNTIL_PLATFORM_IAP_INTEGRATION_AND_TESTS",
+    "paid_randomized_chests": "NOT_APPROVED_PENDING_DISCLOSURE_AGE_RATING_AND_PLATFORM_REVIEW"
+  },
+  "receipt_validation": "REQUIRED",
+  "offline_local_wallet_trust": "NOT_APPROVED",
+  "price_analytics_ab_testing": "CONSENT_COMPLIANT_ONLY"
+}

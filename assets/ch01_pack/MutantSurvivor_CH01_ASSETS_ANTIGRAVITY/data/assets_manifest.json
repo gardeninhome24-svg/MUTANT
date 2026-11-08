@@ -1,0 +1,685 @@
+{
+  "version": "0.1",
+  "chapter": 1,
+  "content": "alpha extracted reference sprites + tiles + UI + effects",
+  "files": [
+    {
+      "path": "tiles/concrete_cross.png",
+      "source_box": [
+        855,
+        169,
+        922,
+        226
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/concrete_rubble.png",
+      "source_box": [
+        925,
+        169,
+        992,
+        226
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/steel_grate.png",
+      "source_box": [
+        995,
+        169,
+        1062,
+        226
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/concrete_clean.png",
+      "source_box": [
+        1065,
+        169,
+        1132,
+        226
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/rust_plates.png",
+      "source_box": [
+        855,
+        229,
+        922,
+        286
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/warning_stripes.png",
+      "source_box": [
+        925,
+        229,
+        992,
+        286
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/toxic_moss.png",
+      "source_box": [
+        995,
+        229,
+        1062,
+        286
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/concrete_fracture.png",
+      "source_box": [
+        1065,
+        229,
+        1132,
+        286
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_blue.png",
+      "source_box": [
+        855,
+        289,
+        922,
+        346
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_grid.png",
+      "source_box": [
+        925,
+        289,
+        992,
+        346
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/rock_break.png",
+      "source_box": [
+        995,
+        289,
+        1062,
+        346
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/toxic_pool.png",
+      "source_box": [
+        1065,
+        289,
+        1132,
+        346
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_scuffed.png",
+      "source_box": [
+        855,
+        349,
+        922,
+        406
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_cracks.png",
+      "source_box": [
+        925,
+        349,
+        992,
+        406
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_ash.png",
+      "source_box": [
+        995,
+        349,
+        1062,
+        406
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "tiles/floor_dark.png",
+      "source_box": [
+        1065,
+        349,
+        1132,
+        406
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": false
+    },
+    {
+      "path": "characters/soldier_idle_reference.png",
+      "source_box": [
+        26,
+        462,
+        100,
+        586
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "characters/engineer_idle_reference.png",
+      "source_box": [
+        110,
+        460,
+        193,
+        586
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "characters/medic_idle_reference.png",
+      "source_box": [
+        203,
+        459,
+        292,
+        587
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "characters/scout_idle_reference.png",
+      "source_box": [
+        299,
+        460,
+        394,
+        587
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/hound_idle_reference.png",
+      "source_box": [
+        426,
+        463,
+        519,
+        578
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/beetle_idle_reference.png",
+      "source_box": [
+        517,
+        460,
+        609,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/stalker_idle_reference.png",
+      "source_box": [
+        606,
+        460,
+        685,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/brute_idle_reference.png",
+      "source_box": [
+        683,
+        457,
+        779,
+        584
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/spitter_idle_reference.png",
+      "source_box": [
+        770,
+        457,
+        861,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/winged_idle_reference.png",
+      "source_box": [
+        857,
+        457,
+        965,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/elite_stalker_idle_reference.png",
+      "source_box": [
+        983,
+        459,
+        1061,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/elite_brute_idle_reference.png",
+      "source_box": [
+        1054,
+        450,
+        1159,
+        585
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/elite_hound_idle_reference.png",
+      "source_box": [
+        1146,
+        460,
+        1239,
+        583
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "bosses/hive_mother_reference.png",
+      "source_box": [
+        1266,
+        454,
+        1516,
+        587
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/mutant_hound_variant.png",
+      "source_box": [
+        882,
+        454,
+        950,
+        528
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/toxic_beetle_variant.png",
+      "source_box": [
+        941,
+        451,
+        1011,
+        529
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/infected_human_variant.png",
+      "source_box": [
+        1001,
+        450,
+        1072,
+        530
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "enemies/heavy_brute_variant.png",
+      "source_box": [
+        1091,
+        449,
+        1167,
+        531
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/supply_crate.png",
+      "source_box": [
+        892,
+        580,
+        954,
+        629
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/hazard_barrel.png",
+      "source_box": [
+        955,
+        579,
+        1002,
+        635
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/fuel_barrel.png",
+      "source_box": [
+        1005,
+        579,
+        1056,
+        635
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/mutation_tank.png",
+      "source_box": [
+        1053,
+        573,
+        1119,
+        651
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/metal_case.png",
+      "source_box": [
+        888,
+        648,
+        948,
+        704
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/computer_console.png",
+      "source_box": [
+        981,
+        655,
+        1076,
+        712
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/chain_fence.png",
+      "source_box": [
+        1045,
+        714,
+        1140,
+        759
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/street_lamp.png",
+      "source_box": [
+        896,
+        722,
+        953,
+        820
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/satellite_dish.png",
+      "source_box": [
+        1179,
+        641,
+        1259,
+        704
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/industrial_pipe.png",
+      "source_box": [
+        1220,
+        708,
+        1283,
+        762
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/wall_panel.png",
+      "source_box": [
+        1067,
+        759,
+        1133,
+        823
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "props/blast_barricade.png",
+      "source_box": [
+        1161,
+        774,
+        1255,
+        821
+      ],
+      "source": "atlas_2",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/medkit.png",
+      "source_box": [
+        1190,
+        676,
+        1246,
+        730
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/chest.png",
+      "source_box": [
+        1261,
+        677,
+        1310,
+        734
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/energy_cell.png",
+      "source_box": [
+        1318,
+        675,
+        1372,
+        730
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/purple_crystal.png",
+      "source_box": [
+        1390,
+        678,
+        1446,
+        736
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/ammo.png",
+      "source_box": [
+        1414,
+        752,
+        1480,
+        795
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "icons/grenade.png",
+      "source_box": [
+        1257,
+        760,
+        1303,
+        813
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/muzzle_flash.png",
+      "source_box": [
+        18,
+        773,
+        100,
+        807
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/laser_blue.png",
+      "source_box": [
+        98,
+        768,
+        179,
+        810
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/plasma_purple.png",
+      "source_box": [
+        180,
+        762,
+        260,
+        810
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/impact_burst.png",
+      "source_box": [
+        265,
+        761,
+        351,
+        817
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/explosion_orange.png",
+      "source_box": [
+        15,
+        829,
+        100,
+        887
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/toxic_splash.png",
+      "source_box": [
+        177,
+        828,
+        265,
+        888
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/smoke.png",
+      "source_box": [
+        262,
+        829,
+        352,
+        887
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/shield.png",
+      "source_box": [
+        263,
+        902,
+        340,
+        970
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    },
+    {
+      "path": "vfx/portal.png",
+      "source_box": [
+        334,
+        899,
+        400,
+        972
+      ],
+      "source": "atlas_1",
+      "alpha_extracted": true
+    }
+  ],
+  "limitations": [
+    "AI collage crops are draft references; not polished edge-cleaned sprites",
+    "No authentic frame-by-frame animation generated",
+    "All 100 stages are NOT illustrated",
+    "Floor tiles are not seamless and require authoring pass",
+    "UI must be built with native Godot Control nodes"
+  ]
+}

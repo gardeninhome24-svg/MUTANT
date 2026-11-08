@@ -1,0 +1,372 @@
+{
+  "id": "ch01_stage001",
+  "name": "Wasteland Outskirts – Entrance",
+  "tile_size": 128,
+  "width": 16,
+  "height": 16,
+  "tiles": [
+    [
+      "concrete_clean",
+      "concrete_clean",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_ash",
+      "concrete_fracture",
+      "concrete_clean",
+      "concrete_clean",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_rubble"
+    ],
+    [
+      "floor_blue",
+      "floor_ash",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_ash",
+      "floor_blue",
+      "floor_blue",
+      "concrete_rubble",
+      "concrete_clean",
+      "floor_blue",
+      "warning_stripes",
+      "floor_cracks",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_ash",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_cracks"
+    ],
+    [
+      "floor_cracks",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_ash",
+      "concrete_clean",
+      "floor_blue",
+      "floor_ash",
+      "floor_blue",
+      "concrete_clean"
+    ],
+    [
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "concrete_clean",
+      "floor_cracks",
+      "concrete_clean",
+      "floor_cracks",
+      "floor_blue",
+      "concrete_rubble",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "concrete_rubble",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "floor_blue",
+      "concrete_clean",
+      "warning_stripes",
+      "toxic_moss",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_ash",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_clean",
+      "concrete_clean",
+      "floor_blue",
+      "floor_cracks"
+    ],
+    [
+      "floor_ash",
+      "floor_blue",
+      "floor_blue",
+      "floor_ash",
+      "floor_blue",
+      "floor_cracks",
+      "concrete_clean",
+      "concrete_fracture",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_ash"
+    ],
+    [
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_cracks",
+      "concrete_clean",
+      "concrete_clean",
+      "concrete_rubble",
+      "floor_cracks",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_rubble",
+      "concrete_fracture",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "concrete_fracture",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_fracture",
+      "concrete_rubble",
+      "concrete_fracture",
+      "floor_ash",
+      "concrete_rubble",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_rubble",
+      "concrete_fracture"
+    ],
+    [
+      "concrete_clean",
+      "concrete_clean",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "concrete_fracture",
+      "concrete_clean"
+    ],
+    [
+      "concrete_rubble",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_cracks",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "floor_blue",
+      "concrete_rubble",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_clean",
+      "floor_ash",
+      "floor_blue",
+      "concrete_clean",
+      "floor_ash",
+      "floor_ash",
+      "floor_blue",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue"
+    ],
+    [
+      "concrete_clean",
+      "concrete_clean",
+      "floor_cracks",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue",
+      "floor_blue"
+    ],
+    [
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_rubble",
+      "concrete_clean",
+      "floor_blue",
+      "floor_ash",
+      "floor_ash",
+      "floor_blue",
+      "floor_blue",
+      "concrete_clean",
+      "floor_ash",
+      "concrete_clean",
+      "concrete_fracture",
+      "floor_blue",
+      "concrete_clean",
+      "floor_blue"
+    ],
+    [
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "concrete_fracture",
+      "floor_blue",
+      "floor_blue",
+      "floor_blue",
+      "floor_cracks",
+      "concrete_clean",
+      "floor_blue",
+      "floor_ash",
+      "floor_ash",
+      "floor_ash",
+      "floor_blue",
+      "concrete_fracture"
+    ]
+  ],
+  "props": [
+    {
+      "id": "supply_crate",
+      "cell": [
+        4,
+        3
+      ],
+      "solid": true
+    },
+    {
+      "id": "metal_case",
+      "cell": [
+        9,
+        3
+      ],
+      "solid": true
+    },
+    {
+      "id": "chain_fence",
+      "cell": [
+        4,
+        9
+      ],
+      "solid": true
+    },
+    {
+      "id": "fuel_barrel",
+      "cell": [
+        12,
+        11
+      ],
+      "solid": true
+    },
+    {
+      "id": "mutation_tank",
+      "cell": [
+        11,
+        5
+      ],
+      "solid": true
+    },
+    {
+      "id": "street_lamp",
+      "cell": [
+        6,
+        11
+      ],
+      "solid": false
+    },
+    {
+      "id": "blast_barricade",
+      "cell": [
+        7,
+        13
+      ],
+      "solid": true
+    },
+    {
+      "id": "computer_console",
+      "cell": [
+        12,
+        6
+      ],
+      "solid": true
+    }
+  ],
+  "player_spawn": [
+    8,
+    8
+  ],
+  "enemy_spawn_rings": {
+    "min_tiles": 6,
+    "max_tiles": 10
+  },
+  "note": "Decorative preview has no embedded props. Render source PNG tile layers and prop nodes independently; expand layout for continuous arena."
+}

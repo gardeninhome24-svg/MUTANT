@@ -1,0 +1,2013 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PROPOSED_FOR_TESTING",
+  "rules": {
+    "not_auto_applied": true,
+    "baseline": "F2P adequately geared, equal skill, no consumables",
+    "never_scale_by_spend": true,
+    "coins_required_to_win": false,
+    "stage_complete_requires_existing_objectives": true
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.85,
+      "difficulty_budget": 1.0,
+      "enemy_hp_multiplier": 1.0,
+      "enemy_damage_multiplier": 1.0,
+      "spawn_budget_multiplier": 1.0,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 2,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.837,
+      "difficulty_budget": 1.012,
+      "enemy_hp_multiplier": 1.007,
+      "enemy_damage_multiplier": 1.007,
+      "spawn_budget_multiplier": 1.048,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 3,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.828,
+      "difficulty_budget": 1.03,
+      "enemy_hp_multiplier": 1.018,
+      "enemy_damage_multiplier": 1.017,
+      "spawn_budget_multiplier": 1.084,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 4,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.82,
+      "difficulty_budget": 1.05,
+      "enemy_hp_multiplier": 1.03,
+      "enemy_damage_multiplier": 1.027,
+      "spawn_budget_multiplier": 1.116,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 5,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.812,
+      "difficulty_budget": 1.072,
+      "enemy_hp_multiplier": 1.043,
+      "enemy_damage_multiplier": 1.039,
+      "spawn_budget_multiplier": 1.146,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 6,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.805,
+      "difficulty_budget": 1.096,
+      "enemy_hp_multiplier": 1.057,
+      "enemy_damage_multiplier": 1.051,
+      "spawn_budget_multiplier": 1.174,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 7,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.798,
+      "difficulty_budget": 1.122,
+      "enemy_hp_multiplier": 1.072,
+      "enemy_damage_multiplier": 1.064,
+      "spawn_budget_multiplier": 1.202,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 8,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.792,
+      "difficulty_budget": 1.148,
+      "enemy_hp_multiplier": 1.088,
+      "enemy_damage_multiplier": 1.077,
+      "spawn_budget_multiplier": 1.228,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 9,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.785,
+      "difficulty_budget": 1.176,
+      "enemy_hp_multiplier": 1.104,
+      "enemy_damage_multiplier": 1.091,
+      "spawn_budget_multiplier": 1.254,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 10,
+      "chapter": 1,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.709,
+      "difficulty_budget": 1.204,
+      "enemy_hp_multiplier": 1.121,
+      "enemy_damage_multiplier": 1.105,
+      "spawn_budget_multiplier": 1.279,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "introduction"
+    },
+    {
+      "stage": 11,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.773,
+      "difficulty_budget": 1.234,
+      "enemy_hp_multiplier": 1.138,
+      "enemy_damage_multiplier": 1.119,
+      "spawn_budget_multiplier": 1.304,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 12,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.767,
+      "difficulty_budget": 1.264,
+      "enemy_hp_multiplier": 1.156,
+      "enemy_damage_multiplier": 1.134,
+      "spawn_budget_multiplier": 1.328,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 13,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.761,
+      "difficulty_budget": 1.295,
+      "enemy_hp_multiplier": 1.175,
+      "enemy_damage_multiplier": 1.149,
+      "spawn_budget_multiplier": 1.351,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 14,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.756,
+      "difficulty_budget": 1.327,
+      "enemy_hp_multiplier": 1.193,
+      "enemy_damage_multiplier": 1.164,
+      "spawn_budget_multiplier": 1.374,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 15,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.75,
+      "difficulty_budget": 1.36,
+      "enemy_hp_multiplier": 1.213,
+      "enemy_damage_multiplier": 1.179,
+      "spawn_budget_multiplier": 1.397,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 16,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.744,
+      "difficulty_budget": 1.393,
+      "enemy_hp_multiplier": 1.232,
+      "enemy_damage_multiplier": 1.195,
+      "spawn_budget_multiplier": 1.42,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 17,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.739,
+      "difficulty_budget": 1.427,
+      "enemy_hp_multiplier": 1.252,
+      "enemy_damage_multiplier": 1.211,
+      "spawn_budget_multiplier": 1.442,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 18,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.734,
+      "difficulty_budget": 1.461,
+      "enemy_hp_multiplier": 1.273,
+      "enemy_damage_multiplier": 1.227,
+      "spawn_budget_multiplier": 1.464,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 19,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.728,
+      "difficulty_budget": 1.496,
+      "enemy_hp_multiplier": 1.293,
+      "enemy_damage_multiplier": 1.244,
+      "spawn_budget_multiplier": 1.486,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 20,
+      "chapter": 2,
+      "biome": "Pustkowia",
+      "target_clear_probability_f2p": 0.618,
+      "difficulty_budget": 1.532,
+      "enemy_hp_multiplier": 1.314,
+      "enemy_damage_multiplier": 1.26,
+      "spawn_budget_multiplier": 1.507,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 12,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 21,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.718,
+      "difficulty_budget": 1.568,
+      "enemy_hp_multiplier": 1.336,
+      "enemy_damage_multiplier": 1.277,
+      "spawn_budget_multiplier": 1.529,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 22,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.713,
+      "difficulty_budget": 1.605,
+      "enemy_hp_multiplier": 1.357,
+      "enemy_damage_multiplier": 1.294,
+      "spawn_budget_multiplier": 1.55,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 23,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.708,
+      "difficulty_budget": 1.642,
+      "enemy_hp_multiplier": 1.379,
+      "enemy_damage_multiplier": 1.311,
+      "spawn_budget_multiplier": 1.57,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 24,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.703,
+      "difficulty_budget": 1.679,
+      "enemy_hp_multiplier": 1.401,
+      "enemy_damage_multiplier": 1.329,
+      "spawn_budget_multiplier": 1.591,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 25,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.698,
+      "difficulty_budget": 1.717,
+      "enemy_hp_multiplier": 1.424,
+      "enemy_damage_multiplier": 1.346,
+      "spawn_budget_multiplier": 1.612,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 26,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.693,
+      "difficulty_budget": 1.756,
+      "enemy_hp_multiplier": 1.447,
+      "enemy_damage_multiplier": 1.364,
+      "spawn_budget_multiplier": 1.632,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 27,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.688,
+      "difficulty_budget": 1.795,
+      "enemy_hp_multiplier": 1.47,
+      "enemy_damage_multiplier": 1.382,
+      "spawn_budget_multiplier": 1.652,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 28,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.683,
+      "difficulty_budget": 1.834,
+      "enemy_hp_multiplier": 1.493,
+      "enemy_damage_multiplier": 1.4,
+      "spawn_budget_multiplier": 1.672,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 29,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.678,
+      "difficulty_budget": 1.874,
+      "enemy_hp_multiplier": 1.516,
+      "enemy_damage_multiplier": 1.418,
+      "spawn_budget_multiplier": 1.692,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 30,
+      "chapter": 3,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.603,
+      "difficulty_budget": 1.914,
+      "enemy_hp_multiplier": 1.54,
+      "enemy_damage_multiplier": 1.436,
+      "spawn_budget_multiplier": 1.711,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "learn_builds"
+    },
+    {
+      "stage": 31,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.669,
+      "difficulty_budget": 1.954,
+      "enemy_hp_multiplier": 1.564,
+      "enemy_damage_multiplier": 1.454,
+      "spawn_budget_multiplier": 1.731,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 32,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.664,
+      "difficulty_budget": 1.995,
+      "enemy_hp_multiplier": 1.588,
+      "enemy_damage_multiplier": 1.473,
+      "spawn_budget_multiplier": 1.75,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 33,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.659,
+      "difficulty_budget": 2.037,
+      "enemy_hp_multiplier": 1.613,
+      "enemy_damage_multiplier": 1.492,
+      "spawn_budget_multiplier": 1.77,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 34,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.655,
+      "difficulty_budget": 2.078,
+      "enemy_hp_multiplier": 1.637,
+      "enemy_damage_multiplier": 1.51,
+      "spawn_budget_multiplier": 1.789,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 35,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.65,
+      "difficulty_budget": 2.12,
+      "enemy_hp_multiplier": 1.662,
+      "enemy_damage_multiplier": 1.529,
+      "spawn_budget_multiplier": 1.808,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 36,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.646,
+      "difficulty_budget": 2.163,
+      "enemy_hp_multiplier": 1.687,
+      "enemy_damage_multiplier": 1.548,
+      "spawn_budget_multiplier": 1.827,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 37,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.641,
+      "difficulty_budget": 2.205,
+      "enemy_hp_multiplier": 1.712,
+      "enemy_damage_multiplier": 1.568,
+      "spawn_budget_multiplier": 1.846,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 38,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.637,
+      "difficulty_budget": 2.248,
+      "enemy_hp_multiplier": 1.738,
+      "enemy_damage_multiplier": 1.587,
+      "spawn_budget_multiplier": 1.865,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 39,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.632,
+      "difficulty_budget": 2.292,
+      "enemy_hp_multiplier": 1.763,
+      "enemy_damage_multiplier": 1.606,
+      "spawn_budget_multiplier": 1.883,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 40,
+      "chapter": 4,
+      "biome": "Laboratorium Krio",
+      "target_clear_probability_f2p": 0.523,
+      "difficulty_budget": 2.335,
+      "enemy_hp_multiplier": 1.789,
+      "enemy_damage_multiplier": 1.626,
+      "spawn_budget_multiplier": 1.902,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 41,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.623,
+      "difficulty_budget": 2.379,
+      "enemy_hp_multiplier": 1.815,
+      "enemy_damage_multiplier": 1.645,
+      "spawn_budget_multiplier": 1.92,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 42,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.619,
+      "difficulty_budget": 2.424,
+      "enemy_hp_multiplier": 1.841,
+      "enemy_damage_multiplier": 1.665,
+      "spawn_budget_multiplier": 1.939,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 43,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.614,
+      "difficulty_budget": 2.468,
+      "enemy_hp_multiplier": 1.868,
+      "enemy_damage_multiplier": 1.685,
+      "spawn_budget_multiplier": 1.957,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 44,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.61,
+      "difficulty_budget": 2.513,
+      "enemy_hp_multiplier": 1.894,
+      "enemy_damage_multiplier": 1.705,
+      "spawn_budget_multiplier": 1.975,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 45,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.606,
+      "difficulty_budget": 2.558,
+      "enemy_hp_multiplier": 1.921,
+      "enemy_damage_multiplier": 1.725,
+      "spawn_budget_multiplier": 1.993,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 46,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.601,
+      "difficulty_budget": 2.604,
+      "enemy_hp_multiplier": 1.948,
+      "enemy_damage_multiplier": 1.745,
+      "spawn_budget_multiplier": 2.011,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 47,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.597,
+      "difficulty_budget": 2.65,
+      "enemy_hp_multiplier": 1.975,
+      "enemy_damage_multiplier": 1.765,
+      "spawn_budget_multiplier": 2.029,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 48,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.593,
+      "difficulty_budget": 2.696,
+      "enemy_hp_multiplier": 2.002,
+      "enemy_damage_multiplier": 1.786,
+      "spawn_budget_multiplier": 2.047,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 49,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.588,
+      "difficulty_budget": 2.742,
+      "enemy_hp_multiplier": 2.029,
+      "enemy_damage_multiplier": 1.806,
+      "spawn_budget_multiplier": 2.065,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 50,
+      "chapter": 5,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.514,
+      "difficulty_budget": 2.789,
+      "enemy_hp_multiplier": 2.057,
+      "enemy_damage_multiplier": 1.827,
+      "spawn_budget_multiplier": 2.082,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 51,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.58,
+      "difficulty_budget": 2.835,
+      "enemy_hp_multiplier": 2.085,
+      "enemy_damage_multiplier": 1.847,
+      "spawn_budget_multiplier": 2.1,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 52,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.576,
+      "difficulty_budget": 2.882,
+      "enemy_hp_multiplier": 2.112,
+      "enemy_damage_multiplier": 1.868,
+      "spawn_budget_multiplier": 2.118,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 53,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.572,
+      "difficulty_budget": 2.93,
+      "enemy_hp_multiplier": 2.14,
+      "enemy_damage_multiplier": 1.889,
+      "spawn_budget_multiplier": 2.135,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 54,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.567,
+      "difficulty_budget": 2.977,
+      "enemy_hp_multiplier": 2.169,
+      "enemy_damage_multiplier": 1.91,
+      "spawn_budget_multiplier": 2.153,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 55,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.563,
+      "difficulty_budget": 3.025,
+      "enemy_hp_multiplier": 2.197,
+      "enemy_damage_multiplier": 1.931,
+      "spawn_budget_multiplier": 2.17,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 56,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.559,
+      "difficulty_budget": 3.073,
+      "enemy_hp_multiplier": 2.225,
+      "enemy_damage_multiplier": 1.952,
+      "spawn_budget_multiplier": 2.187,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 57,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.555,
+      "difficulty_budget": 3.122,
+      "enemy_hp_multiplier": 2.254,
+      "enemy_damage_multiplier": 1.973,
+      "spawn_budget_multiplier": 2.204,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 58,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.551,
+      "difficulty_budget": 3.17,
+      "enemy_hp_multiplier": 2.283,
+      "enemy_damage_multiplier": 1.994,
+      "spawn_budget_multiplier": 2.222,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 59,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.547,
+      "difficulty_budget": 3.219,
+      "enemy_hp_multiplier": 2.311,
+      "enemy_damage_multiplier": 2.016,
+      "spawn_budget_multiplier": 2.239,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 60,
+      "chapter": 6,
+      "biome": "Toksyczne Kanały",
+      "target_clear_probability_f2p": 0.438,
+      "difficulty_budget": 3.268,
+      "enemy_hp_multiplier": 2.34,
+      "enemy_damage_multiplier": 2.037,
+      "spawn_budget_multiplier": 2.256,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 13,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "use_talents_and_positioning"
+    },
+    {
+      "stage": 61,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.539,
+      "difficulty_budget": 3.318,
+      "enemy_hp_multiplier": 2.37,
+      "enemy_damage_multiplier": 2.059,
+      "spawn_budget_multiplier": 2.273,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 62,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.535,
+      "difficulty_budget": 3.367,
+      "enemy_hp_multiplier": 2.399,
+      "enemy_damage_multiplier": 2.08,
+      "spawn_budget_multiplier": 2.29,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 63,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.531,
+      "difficulty_budget": 3.417,
+      "enemy_hp_multiplier": 2.428,
+      "enemy_damage_multiplier": 2.102,
+      "spawn_budget_multiplier": 2.307,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 64,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.527,
+      "difficulty_budget": 3.467,
+      "enemy_hp_multiplier": 2.458,
+      "enemy_damage_multiplier": 2.123,
+      "spawn_budget_multiplier": 2.323,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 65,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.523,
+      "difficulty_budget": 3.517,
+      "enemy_hp_multiplier": 2.488,
+      "enemy_damage_multiplier": 2.145,
+      "spawn_budget_multiplier": 2.34,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 66,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.519,
+      "difficulty_budget": 3.568,
+      "enemy_hp_multiplier": 2.517,
+      "enemy_damage_multiplier": 2.167,
+      "spawn_budget_multiplier": 2.357,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 67,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.515,
+      "difficulty_budget": 3.619,
+      "enemy_hp_multiplier": 2.547,
+      "enemy_damage_multiplier": 2.189,
+      "spawn_budget_multiplier": 2.374,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 68,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.511,
+      "difficulty_budget": 3.669,
+      "enemy_hp_multiplier": 2.577,
+      "enemy_damage_multiplier": 2.211,
+      "spawn_budget_multiplier": 2.39,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 69,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.507,
+      "difficulty_budget": 3.721,
+      "enemy_hp_multiplier": 2.608,
+      "enemy_damage_multiplier": 2.233,
+      "spawn_budget_multiplier": 2.407,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 70,
+      "chapter": 7,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.433,
+      "difficulty_budget": 3.772,
+      "enemy_hp_multiplier": 2.638,
+      "enemy_damage_multiplier": 2.255,
+      "spawn_budget_multiplier": 2.423,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 71,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.499,
+      "difficulty_budget": 3.823,
+      "enemy_hp_multiplier": 2.668,
+      "enemy_damage_multiplier": 2.278,
+      "spawn_budget_multiplier": 2.44,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 72,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.495,
+      "difficulty_budget": 3.875,
+      "enemy_hp_multiplier": 2.699,
+      "enemy_damage_multiplier": 2.3,
+      "spawn_budget_multiplier": 2.456,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 73,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.491,
+      "difficulty_budget": 3.927,
+      "enemy_hp_multiplier": 2.73,
+      "enemy_damage_multiplier": 2.322,
+      "spawn_budget_multiplier": 2.473,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 74,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.487,
+      "difficulty_budget": 3.979,
+      "enemy_hp_multiplier": 2.76,
+      "enemy_damage_multiplier": 2.345,
+      "spawn_budget_multiplier": 2.489,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 75,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.483,
+      "difficulty_budget": 4.031,
+      "enemy_hp_multiplier": 2.791,
+      "enemy_damage_multiplier": 2.367,
+      "spawn_budget_multiplier": 2.505,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 76,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.48,
+      "difficulty_budget": 4.084,
+      "enemy_hp_multiplier": 2.822,
+      "enemy_damage_multiplier": 2.39,
+      "spawn_budget_multiplier": 2.522,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 77,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.476,
+      "difficulty_budget": 4.137,
+      "enemy_hp_multiplier": 2.854,
+      "enemy_damage_multiplier": 2.412,
+      "spawn_budget_multiplier": 2.538,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 78,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.472,
+      "difficulty_budget": 4.19,
+      "enemy_hp_multiplier": 2.885,
+      "enemy_damage_multiplier": 2.435,
+      "spawn_budget_multiplier": 2.554,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 79,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.468,
+      "difficulty_budget": 4.243,
+      "enemy_hp_multiplier": 2.916,
+      "enemy_damage_multiplier": 2.458,
+      "spawn_budget_multiplier": 2.57,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 80,
+      "chapter": 8,
+      "biome": "Opuszczone Miasto",
+      "target_clear_probability_f2p": 0.359,
+      "difficulty_budget": 4.296,
+      "enemy_hp_multiplier": 2.948,
+      "enemy_damage_multiplier": 2.481,
+      "spawn_budget_multiplier": 2.586,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 81,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.46,
+      "difficulty_budget": 4.35,
+      "enemy_hp_multiplier": 2.979,
+      "enemy_damage_multiplier": 2.504,
+      "spawn_budget_multiplier": 2.602,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 82,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.457,
+      "difficulty_budget": 4.403,
+      "enemy_hp_multiplier": 3.011,
+      "enemy_damage_multiplier": 2.527,
+      "spawn_budget_multiplier": 2.618,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 83,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.453,
+      "difficulty_budget": 4.457,
+      "enemy_hp_multiplier": 3.043,
+      "enemy_damage_multiplier": 2.55,
+      "spawn_budget_multiplier": 2.634,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 84,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.449,
+      "difficulty_budget": 4.511,
+      "enemy_hp_multiplier": 3.075,
+      "enemy_damage_multiplier": 2.573,
+      "spawn_budget_multiplier": 2.65,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 85,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.445,
+      "difficulty_budget": 4.565,
+      "enemy_hp_multiplier": 3.107,
+      "enemy_damage_multiplier": 2.596,
+      "spawn_budget_multiplier": 2.666,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 86,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.442,
+      "difficulty_budget": 4.62,
+      "enemy_hp_multiplier": 3.139,
+      "enemy_damage_multiplier": 2.619,
+      "spawn_budget_multiplier": 2.682,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 87,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.438,
+      "difficulty_budget": 4.674,
+      "enemy_hp_multiplier": 3.171,
+      "enemy_damage_multiplier": 2.642,
+      "spawn_budget_multiplier": 2.698,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 88,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.434,
+      "difficulty_budget": 4.729,
+      "enemy_hp_multiplier": 3.204,
+      "enemy_damage_multiplier": 2.666,
+      "spawn_budget_multiplier": 2.713,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 89,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.43,
+      "difficulty_budget": 4.784,
+      "enemy_hp_multiplier": 3.236,
+      "enemy_damage_multiplier": 2.689,
+      "spawn_budget_multiplier": 2.729,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 90,
+      "chapter": 9,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.357,
+      "difficulty_budget": 4.839,
+      "enemy_hp_multiplier": 3.269,
+      "enemy_damage_multiplier": 2.712,
+      "spawn_budget_multiplier": 2.745,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 91,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.423,
+      "difficulty_budget": 4.895,
+      "enemy_hp_multiplier": 3.301,
+      "enemy_damage_multiplier": 2.736,
+      "spawn_budget_multiplier": 2.761,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 92,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.419,
+      "difficulty_budget": 4.95,
+      "enemy_hp_multiplier": 3.334,
+      "enemy_damage_multiplier": 2.76,
+      "spawn_budget_multiplier": 2.776,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 93,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.416,
+      "difficulty_budget": 5.006,
+      "enemy_hp_multiplier": 3.367,
+      "enemy_damage_multiplier": 2.783,
+      "spawn_budget_multiplier": 2.792,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 94,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.412,
+      "difficulty_budget": 5.062,
+      "enemy_hp_multiplier": 3.4,
+      "enemy_damage_multiplier": 2.807,
+      "spawn_budget_multiplier": 2.807,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 95,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.408,
+      "difficulty_budget": 5.118,
+      "enemy_hp_multiplier": 3.433,
+      "enemy_damage_multiplier": 2.831,
+      "spawn_budget_multiplier": 2.823,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 96,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.405,
+      "difficulty_budget": 5.174,
+      "enemy_hp_multiplier": 3.466,
+      "enemy_damage_multiplier": 2.854,
+      "spawn_budget_multiplier": 2.838,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 97,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.401,
+      "difficulty_budget": 5.23,
+      "enemy_hp_multiplier": 3.5,
+      "enemy_damage_multiplier": 2.878,
+      "spawn_budget_multiplier": 2.854,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 98,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.397,
+      "difficulty_budget": 5.287,
+      "enemy_hp_multiplier": 3.533,
+      "enemy_damage_multiplier": 2.902,
+      "spawn_budget_multiplier": 2.869,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 99,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.394,
+      "difficulty_budget": 5.343,
+      "enemy_hp_multiplier": 3.566,
+      "enemy_damage_multiplier": 2.926,
+      "spawn_budget_multiplier": 2.885,
+      "elite_count": 1,
+      "boss": false,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    },
+    {
+      "stage": 100,
+      "chapter": 10,
+      "biome": "Rdzeń Reaktora",
+      "target_clear_probability_f2p": 0.285,
+      "difficulty_budget": 5.4,
+      "enemy_hp_multiplier": 3.6,
+      "enemy_damage_multiplier": 2.95,
+      "spawn_budget_multiplier": 2.9,
+      "elite_count": 2,
+      "boss": true,
+      "run_target_minutes": 14,
+      "f2p_min_clearability": true,
+      "counterplay_rules": [
+        "telegraph_at_least_0_8s",
+        "minimum_escape_corridor",
+        "boss_mechanics_not_hp_only"
+      ],
+      "difficulty_notes": "advanced_build_and_boss_patterns"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "difficulty_profiles": [
+    {
+      "name": "Rekrut",
+      "hp_multiplier": 0.75,
+      "damage_multiplier": 0.7,
+      "spawn_multiplier": 0.8,
+      "reward_multiplier": 1
+    },
+    {
+      "name": "Ocalały",
+      "hp_multiplier": 1,
+      "damage_multiplier": 1,
+      "spawn_multiplier": 1,
+      "reward_multiplier": 1.25
+    },
+    {
+      "name": "Weteran",
+      "hp_multiplier": 1.25,
+      "damage_multiplier": 1.2,
+      "spawn_multiplier": 1.25,
+      "reward_multiplier": 1.6
+    },
+    {
+      "name": "Koszmar",
+      "hp_multiplier": 1.6,
+      "damage_multiplier": 1.4,
+      "spawn_multiplier": 1.45,
+      "reward_multiplier": 2.1
+    },
+    {
+      "name": "Apokalipsa",
+      "hp_multiplier": 2,
+      "damage_multiplier": 1.65,
+      "spawn_multiplier": 1.7,
+      "reward_multiplier": 2.8
+    }
+  ]
+}

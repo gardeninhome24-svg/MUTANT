@@ -1,0 +1,5 @@
+1. Skopiuj cały tekst PROMPT_I_KAMPANIA_100_ETAPOW.md do Antigravity lub udostępnij agentowi ten plik.
+2. Załącz zrzut błędnej wersji gry i obraz referencyjny.
+3. Wymagaj P0 naprawy szarego ekranu i grywalnego etapu 001 przed wdrażaniem 100 etapów.
+4. etapy_001_100.json to projekt danych, nie gotowe 100 grywalnych map.
+5. PROFILE_TRUDNOSCI.json to testowe wartości.

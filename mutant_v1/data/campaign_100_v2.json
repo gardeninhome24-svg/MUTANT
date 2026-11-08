@@ -1,0 +1,7132 @@
+{
+  "schema_version": 2,
+  "status": "DESIGN_ONLY_INTEGRATION_REQUIRED",
+  "missions": [
+    {
+      "id": "MS_STORY_001",
+      "stage": 1,
+      "chapter": 1,
+      "name": "Zanikający sygnał: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": null,
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 001 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 93,
+        "account_xp": 35,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 2,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_002",
+      "stage": 2,
+      "chapter": 1,
+      "name": "Obrona stanowiska: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_001",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 002 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 108,
+        "account_xp": 40,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 3,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_003",
+      "stage": 3,
+      "chapter": 1,
+      "name": "Przejęcie próbek: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_002",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 003 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 126,
+        "account_xp": 45,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 4,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_004",
+      "stage": 4,
+      "chapter": 1,
+      "name": "Sabotaż inkubatora: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_003",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 004 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 146,
+        "account_xp": 50,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 5,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_005",
+      "stage": 5,
+      "chapter": 1,
+      "name": "Akcja ratunkowa: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_004",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch01_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 005 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 168,
+        "account_xp": 55,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 6,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_006",
+      "stage": 6,
+      "chapter": 1,
+      "name": "Droga przez ruiny: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_005",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 006 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 192,
+        "account_xp": 60,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 7,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_007",
+      "stage": 7,
+      "chapter": 1,
+      "name": "Oczyszczenie strefy: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_006",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch01_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 007 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 218,
+        "account_xp": 65,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 8,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_008",
+      "stage": 8,
+      "chapter": 1,
+      "name": "Przywracanie zasilania: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_007",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 008 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 246,
+        "account_xp": 70,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 9,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_009",
+      "stage": 9,
+      "chapter": 1,
+      "name": "Utrzymać pozycję: sygnał z pustkowi",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_008",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Odkrycie nadajnika A-03 i pierwszego śladu Projektu Zero. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 009 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 277,
+        "account_xp": 75,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 10,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_010",
+      "stage": 10,
+      "chapter": 1,
+      "name": "Finał: Matka Roju",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_009",
+      "biome": "wasteland",
+      "difficulty_tier": "intro",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch01_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch01"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch01",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "acid_spots",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Dotarliśmy do źródła zagrożenia. Matka Roju już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 010 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 310,
+        "account_xp": 80,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 11,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_011",
+      "stage": 11,
+      "chapter": 2,
+      "name": "Zanikający sygnał: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_010",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 011 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 345,
+        "account_xp": 85,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 12,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_012",
+      "stage": 12,
+      "chapter": 2,
+      "name": "Obrona stanowiska: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_011",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 012 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 382,
+        "account_xp": 90,
+        "materials": {
+          "scrap": 1
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 13,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_013",
+      "stage": 13,
+      "chapter": 2,
+      "name": "Przejęcie próbek: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_012",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 013 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 422,
+        "account_xp": 95,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 14,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_014",
+      "stage": 14,
+      "chapter": 2,
+      "name": "Sabotaż inkubatora: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_013",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 014 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 464,
+        "account_xp": 100,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 15,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_015",
+      "stage": 15,
+      "chapter": 2,
+      "name": "Akcja ratunkowa: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_014",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch02_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 015 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 508,
+        "account_xp": 105,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 16,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_016",
+      "stage": 16,
+      "chapter": 2,
+      "name": "Droga przez ruiny: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_015",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 016 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 554,
+        "account_xp": 110,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 17,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_017",
+      "stage": 17,
+      "chapter": 2,
+      "name": "Oczyszczenie strefy: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_016",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch02_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 017 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 602,
+        "account_xp": 115,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 18,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_018",
+      "stage": 18,
+      "chapter": 2,
+      "name": "Przywracanie zasilania: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_017",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 018 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 652,
+        "account_xp": 120,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 19,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_019",
+      "stage": 19,
+      "chapter": 2,
+      "name": "Utrzymać pozycję: protokół ewakuacja",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_018",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Ochrona konwoju i śladów personelu badawczego. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 019 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 705,
+        "account_xp": 125,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 20,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_020",
+      "stage": 20,
+      "chapter": 2,
+      "name": "Finał: Nadzorca Skażenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_019",
+      "biome": "wasteland",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch02_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch02"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch02",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Dotarliśmy do źródła zagrożenia. Nadzorca Skażenia już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 020 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 760,
+        "account_xp": 130,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 21,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_021",
+      "stage": 21,
+      "chapter": 3,
+      "name": "Zanikający sygnał: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_020",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 021 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 817,
+        "account_xp": 135,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 22,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_022",
+      "stage": 22,
+      "chapter": 3,
+      "name": "Obrona stanowiska: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_021",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 022 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 876,
+        "account_xp": 140,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 23,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_023",
+      "stage": 23,
+      "chapter": 3,
+      "name": "Przejęcie próbek: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_022",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 023 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 938,
+        "account_xp": 145,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 24,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_024",
+      "stage": 24,
+      "chapter": 3,
+      "name": "Sabotaż inkubatora: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_023",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 024 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1002,
+        "account_xp": 150,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 25,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_025",
+      "stage": 25,
+      "chapter": 3,
+      "name": "Akcja ratunkowa: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_024",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch03_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 025 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1068,
+        "account_xp": 155,
+        "materials": {
+          "scrap": 2
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 26,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_026",
+      "stage": 26,
+      "chapter": 3,
+      "name": "Droga przez ruiny: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_025",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 026 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1136,
+        "account_xp": 160,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 27,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_027",
+      "stage": 27,
+      "chapter": 3,
+      "name": "Oczyszczenie strefy: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_026",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch03_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 027 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1206,
+        "account_xp": 165,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 28,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_028",
+      "stage": 28,
+      "chapter": 3,
+      "name": "Przywracanie zasilania: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_027",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 028 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1278,
+        "account_xp": 170,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 29,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_029",
+      "stage": 29,
+      "chapter": 3,
+      "name": "Utrzymać pozycję: komory ciszy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_028",
+      "biome": "cryo_lab",
+      "difficulty_tier": "normal",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Uwolnienie ocalałych z komór kriogenicznych. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 029 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1353,
+        "account_xp": 175,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 30,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_030",
+      "stage": 30,
+      "chapter": 3,
+      "name": "Finał: Król Kriostazy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_029",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch03_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch03"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch03",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "freeze_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Dotarliśmy do źródła zagrożenia. Król Kriostazy już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 030 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1430,
+        "account_xp": 180,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 31,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_031",
+      "stage": 31,
+      "chapter": 4,
+      "name": "Zanikający sygnał: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_030",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 031 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1509,
+        "account_xp": 185,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 32,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_032",
+      "stage": 32,
+      "chapter": 4,
+      "name": "Obrona stanowiska: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_031",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 032 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1590,
+        "account_xp": 190,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 33,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_033",
+      "stage": 33,
+      "chapter": 4,
+      "name": "Przejęcie próbek: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_032",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 033 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1674,
+        "account_xp": 195,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 34,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_034",
+      "stage": 34,
+      "chapter": 4,
+      "name": "Sabotaż inkubatora: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_033",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 196
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 034 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1760,
+        "account_xp": 200,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 35,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_035",
+      "stage": 35,
+      "chapter": 4,
+      "name": "Akcja ratunkowa: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_034",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch04_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch04_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 035 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1848,
+        "account_xp": 205,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 36,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_036",
+      "stage": 36,
+      "chapter": 4,
+      "name": "Droga przez ruiny: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_035",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 036 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 1938,
+        "account_xp": 210,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 37,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_037",
+      "stage": 37,
+      "chapter": 4,
+      "name": "Oczyszczenie strefy: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_036",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch04_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 037 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2030,
+        "account_xp": 215,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 38,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_038",
+      "stage": 38,
+      "chapter": 4,
+      "name": "Przywracanie zasilania: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_037",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 212
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 038 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2124,
+        "account_xp": 220,
+        "materials": {
+          "scrap": 3
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 39,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_039",
+      "stage": 39,
+      "chapter": 4,
+      "name": "Utrzymać pozycję: fałszywe lekarstwo",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_038",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odkrycie, że antidotum służy do kontroli mutacji. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 039 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2221,
+        "account_xp": 225,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 40,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_040",
+      "stage": 40,
+      "chapter": 4,
+      "name": "Finał: Doktor Szron",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_039",
+      "biome": "cryo_lab",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch04_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch04"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch04",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Dotarliśmy do źródła zagrożenia. Doktor Szron już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 040 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2320,
+        "account_xp": 230,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 41,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_041",
+      "stage": 41,
+      "chapter": 5,
+      "name": "Zanikający sygnał: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_040",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 041 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2421,
+        "account_xp": 235,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 42,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_042",
+      "stage": 42,
+      "chapter": 5,
+      "name": "Obrona stanowiska: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_041",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 042 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2524,
+        "account_xp": 240,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 43,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_043",
+      "stage": 43,
+      "chapter": 5,
+      "name": "Przejęcie próbek: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_042",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 043 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2630,
+        "account_xp": 245,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 44,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_044",
+      "stage": 44,
+      "chapter": 5,
+      "name": "Sabotaż inkubatora: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_043",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 236
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 044 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2738,
+        "account_xp": 250,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 45,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_045",
+      "stage": 45,
+      "chapter": 5,
+      "name": "Akcja ratunkowa: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_044",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch05_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch05_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 045 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2848,
+        "account_xp": 255,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 46,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_046",
+      "stage": 46,
+      "chapter": 5,
+      "name": "Droga przez ruiny: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_045",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 046 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 2960,
+        "account_xp": 260,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 47,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_047",
+      "stage": 47,
+      "chapter": 5,
+      "name": "Oczyszczenie strefy: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_046",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch05_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 047 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3074,
+        "account_xp": 265,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 48,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_048",
+      "stage": 48,
+      "chapter": 5,
+      "name": "Przywracanie zasilania: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_047",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 252
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 048 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3190,
+        "account_xp": 270,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 49,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_049",
+      "stage": 49,
+      "chapter": 5,
+      "name": "Utrzymać pozycję: podpowierzchnią",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_048",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zejście do kanałów i odkrycie gniazda. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 049 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3309,
+        "account_xp": 275,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 50,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_050",
+      "stage": 50,
+      "chapter": 5,
+      "name": "Finał: Lewiatan Kwaśny",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_049",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch05_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch05"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "toxic_fog",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Dotarliśmy do źródła zagrożenia. Lewiatan Kwaśny już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 050 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3430,
+        "account_xp": 280,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 51,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_051",
+      "stage": 51,
+      "chapter": 6,
+      "name": "Zanikający sygnał: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_050",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 051 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3553,
+        "account_xp": 285,
+        "materials": {
+          "scrap": 4
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 52,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_052",
+      "stage": 52,
+      "chapter": 6,
+      "name": "Obrona stanowiska: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_051",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 052 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3678,
+        "account_xp": 290,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 53,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_053",
+      "stage": 53,
+      "chapter": 6,
+      "name": "Przejęcie próbek: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_052",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 053 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3806,
+        "account_xp": 295,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 54,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_054",
+      "stage": 54,
+      "chapter": 6,
+      "name": "Sabotaż inkubatora: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_053",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 276
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 054 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 3936,
+        "account_xp": 300,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 55,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_055",
+      "stage": 55,
+      "chapter": 6,
+      "name": "Akcja ratunkowa: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_054",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch06_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch06_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 055 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4068,
+        "account_xp": 305,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 56,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_056",
+      "stage": 56,
+      "chapter": 6,
+      "name": "Droga przez ruiny: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_055",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 056 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4202,
+        "account_xp": 310,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 57,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_057",
+      "stage": 57,
+      "chapter": 6,
+      "name": "Oczyszczenie strefy: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_056",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch06_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 057 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4338,
+        "account_xp": 315,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 58,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_058",
+      "stage": 58,
+      "chapter": 6,
+      "name": "Przywracanie zasilania: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_057",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 4,
+          "mandatory": false,
+          "bonus_reward_credits": 292
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 058 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4476,
+        "account_xp": 320,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 59,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_059",
+      "stage": 59,
+      "chapter": 6,
+      "name": "Utrzymać pozycję: zatrute źródło",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_058",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "tactical",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Oczyszczenie węzłów zasilających skażenie. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 059 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4617,
+        "account_xp": 325,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 60,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_060",
+      "stage": 60,
+      "chapter": 6,
+      "name": "Finał: Serce Zarazy",
+      "npc": "Nina",
+      "prerequisite": "MS_STORY_059",
+      "biome": "toxic_sewers",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch06_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch06"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch06",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Dotarliśmy do źródła zagrożenia. Serce Zarazy już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Operacja 060 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Nina",
+          "text": "Nina: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4760,
+        "account_xp": 330,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 61,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_061",
+      "stage": 61,
+      "chapter": 7,
+      "name": "Zanikający sygnał: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_060",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 061 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 4905,
+        "account_xp": 335,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 62,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_062",
+      "stage": 62,
+      "chapter": 7,
+      "name": "Obrona stanowiska: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_061",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 062 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5052,
+        "account_xp": 340,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 63,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_063",
+      "stage": 63,
+      "chapter": 7,
+      "name": "Przejęcie próbek: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_062",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 063 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5202,
+        "account_xp": 345,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 64,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_064",
+      "stage": 64,
+      "chapter": 7,
+      "name": "Sabotaż inkubatora: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_063",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 316
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 064 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5354,
+        "account_xp": 350,
+        "materials": {
+          "scrap": 5
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 65,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_065",
+      "stage": 65,
+      "chapter": 7,
+      "name": "Akcja ratunkowa: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_064",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch07_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch07_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 065 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5508,
+        "account_xp": 355,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 66,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_066",
+      "stage": 66,
+      "chapter": 7,
+      "name": "Droga przez ruiny: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_065",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 066 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5664,
+        "account_xp": 360,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 67,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_067",
+      "stage": 67,
+      "chapter": 7,
+      "name": "Oczyszczenie strefy: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_066",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch07_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 067 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5822,
+        "account_xp": 365,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 68,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_068",
+      "stage": 68,
+      "chapter": 7,
+      "name": "Przywracanie zasilania: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_067",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 332
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 068 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 5982,
+        "account_xp": 370,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 69,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_069",
+      "stage": 69,
+      "chapter": 7,
+      "name": "Utrzymać pozycję: miasto bez głosu",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_068",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Przeszukanie opustoszałej stolicy. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 069 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6145,
+        "account_xp": 375,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 70,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_070",
+      "stage": 70,
+      "chapter": 7,
+      "name": "Finał: Król Martwego Miasta",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_069",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch07_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch07"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch07",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "ambush_squad",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Dotarliśmy do źródła zagrożenia. Król Martwego Miasta już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 070 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6310,
+        "account_xp": 380,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 71,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_071",
+      "stage": 71,
+      "chapter": 8,
+      "name": "Zanikający sygnał: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_070",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 071 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6477,
+        "account_xp": 385,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 72,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_072",
+      "stage": 72,
+      "chapter": 8,
+      "name": "Obrona stanowiska: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_071",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 072 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6646,
+        "account_xp": 390,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 73,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_073",
+      "stage": 73,
+      "chapter": 8,
+      "name": "Przejęcie próbek: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_072",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 073 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6818,
+        "account_xp": 395,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 74,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_074",
+      "stage": 74,
+      "chapter": 8,
+      "name": "Sabotaż inkubatora: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_073",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 356
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 074 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 6992,
+        "account_xp": 400,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 75,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_075",
+      "stage": 75,
+      "chapter": 8,
+      "name": "Akcja ratunkowa: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_074",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch08_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch08_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 075 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 7168,
+        "account_xp": 405,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 76,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_076",
+      "stage": 76,
+      "chapter": 8,
+      "name": "Droga przez ruiny: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_075",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 076 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 7346,
+        "account_xp": 410,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 77,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_077",
+      "stage": 77,
+      "chapter": 8,
+      "name": "Oczyszczenie strefy: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_076",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch08_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 077 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 7526,
+        "account_xp": 415,
+        "materials": {
+          "scrap": 6
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 78,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_078",
+      "stage": 78,
+      "chapter": 8,
+      "name": "Przywracanie zasilania: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_077",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 372
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 078 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 7708,
+        "account_xp": 420,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 79,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_079",
+      "stage": 79,
+      "chapter": 8,
+      "name": "Utrzymać pozycję: ostatni patrol",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_078",
+      "biome": "dead_city",
+      "difficulty_tier": "hard",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Odblokowanie drogi do kompleksu Zero. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 079 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 7893,
+        "account_xp": 425,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 80,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_080",
+      "stage": 80,
+      "chapter": 8,
+      "name": "Finał: Egzekutor Omega",
+      "npc": "Kira",
+      "prerequisite": "MS_STORY_079",
+      "biome": "dead_city",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch08_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch08"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch08",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Dotarliśmy do źródła zagrożenia. Egzekutor Omega już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Operacja 080 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Kira",
+          "text": "Kira: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 8080,
+        "account_xp": 430,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 81,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_081",
+      "stage": 81,
+      "chapter": 9,
+      "name": "Zanikający sygnał: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_080",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 081 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 8269,
+        "account_xp": 435,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 82,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_082",
+      "stage": 82,
+      "chapter": 9,
+      "name": "Obrona stanowiska: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_081",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 082 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 8460,
+        "account_xp": 440,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 83,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_083",
+      "stage": 83,
+      "chapter": 9,
+      "name": "Przejęcie próbek: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_082",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 083 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 8654,
+        "account_xp": 445,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 84,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_084",
+      "stage": 84,
+      "chapter": 9,
+      "name": "Sabotaż inkubatora: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_083",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 396
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 084 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 8850,
+        "account_xp": 450,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 85,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_085",
+      "stage": 85,
+      "chapter": 9,
+      "name": "Akcja ratunkowa: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_084",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch09_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch09_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 085 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 9048,
+        "account_xp": 455,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 86,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_086",
+      "stage": 86,
+      "chapter": 9,
+      "name": "Droga przez ruiny: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_085",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 086 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 9248,
+        "account_xp": 460,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 87,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_087",
+      "stage": 87,
+      "chapter": 9,
+      "name": "Oczyszczenie strefy: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_086",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch09_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 087 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 9450,
+        "account_xp": 465,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 88,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_088",
+      "stage": 88,
+      "chapter": 9,
+      "name": "Przywracanie zasilania: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_087",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 412
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 088 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 9654,
+        "account_xp": 470,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 89,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_089",
+      "stage": 89,
+      "chapter": 9,
+      "name": "Utrzymać pozycję: puls rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_088",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Stabilizacja obcych reaktorów. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 089 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 9861,
+        "account_xp": 475,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 90,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_090",
+      "stage": 90,
+      "chapter": 9,
+      "name": "Finał: Strażnik Rdzenia",
+      "npc": "Iwo",
+      "prerequisite": "MS_STORY_089",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch09_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch09"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch09",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Dotarliśmy do źródła zagrożenia. Strażnik Rdzenia już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Operacja 090 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Iwo",
+          "text": "Iwo: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 10070,
+        "account_xp": 480,
+        "materials": {
+          "scrap": 7
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 91,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_091",
+      "stage": 91,
+      "chapter": 10,
+      "name": "Zanikający sygnał: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_090",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "activate_terminal",
+          "id": "terminal",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy rozpoznaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 091 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 10281,
+        "account_xp": 485,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 92,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_092",
+      "stage": 92,
+      "chapter": 10,
+      "name": "Obrona stanowiska: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_091",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defend_node",
+          "id": "signal_node",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy zabezpiecz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 092 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 10494,
+        "account_xp": 490,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 93,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_093",
+      "stage": 93,
+      "chapter": 10,
+      "name": "Przejęcie próbek: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_092",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "collect_item",
+          "id": "dna_sample",
+          "count": 3,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy odzyskaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 093 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 10710,
+        "account_xp": 495,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 94,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_094",
+      "stage": 94,
+      "chapter": 10,
+      "name": "Sabotaż inkubatora: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_093",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "destroy_target",
+          "id": "incubator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 436
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy zniszcz cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 094 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 10928,
+        "account_xp": 500,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 95,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_095",
+      "stage": 95,
+      "chapter": 10,
+      "name": "Akcja ratunkowa: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_094",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch10_stage05"
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "rescue_npc",
+          "id": "survivor",
+          "count": 1,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_elite",
+          "id": "elite_ch10_stage05",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy uratuj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 095 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 11148,
+        "account_xp": 505,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 96,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_096",
+      "stage": 96,
+      "chapter": 10,
+      "name": "Droga przez ruiny: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_095",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "escort",
+          "id": "drone",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy przeprowadź cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 096 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 11370,
+        "account_xp": 510,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 97,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_097",
+      "stage": 97,
+      "chapter": 10,
+      "name": "Oczyszczenie strefy: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_096",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "clear_elites",
+          "id": "elite_ch10_stage07",
+          "count": 2,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy oczyść cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 097 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 11594,
+        "account_xp": 515,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 98,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_098",
+      "stage": 98,
+      "chapter": 10,
+      "name": "Przywracanie zasilania: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_097",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "repair_generator",
+          "id": "generator",
+          "count": 2,
+          "mandatory": true
+        },
+        {
+          "type": "avoid_hazard_hits",
+          "maximum": 3,
+          "mandatory": false,
+          "bonus_reward_credits": 452
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy napraw cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 098 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 11820,
+        "account_xp": 520,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 99,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_099",
+      "stage": 99,
+      "chapter": 10,
+      "name": "Utrzymać pozycję: projekt zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_098",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": null
+      },
+      "wave10": {
+        "boss_id": null
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "survive_hazard",
+          "id": "hazard_interval",
+          "count": 90,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Wybór ocalałych i zakończenie źródła mutacji. Teraz musimy przetrwaj cel operacji. Przeciwnik kontroluje tę strefę, nie trać osłony."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Zajmę się tym. Najpierw sprawdzę pozycję i wyposażenie."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 099 trwa. Sprawdź pozycję celu i aktywne przeszkody."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Etap zakończony. Mamy kolejny fragment układanki Projektu Zero."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 12049,
+        "account_xp": 525,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 0,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": 100,
+      "balance_status": "DRAFT"
+    },
+    {
+      "id": "MS_STORY_100",
+      "stage": 100,
+      "chapter": 10,
+      "name": "Finał: Architekt Zero",
+      "npc": "Mara",
+      "prerequisite": "MS_STORY_099",
+      "biome": "reactor",
+      "difficulty_tier": "endgame",
+      "waves": 10,
+      "duration_target_minutes": [
+        10,
+        15
+      ],
+      "wave5": {
+        "elite_id": "elite_ch10_stage05"
+      },
+      "wave10": {
+        "boss_id": "boss_ch10"
+      },
+      "objectives": [
+        {
+          "type": "survive_waves",
+          "count": 10,
+          "mandatory": true
+        },
+        {
+          "type": "defeat_boss",
+          "id": "boss_ch10",
+          "count": 1,
+          "mandatory": true
+        }
+      ],
+      "hazard": "pulse_lanes",
+      "intro_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Dotarliśmy do źródła zagrożenia. Architekt Zero już czeka. Obserwuj sygnały ataków; bezpieczne przejścia są ważniejsze od samego DPS."
+        },
+        {
+          "speaker": "Ocalały",
+          "text": "Znam ryzyko. Muszę przetrwać i wyprowadzić wszystkich."
+        }
+      ],
+      "progress_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Operacja 100 trwa. Sprawdź telegraphy bossa oraz kierunki ucieczki."
+        }
+      ],
+      "completion_dialogue": [
+        {
+          "speaker": "Mara",
+          "text": "Mara: Zagrożenie unieszkodliwione. Otwiera się nowy rozdział historii."
+        }
+      ],
+      "rewards": {
+        "soft_credits": 12280,
+        "account_xp": 530,
+        "materials": {
+          "scrap": 8
+        },
+        "equipment_chest": 1,
+        "premium_gems": 0
+      },
+      "first_clear_only": true,
+      "replay_credits_multiplier": 0.3,
+      "mandatory_stage_unlock": null,
+      "balance_status": "DRAFT"
+    }
+  ]
+}

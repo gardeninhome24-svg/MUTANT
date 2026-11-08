@@ -1,0 +1,1521 @@
+{
+  "schema": "mutant_survivor_asset_addon_v1",
+  "version": "1.1",
+  "base_project": "MutantSurvivor_Aktualny_Projekt.zip snapshot as supplied",
+  "integration_mode": "COPY_ONLY_NO_OVERWRITE",
+  "assets": [
+    {
+      "id": "weapon_common",
+      "path": "assets/items/weapon_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "782f2f3b73327c90e1de8f08c9917844f1291fdf507d538059046d2957f6db23"
+    },
+    {
+      "id": "weapon_rare",
+      "path": "assets/items/weapon_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "281f55473aa7719b05ef627fba0a0ee629e71147989d8dad94bcf6124943d703"
+    },
+    {
+      "id": "weapon_epic",
+      "path": "assets/items/weapon_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "6edf67e8b8f0fea12dd72c9bddeb8bd57949a6a70677d6ad6bc370e7b66807b3"
+    },
+    {
+      "id": "weapon_legendary",
+      "path": "assets/items/weapon_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "96f76876ba50c58d771e1f8e90d4a106da76576f79ee33ece10b391fe0813f90"
+    },
+    {
+      "id": "weapon_mythic",
+      "path": "assets/items/weapon_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "a0713ca769b17d422d8f3d922879cdd3e7d7bbee23817bb3986b843352b3210b"
+    },
+    {
+      "id": "helmet_common",
+      "path": "assets/items/helmet_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "3c5581534a43dd7a4a4b25d25233b6992647d4302fddce5113367e9d99299f8d"
+    },
+    {
+      "id": "helmet_rare",
+      "path": "assets/items/helmet_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "a5d767aa464145ede9605ebff8ad0b50d8e42f377c8974d7ac1e90eccfd5fa0e"
+    },
+    {
+      "id": "helmet_epic",
+      "path": "assets/items/helmet_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "8a1642a23e84556955a6c01ab092a54f46d38c6443ba2e81eb520f2c43434548"
+    },
+    {
+      "id": "helmet_legendary",
+      "path": "assets/items/helmet_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "bbb9eb97e1dc9ae20a2a41449df2d888bf87c632bea3426b32892e5f741edfe6"
+    },
+    {
+      "id": "helmet_mythic",
+      "path": "assets/items/helmet_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "59d9f61f1a120c095ab3f40e5343932d763ad9d2400036a90a7bc82fbd694905"
+    },
+    {
+      "id": "chest_common",
+      "path": "assets/items/chest_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "7b4631b19742e6688ff4060778c3dd19217ecb418b71976fe9b491cd988be5b8"
+    },
+    {
+      "id": "chest_rare",
+      "path": "assets/items/chest_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "c7d7e363e01a5ecabec561455ae4f79672d0e9a3d681737b754e4523a33e6872"
+    },
+    {
+      "id": "chest_epic",
+      "path": "assets/items/chest_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "ffa5d5f85e035c6a7f13ef1d3e0f3d7029ac1a969cfe38d92b9b7c851a6cec1b"
+    },
+    {
+      "id": "chest_legendary",
+      "path": "assets/items/chest_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "154f89bf5768521c498c14dd49d83c995f63ff9e48041706972b06d125c86df9"
+    },
+    {
+      "id": "chest_mythic",
+      "path": "assets/items/chest_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "1ab230817b8a8ada9d34a760e9004ec9262088098f6a115a2aa6e4df4f52f49a"
+    },
+    {
+      "id": "gloves_common",
+      "path": "assets/items/gloves_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "336bf76da171cf2f503282e4bd1f370a52bc7d84b921ba7dce889b95aa8bb9cb"
+    },
+    {
+      "id": "gloves_rare",
+      "path": "assets/items/gloves_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "9b2682a20a464ac0e51b75197cd37ff390026f7df76fb497114a46d4e35f0521"
+    },
+    {
+      "id": "gloves_epic",
+      "path": "assets/items/gloves_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "529677a7a1464cfa9b6093ed14ac6024bb9b4582b1a82bea2cfa068ba535d5dc"
+    },
+    {
+      "id": "gloves_legendary",
+      "path": "assets/items/gloves_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "9f67fe101f45715969796d33e6b5aa08fa363a29ac4ac7dbbcc1cc945005ef9f"
+    },
+    {
+      "id": "gloves_mythic",
+      "path": "assets/items/gloves_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "71b2ec7957d43f5314a43126312113d6047cbd29e40239a7761cd125045b4d31"
+    },
+    {
+      "id": "boots_common",
+      "path": "assets/items/boots_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "c218cf90e8d5543acf0e98db3fabcf6dc60a6c71c16c483fdba33256ffbe7786"
+    },
+    {
+      "id": "boots_rare",
+      "path": "assets/items/boots_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "00ef1ceee32929a10c732c91b70565cb1ba1f02fe2e3d927e8cf5f1cfc161549"
+    },
+    {
+      "id": "boots_epic",
+      "path": "assets/items/boots_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "570d312e111225cfef860bfbc54f71b2309539a4a94c20bdcdf476e944b019a3"
+    },
+    {
+      "id": "boots_legendary",
+      "path": "assets/items/boots_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "9f2820bf1f9e552bbaecb6bed17b0f25587e5fdb56977c8be79ff9b74f4c3ee2"
+    },
+    {
+      "id": "boots_mythic",
+      "path": "assets/items/boots_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "2fefd5c2ecf53dddbe018475e4fcc2418a71c39ba0384dfd13382b7ffc8c5420"
+    },
+    {
+      "id": "amulet_common",
+      "path": "assets/items/amulet_common.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "7fb963bd44759d01ad010ff6b87af53a0b58598935fa89573c40323d2c2fa0e6"
+    },
+    {
+      "id": "amulet_rare",
+      "path": "assets/items/amulet_rare.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "6f4ef24d2948bfdd194839af6c6b241c3c64bb675859b8ca82690674a20a99ea"
+    },
+    {
+      "id": "amulet_epic",
+      "path": "assets/items/amulet_epic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "ed75ab43ba8066e3ebd6e9e78da688e1c83d30e440141a28b14dc9b4de0a3b49"
+    },
+    {
+      "id": "amulet_legendary",
+      "path": "assets/items/amulet_legendary.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "7d22d9f57b8a9733d5243f796ea85d4dac97cdb128d1fd5845f2ffce44bae1f2"
+    },
+    {
+      "id": "amulet_mythic",
+      "path": "assets/items/amulet_mythic.png",
+      "kind": "item_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Oryginalna samodzielna ikona RPG; kolory według rzadkości, nie spritesheet",
+      "sha256": "c030bc9bf5ae24c5e50d14974b5b34ce505776b8bfc23d29419d8ff1936403a8"
+    },
+    {
+      "id": "home",
+      "path": "assets/ui/home.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "7688fa7babffe663d0ea081960c2d592c8f4ed430d097001d0fd5d95068ba9cf"
+    },
+    {
+      "id": "character",
+      "path": "assets/ui/character.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "73299a7f7c8fb942362d2005c5a08837055388628dfa5fb00d75501561719607"
+    },
+    {
+      "id": "inventory",
+      "path": "assets/ui/inventory.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "032f7e3d5e944e8311139c9cb7d4efb6ba098dc443bbf687a1482bde07d604a9"
+    },
+    {
+      "id": "equipment_details",
+      "path": "assets/ui/equipment_details.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "f401d654bdc7f9b736961524cbbf66c78cda1a4e16db329921279c79c8e2bb01"
+    },
+    {
+      "id": "skill_tree",
+      "path": "assets/ui/skill_tree.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "b2eb17f26030fe13178ea88950ffa06eed21fa05bc25092e92d19e1d87accbb1"
+    },
+    {
+      "id": "stage_select",
+      "path": "assets/ui/stage_select.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "6ac94d480ef421938318db7c3dde33684e236b607380dc886ee3d96edaa33775"
+    },
+    {
+      "id": "shop",
+      "path": "assets/ui/shop.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "62bbaf627ac619f92d8a4871ae4d7666491dc42b579820c20338044c6bbfcbd6"
+    },
+    {
+      "id": "vip",
+      "path": "assets/ui/vip.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "6603f47211f24d64c41a150ea0f1c8a42e524359bebe5559885b6f16d9f4137b"
+    },
+    {
+      "id": "battle_pass",
+      "path": "assets/ui/battle_pass.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "c96c2249419435b1eb818b03f7a2449fb2311575d4281cbf82f554254f6237d3"
+    },
+    {
+      "id": "daily_rewards",
+      "path": "assets/ui/daily_rewards.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "87b1bd6cee8278c0027025532e5e69edab1ded5488d24e874f7a7405d3346dd3"
+    },
+    {
+      "id": "victory",
+      "path": "assets/ui/victory.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "5b720e00b4e6d827b79bddfad714b0376c37de5579473f429ca2f6935d3e3219"
+    },
+    {
+      "id": "defeat",
+      "path": "assets/ui/defeat.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "e76c8028c51deb73cbb56286c7af66e47232b3002090d0a990e4b6a573adda93"
+    },
+    {
+      "id": "settings",
+      "path": "assets/ui/settings.png",
+      "kind": "ui_icon",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Autorski pojedynczy piktogram bez tekstu, można lokalizować UI",
+      "sha256": "897fb87e172ddbd74171e1de05b1a630cfbef5a00a2430c72968fb45bfb2371c"
+    },
+    {
+      "id": "common",
+      "path": "assets/mutant_v1_addon/rarity_frames/common.png",
+      "kind": "ui_frame",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "1fcc1901fe167591cd92ff32a33d1dbb11d3dee187f64b2025c1dee508b52e71"
+    },
+    {
+      "id": "rare",
+      "path": "assets/mutant_v1_addon/rarity_frames/rare.png",
+      "kind": "ui_frame",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "0b920b57d4e26c69823dd32482a51c330dc8e47355299b647e7854398bedbf89"
+    },
+    {
+      "id": "epic",
+      "path": "assets/mutant_v1_addon/rarity_frames/epic.png",
+      "kind": "ui_frame",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "c2a9ab794be95d6b277b9c4a47f4ce09c1a3ea018a781809d4220181ab8eb4f3"
+    },
+    {
+      "id": "legendary",
+      "path": "assets/mutant_v1_addon/rarity_frames/legendary.png",
+      "kind": "ui_frame",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "e74d42acf39f820413932ebffd524ac5c1f997b3d4d33e6da306ad1b56f171d6"
+    },
+    {
+      "id": "mythic",
+      "path": "assets/mutant_v1_addon/rarity_frames/mythic.png",
+      "kind": "ui_frame",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "d9e21225f6f8db40b9cbb5ce111b77b284beac66bb094e080d6b8f881618ba34"
+    },
+    {
+      "id": "primary_normal",
+      "path": "assets/mutant_v1_addon/buttons/primary_normal.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "1d46e2ab9419d00db6445c42a7d3c0688cab80af77ec9f729564d8b5dd79881c"
+    },
+    {
+      "id": "primary_hover",
+      "path": "assets/mutant_v1_addon/buttons/primary_hover.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "604885d0a13559a3f0f440edb988ee08bd240c2d6604f06a0effdc5bb256ec63"
+    },
+    {
+      "id": "primary_disabled",
+      "path": "assets/mutant_v1_addon/buttons/primary_disabled.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "a15a0aadaee45d663953bd6d55c3db8601daf86966768d99b1b74b2383ff126f"
+    },
+    {
+      "id": "premium_normal",
+      "path": "assets/mutant_v1_addon/buttons/premium_normal.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "071bdada7088451d87a6730fb65a1aae009cdc026d57630256294b9624a70e8a"
+    },
+    {
+      "id": "premium_hover",
+      "path": "assets/mutant_v1_addon/buttons/premium_hover.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "42c0491678c518979b53e4c371cf052e763606a891ee6f86868575e647236fed"
+    },
+    {
+      "id": "premium_disabled",
+      "path": "assets/mutant_v1_addon/buttons/premium_disabled.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "a15a0aadaee45d663953bd6d55c3db8601daf86966768d99b1b74b2383ff126f"
+    },
+    {
+      "id": "danger_normal",
+      "path": "assets/mutant_v1_addon/buttons/danger_normal.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "2f74a6033445d3fce9235f1450ebef61f610dc87534348accf913e6e3203a94c"
+    },
+    {
+      "id": "danger_hover",
+      "path": "assets/mutant_v1_addon/buttons/danger_hover.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "8c132eec4b7c189dd78384f2de9558565556824661a7d856512e70f3309fccb4"
+    },
+    {
+      "id": "danger_disabled",
+      "path": "assets/mutant_v1_addon/buttons/danger_disabled.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "a15a0aadaee45d663953bd6d55c3db8601daf86966768d99b1b74b2383ff126f"
+    },
+    {
+      "id": "success_normal",
+      "path": "assets/mutant_v1_addon/buttons/success_normal.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "bf4232b66fa318095abfebad29854d294553c0a150331b7eae1e87f5b1f9a888"
+    },
+    {
+      "id": "success_hover",
+      "path": "assets/mutant_v1_addon/buttons/success_hover.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "f61091cce0d11e1d51b3a4b462b67118859022f817323cb4662673095654834f"
+    },
+    {
+      "id": "success_disabled",
+      "path": "assets/mutant_v1_addon/buttons/success_disabled.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "a15a0aadaee45d663953bd6d55c3db8601daf86966768d99b1b74b2383ff126f"
+    },
+    {
+      "id": "secondary_normal",
+      "path": "assets/mutant_v1_addon/buttons/secondary_normal.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "9c0409884537008c4a9631af46eeae83f58bf6f41b1fb3097512cc250c2fa116"
+    },
+    {
+      "id": "secondary_hover",
+      "path": "assets/mutant_v1_addon/buttons/secondary_hover.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "83d5b559d37e28c25c3aa843fdb872d2fcbc4a51dad737bf1a44b8eca75abd17"
+    },
+    {
+      "id": "secondary_disabled",
+      "path": "assets/mutant_v1_addon/buttons/secondary_disabled.png",
+      "kind": "ui_button",
+      "status": "READY_STANDALONE",
+      "width": 512,
+      "height": 512,
+      "note": "9-slice recommended with margin 70 px at 512",
+      "sha256": "a15a0aadaee45d663953bd6d55c3db8601daf86966768d99b1b74b2383ff126f"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "a786132d73ae152e2cfa1fbf2d8a5903e8fc6b2a0c923ac3ff8121fd32558331"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "31c65a1d149092c6ff08b29cf93e52f9439f95f0e8c204a4a7672c61f6b5b9b2"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "39b08ad7a45fad68610c9b2b8d2f93b7a70e4ef64799f01c1b468308e59a4da8"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "e58ce99eab35d5ab3257e3ef67f5963c6de097d4514463b0fd8b24796ba85922"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "76981051f0dd0584f09e02fbbe948af3731753e7387de417a87323c0e7a87d93"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/impact_plasma/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "2c6d2070e4bb0a217da7be6189525177cfc3fc407634a1223972b5dbf76198b9"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "3f5a66530d88f1e6ef9ca0842538362cdf8dcc2c3047e63b61dc503323e07326"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "29a1b3461368c51039ab27c209c47e29da539f1534d06cf72c8120e5dce0aad4"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "9a9bd1babe244d837daf2ee657d0d7ea328338a90bd7c22a210dce09205100db"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "7f099e5b142df522ca26703a494959d8448381092ce087096fc458b1afe1acc6"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "28b59c46d9c0895752fdd404a2a363008ad0297afa2f711ba4cfe938b47e34d3"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/impact_toxic/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "96999f06d0773b58bfe010855d5aa6a107f64c405e55ff93052497c3272769f2"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "07ebc40b2edacc20c546f6ca51a11d4fe8dd04e8a9589acd0d65bfade2597b11"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "2adf15cc2d28a8ffb7d234fe8606c72822a1ffd43c1c6fc364b9319c133cf43d"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "49d8f39b05a21b48f468f8d5157d2c250c856465b934685cc18ce6aebe3064b4"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "212a99c39b787f7455a572e2d8a2c8120da91e1998ee22398353f597c32147cd"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "bd15edf9de93b0573dde3f0ce40075626e77ebe5a0a34eb525b675a54132190e"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/impact_fire/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "10c75087eca742c32505c36bce80ee03448f986a79543e32b0a92d1293ae8bdd"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "e25069d3edeede220248b2cc165d9d2832164d1525be2e29a906209b8ba69026"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "bb62ab671d255351f2a1060ef2141b30d6264aef23088e45a35629d9bfae668c"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "74825f000b93fbeb36542d9a2064eb8361114a8ac4806a5288b24f45d607d579"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "122773f9c47d555e5d5ee211dcf44e0fe2f7d779676d02b00f4500e788cffa7d"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "b787a97fec798f1bd682d672d52dcd1dcbbe64c79ae2b5cd7e3d039e86976002"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/impact_ice/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "d3c9d75da3c3922566ce8c747e93673286e3580e01812203a16450bcc5ec2aff"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "e7b089105cbae5f13aab931ff561d35c96d83c75f6a58c7bd5605e1b1f917f49"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "57c95aca87b4ace1ed1787ba4bde64645d3eedc822775b349d6a79acab60164b"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "ca55233993dc7436f1af0a7bba0dd41086ea9743970ff1efd32073f266b10113"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "7b1d1a033c98e02c3098acabd113c3e5d95a71d565660a95991d62d63e5a8a7e"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "330997f309d55a50fcc986b72f46f0d4718a0899f68c858a70b8298fce85d543"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/shield_pulse/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "b8b8345d7bdc2206895b41a1967da4177364d1923928c1c0ee0b5322cca0ec60"
+    },
+    {
+      "id": "00",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/00.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "b54284fe435fc486b5b2157b66ef890fe339d85eb15562e576a4ceab63d3b1cf"
+    },
+    {
+      "id": "01",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/01.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "fdbefe3f723f0d9639a47a3eb865a53eb6890ea970db68d5a850bd2706ac6065"
+    },
+    {
+      "id": "02",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/02.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "b118db3846be5d1d134edb1c7a0e87507204c73176253b356fdcfef1f0fd3da4"
+    },
+    {
+      "id": "03",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/03.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "eb331d223261a1f0b3e4036e3b67075473c8357e18f03835947d0fd5e49ea863"
+    },
+    {
+      "id": "04",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/04.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "5c7a8e4e06a725c7a858b3ecadea6ba2c13a9b2712d30e7e953854605616c08d"
+    },
+    {
+      "id": "05",
+      "path": "assets/mutant_v1_addon/vfx/loot_glow/05.png",
+      "kind": "vfx_frame",
+      "status": "READY_STANDALONE",
+      "width": 384,
+      "height": 384,
+      "note": "6-frame original placeholder VFX sequence, not character animation",
+      "sha256": "01e0985f69b71967669c5f65a5ec6f15f26bf07e54a857454a9fda9ca9f242c9"
+    },
+    {
+      "id": "floor_seamless",
+      "path": "assets/biomes/wasteland/floor_seamless.png",
+      "kind": "biome_tile",
+      "status": "PROTOTYPE_SEAMLESS",
+      "width": 256,
+      "height": 256,
+      "note": "Tileable across repeat boundary; style requires further art polish",
+      "sha256": "39b3e42083e843aa4ce37fec6a8e659147da392ec2a4ab5d46e9f99354a6720b"
+    },
+    {
+      "id": "wall_modular",
+      "path": "assets/biomes/wasteland/wall_modular.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "f372f47b517715e1494f48fb1268cecb159047eb6c418e7204358a98d75f1dae"
+    },
+    {
+      "id": "cover_objects",
+      "path": "assets/biomes/wasteland/cover_objects.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "d9ff7f85bac12451199e92259a945868ebcf200cfcdcb4d72826847428210d4d"
+    },
+    {
+      "id": "hazard_visual",
+      "path": "assets/biomes/wasteland/hazard_visual.png",
+      "kind": "biome_hazard",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Transparent hazard decal; gameplay and damage zones must be implemented separately",
+      "sha256": "6c9f174b9242557c7373665780344b5833ac677ca797e05a71cba4c3f0ff0ff8"
+    },
+    {
+      "id": "stage_background",
+      "path": "assets/biomes/wasteland/stage_background.png",
+      "kind": "biome_background",
+      "status": "PROTOTYPE_TILED_TEXTURE",
+      "width": 512,
+      "height": 512,
+      "note": "512x512 repeating floor preview texture; not a pre-rendered complete arena",
+      "sha256": "804c428b33915c96594b881946c0ed67a1d33cd49ec1f834168d4e605f7d5154"
+    },
+    {
+      "id": "ambient_effect",
+      "path": "assets/biomes/wasteland/ambient_effect.png",
+      "kind": "biome_fx",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "d77e1a3476672f6035380ad9ba713e994003b4dbdcc15ae7ddabcf8a77f609c8"
+    },
+    {
+      "id": "floor_seamless",
+      "path": "assets/biomes/cryo_lab/floor_seamless.png",
+      "kind": "biome_tile",
+      "status": "PROTOTYPE_SEAMLESS",
+      "width": 256,
+      "height": 256,
+      "note": "Tileable across repeat boundary; style requires further art polish",
+      "sha256": "3922b23fd55362051e7aafd2e2a4e4d8aebfa50c4f1164b7b08a1afe589a2b81"
+    },
+    {
+      "id": "wall_modular",
+      "path": "assets/biomes/cryo_lab/wall_modular.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "617e1b6bc51a65b742b416ee837790579da0df70605132455117806550815246"
+    },
+    {
+      "id": "cover_objects",
+      "path": "assets/biomes/cryo_lab/cover_objects.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "eeda59cfa8b3198ca8ab7249295dea39ed5f0c96dbde310677eb13ba788c1bb2"
+    },
+    {
+      "id": "hazard_visual",
+      "path": "assets/biomes/cryo_lab/hazard_visual.png",
+      "kind": "biome_hazard",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Transparent hazard decal; gameplay and damage zones must be implemented separately",
+      "sha256": "bbcd41d73ea951666f45e37b978c4854475917803c9e44b855176af5bd85dd47"
+    },
+    {
+      "id": "stage_background",
+      "path": "assets/biomes/cryo_lab/stage_background.png",
+      "kind": "biome_background",
+      "status": "PROTOTYPE_TILED_TEXTURE",
+      "width": 512,
+      "height": 512,
+      "note": "512x512 repeating floor preview texture; not a pre-rendered complete arena",
+      "sha256": "35611ed1306109066e8fd1159b550b6e508f4a8dd14f94adbed76845874f9a1b"
+    },
+    {
+      "id": "ambient_effect",
+      "path": "assets/biomes/cryo_lab/ambient_effect.png",
+      "kind": "biome_fx",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "7655c8c4dfb2aa5d687654e16028c64e105a71272c5421b36a9b3fe417dfa591"
+    },
+    {
+      "id": "floor_seamless",
+      "path": "assets/biomes/toxic_sewers/floor_seamless.png",
+      "kind": "biome_tile",
+      "status": "PROTOTYPE_SEAMLESS",
+      "width": 256,
+      "height": 256,
+      "note": "Tileable across repeat boundary; style requires further art polish",
+      "sha256": "b76e1f35619f49e69381d391018014ac554976646b9dcfed06d7733bc1a0bf7e"
+    },
+    {
+      "id": "wall_modular",
+      "path": "assets/biomes/toxic_sewers/wall_modular.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "15db9ba178e8911915372c60ba7635695d42bf8d80af3ab8f0c88be447a58b1c"
+    },
+    {
+      "id": "cover_objects",
+      "path": "assets/biomes/toxic_sewers/cover_objects.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "57bfe03d0dfe2252a9a9771f72e2975703fd7c0d10414e8ef535dbb355bda438"
+    },
+    {
+      "id": "hazard_visual",
+      "path": "assets/biomes/toxic_sewers/hazard_visual.png",
+      "kind": "biome_hazard",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Transparent hazard decal; gameplay and damage zones must be implemented separately",
+      "sha256": "40d086c3dac4af0c5c0dc91ba093789f9b769d5e9050f9b8df858b3b1cdae9af"
+    },
+    {
+      "id": "stage_background",
+      "path": "assets/biomes/toxic_sewers/stage_background.png",
+      "kind": "biome_background",
+      "status": "PROTOTYPE_TILED_TEXTURE",
+      "width": 512,
+      "height": 512,
+      "note": "512x512 repeating floor preview texture; not a pre-rendered complete arena",
+      "sha256": "1554093874b2ebdd34dc02e8815ddcfa856de75f68143ea44f3c27967d058c41"
+    },
+    {
+      "id": "ambient_effect",
+      "path": "assets/biomes/toxic_sewers/ambient_effect.png",
+      "kind": "biome_fx",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "ae621c5d051257f7abf5a32e66c6700f760c59041dd05b6880445abdbc960631"
+    },
+    {
+      "id": "floor_seamless",
+      "path": "assets/biomes/dead_city/floor_seamless.png",
+      "kind": "biome_tile",
+      "status": "PROTOTYPE_SEAMLESS",
+      "width": 256,
+      "height": 256,
+      "note": "Tileable across repeat boundary; style requires further art polish",
+      "sha256": "cb59e7f065fab5bba7b5bcad0368b6a0638a85775b9ee54285d198a9657316a1"
+    },
+    {
+      "id": "wall_modular",
+      "path": "assets/biomes/dead_city/wall_modular.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "7cac79bc06341a5a69dc84ac04fc1723b5177c6742543695e891ea7d5e59f3ec"
+    },
+    {
+      "id": "cover_objects",
+      "path": "assets/biomes/dead_city/cover_objects.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "5d0547aa1a84e53fe2c2c62cca8495bae69301896a451b0dd5f0b3ce53231f64"
+    },
+    {
+      "id": "hazard_visual",
+      "path": "assets/biomes/dead_city/hazard_visual.png",
+      "kind": "biome_hazard",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Transparent hazard decal; gameplay and damage zones must be implemented separately",
+      "sha256": "14757353a4d2348af0fe4d74cfe02145a5d52aa771d713f59cb686b90cc5a66e"
+    },
+    {
+      "id": "stage_background",
+      "path": "assets/biomes/dead_city/stage_background.png",
+      "kind": "biome_background",
+      "status": "PROTOTYPE_TILED_TEXTURE",
+      "width": 512,
+      "height": 512,
+      "note": "512x512 repeating floor preview texture; not a pre-rendered complete arena",
+      "sha256": "9e69cd21c7ba8b1eada3e2aa5c03230bd87b3df20c00bb04472c9644e2705549"
+    },
+    {
+      "id": "ambient_effect",
+      "path": "assets/biomes/dead_city/ambient_effect.png",
+      "kind": "biome_fx",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "f0a29cbea0b14128572e77c84e817072c975db84415c020a478e71c9e879fb3f"
+    },
+    {
+      "id": "floor_seamless",
+      "path": "assets/biomes/reactor/floor_seamless.png",
+      "kind": "biome_tile",
+      "status": "PROTOTYPE_SEAMLESS",
+      "width": 256,
+      "height": 256,
+      "note": "Tileable across repeat boundary; style requires further art polish",
+      "sha256": "7ee3df427adf73ebd65842d5b90559099dccbad0dbfbff6fb89825836a4505e1"
+    },
+    {
+      "id": "wall_modular",
+      "path": "assets/biomes/reactor/wall_modular.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "4f0ef160f891b1edee97d35b39f56716ae82e4051ce87aefcba25448bdb79b45"
+    },
+    {
+      "id": "cover_objects",
+      "path": "assets/biomes/reactor/cover_objects.png",
+      "kind": "biome_prop",
+      "status": "PROTOTYPE_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "a4dbf338003170289ac3b9f9a8e7787bbcc18b9723ef938ec01a4f4bbdaefb7d"
+    },
+    {
+      "id": "hazard_visual",
+      "path": "assets/biomes/reactor/hazard_visual.png",
+      "kind": "biome_hazard",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "Transparent hazard decal; gameplay and damage zones must be implemented separately",
+      "sha256": "27706092f2646d60002d29e204f28d06bdd64f4c5befd614de5a8718a905c1d2"
+    },
+    {
+      "id": "stage_background",
+      "path": "assets/biomes/reactor/stage_background.png",
+      "kind": "biome_background",
+      "status": "PROTOTYPE_TILED_TEXTURE",
+      "width": 512,
+      "height": 512,
+      "note": "512x512 repeating floor preview texture; not a pre-rendered complete arena",
+      "sha256": "e7c80bcfd90a7ee8535b3f9027e9614b859deb7c79f2f827cfe73f469b77f84a"
+    },
+    {
+      "id": "ambient_effect",
+      "path": "assets/biomes/reactor/ambient_effect.png",
+      "kind": "biome_fx",
+      "status": "READY_STANDALONE",
+      "width": 256,
+      "height": 256,
+      "note": "",
+      "sha256": "40ce122e8f90808623546591189ae69efb97e63499a4de8b570c94474e957478"
+    },
+    {
+      "id": "ui_click",
+      "path": "audio/sfx/ui_click.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.1,
+      "sha256": "a6a769158aaf55f1b03ea4f6cb239a6cbaa59115816fd1c2f092f7bd90a1b883"
+    },
+    {
+      "id": "ui_confirm",
+      "path": "audio/sfx/ui_confirm.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.25,
+      "sha256": "1b1816887898b9dfc8655cf0206b6d7cb983581f5b9c82c78fa1955f04d1ded8"
+    },
+    {
+      "id": "ui_error",
+      "path": "audio/sfx/ui_error.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.3,
+      "sha256": "5bae346411ce227c94ab73c09beecf823a05da4c9b918a34b4fdd8b299db4a00"
+    },
+    {
+      "id": "ui_level_up",
+      "path": "audio/sfx/ui_level_up.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.7,
+      "sha256": "31971c5bf857bfd6852695a89483e808e13eebd2c12e2833bdd072b685e381b8"
+    },
+    {
+      "id": "loot_open",
+      "path": "audio/sfx/loot_open.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.65,
+      "sha256": "e1c0689933be31052c59aba58debf752c12da274dd0e787d5410689769ca3db2"
+    },
+    {
+      "id": "loot_rare",
+      "path": "audio/sfx/loot_rare.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.8,
+      "sha256": "b8c2c7c542e43f411fde9358588139a47ede6592a1471bf5568fd52d4239793f"
+    },
+    {
+      "id": "xp_pickup",
+      "path": "audio/sfx/xp_pickup.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.18,
+      "sha256": "ba2b52479433b4309922f7afe5abcd2752d38368e0798a7c2830cd6d6b2f8135"
+    },
+    {
+      "id": "weapon_plasma",
+      "path": "audio/sfx/weapon_plasma.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.22,
+      "sha256": "453b466c304a326fc21f0d0dc95107cd32e7b8fa55b4cddeb38527c1245c65e1"
+    },
+    {
+      "id": "weapon_rifle",
+      "path": "audio/sfx/weapon_rifle.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.17,
+      "sha256": "e2df7bd5416f20deae5426411019a138d7bd087b8c58f6394e938ae2adeff2bb"
+    },
+    {
+      "id": "weapon_heavy",
+      "path": "audio/sfx/weapon_heavy.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.38,
+      "sha256": "44e6ff115807c0a8cbc6354c41989369ebdac4b038b75c8e88c8fd74a3b72ddb"
+    },
+    {
+      "id": "grenade_blast",
+      "path": "audio/sfx/grenade_blast.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.65,
+      "sha256": "931b19e65ae913994726d17e004be296d7a7ae3911b041e520541009a4f3639f"
+    },
+    {
+      "id": "enemy_hurt",
+      "path": "audio/sfx/enemy_hurt.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.25,
+      "sha256": "0078e8c9440297f9f3fdccb0cdc76370a4ead83de32b586b45113d687f6fcca2"
+    },
+    {
+      "id": "enemy_death",
+      "path": "audio/sfx/enemy_death.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.53,
+      "sha256": "80a449f99620a93ab9a624832e8c7c3684d852b4e4def4fae266b24a440f849e"
+    },
+    {
+      "id": "boss_warning",
+      "path": "audio/sfx/boss_warning.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.6,
+      "sha256": "16e72d74b14984e735096b6c292d6c9d16554fc58e891039c453121d1a29c9cf"
+    },
+    {
+      "id": "shield_hit",
+      "path": "audio/sfx/shield_hit.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.24,
+      "sha256": "99928f9c60e2c40a9803df2814c0518b9e72dd1408d5ffe2b22a10909656d0f4"
+    },
+    {
+      "id": "toxic_sizzle",
+      "path": "audio/sfx/toxic_sizzle.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.7,
+      "sha256": "dccf3f9dd9df5983a16c04f47d93f0f27111b44fcbaa4ab20a98fe46d50eebea"
+    },
+    {
+      "id": "freeze_shatter",
+      "path": "audio/sfx/freeze_shatter.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.48,
+      "sha256": "cf3aa21b280d613314a50626eed5be8ab9d6d61c53399c9891b48c3a431be076"
+    },
+    {
+      "id": "reward_claim",
+      "path": "audio/sfx/reward_claim.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.7,
+      "sha256": "1c3fb427e332622ac4a57605279dc764d3ae866ecab929bd8494ca0e06a997d1"
+    },
+    {
+      "id": "revive",
+      "path": "audio/sfx/revive.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.85,
+      "sha256": "f396da526f698947c5790efc0d5004482b8c18616bd8d360934163142d58e232"
+    },
+    {
+      "id": "stage_victory",
+      "path": "audio/sfx/stage_victory.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 1.1,
+      "sha256": "bdd7fba34d66ed73af01046bae7021f3dcc88f9c8440f0125768ebebf8a6fcb9"
+    },
+    {
+      "id": "stage_defeat",
+      "path": "audio/sfx/stage_defeat.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 1.0,
+      "sha256": "a72ec78796fa5be1bfea43103b380ab4beb2931b8cf2f183fd5e29c2e3c48b6c"
+    },
+    {
+      "id": "menu_transition",
+      "path": "audio/sfx/menu_transition.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 0.35,
+      "sha256": "71f2263723be2bf8939e76f1ed21bdded87ca2ccedfcac52a2e468bc2ee3c581"
+    },
+    {
+      "id": "wasteland_loop_8s",
+      "path": "audio/ambience/wasteland_loop_8s.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 8.0,
+      "sha256": "331649a4b00aee1bcd395595c4dc51cfc8a952fd13e7529a304e7cac76882456"
+    },
+    {
+      "id": "cryo_lab_loop_8s",
+      "path": "audio/ambience/cryo_lab_loop_8s.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 8.0,
+      "sha256": "30f61222f77ded73862c9d62cb4b21b67c7ba248b84f8be5b150af2867f711fa"
+    },
+    {
+      "id": "toxic_sewers_loop_8s",
+      "path": "audio/ambience/toxic_sewers_loop_8s.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 8.0,
+      "sha256": "3ad94ca4e78e05fe3ba5f36039262fe0a518a64c8ed4ba692240ec83e88395b3"
+    },
+    {
+      "id": "dead_city_loop_8s",
+      "path": "audio/ambience/dead_city_loop_8s.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 8.0,
+      "sha256": "44f4b525cb3d53600e681d832df6483c78a36e27e4284c705ddd94a71cc706d9"
+    },
+    {
+      "id": "reactor_loop_8s",
+      "path": "audio/ambience/reactor_loop_8s.wav",
+      "kind": "original_synthesized_sfx",
+      "status": "READY_WAV",
+      "duration_seconds": 8.0,
+      "sha256": "f9957a5f85e9498faced5c00fca271ad3793c805b00d4d9d3feadee646ad8d88"
+    }
+  ],
+  "warnings": [
+    "UI and item assets have standalone transparent sprites.",
+    "70 missing character/enemy multi-frame animations are NOT delivered.",
+    "New biome props and tiles are prototype-designs, not equivalents of illustrated HD environments.",
+    "No monetized payment/audio music integration, only placeholder original synthesized SFX and ambience.",
+    "Do not use promotional reference collages as runtime sprites."
+  ]
+}

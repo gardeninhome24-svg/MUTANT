@@ -1,0 +1,127 @@
+{
+  "schema_version": 2,
+  "rarity_roll_weights_basis_points": {
+    "common": 6800,
+    "rare": 2400,
+    "epic": 650,
+    "legendary": 130,
+    "mythic": 20
+  },
+  "affixes": [
+    {
+      "id": "attack_pct",
+      "name": "Obrażenia +%",
+      "min_roll": 1,
+      "max_roll": 8,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "hp_pct",
+      "name": "Zdrowie +%",
+      "min_roll": 2,
+      "max_roll": 12,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "armor_flat",
+      "name": "Pancerz +",
+      "min_roll": 1,
+      "max_roll": 10,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "crit_chance_pct",
+      "name": "Szansa krytyczna +%",
+      "min_roll": 0.5,
+      "max_roll": 4,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "crit_damage_pct",
+      "name": "Obrażenia krytyczne +%",
+      "min_roll": 2,
+      "max_roll": 12,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "move_speed_pct",
+      "name": "Szybkość ruchu +%",
+      "min_roll": 1,
+      "max_roll": 6,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "attack_speed_pct",
+      "name": "Szybkostrzelność +%",
+      "min_roll": 1,
+      "max_roll": 7,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "cooldown_reduction_pct",
+      "name": "Skrócenie odnowienia +%",
+      "min_roll": 1,
+      "max_roll": 6,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "lifesteal_pct",
+      "name": "Leczenie za obrażenia +%",
+      "min_roll": 0.25,
+      "max_roll": 1.5,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "pickup_radius_pct",
+      "name": "Zasięg zbioru +%",
+      "min_roll": 3,
+      "max_roll": 18,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "poison_resistance_pct",
+      "name": "Odporność na toksyny +%",
+      "min_roll": 2,
+      "max_roll": 14,
+      "roll_precision": 0.01
+    },
+    {
+      "id": "freeze_resistance_pct",
+      "name": "Odporność na mróz +%",
+      "min_roll": 2,
+      "max_roll": 14,
+      "roll_precision": 0.01
+    }
+  ],
+  "rules": {
+    "independent_rng_seed_per_drop": true,
+    "inventory_item_unique_instance_id": true,
+    "affix_uniqueness_within_item": true,
+    "max_stack_same_affix": 1,
+    "paid_and_free_use_same_combat_stats": true,
+    "upgrades_guaranteed": true,
+    "loss_on_upgrade": false,
+    "lootbox_paid_random_items": "DISABLED_PENDING_LEGAL_PLATFORM_REVIEW"
+  },
+  "drop_tables": {
+    "normal": {
+      "credits": 1.0,
+      "equipment": 0.015,
+      "material": 0.12
+    },
+    "elite": {
+      "credits": 1,
+      "equipment": 0.3,
+      "material": 0.75
+    },
+    "boss_first_clear": {
+      "equipment": 1,
+      "material": 1,
+      "gem_shard": 0
+    },
+    "stage_first_clear": {
+      "equipment_chest": 1,
+      "credits": 1
+    }
+  }
+}

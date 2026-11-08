@@ -1,0 +1,509 @@
+{
+  "asset_count": 56,
+  "assets": [
+    {
+      "path": "assets/ui/buttons/danger_red_disabled.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "42961fd7ce2e2189f2dca452a165b44d6b4b3049246b1fc54f28caae7639a59e"
+    },
+    {
+      "path": "assets/ui/buttons/danger_red_normal.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "c2baa24384a3a8ed8400483d80482761a94e19cf108a0875982bd3a7889e2b5d"
+    },
+    {
+      "path": "assets/ui/buttons/danger_red_pressed.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "1e9efed7f7920071ea4088cc6c2147ce478a11e1f66e040fd94aef6bb1e319f9"
+    },
+    {
+      "path": "assets/ui/buttons/primary_gold_disabled.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "0486a3541b727d01524a0ba9405b9b0ca03368ce396c7f13390467be054db55d"
+    },
+    {
+      "path": "assets/ui/buttons/primary_gold_normal.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "fc0f0b82dbc02e9dfa3477727fec53c1b60468fa814bacefe2b4a830a8c69e4a"
+    },
+    {
+      "path": "assets/ui/buttons/primary_gold_pressed.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "0b820eaaf8cd6570c46deecc1335ce59a37dfb6b283eb6c57c5acab159706093"
+    },
+    {
+      "path": "assets/ui/buttons/secondary_cyan_disabled.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "9f6f47d7bd126f954da107a9208f7def2f2f871696f5461415e983ea83e240c4"
+    },
+    {
+      "path": "assets/ui/buttons/secondary_cyan_normal.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "d45ff78ea91ceff158c5c341ec52c99ea62283fc74af520823289c374fb44a50"
+    },
+    {
+      "path": "assets/ui/buttons/secondary_cyan_pressed.png",
+      "size": [
+        480,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "76626c914ae3e66e940fa081aa9d5526876f337aaf281334702cb980a82cf1e7"
+    },
+    {
+      "path": "assets/ui/icons/drone_auto.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "0988c17f58d1b1f98ac5b24a9dad1177dcc92cf4a77224dafef759f0338ce17a"
+    },
+    {
+      "path": "assets/ui/icons/grenade_auto.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "8b132b2984b75c772bca3350769a815a065fcecc14caae7728a4818b55085800"
+    },
+    {
+      "path": "assets/ui/icons/gun_auto.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "8c1f206ce11484cceaada0be4396fc1b48e994284afeee9e46fb0035be381a43"
+    },
+    {
+      "path": "assets/ui/icons/heal_auto.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "f87fc8e519693259bb92ee81930b7d50e5d01aa27c6bb42cbc123af66c126dc1"
+    },
+    {
+      "path": "assets/ui/icons/move.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "8038e3c7f4a71681517667b7c45aa9bb6c3fbcf6f30bb20e885ac97b10b14614"
+    },
+    {
+      "path": "assets/ui/icons/prestige.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "496275c4f7c9942ca52c5d6e7e83e476b15eb47ba82c7f4c9be065c306ca671e"
+    },
+    {
+      "path": "assets/ui/icons/reward_chest.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "95589a4b35e9e22c5736d68433dc47aa89c8b8f923bcbd4e032b08be9efc18b3"
+    },
+    {
+      "path": "assets/ui/icons/shield_auto.png",
+      "size": [
+        160,
+        160
+      ],
+      "mode": "RGBA",
+      "sha256": "d54ad79dd6402fd2c095c28688e796eafccfdec5b3785a8a8df561f30f2433bb"
+    },
+    {
+      "path": "assets/ui/panels/panel_battlepass.png",
+      "size": [
+        640,
+        510
+      ],
+      "mode": "RGBA",
+      "sha256": "2a4a2a328cf7eece4c7a63de33d83ef56844e8205d95aa1e65a5511891cb84a6"
+    },
+    {
+      "path": "assets/ui/panels/panel_boss.png",
+      "size": [
+        620,
+        92
+      ],
+      "mode": "RGBA",
+      "sha256": "dff661dce6a58bd637bc5df0dbf622a565821286a325821756466bbfc3ddfd91"
+    },
+    {
+      "path": "assets/ui/panels/panel_campaign.png",
+      "size": [
+        640,
+        850
+      ],
+      "mode": "RGBA",
+      "sha256": "9cefe36061380f98a5d5cde5b65aee5ffae78929dd763174eb66f81cc1293b99"
+    },
+    {
+      "path": "assets/ui/panels/panel_character.png",
+      "size": [
+        640,
+        960
+      ],
+      "mode": "RGBA",
+      "sha256": "067afe4affc88c816a2b2fef9d44a957b87787f3f2ae924d59f8e36b85c84e6a"
+    },
+    {
+      "path": "assets/ui/panels/panel_daily.png",
+      "size": [
+        640,
+        720
+      ],
+      "mode": "RGBA",
+      "sha256": "cf6478944510f399ce4dcf6ee51d9a2c5b38b7e9db63df2f922462b09ed3ca81"
+    },
+    {
+      "path": "assets/ui/panels/panel_equipment.png",
+      "size": [
+        220,
+        220
+      ],
+      "mode": "RGBA",
+      "sha256": "a5eedae59690ca9fbe67d24d200b76e7ad01a06595be10aba30e613a62d8725c"
+    },
+    {
+      "path": "assets/ui/panels/panel_inventory.png",
+      "size": [
+        640,
+        940
+      ],
+      "mode": "RGBA",
+      "sha256": "ad6c041a3e03444b6353b83108465aab4c9e238fb7efb1d795306eb103c42d59"
+    },
+    {
+      "path": "assets/ui/panels/panel_modal_defeat.png",
+      "size": [
+        560,
+        680
+      ],
+      "mode": "RGBA",
+      "sha256": "1069626520d704165c47a75edafba7dd164d2bf705c6a20cd56f5e30bbaeb659"
+    },
+    {
+      "path": "assets/ui/panels/panel_modal_victory.png",
+      "size": [
+        560,
+        680
+      ],
+      "mode": "RGBA",
+      "sha256": "1bccf80a69f86fc3689bacb24d59d44e8b1b67d620dddb1e93c8f698cc5ad26e"
+    },
+    {
+      "path": "assets/ui/panels/panel_npc.png",
+      "size": [
+        600,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "42416ad254cb1e94b48771e726cc4de3eaca7f466ffe0e4633d0d11f2f913459"
+    },
+    {
+      "path": "assets/ui/panels/panel_objectives.png",
+      "size": [
+        410,
+        180
+      ],
+      "mode": "RGBA",
+      "sha256": "9f4456ca42136b450e7e8da7ee6914381bb1ea8c50f5b60b26c2ced23551f8f2"
+    },
+    {
+      "path": "assets/ui/panels/panel_shop.png",
+      "size": [
+        640,
+        920
+      ],
+      "mode": "RGBA",
+      "sha256": "453256954eedf459f6489985ba3ddf7184b63c445bf7a71e3d91a4b3ef4a84ef"
+    },
+    {
+      "path": "assets/ui/panels/panel_small.png",
+      "size": [
+        360,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "1c9b60d820685b6f24f5e95d45c18ba45599788a490884868b5547a6195751a4"
+    },
+    {
+      "path": "assets/ui/panels/panel_stage.png",
+      "size": [
+        590,
+        280
+      ],
+      "mode": "RGBA",
+      "sha256": "4796ff605604564ea17d82420fa227b5c430667be89360c121ee858bd07edc71"
+    },
+    {
+      "path": "assets/ui/panels/panel_weapon.png",
+      "size": [
+        220,
+        220
+      ],
+      "mode": "RGBA",
+      "sha256": "9f8ec553159dbb147ab04ff1090b35862181c15249e64148136b3c3e15aec499"
+    },
+    {
+      "path": "assets/vfx/acid/acid_00.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "94ed0cb3464af6254b8eeb79ae63e26d9bb2397a26135196b440fe6fc36da756"
+    },
+    {
+      "path": "assets/vfx/acid/acid_01.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "55c43a5d8934e81850eb11480428aec395cbd9be5525a3d78262492053d1a049"
+    },
+    {
+      "path": "assets/vfx/acid/acid_02.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "2bac995c7998588651b999c5cfab7abdae69c251a49356d9b98b2d8bc5ec4125"
+    },
+    {
+      "path": "assets/vfx/acid/acid_03.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "f0abd13e3b1eeccf8f5742344e6a3dad52a2f2620392b7cf0475fdba4882c83d"
+    },
+    {
+      "path": "assets/vfx/acid/acid_04.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "014fd7e666db78fdad731404000f99454f90ea9a6d9f8ad9ea92ad5f5c05cf7a"
+    },
+    {
+      "path": "assets/vfx/acid/acid_05.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "5632dd52abfe093bb725579b1c2795bfca186c4320544301c232762028b8e812"
+    },
+    {
+      "path": "assets/vfx/acid/acid_06.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "14fba3977723ec776b06fcc63d174d2d0f2ab4bfbf28e2587af3cb985f477585"
+    },
+    {
+      "path": "assets/vfx/acid/acid_07.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "6b78f537009df1a93fb08e17e0e224f95fdf82837c02d091843239b68e11fc48"
+    },
+    {
+      "path": "assets/vfx/impact/impact_00.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "9c70601c8e4c76b17a8d5aadd98c36596eb2f66653d24e37e46c1b38b3477128"
+    },
+    {
+      "path": "assets/vfx/impact/impact_01.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "3185977d7c6fb20f15d16038cd58e6684362d4fa620810bf72691feeb024dd77"
+    },
+    {
+      "path": "assets/vfx/impact/impact_02.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "460567d0ca992b9cc3ccb8d01edc71196ca5ca18df298b2186ea9620e282403f"
+    },
+    {
+      "path": "assets/vfx/impact/impact_03.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "da8bffbe60cf53952a9e27a8e8d9c3d6248e20344fae893a736f1d321cf74bfe"
+    },
+    {
+      "path": "assets/vfx/impact/impact_04.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "c31f5dfdc2d588aea5dfd113d8b487651d1acbb187927350a7c03b5d38106b7e"
+    },
+    {
+      "path": "assets/vfx/impact/impact_05.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "43bae58daa80515967be837d6e13f153a41b0828efe7b08d8ebd08a2307f1c57"
+    },
+    {
+      "path": "assets/vfx/impact/impact_06.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "ca97211e4e073d6ee0c3918f48b0c3d7521bec734871e9fbe08405c3565fc303"
+    },
+    {
+      "path": "assets/vfx/impact/impact_07.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "7cf062db6792170bfa90de229d7462677921a816f3af8b78ce2ba0648a85d95a"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_00.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "bd58da7feb163e95f385cc2cc21ffcee85a991f12a63cd5ed262448793672a93"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_01.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "a65c6445aa41e92db25d5fe10c60d4f541391553935e0e8f50c9132b3129c572"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_02.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "0d84f6948d4ae1d3b78bc03cebfc9134af27686b1839901d6bdf4b36853fe8e0"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_03.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "de2639b2a111806335ad6d189d52a74c8c9ce527da358c44bce0455c18a9e5f6"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_04.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "b45895c7e8c9d8815b7dc2833fe2a94b9c8bae9df4ef65430e6e8803dc48a788"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_05.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "3b514449f6c610cf6edc7051f2437a5831745b4306868beefbb1e9d95005af3f"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_06.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "da31c88a50af3d1484a665921e634ea099356efab20cbc2b69381cabe1c7529d"
+    },
+    {
+      "path": "assets/vfx/plasma/plasma_07.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "8ed44be8e6333101672f862dcab44c80f64e3cb1795c045199027177b8890b8a"
+    }
+  ]
+}

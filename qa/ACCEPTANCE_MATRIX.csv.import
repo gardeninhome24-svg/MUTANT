@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bcsldoqs7pv7m"
+
+[deps]
+
+files=["res://qa/ACCEPTANCE_MATRIX.Priority.translation", "res://qa/ACCEPTANCE_MATRIX.Scenario.translation", "res://qa/ACCEPTANCE_MATRIX.Expected.translation", "res://qa/ACCEPTANCE_MATRIX.Method.translation", "res://qa/ACCEPTANCE_MATRIX.Status.translation"]
+
+source_file="res://qa/ACCEPTANCE_MATRIX.csv"
+dest_files=["res://qa/ACCEPTANCE_MATRIX.Priority.translation", "res://qa/ACCEPTANCE_MATRIX.Scenario.translation", "res://qa/ACCEPTANCE_MATRIX.Expected.translation", "res://qa/ACCEPTANCE_MATRIX.Method.translation", "res://qa/ACCEPTANCE_MATRIX.Status.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

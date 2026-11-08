@@ -1,0 +1,101 @@
+﻿stage,chapter,title,npc,biome,goal_type,goal_count,boss_id,credits,account_xp
+1,1,Zanikający sygnał: sygnał z pustkowi,Mara,wasteland,activate_terminal,1,,93,35
+2,1,Obrona stanowiska: sygnał z pustkowi,Mara,wasteland,defend_node,90,,108,40
+3,1,Przejęcie próbek: sygnał z pustkowi,Mara,wasteland,collect_item,3,,126,45
+4,1,Sabotaż inkubatora: sygnał z pustkowi,Mara,wasteland,destroy_target,2,,146,50
+5,1,Akcja ratunkowa: sygnał z pustkowi,Mara,wasteland,rescue_npc,1,,168,55
+6,1,Droga przez ruiny: sygnał z pustkowi,Mara,wasteland,escort,1,,192,60
+7,1,Oczyszczenie strefy: sygnał z pustkowi,Mara,wasteland,clear_elites,2,,218,65
+8,1,Przywracanie zasilania: sygnał z pustkowi,Mara,wasteland,repair_generator,2,,246,70
+9,1,Utrzymać pozycję: sygnał z pustkowi,Mara,wasteland,survive_hazard,90,,277,75
+10,1,Finał: Matka Roju,Mara,wasteland,defeat_boss,1,boss_ch01,310,80
+11,2,Zanikający sygnał: protokół ewakuacja,Iwo,wasteland,activate_terminal,1,,345,85
+12,2,Obrona stanowiska: protokół ewakuacja,Iwo,wasteland,defend_node,90,,382,90
+13,2,Przejęcie próbek: protokół ewakuacja,Iwo,wasteland,collect_item,3,,422,95
+14,2,Sabotaż inkubatora: protokół ewakuacja,Iwo,wasteland,destroy_target,2,,464,100
+15,2,Akcja ratunkowa: protokół ewakuacja,Iwo,wasteland,rescue_npc,1,,508,105
+16,2,Droga przez ruiny: protokół ewakuacja,Iwo,wasteland,escort,1,,554,110
+17,2,Oczyszczenie strefy: protokół ewakuacja,Iwo,wasteland,clear_elites,2,,602,115
+18,2,Przywracanie zasilania: protokół ewakuacja,Iwo,wasteland,repair_generator,2,,652,120
+19,2,Utrzymać pozycję: protokół ewakuacja,Iwo,wasteland,survive_hazard,90,,705,125
+20,2,Finał: Nadzorca Skażenia,Iwo,wasteland,defeat_boss,1,boss_ch02,760,130
+21,3,Zanikający sygnał: komory ciszy,Nina,cryo_lab,activate_terminal,1,,817,135
+22,3,Obrona stanowiska: komory ciszy,Nina,cryo_lab,defend_node,90,,876,140
+23,3,Przejęcie próbek: komory ciszy,Nina,cryo_lab,collect_item,3,,938,145
+24,3,Sabotaż inkubatora: komory ciszy,Nina,cryo_lab,destroy_target,2,,1002,150
+25,3,Akcja ratunkowa: komory ciszy,Nina,cryo_lab,rescue_npc,1,,1068,155
+26,3,Droga przez ruiny: komory ciszy,Nina,cryo_lab,escort,1,,1136,160
+27,3,Oczyszczenie strefy: komory ciszy,Nina,cryo_lab,clear_elites,2,,1206,165
+28,3,Przywracanie zasilania: komory ciszy,Nina,cryo_lab,repair_generator,2,,1278,170
+29,3,Utrzymać pozycję: komory ciszy,Nina,cryo_lab,survive_hazard,90,,1353,175
+30,3,Finał: Król Kriostazy,Nina,cryo_lab,defeat_boss,1,boss_ch03,1430,180
+31,4,Zanikający sygnał: fałszywe lekarstwo,Kira,cryo_lab,activate_terminal,1,,1509,185
+32,4,Obrona stanowiska: fałszywe lekarstwo,Kira,cryo_lab,defend_node,90,,1590,190
+33,4,Przejęcie próbek: fałszywe lekarstwo,Kira,cryo_lab,collect_item,3,,1674,195
+34,4,Sabotaż inkubatora: fałszywe lekarstwo,Kira,cryo_lab,avoid_hazard_hits,1,,1760,200
+35,4,Akcja ratunkowa: fałszywe lekarstwo,Kira,cryo_lab,defeat_elite,1,,1848,205
+36,4,Droga przez ruiny: fałszywe lekarstwo,Kira,cryo_lab,escort,1,,1938,210
+37,4,Oczyszczenie strefy: fałszywe lekarstwo,Kira,cryo_lab,clear_elites,2,,2030,215
+38,4,Przywracanie zasilania: fałszywe lekarstwo,Kira,cryo_lab,avoid_hazard_hits,1,,2124,220
+39,4,Utrzymać pozycję: fałszywe lekarstwo,Kira,cryo_lab,survive_hazard,90,,2221,225
+40,4,Finał: Doktor Szron,Kira,cryo_lab,defeat_boss,1,boss_ch04,2320,230
+41,5,Zanikający sygnał: podpowierzchnią,Iwo,toxic_sewers,activate_terminal,1,,2421,235
+42,5,Obrona stanowiska: podpowierzchnią,Iwo,toxic_sewers,defend_node,90,,2524,240
+43,5,Przejęcie próbek: podpowierzchnią,Iwo,toxic_sewers,collect_item,3,,2630,245
+44,5,Sabotaż inkubatora: podpowierzchnią,Iwo,toxic_sewers,avoid_hazard_hits,1,,2738,250
+45,5,Akcja ratunkowa: podpowierzchnią,Iwo,toxic_sewers,defeat_elite,1,,2848,255
+46,5,Droga przez ruiny: podpowierzchnią,Iwo,toxic_sewers,escort,1,,2960,260
+47,5,Oczyszczenie strefy: podpowierzchnią,Iwo,toxic_sewers,clear_elites,2,,3074,265
+48,5,Przywracanie zasilania: podpowierzchnią,Iwo,toxic_sewers,avoid_hazard_hits,1,,3190,270
+49,5,Utrzymać pozycję: podpowierzchnią,Iwo,toxic_sewers,survive_hazard,90,,3309,275
+50,5,Finał: Lewiatan Kwaśny,Iwo,toxic_sewers,defeat_boss,1,boss_ch05,3430,280
+51,6,Zanikający sygnał: zatrute źródło,Nina,toxic_sewers,activate_terminal,1,,3553,285
+52,6,Obrona stanowiska: zatrute źródło,Nina,toxic_sewers,defend_node,90,,3678,290
+53,6,Przejęcie próbek: zatrute źródło,Nina,toxic_sewers,collect_item,3,,3806,295
+54,6,Sabotaż inkubatora: zatrute źródło,Nina,toxic_sewers,avoid_hazard_hits,1,,3936,300
+55,6,Akcja ratunkowa: zatrute źródło,Nina,toxic_sewers,defeat_elite,1,,4068,305
+56,6,Droga przez ruiny: zatrute źródło,Nina,toxic_sewers,escort,1,,4202,310
+57,6,Oczyszczenie strefy: zatrute źródło,Nina,toxic_sewers,clear_elites,2,,4338,315
+58,6,Przywracanie zasilania: zatrute źródło,Nina,toxic_sewers,avoid_hazard_hits,1,,4476,320
+59,6,Utrzymać pozycję: zatrute źródło,Nina,toxic_sewers,survive_hazard,90,,4617,325
+60,6,Finał: Serce Zarazy,Nina,toxic_sewers,defeat_boss,1,boss_ch06,4760,330
+61,7,Zanikający sygnał: miasto bez głosu,Mara,dead_city,activate_terminal,1,,4905,335
+62,7,Obrona stanowiska: miasto bez głosu,Mara,dead_city,defend_node,90,,5052,340
+63,7,Przejęcie próbek: miasto bez głosu,Mara,dead_city,collect_item,3,,5202,345
+64,7,Sabotaż inkubatora: miasto bez głosu,Mara,dead_city,avoid_hazard_hits,1,,5354,350
+65,7,Akcja ratunkowa: miasto bez głosu,Mara,dead_city,defeat_elite,1,,5508,355
+66,7,Droga przez ruiny: miasto bez głosu,Mara,dead_city,escort,1,,5664,360
+67,7,Oczyszczenie strefy: miasto bez głosu,Mara,dead_city,clear_elites,2,,5822,365
+68,7,Przywracanie zasilania: miasto bez głosu,Mara,dead_city,avoid_hazard_hits,1,,5982,370
+69,7,Utrzymać pozycję: miasto bez głosu,Mara,dead_city,survive_hazard,90,,6145,375
+70,7,Finał: Król Martwego Miasta,Mara,dead_city,defeat_boss,1,boss_ch07,6310,380
+71,8,Zanikający sygnał: ostatni patrol,Kira,dead_city,activate_terminal,1,,6477,385
+72,8,Obrona stanowiska: ostatni patrol,Kira,dead_city,defend_node,90,,6646,390
+73,8,Przejęcie próbek: ostatni patrol,Kira,dead_city,collect_item,3,,6818,395
+74,8,Sabotaż inkubatora: ostatni patrol,Kira,dead_city,avoid_hazard_hits,1,,6992,400
+75,8,Akcja ratunkowa: ostatni patrol,Kira,dead_city,defeat_elite,1,,7168,405
+76,8,Droga przez ruiny: ostatni patrol,Kira,dead_city,escort,1,,7346,410
+77,8,Oczyszczenie strefy: ostatni patrol,Kira,dead_city,clear_elites,2,,7526,415
+78,8,Przywracanie zasilania: ostatni patrol,Kira,dead_city,avoid_hazard_hits,1,,7708,420
+79,8,Utrzymać pozycję: ostatni patrol,Kira,dead_city,survive_hazard,90,,7893,425
+80,8,Finał: Egzekutor Omega,Kira,dead_city,defeat_boss,1,boss_ch08,8080,430
+81,9,Zanikający sygnał: puls rdzenia,Iwo,reactor,activate_terminal,1,,8269,435
+82,9,Obrona stanowiska: puls rdzenia,Iwo,reactor,defend_node,90,,8460,440
+83,9,Przejęcie próbek: puls rdzenia,Iwo,reactor,collect_item,3,,8654,445
+84,9,Sabotaż inkubatora: puls rdzenia,Iwo,reactor,avoid_hazard_hits,1,,8850,450
+85,9,Akcja ratunkowa: puls rdzenia,Iwo,reactor,defeat_elite,1,,9048,455
+86,9,Droga przez ruiny: puls rdzenia,Iwo,reactor,escort,1,,9248,460
+87,9,Oczyszczenie strefy: puls rdzenia,Iwo,reactor,clear_elites,2,,9450,465
+88,9,Przywracanie zasilania: puls rdzenia,Iwo,reactor,avoid_hazard_hits,1,,9654,470
+89,9,Utrzymać pozycję: puls rdzenia,Iwo,reactor,survive_hazard,90,,9861,475
+90,9,Finał: Strażnik Rdzenia,Iwo,reactor,defeat_boss,1,boss_ch09,10070,480
+91,10,Zanikający sygnał: projekt zero,Mara,reactor,activate_terminal,1,,10281,485
+92,10,Obrona stanowiska: projekt zero,Mara,reactor,defend_node,90,,10494,490
+93,10,Przejęcie próbek: projekt zero,Mara,reactor,collect_item,3,,10710,495
+94,10,Sabotaż inkubatora: projekt zero,Mara,reactor,avoid_hazard_hits,1,,10928,500
+95,10,Akcja ratunkowa: projekt zero,Mara,reactor,defeat_elite,1,,11148,505
+96,10,Droga przez ruiny: projekt zero,Mara,reactor,escort,1,,11370,510
+97,10,Oczyszczenie strefy: projekt zero,Mara,reactor,clear_elites,2,,11594,515
+98,10,Przywracanie zasilania: projekt zero,Mara,reactor,avoid_hazard_hits,1,,11820,520
+99,10,Utrzymać pozycję: projekt zero,Mara,reactor,survive_hazard,90,,12049,525
+100,10,Finał: Architekt Zero,Mara,reactor,defeat_boss,1,boss_ch10,12280,530

@@ -1,0 +1,614 @@
+{
+  "stages": [
+    {
+      "stage": 1,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 2,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 3,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 4,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 5,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 6,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 7,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 8,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 9,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 10,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 11,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 12,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 13,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 14,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 15,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 16,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 17,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 18,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 19,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 20,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 21,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 22,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 23,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 24,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 25,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 26,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 27,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 28,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 29,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 30,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 31,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 32,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 33,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 34,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 35,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 36,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 37,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 38,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 39,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 40,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 41,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 42,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 43,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 44,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 45,
+      "mutators": [
+        "elite_flanking",
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 46,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 47,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 48,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 49,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 50,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 51,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 52,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 53,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 54,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 55,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 56,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 57,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 58,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 59,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 60,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph",
+        "environmental_pulse",
+        "shielded_support_unit"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 61,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 62,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 63,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 64,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 65,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 66,
+      "mutators": [
+        "elite_flanking",
+        "shielded_support_unit"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 67,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 68,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 69,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 70,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 71,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 72,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph",
+        "shielded_support_unit"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 73,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 74,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 75,
+      "mutators": [
+        "elite_flanking",
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 76,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 77,
+      "mutators": [
+        "two_fronts"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 78,
+      "mutators": [
+        "elite_flanking",
+        "shielded_support_unit"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 79,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 80,
+      "mutators": [
+        "projectile_telegraph",
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 81,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 82,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 83,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 84,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph",
+        "shielded_support_unit",
+        "two_fronts"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 85,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 86,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 87,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 88,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 89,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 90,
+      "mutators": [
+        "elite_flanking",
+        "environmental_pulse",
+        "shielded_support_unit"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 91,
+      "mutators": [
+        "two_fronts"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 92,
+      "mutators": [
+        "projectile_telegraph"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 93,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 94,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 95,
+      "mutators": [
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 96,
+      "mutators": [
+        "elite_flanking",
+        "projectile_telegraph",
+        "shielded_support_unit",
+        "boss_phase_extension"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 97,
+      "mutators": [],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 98,
+      "mutators": [
+        "two_fronts"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 99,
+      "mutators": [
+        "elite_flanking"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    },
+    {
+      "stage": 100,
+      "mutators": [
+        "projectile_telegraph",
+        "environmental_pulse"
+      ],
+      "status": "DESIGN_NEEDS_RUNTIME_IMPLEMENTATION"
+    }
+  ],
+  "warning": "Mutators require enemy AI and visual telegraphs; test action readability and FPS"
+}

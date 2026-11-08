@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "design_status": "DRAFT_NEEDS_GAMEPLAY_TEST",
+  "classes": [
+    {
+      "id": "soldier",
+      "name": "Żołnierz",
+      "base_hp": 135,
+      "base_attack": 18,
+      "base_armor": 6,
+      "base_crit": 0.04,
+      "active_ability": {
+        "name": "Ogien zaporowy",
+        "description": "Seria 12 pocisków, bonus do odrzutu",
+        "cooldown_seconds": 45
+      },
+      "story_npc": "Mara",
+      "intro_line": "Nie musisz być nieustraszony. Musisz utrzymać linię.",
+      "starting_weapon": "assault_rifle",
+      "passive": "bullet_knockback_10pct"
+    },
+    {
+      "id": "engineer",
+      "name": "Inżynier",
+      "base_hp": 110,
+      "base_attack": 16,
+      "base_armor": 4,
+      "base_crit": 0.05,
+      "active_ability": {
+        "name": "Wieżyczka impulsowa",
+        "description": "Stawia automatyczną wieżyczkę na 12 s",
+        "cooldown_seconds": 45
+      },
+      "story_npc": "Iwo",
+      "intro_line": "Maszyna zrobi dokładnie to, do czego ją zbudujesz.",
+      "starting_weapon": "plasma_rifle",
+      "passive": "turret_duration_15pct"
+    },
+    {
+      "id": "medic",
+      "name": "Medyk",
+      "base_hp": 125,
+      "base_attack": 15,
+      "base_armor": 5,
+      "base_crit": 0.04,
+      "active_ability": {
+        "name": "Impuls ratunkowy",
+        "description": "Leczy i odpycha wrogów w krótkim promieniu",
+        "cooldown_seconds": 50
+      },
+      "story_npc": "Nina",
+      "intro_line": "Nikt nie zostaje w tyle.",
+      "starting_weapon": "assault_rifle",
+      "passive": "healing_20pct"
+    },
+    {
+      "id": "scout",
+      "name": "Zwiadowca",
+      "base_hp": 95,
+      "base_attack": 17,
+      "base_armor": 3,
+      "base_crit": 0.09,
+      "active_ability": {
+        "name": "Cień i błysk",
+        "description": "Krótki unik i seria krytycznych pocisków",
+        "cooldown_seconds": 45
+      },
+      "story_npc": "Kira",
+      "intro_line": "Zobacz ich pierwszy, zanim oni zobaczą ciebie.",
+      "starting_weapon": "smg",
+      "passive": "move_speed_8pct"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PROPOSED_SANDBOX_NOT_APPROVED_PRODUCTION_PRICES",
+  "attempts": {
+    "max": 5,
+    "regen_seconds": 1800,
+    "consume_on_start": true,
+    "practice_cost": 0,
+    "practice_rewards": false,
+    "practice_all_unlocked_stages": true,
+    "premium_refill_full_cost_crystals": 60,
+    "premium_refill_single_cost_crystals": 18,
+    "refill_existing_pool_not_extra": true,
+    "max_purchase_per_day": 5,
+    "max_attempts_on_refill": 5
+  },
+  "revive": {
+    "per_run_max": 1,
+    "premium_cost_crystals": 30,
+    "health_fraction": 0.65,
+    "shield_seconds": 3.5,
+    "optional_rewarded_ad_enabled": false,
+    "offline_fallback": "crystals_only",
+    "no_forced_ads": true
+  },
+  "pity": {
+    "threshold": 50,
+    "per_chest_type": true,
+    "counts_only_opened_premium_chests": true,
+    "guarantee_legendary_or_above": true,
+    "disclose_odds": true,
+    "odds_proposal": {
+      "common": 0.52,
+      "rare": 0.3,
+      "epic": 0.135,
+      "legendary": 0.04,
+      "mythic": 0.005
+    },
+    "note": "Example probabilities, MUST NOT activate until validated and disclosed, 50th is guaranteed legendary+"
+  },
+  "monetization": {
+    "vip_eur_30d": 9.99,
+    "battle_pass_eur_30d": 9.99,
+    "ads_optional": true,
+    "purchases_sandbox_only": true,
+    "never_sell_exclusive_campaign_progression": true
+  },
+  "core": {
+    "class_progression_separate": true,
+    "shared_inventory": true,
+    "shared_premium_wallet": true,
+    "fuse_same_rarity_count": 3,
+    "levels_per_class": 100,
+    "stages_per_class": 100,
+    "no_paywall_for_f2p": true
+  },
+  "performance": {
+    "android_min_fps": 30,
+    "high_target_fps": 60,
+    "enemy_active_max_low": 40,
+    "enemy_active_max_mid": 65,
+    "enemy_active_max_high": 100
+  }
+}

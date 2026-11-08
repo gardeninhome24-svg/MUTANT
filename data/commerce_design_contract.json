@@ -1,0 +1,13 @@
+{
+  "vip_30days_eur": 9.99,
+  "battle_pass_30days_eur": 9.99,
+  "crystal_sources": ["daily", "achievements", "bosses", "events", "leaderboards"],
+  "chests": {"paid_and_free": true, "legendary_guarantee_at": 50, "disclose_odds": true, "exact_probabilities": "must balance and disclose; do not invent"},
+  "duplicate_items": ["salvage_to_materials", "fuse_3_of_same_rarity_to_random_higher_rarity"],
+  "equipment_upgrade_success_pct": 100,
+  "ads": "optional_rewarded_only; feature flag, no forced interstitials",
+  "beta": "all transactions sandbox, production receipts and backend verification not implemented by this kit",
+  "global_leaderboard": "server verified only, no trust in offline saves",
+  "campaign_f2p_target_days": [45, 60],
+  "daily_play_target_minutes": [45, 90]
+}

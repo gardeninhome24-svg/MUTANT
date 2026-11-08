@@ -1,0 +1,629 @@
+[gd_scene load_steps=20 format=3 uid="uid://mainscen001"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://b7vplayer001" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="4_joystick"]
+[ext_resource type="Texture2D" path="res://assets/ui/joystick_base.png" id="5_jbase"]
+[ext_resource type="Texture2D" path="res://assets/ui/joystick_knob.png" id="6_jknob"]
+[ext_resource type="Texture2D" path="res://assets/mutantsurvivor_ch01/icons/energy_cell.png" id="7_battery"]
+[ext_resource type="Texture2D" path="res://assets/mutantsurvivor_ch01/icons/purple_crystal.png" id="8_gem"]
+[ext_resource type="Texture2D" path="res://assets/ui/dash_button.png" id="9_dash"]
+[ext_resource type="Script" path="res://scripts/mini_radar.gd" id="10_radar"]
+[ext_resource type="Texture2D" path="res://assets/environment/flashlight_cookie.png" id="11_light"]
+[ext_resource type="Texture2D" path="res://assets/mutantsurvivor_ch01/ui/hero_portrait.png" id="13_portrait"]
+[ext_resource type="Texture2D" path="res://assets/ui/fire_button.png" id="14_fire"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(2640, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(64, 2120)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+bg_color = Color(0.06, 0.08, 0.12, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.78, 0.98, 0.75)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
+bg_color = Color(0.88, 0.16, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp"]
+bg_color = Color(0.12, 0.65, 0.98, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wave"]
+bg_color = Color(0.95, 0.75, 0.18, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss"]
+bg_color = Color(0.92, 0.14, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.76, 0.8, 0.88, 1)
+
+[node name="GroundLayer" type="Node2D" parent="."]
+z_index = -20
+
+[node name="DecorationsLayer" type="Node2D" parent="."]
+z_index = -10
+
+[node name="ObstaclesLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="CharactersLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="CharactersLayer" instance=ExtResource("2_player")]
+position = Vector2(0, 60)
+
+[node name="HeroTorchLight" type="PointLight2D" parent="CharactersLayer/Player"]
+position = Vector2(0, -40)
+scale = Vector2(4.2, 4.2)
+color = Color(0.9, 0.96, 1, 1)
+energy = 0.55
+texture = ExtResource("11_light")
+
+[node name="ProjectilesLayer" type="Node2D" parent="."]
+z_index = 5
+
+[node name="EffectsLayer" type="Node2D" parent="."]
+z_index = 10
+
+[node name="WorldBorders" type="StaticBody2D" parent="." groups=["world_border"]]
+collision_layer = 1
+collision_mask = 1
+
+[node name="TopWall" type="CollisionShape2D" parent="WorldBorders"]
+position = Vector2(0, -1024)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="BottomWall" type="CollisionShape2D" parent="WorldBorders"]
+position = Vector2(0, 1024)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="LeftWall" type="CollisionShape2D" parent="WorldBorders"]
+position = Vector2(-1280, 0)
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="RightWall" type="CollisionShape2D" parent="WorldBorders"]
+position = Vector2(1280, 0)
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HUDRoot" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerStatsCard" type="PanelContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 438.0
+offset_bottom = 136.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="Margin" type="MarginContainer" parent="HUD/HUDRoot/PlayerStatsCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxRoot" type="HBoxContainer" parent="HUD/HUDRoot/PlayerStatsCard/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AvatarBox" type="VBoxContainer" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Avatar" type="TextureRect" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox"]
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+texture = ExtResource("13_portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CharLevelLabel" type="Label" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.32, 1)
+theme_override_font_sizes/font_size = 12
+text = "Konto Lv.1"
+horizontal_alignment = 1
+
+[node name="VBoxStats" type="VBoxContainer" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="ChapterTitle" type="Label" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "ETAP 01/100 — Pierwszy trop"
+
+[node name="SubTitle" type="Label" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.8, 0.88, 1)
+theme_override_font_sizes/font_size = 11
+text = "Rozdział 1: Kompleks A-03 | Poziom trudności: Ocalały"
+
+[node name="HPBar" type="ProgressBar" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp")
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "HP: 160 / 160"
+horizontal_alignment = 1
+
+[node name="XPBar" type="ProgressBar" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp")
+value = 0.0
+show_percentage = false
+
+[node name="RunLevelLabel" type="Label" parent="HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Poziom w runie: Lv.1 (0 / 30 XP)"
+horizontal_alignment = 1
+
+[node name="ObjectivesPanel" type="PanelContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 146.0
+offset_right = 330.0
+offset_bottom = 262.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="Margin" type="MarginContainer" parent="HUD/HUDRoot/ObjectivesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDRoot/ObjectivesPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="Label" parent="HUD/HUDRoot/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.25, 1)
+theme_override_font_sizes/font_size = 13
+text = "◆ CELE MISJI (ETAP 01)"
+
+[node name="Obj1Label" type="Label" parent="HUD/HUDRoot/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "☐ Dotrzyj do nadajnika A-03 (0/1)"
+
+[node name="Obj2Label" type="Label" parent="HUD/HUDRoot/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "☐ Zbierz rdzenie danych DNA (0/3)"
+
+[node name="Obj3Label" type="Label" parent="HUD/HUDRoot/ObjectivesPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "☐ Przetrwaj 10 fal (Fala 1/10)"
+
+[node name="WaveProgress" type="VBoxContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -210.0
+offset_top = 16.0
+offset_right = 210.0
+offset_bottom = 108.0
+grow_horizontal = 2
+theme_override_constants/separation = 5
+
+[node name="WaveLabel" type="Label" parent="HUD/HUDRoot/WaveProgress"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.22, 1)
+theme_override_font_sizes/font_size = 15
+text = "⚡ FALA 1 / 10 (CZAS: 18s) ⚡"
+horizontal_alignment = 1
+
+[node name="WaveTimerBar" type="ProgressBar" parent="HUD/HUDRoot/WaveProgress"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_wave")
+max_value = 18.0
+value = 18.0
+show_percentage = false
+
+[node name="BossBox" type="VBoxContainer" parent="HUD/HUDRoot/WaveProgress"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="BossLabel" type="Label" parent="HUD/HUDRoot/WaveProgress/BossBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.32, 0.52, 1)
+theme_override_font_sizes/font_size = 13
+text = "☠ BOSS: MATKA ROJU A-03 ☠"
+horizontal_alignment = 1
+
+[node name="BossHPBar" type="ProgressBar" parent="HUD/HUDRoot/WaveProgress/BossBox"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_boss")
+max_value = 1000.0
+value = 1000.0
+show_percentage = false
+
+[node name="CurrencyBar" type="HBoxContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -350.0
+offset_top = 16.0
+offset_right = -18.0
+offset_bottom = 52.0
+grow_horizontal = 0
+theme_override_constants/separation = 18
+alignment = 2
+
+[node name="EnergyHBox" type="HBoxContainer" parent="HUD/HUDRoot/CurrencyBar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="HUD/HUDRoot/CurrencyBar/EnergyHBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("7_battery")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnergyLabel" type="Label" parent="HUD/HUDRoot/CurrencyBar/EnergyHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+text = "Kredyty: 250"
+
+[node name="DMHBox" type="HBoxContainer" parent="HUD/HUDRoot/CurrencyBar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="HUD/HUDRoot/CurrencyBar/DMHBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("8_gem")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DMLabel" type="Label" parent="HUD/HUDRoot/CurrencyBar/DMHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.45, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "150"
+
+[node name="RadarPanel" type="PanelContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -168.0
+offset_top = 58.0
+offset_right = -18.0
+offset_bottom = 176.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="MiniRadar" type="Control" parent="HUD/HUDRoot/RadarPanel"]
+layout_mode = 2
+script = ExtResource("10_radar")
+
+[node name="VirtualJoystick" type="Control" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -205.0
+offset_right = 218.0
+offset_bottom = -35.0
+grow_vertical = 0
+script = ExtResource("4_joystick")
+
+[node name="Base" type="TextureRect" parent="HUD/HUDRoot/VirtualJoystick"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_jbase")
+expand_mode = 1
+
+[node name="Knob" type="TextureRect" parent="HUD/HUDRoot/VirtualJoystick"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 53.0
+offset_top = 53.0
+offset_right = 117.0
+offset_bottom = 117.0
+texture = ExtResource("6_jknob")
+expand_mode = 1
+
+[node name="FireBtn" type="TextureButton" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -160.0
+offset_right = -44.0
+offset_bottom = -54.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("14_fire")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DashBtn" type="TextureButton" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -236.0
+offset_top = -132.0
+offset_right = -168.0
+offset_bottom = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("9_dash")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="UpgradePanel" type="ColorRect" parent="HUD/HUDRoot"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.05, 0.86)
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD/HUDRoot/UpgradePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDRoot/UpgradePanel/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "⚡ AWANS W RUNIE! WYBIERZ MODUŁ BOJOWY ⚡"
+horizontal_alignment = 1
+
+[node name="CardsContainer" type="HBoxContainer" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RerollBtn" type="Button" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(240, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "🎲 PRZELOSUJ KARTY (1)"
+
+[node name="DeathPanel" type="ColorRect" parent="HUD/HUDRoot"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.02, 0.02, 0.92)
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD/HUDRoot/DeathPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDRoot/DeathPanel/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.28, 0.28, 1)
+theme_override_font_sizes/font_size = 34
+text = "💀 ODDZIAŁ Został PRZEŁAMANY! 💀"
+horizontal_alignment = 1
+
+[node name="Desc" type="Label" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox"]
+layout_mode = 2
+text = "Możesz użyć awaryjnego defibrylatora (1 na etap) lub ponowić misję."
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ReviveAdBtn" type="Button" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox"]
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+text = "⚡ WSKRZESZENIE AWARYJNE"
+
+[node name="ReviveDMBtn" type="Button" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox"]
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+text = "💎 WSKRZESZENIE (30 DM)"
+
+[node name="GiveUpBtn" type="Button" parent="HUD/HUDRoot/DeathPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(200, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "PONÓW ETAP"
+
+[node name="WinPanel" type="ColorRect" parent="HUD/HUDRoot"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.08, 0.05, 0.92)
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD/HUDRoot/WinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDRoot/WinPanel/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/HUDRoot/WinPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.45, 1)
+theme_override_font_sizes/font_size = 34
+text = "🏆 ETAP UKOŃCZONY! ODBLOKOWANO KOLEJNY ETAP! 🏆"
+horizontal_alignment = 1
+
+[node name="SummaryLabel" type="Label" parent="HUD/HUDRoot/WinPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Nagroda: +127 Kredytów | +72 XP Postaci"
+horizontal_alignment = 1
+
+[node name="NextStageBtn" type="Button" parent="HUD/HUDRoot/WinPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(260, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "▶ ROZPOCZNIJ KOLEJNY ETAP"
+
+[node name="RestartBtn" type="Button" parent="HUD/HUDRoot/WinPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "POWTÓRZ OBECNY ETAP"
+
+[node name="PremiumShopPanel" type="ColorRect" parent="HUD/HUDRoot"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.07, 0.95)
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD/HUDRoot/PremiumShopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDRoot/PremiumShopPanel/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "⭐ ZBROJOWNIA SEKTORA A-03 ⭐"
+horizontal_alignment = 1
+
+[node name="BuyEnergyBtn" type="Button" parent="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(260, 46)
+layout_mode = 2
+text = "🔋 PAKIET ZASILANIA"
+
+[node name="WatchAdEnergyBtn" type="Button" parent="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(260, 46)
+layout_mode = 2
+text = "📺 BONUS ZAOPATRZENIA"
+
+[node name="CloseShopBtn" type="Button" parent="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+text = "POWRÓT"
+
+[connection signal="pressed" from="HUD/HUDRoot/DashBtn" to="CharactersLayer/Player" method="perform_dash"]
+[connection signal="pressed" from="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/RerollBtn" to="." method="_on_reroll_pressed"]
+[connection signal="pressed" from="HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox/ReviveAdBtn" to="." method="_on_revive_ad_pressed"]
+[connection signal="pressed" from="HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox/ReviveDMBtn" to="." method="_on_revive_premium_pressed"]
+[connection signal="pressed" from="HUD/HUDRoot/DeathPanel/CenterContainer/VBox/GiveUpBtn" to="." method="restart_current_stage"]
+[connection signal="pressed" from="HUD/HUDRoot/WinPanel/CenterContainer/VBox/NextStageBtn" to="." method="start_next_unlocked_stage"]
+[connection signal="pressed" from="HUD/HUDRoot/WinPanel/CenterContainer/VBox/RestartBtn" to="." method="restart_current_stage"]
+[connection signal="pressed" from="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox/BuyEnergyBtn" to="." method="_on_buy_energy_pack"]
+[connection signal="pressed" from="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox/WatchAdEnergyBtn" to="." method="_on_watch_ad_for_energy"]
+[connection signal="pressed" from="HUD/HUDRoot/PremiumShopPanel/CenterContainer/VBox/CloseShopBtn" to="." method="toggle_premium_shop"]
