@@ -14,8 +14,20 @@ var output_vector: Vector2 = Vector2.ZERO
 signal direction_changed(dir: Vector2)
 
 func _ready() -> void:
+	# Decorative elements must not steal interaction from the movement surface.
+	base.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	reset_knob()
 	resized.connect(reset_knob)
+
+func _notification(what: int) -> void:
+	# A touch can be interrupted by pause, an Android app switch or hidden HUD.
+	# Never leave the player moving after the joystick disappears.
+	if what == NOTIFICATION_VISIBILITY_CHANGED or what == NOTIFICATION_EXIT_TREE:
+		if not is_visible_in_tree() or what == NOTIFICATION_EXIT_TREE:
+			touch_index = -1
+			if is_node_ready():
+				reset_knob()
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
@@ -28,7 +40,8 @@ func _input(event: InputEvent) -> void:
 			if touch_index != -1:
 				return
 			var center := size * 0.5
-			if local_pos.distance_to(center) <= _radius() * 1.45:
+			# Allow a little space around the visible base for comfortable thumbs.
+			if local_pos.distance_to(center) <= _radius() * 1.65:
 				touch_index = event.index
 				update_joystick(event.position)
 		elif event.index == touch_index:
