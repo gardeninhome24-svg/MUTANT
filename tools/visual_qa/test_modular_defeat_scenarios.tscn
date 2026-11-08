@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxmodularscenarios01"]
+
+[ext_resource type="Script" path="res://tools/visual_qa/test_modular_defeat_scenarios.gd" id="1_test"]
+
+[node name="TestModularDefeatScenarios" type="Node"]
+script = ExtResource("1_test")

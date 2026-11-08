@@ -1,0 +1,92 @@
+{
+  "version": "2.0.0",
+  "project": "Mutant Survivor",
+  "engine": "Godot 4.7.2",
+  "scenarios": [
+    {
+      "id": "defeat_overlay_16x9",
+      "category": "defeat",
+      "name": "Defeat Overlay (Misja Nieudana) - Landscape PC",
+      "scene_path": "res://addons/ms_balance/ui/defeat_overlay.tscn",
+      "resolution": [1280, 720],
+      "reference_image": "visual_qa/references/defeat/defeat_overlay_1280x720_ref.png",
+      "actual_capture": "visual_qa/captures/defeat_overlay_1280x720_actual.png",
+      "tolerance_ssim": 0.65,
+      "key_elements": [
+        "Backdrop without seams",
+        "Centered card 580px with red biohazard border",
+        "MISJA NIEUDANA header",
+        "3 Stat Cards: Fala, Czas, Zabici",
+        "Revive Button (Gold/Amber 30 gems)",
+        "Ad Revive Button (Cyan/Teal)",
+        "Retry and Return to Base buttons"
+      ]
+    },
+    {
+      "id": "victory_overlay_16x9",
+      "category": "victory",
+      "name": "Victory Overlay (Misja Ukończona) - Landscape PC",
+      "scene_path": "res://scenes/main/main.tscn",
+      "resolution": [1280, 720],
+      "reference_image": "visual_qa/references/victory/victory_1280x720_ref.png",
+      "actual_capture": "visual_qa/captures/victory_overlay_1280x720_actual.png",
+      "tolerance_ssim": 0.60,
+      "key_elements": [
+        "Gold laurel star badge header",
+        "MISJA UKOŃCZONA text",
+        "3 Stat Cards: Fala 10/10, Czas, Zabici",
+        "Reward badges: Gems, Gold/Credits, Scrap, Item Drop",
+        "Emerald Continue button"
+      ]
+    },
+    {
+      "id": "hud_combat_16x9",
+      "category": "hud_16x9",
+      "name": "Live Combat HUD - Landscape PC 16:9",
+      "scene_path": "res://scenes/main/main.tscn",
+      "resolution": [1280, 720],
+      "reference_image": "visual_qa/references/hud_16x9/hud_combat_1280x720_ref.png",
+      "actual_capture": "visual_qa/captures/hud_combat_1280x720_actual.png",
+      "tolerance_ssim": 0.55,
+      "key_elements": [
+        "Hero portrait and HP/XP bars",
+        "Top wave / timer / kill counter",
+        "Minimap radar with enemy dots",
+        "Bottom weapon ammo HUD",
+        "Move-only combat without manual firing clutters"
+      ]
+    },
+    {
+      "id": "hud_mobile_9x16",
+      "category": "hud_9x16",
+      "name": "Live Combat HUD - Mobile Android 9:16",
+      "scene_path": "res://scenes/main/main.tscn",
+      "resolution": [720, 1280],
+      "reference_image": "visual_qa/references/hud_9x16/hud_mobile_720x1280_ref.png",
+      "actual_capture": "visual_qa/captures/hud_mobile_720x1280_actual.png",
+      "tolerance_ssim": 0.55,
+      "key_elements": [
+        "Portrait responsive layout",
+        "Top status bars and boss alert banner",
+        "Safe area margins for mobile screens",
+        "Virtual move joystick 48x48+ dp hitboxes"
+      ]
+    },
+    {
+      "id": "inventory_16x9",
+      "category": "inventory",
+      "name": "Armory & Inventory Equipment Screen",
+      "scene_path": "res://scenes/ui/inventory_showcase.tscn",
+      "resolution": [1280, 720],
+      "reference_image": "visual_qa/references/inventory/inventory_1280x720_ref.png",
+      "actual_capture": "visual_qa/captures/inventory_1280x720_actual.png",
+      "tolerance_ssim": 0.55,
+      "key_elements": [
+        "Category sidebar: Weapons, Armor, Helmets, etc.",
+        "Character showcase central slot grid",
+        "Equipment grid with rarity borders",
+        "Stats comparison panel and action buttons"
+      ]
+    }
+  ]
+}

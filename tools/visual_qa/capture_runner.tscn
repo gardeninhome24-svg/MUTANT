@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://visual_qa_capture_runner_01"]
+
+[ext_resource type="Script" path="res://tools/visual_qa/capture_runner.gd" id="1_vqa"]
+
+[node name="VisualQACaptureRunner" type="Node"]
+script = ExtResource("1_vqa")

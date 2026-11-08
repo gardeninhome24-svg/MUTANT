@@ -1,15 +1,21 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://addons/ms_balance/ui/defeat_overlay.gd" id="1"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/defeat_background_landscape.png" id="2"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_biohazard_crest.png" id="3_crest"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_stat_flag.png" id="4_flag"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_stat_timer.png" id="5_timer"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_stat_skull.png" id="6_skull"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_revive.png" id="7_revive"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_ad_clapper.png" id="8_ad"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_retry.png" id="9_retry"]
-[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_home.png" id="10_hub"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/defeat_backdrop_landscape.png" id="2_backdrop"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/card_armored_frame.png" id="3_frame"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/tile_stat_box_clean.png" id="4_tile_bg"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_flag.png" id="5_flag"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_timer.png" id="6_timer"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/icon_skull.png" id="7_skull"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_revive_gold_normal.png" id="8_gold_norm"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_revive_gold_hover.png" id="9_gold_hov"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_revive_gold_pressed.png" id="10_gold_pres"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_revive_gold_disabled.png" id="11_gold_dis"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_revive_ad.png" id="12_ad"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_attempt_purple.png" id="13_att"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_retry_blue.png" id="14_retry"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/btn_hub_dark.png" id="15_hub"]
+[ext_resource type="Texture2D" path="res://addons/ms_balance/assets/token_crystal.png" id="16_cryst"]
 
 [node name="MSDefeatOverlay" type="Control"]
 layout_mode = 3
@@ -27,216 +33,354 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2")
+texture = ExtResource("2_backdrop")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Darken" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.01, 0.02, 0.04, 0.45)
-
-[node name="Center" type="PanelContainer" parent="."]
+[node name="CardCenter" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -290.0
-offset_top = -255.0
-offset_right = 290.0
-offset_bottom = 255.0
+offset_left = -435.0
+offset_top = -330.0
+offset_right = 435.0
+offset_bottom = 330.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_minimum_size = Vector2(580, 510)
+custom_minimum_size = Vector2(870, 660)
 
-[node name="Margin" type="MarginContainer" parent="Center"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 18
-
-[node name="VBox" type="VBoxContainer" parent="Center/Margin"]
-layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 8
-
-[node name="Crest" type="TextureRect" parent="Center/Margin/VBox"]
-custom_minimum_size = Vector2(46, 46)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("3_crest")
+[node name="CardFrame" type="TextureRect" parent="CardCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_frame")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Title" type="Label" parent="Center/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.28, 0.25, 1)
-theme_override_colors/font_shadow_color = Color(0.3, 0.02, 0.02, 1)
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 28
-text = "MISJA NIEUDANA"
-horizontal_alignment = 1
+[node name="StatTiles" type="Control" parent="CardCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Subtitle" type="Label" parent="Center/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.82, 0.95, 1)
-theme_override_font_sizes/font_size = 12
-text = "CHCESZ KONTYNUOWAĆ MISJĘ?"
-horizontal_alignment = 1
+[node name="TileFala" type="TextureRect" parent="CardCenter/StatTiles"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 222.0
+offset_right = 305.0
+offset_bottom = 317.0
+texture = ExtResource("4_tile_bg")
+expand_mode = 1
 
-[node name="StatsRow" type="HBoxContainer" parent="Center/Margin/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
-
-[node name="StatCardWave" type="PanelContainer" parent="Center/Margin/VBox/StatsRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBox" type="HBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardWave"]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Center/Margin/VBox/StatsRow/StatCardWave/HBox"]
-custom_minimum_size = Vector2(26, 26)
-layout_mode = 2
-texture = ExtResource("4_flag")
+[node name="Icon" type="TextureRect" parent="CardCenter/StatTiles/TileFala"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 18.0
+offset_right = 72.0
+offset_bottom = 74.0
+texture = ExtResource("5_flag")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBox" type="VBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardWave/HBox"]
-layout_mode = 2
-theme_override_constants/separation = 1
-alignment = 1
-
-[node name="Label" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardWave/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
-theme_override_font_sizes/font_size = 10
+[node name="Title" type="Label" parent="CardCenter/StatTiles/TileFala"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 16.0
+offset_right = 230.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 14
 text = "FALA"
 
-[node name="WaveVal" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardWave/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.92, 0.65, 1)
-theme_override_font_sizes/font_size = 16
-text = "5 / 10"
+[node name="WaveVal" type="Label" parent="CardCenter/StatTiles/TileFala"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 36.0
+offset_right = 240.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
+text = "5/10"
+vertical_alignment = 1
 
-[node name="StatCardTime" type="PanelContainer" parent="Center/Margin/VBox/StatsRow"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="TileCzas" type="TextureRect" parent="CardCenter/StatTiles"]
+layout_mode = 0
+offset_left = 315.0
+offset_top = 222.0
+offset_right = 575.0
+offset_bottom = 317.0
+texture = ExtResource("4_tile_bg")
+expand_mode = 1
 
-[node name="HBox" type="HBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardTime"]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Center/Margin/VBox/StatsRow/StatCardTime/HBox"]
-custom_minimum_size = Vector2(26, 26)
-layout_mode = 2
-texture = ExtResource("5_timer")
+[node name="Icon" type="TextureRect" parent="CardCenter/StatTiles/TileCzas"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 18.0
+offset_right = 72.0
+offset_bottom = 74.0
+texture = ExtResource("6_timer")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBox" type="VBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardTime/HBox"]
-layout_mode = 2
-theme_override_constants/separation = 1
-alignment = 1
-
-[node name="Label" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardTime/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
-theme_override_font_sizes/font_size = 10
+[node name="Title" type="Label" parent="CardCenter/StatTiles/TileCzas"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 16.0
+offset_right = 230.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 14
 text = "CZAS"
 
-[node name="TimeVal" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardTime/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.92, 0.65, 1)
-theme_override_font_sizes/font_size = 16
+[node name="TimeVal" type="Label" parent="CardCenter/StatTiles/TileCzas"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 36.0
+offset_right = 240.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
 text = "04:32"
+vertical_alignment = 1
 
-[node name="StatCardKills" type="PanelContainer" parent="Center/Margin/VBox/StatsRow"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="TileZabici" type="TextureRect" parent="CardCenter/StatTiles"]
+layout_mode = 0
+offset_left = 580.0
+offset_top = 222.0
+offset_right = 840.0
+offset_bottom = 317.0
+texture = ExtResource("4_tile_bg")
+expand_mode = 1
 
-[node name="HBox" type="HBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardKills"]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Center/Margin/VBox/StatsRow/StatCardKills/HBox"]
-custom_minimum_size = Vector2(26, 26)
-layout_mode = 2
-texture = ExtResource("6_skull")
+[node name="Icon" type="TextureRect" parent="CardCenter/StatTiles/TileZabici"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 18.0
+offset_right = 72.0
+offset_bottom = 74.0
+texture = ExtResource("7_skull")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBox" type="VBoxContainer" parent="Center/Margin/VBox/StatsRow/StatCardKills/HBox"]
-layout_mode = 2
-theme_override_constants/separation = 1
-alignment = 1
-
-[node name="Label" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardKills/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
-theme_override_font_sizes/font_size = 10
+[node name="Title" type="Label" parent="CardCenter/StatTiles/TileZabici"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 16.0
+offset_right = 230.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 14
 text = "ZABICI"
 
-[node name="KillsVal" type="Label" parent="Center/Margin/VBox/StatsRow/StatCardKills/HBox/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.92, 0.65, 1)
-theme_override_font_sizes/font_size = 16
+[node name="KillsVal" type="Label" parent="CardCenter/StatTiles/TileZabici"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 36.0
+offset_right = 240.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
 text = "142"
+vertical_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="CardCenter"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 332.0
+offset_right = 770.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0.72, 0.82, 0.92, 1)
+theme_override_font_sizes/font_size = 14
+text = "— CHCESZ KONTYNUOWAĆ MISJĘ? —"
+horizontal_alignment = 1
+
+[node name="ActionRow1" type="Control" parent="CardCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnReviveGold" type="TextureButton" parent="CardCenter/ActionRow1"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 372.0
+offset_right = 297.0
+offset_bottom = 477.0
+texture_normal = ExtResource("8_gold_norm")
+texture_pressed = ExtResource("10_gold_pres")
+texture_hover = ExtResource("9_gold_hov")
+texture_disabled = ExtResource("11_gold_dis")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="CostBadge" type="HBoxContainer" parent="CardCenter/ActionRow1/BtnReviveGold"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 16.0
+offset_right = 245.0
+offset_bottom = 52.0
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="CrystIcon" type="TextureRect" parent="CardCenter/ActionRow1/BtnReviveGold/CostBadge"]
+layout_mode = 2
+custom_minimum_size = Vector2(28, 28)
+texture = ExtResource("16_cryst")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CostLabel" type="Label" parent="CardCenter/ActionRow1/BtnReviveGold/CostBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "300"
+vertical_alignment = 1
+
+[node name="BtnReviveAd" type="TextureButton" parent="CardCenter/ActionRow1"]
+layout_mode = 0
+offset_left = 319.0
+offset_top = 372.0
+offset_right = 579.0
+offset_bottom = 477.0
+texture_normal = ExtResource("12_ad")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BtnAttempt" type="TextureRect" parent="CardCenter/ActionRow1"]
+layout_mode = 0
+offset_left = 599.0
+offset_top = 372.0
+offset_right = 844.0
+offset_bottom = 477.0
+texture = ExtResource("13_att")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CountLabel" type="Label" parent="CardCenter/ActionRow1/BtnAttempt"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 14.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "x1"
+vertical_alignment = 1
+
+[node name="ActionRow2" type="Control" parent="CardCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnRetry" type="TextureButton" parent="CardCenter/ActionRow2"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 495.0
+offset_right = 420.0
+offset_bottom = 575.0
+texture_normal = ExtResource("14_retry")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BtnHub" type="TextureButton" parent="CardCenter/ActionRow2"]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 495.0
+offset_right = 805.0
+offset_bottom = 575.0
+texture_normal = ExtResource("15_hub")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Center" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margin" type="Control" parent="Center"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="Control" parent="Center/Margin"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Center/Margin/VBox"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "MISJA NIEUDANA"
+
+[node name="Subtitle" type="Label" parent="Center/Margin/VBox"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="Score" type="Label" parent="Center/Margin/VBox"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.9, 0.62, 1)
-theme_override_font_sizes/font_size = 14
-text = "FALA 9/10   |   02:30   |   230 MUTANTÓW"
-horizontal_alignment = 1
-autowrap_mode = 3
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="Summary" type="Label" parent="Center/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 12
-text = "Ulepsz wyposażenie lub spróbuj innej strategii."
-horizontal_alignment = 1
-autowrap_mode = 3
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="RevivePremium" type="Button" parent="Center/Margin/VBox"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-icon = ExtResource("7_revive")
-expand_icon = true
-text = "  WSKRZEŚ — 30 KRYSZTAŁÓW"
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
 
 [node name="ReviveAd" type="Button" parent="Center/Margin/VBox"]
-visible = false
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-icon = ExtResource("8_ad")
-expand_icon = true
-text = "  WSKRZEŚ ZA REKLAMĘ"
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
 
 [node name="Retry" type="Button" parent="Center/Margin/VBox"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-icon = ExtResource("9_retry")
-expand_icon = true
-text = "  SPRÓBUJ PONOWNIE (1 PRÓBA)"
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
 
 [node name="Hub" type="Button" parent="Center/Margin/VBox"]
-custom_minimum_size = Vector2(0, 46)
-layout_mode = 2
-icon = ExtResource("10_hub")
-expand_icon = true
-text = "  POWRÓT DO BAZY"
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

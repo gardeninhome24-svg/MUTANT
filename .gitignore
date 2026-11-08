@@ -7,10 +7,25 @@
 export.cfg
 export_credentials.cfg
 
-# Imported translations (automatically generated from CSV files)
+# Imported translations
 *.translation
 
 # Mono-specific ignores
 .mono/
 data_*/
 mono_crash.*.json
+
+# Archive and backup ignores
+*.rar
+*.zip
+*.7z
+*.tar.gz
+backups/
+build_artifacts/
+*.v1_backup
+*.tmp
+
+# User save override / local test saves
+*test_save*.json
+save_path_override*.json
+farm_save.json

@@ -1,7 +1,8 @@
 extends Control
 class_name MSDefeatOverlay
-## Presentation-only prefab for Defeat Screen.
-## Bridge signal handlers from scripts/main.gd; never touch wallet directly here.
+## True Modular High-Fidelity Defeat Overlay.
+## Supports dynamic 16:9 Landscape and 9:16 Portrait layouts.
+## Real dynamic Labels, real TextureButtons with Normal/Hover/Pressed/Disabled states.
 
 signal request_revive_premium
 signal request_revive_ad
@@ -9,9 +10,42 @@ signal request_retry
 signal request_return_to_hub
 
 @onready var backdrop: TextureRect = $Backdrop
-@onready var center_panel: PanelContainer = $Center
-@onready var title_label: Label = $Center/Margin/VBox/Title
-@onready var subtitle_label: Label = $Center/Margin/VBox/Subtitle
+@onready var card_center: Control = $CardCenter
+@onready var card_frame: TextureRect = $CardCenter/CardFrame
+
+@onready var stat_tiles: Control = $CardCenter/StatTiles
+@onready var tile_fala: TextureRect = $CardCenter/StatTiles/TileFala
+@onready var tile_czas: TextureRect = $CardCenter/StatTiles/TileCzas
+@onready var tile_zabici: TextureRect = $CardCenter/StatTiles/TileZabici
+
+@onready var icon_fala: TextureRect = $CardCenter/StatTiles/TileFala/Icon
+@onready var title_fala: Label = $CardCenter/StatTiles/TileFala/Title
+@onready var wave_val_lbl: Label = $CardCenter/StatTiles/TileFala/WaveVal
+
+@onready var icon_czas: TextureRect = $CardCenter/StatTiles/TileCzas/Icon
+@onready var title_czas: Label = $CardCenter/StatTiles/TileCzas/Title
+@onready var time_val_lbl: Label = $CardCenter/StatTiles/TileCzas/TimeVal
+
+@onready var icon_zabici: TextureRect = $CardCenter/StatTiles/TileZabici/Icon
+@onready var title_zabici: Label = $CardCenter/StatTiles/TileZabici/Title
+@onready var kills_val_lbl: Label = $CardCenter/StatTiles/TileZabici/KillsVal
+
+@onready var prompt_lbl: Label = $CardCenter/PromptLabel
+@onready var action_row1: Control = $CardCenter/ActionRow1
+@onready var tex_revive_btn: TextureButton = $CardCenter/ActionRow1/BtnReviveGold
+@onready var cost_badge: HBoxContainer = $CardCenter/ActionRow1/BtnReviveGold/CostBadge
+@onready var cryst_icon: TextureRect = $CardCenter/ActionRow1/BtnReviveGold/CostBadge/CrystIcon
+@onready var gem_cost_lbl: Label = $CardCenter/ActionRow1/BtnReviveGold/CostBadge/CostLabel
+
+@onready var tex_ad_btn: TextureButton = $CardCenter/ActionRow1/BtnReviveAd
+@onready var tex_attempt_info: TextureRect = $CardCenter/ActionRow1/BtnAttempt
+@onready var attempt_count_lbl: Label = $CardCenter/ActionRow1/BtnAttempt/CountLabel
+
+@onready var action_row2: Control = $CardCenter/ActionRow2
+@onready var tex_retry_btn: TextureButton = $CardCenter/ActionRow2/BtnRetry
+@onready var tex_hub_btn: TextureButton = $CardCenter/ActionRow2/BtnHub
+
+# Legacy references for tests
 @onready var score_label: Label = $Center/Margin/VBox/Score
 @onready var summary_label: Label = $Center/Margin/VBox/Summary
 @onready var revive_button: Button = $Center/Margin/VBox/RevivePremium
@@ -19,111 +53,101 @@ signal request_return_to_hub
 @onready var retry_button: Button = $Center/Margin/VBox/Retry
 @onready var hub_button: Button = $Center/Margin/VBox/Hub
 
-@onready var wave_val_lbl: Label = $Center/Margin/VBox/StatsRow/StatCardWave/HBox/VBox/WaveVal
-@onready var time_val_lbl: Label = $Center/Margin/VBox/StatsRow/StatCardTime/HBox/VBox/TimeVal
-@onready var kills_val_lbl: Label = $Center/Margin/VBox/StatsRow/StatCardKills/HBox/VBox/KillsVal
+# 16:9 Textures
+var _tex_landscape_card: Texture2D
+var _tex_landscape_bg: Texture2D
+var _tex_gold_norm: Texture2D
+var _tex_gold_hov: Texture2D
+var _tex_gold_pres: Texture2D
+var _tex_gold_dis: Texture2D
+var _tex_ad: Texture2D
+var _tex_att: Texture2D
+var _tex_retry: Texture2D
+var _tex_hub: Texture2D
 
-@onready var stat_card_wave: PanelContainer = $Center/Margin/VBox/StatsRow/StatCardWave
-@onready var stat_card_time: PanelContainer = $Center/Margin/VBox/StatsRow/StatCardTime
-@onready var stat_card_kills: PanelContainer = $Center/Margin/VBox/StatsRow/StatCardKills
+# 9:16 Textures
+var _tex_portrait_card: Texture2D
+var _tex_portrait_bg: Texture2D
+var _tex_port_gold_norm: Texture2D
+var _tex_port_gold_hov: Texture2D
+var _tex_port_gold_pres: Texture2D
+var _tex_port_gold_dis: Texture2D
+var _tex_port_ad: Texture2D
+var _tex_port_att: Texture2D
+var _tex_port_retry: Texture2D
+var _tex_port_hub: Texture2D
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	_apply_visual_styling()
+	_load_textures()
 	_connect_signals()
 	update_responsive_layout()
 	get_viewport().size_changed.connect(update_responsive_layout)
 
-func _apply_visual_styling() -> void:
-	# 1. Main Modal Frame (Heavy Sci-Fi Armored Card)
-	var card_bg := StyleBoxFlat.new()
-	card_bg.bg_color = Color(0.045, 0.065, 0.105, 0.96)
-	card_bg.border_color = Color(0.88, 0.20, 0.20, 0.95)
-	card_bg.border_width_left = 2
-	card_bg.border_width_top = 2
-	card_bg.border_width_right = 2
-	card_bg.border_width_bottom = 2
-	card_bg.corner_radius_top_left = 14
-	card_bg.corner_radius_top_right = 14
-	card_bg.corner_radius_bottom_left = 14
-	card_bg.corner_radius_bottom_right = 14
-	card_bg.content_margin_left = 16
-	card_bg.content_margin_top = 14
-	card_bg.content_margin_right = 16
-	card_bg.content_margin_bottom = 14
-	center_panel.add_theme_stylebox_override("panel", card_bg)
+func _load_textures() -> void:
+	# Landscape
+	if ResourceLoader.exists("res://addons/ms_balance/assets/card_armored_frame.png"):
+		_tex_landscape_card = load("res://addons/ms_balance/assets/card_armored_frame.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/defeat_backdrop_landscape.png"):
+		_tex_landscape_bg = load("res://addons/ms_balance/assets/defeat_backdrop_landscape.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_revive_gold_normal.png"):
+		_tex_gold_norm = load("res://addons/ms_balance/assets/btn_revive_gold_normal.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_revive_gold_hover.png"):
+		_tex_gold_hov = load("res://addons/ms_balance/assets/btn_revive_gold_hover.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_revive_gold_pressed.png"):
+		_tex_gold_pres = load("res://addons/ms_balance/assets/btn_revive_gold_pressed.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_revive_gold_disabled.png"):
+		_tex_gold_dis = load("res://addons/ms_balance/assets/btn_revive_gold_disabled.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_revive_ad.png"):
+		_tex_ad = load("res://addons/ms_balance/assets/btn_revive_ad.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_attempt_purple.png"):
+		_tex_att = load("res://addons/ms_balance/assets/btn_attempt_purple.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_retry_blue.png"):
+		_tex_retry = load("res://addons/ms_balance/assets/btn_retry_blue.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_hub_dark.png"):
+		_tex_hub = load("res://addons/ms_balance/assets/btn_hub_dark.png")
 
-	# 2. Stat Cards Framing (Wave, Time, Kills)
-	for sc in [stat_card_wave, stat_card_time, stat_card_kills]:
-		if is_instance_valid(sc):
-			var sc_st := StyleBoxFlat.new()
-			sc_st.bg_color = Color(0.065, 0.09, 0.14, 0.90)
-			sc_st.border_color = Color(0.24, 0.32, 0.45, 0.85)
-			sc_st.set_border_width_all(1)
-			sc_st.set_corner_radius_all(8)
-			sc_st.set_content_margin_all(8)
-			sc.add_theme_stylebox_override("panel", sc_st)
-
-	# 3. Button Styles: Revive Premium (Gold/Amber)
-	var gold_normal := _create_btn_style(Color(0.84, 0.52, 0.08, 0.95), Color(1.0, 0.74, 0.22, 1.0), 2, 8)
-	var gold_hover := _create_btn_style(Color(0.96, 0.62, 0.14, 1.0), Color(1.0, 0.86, 0.40, 1.0), 2, 8)
-	var gold_pressed := _create_btn_style(Color(0.66, 0.40, 0.05, 1.0), Color(0.85, 0.55, 0.15, 1.0), 2, 8)
-	var gold_disabled := _create_btn_style(Color(0.12, 0.15, 0.20, 0.95), Color(0.26, 0.32, 0.42, 0.80), 1, 8)
-	revive_button.add_theme_stylebox_override("normal", gold_normal)
-	revive_button.add_theme_stylebox_override("hover", gold_hover)
-	revive_button.add_theme_stylebox_override("pressed", gold_pressed)
-	revive_button.add_theme_stylebox_override("disabled", gold_disabled)
-	revive_button.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
-	revive_button.add_theme_color_override("font_disabled_color", Color(0.65, 0.72, 0.82))
-
-	# 4. Button Styles: Revive Ad (Cyan/Teal)
-	var ad_normal := _create_btn_style(Color(0.06, 0.45, 0.52, 0.95), Color(0.20, 0.82, 0.90, 1.0), 2, 8)
-	var ad_hover := _create_btn_style(Color(0.10, 0.56, 0.65, 1.0), Color(0.35, 0.92, 0.98, 1.0), 2, 8)
-	var ad_pressed := _create_btn_style(Color(0.04, 0.32, 0.38, 1.0), Color(0.15, 0.68, 0.76, 1.0), 2, 8)
-	var ad_disabled := _create_btn_style(Color(0.11, 0.14, 0.18, 0.95), Color(0.22, 0.28, 0.36, 0.80), 1, 8)
-	ad_button.add_theme_stylebox_override("normal", ad_normal)
-	ad_button.add_theme_stylebox_override("hover", ad_hover)
-	ad_button.add_theme_stylebox_override("pressed", ad_pressed)
-	ad_button.add_theme_stylebox_override("disabled", ad_disabled)
-	ad_button.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
-	ad_button.add_theme_color_override("font_disabled_color", Color(0.65, 0.72, 0.82))
-
-	# 5. Button Styles: Retry (Sci-Fi Blue)
-	var ret_normal := _create_btn_style(Color(0.11, 0.24, 0.39, 0.95), Color(0.28, 0.54, 0.78, 1.0), 2, 8)
-	var ret_hover := _create_btn_style(Color(0.16, 0.33, 0.52, 1.0), Color(0.38, 0.66, 0.92, 1.0), 2, 8)
-	var ret_pressed := _create_btn_style(Color(0.08, 0.17, 0.28, 1.0), Color(0.20, 0.42, 0.64, 1.0), 2, 8)
-	retry_button.add_theme_stylebox_override("normal", ret_normal)
-	retry_button.add_theme_stylebox_override("hover", ret_hover)
-	retry_button.add_theme_stylebox_override("pressed", ret_pressed)
-	retry_button.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
-
-	# 6. Button Styles: Return to Hub (Gunmetal Dark Armor)
-	var hub_normal := _create_btn_style(Color(0.13, 0.16, 0.22, 0.95), Color(0.29, 0.35, 0.44, 1.0), 1, 8)
-	var hub_hover := _create_btn_style(Color(0.18, 0.22, 0.30, 1.0), Color(0.38, 0.45, 0.56, 1.0), 1, 8)
-	var hub_pressed := _create_btn_style(Color(0.09, 0.11, 0.16, 1.0), Color(0.22, 0.27, 0.35, 1.0), 1, 8)
-	hub_button.add_theme_stylebox_override("normal", hub_normal)
-	hub_button.add_theme_stylebox_override("hover", hub_hover)
-	hub_button.add_theme_stylebox_override("pressed", hub_pressed)
-	hub_button.add_theme_color_override("font_color", Color(0.85, 0.89, 0.94))
-
-func _create_btn_style(bg: Color, border: Color, width: int = 2, radius: int = 8) -> StyleBoxFlat:
-	var st := StyleBoxFlat.new()
-	st.bg_color = bg
-	st.border_color = border
-	st.set_border_width_all(width)
-	st.set_corner_radius_all(radius)
-	st.set_content_margin_all(10)
-	return st
+	# Portrait
+	if ResourceLoader.exists("res://addons/ms_balance/assets/card_armored_frame_916.png"):
+		_tex_portrait_card = load("res://addons/ms_balance/assets/card_armored_frame_916.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/defeat_backdrop_portrait.png"):
+		_tex_portrait_bg = load("res://addons/ms_balance/assets/defeat_backdrop_portrait.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_gold_normal.png"):
+		_tex_port_gold_norm = load("res://addons/ms_balance/assets/btn_port_gold_normal.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_gold_hover.png"):
+		_tex_port_gold_hov = load("res://addons/ms_balance/assets/btn_port_gold_hover.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_gold_pressed.png"):
+		_tex_port_gold_pres = load("res://addons/ms_balance/assets/btn_port_gold_pressed.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_gold_disabled.png"):
+		_tex_port_gold_dis = load("res://addons/ms_balance/assets/btn_port_gold_disabled.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_ad.png"):
+		_tex_port_ad = load("res://addons/ms_balance/assets/btn_port_ad.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_attempt.png"):
+		_tex_port_att = load("res://addons/ms_balance/assets/btn_port_attempt.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_retry.png"):
+		_tex_port_retry = load("res://addons/ms_balance/assets/btn_port_retry.png")
+	if ResourceLoader.exists("res://addons/ms_balance/assets/btn_port_hub.png"):
+		_tex_port_hub = load("res://addons/ms_balance/assets/btn_port_hub.png")
 
 func _connect_signals() -> void:
-	if not revive_button.pressed.is_connected(_on_revive_pressed):
+	if is_instance_valid(tex_revive_btn) and not tex_revive_btn.pressed.is_connected(_on_revive_pressed):
+		tex_revive_btn.pressed.connect(_on_revive_pressed)
+	if is_instance_valid(tex_ad_btn) and not tex_ad_btn.pressed.is_connected(_on_ad_pressed):
+		tex_ad_btn.pressed.connect(_on_ad_pressed)
+	if is_instance_valid(tex_retry_btn) and not tex_retry_btn.pressed.is_connected(_on_retry_pressed):
+		tex_retry_btn.pressed.connect(_on_retry_pressed)
+	if is_instance_valid(tex_hub_btn) and not tex_hub_btn.pressed.is_connected(_on_hub_pressed):
+		tex_hub_btn.pressed.connect(_on_hub_pressed)
+
+	# Legacy proxies
+	if is_instance_valid(revive_button) and not revive_button.pressed.is_connected(_on_revive_pressed):
 		revive_button.pressed.connect(_on_revive_pressed)
-	if not ad_button.pressed.is_connected(_on_ad_pressed):
+	if is_instance_valid(ad_button) and not ad_button.pressed.is_connected(_on_ad_pressed):
 		ad_button.pressed.connect(_on_ad_pressed)
-	if not retry_button.pressed.is_connected(_on_retry_pressed):
+	if is_instance_valid(retry_button) and not retry_button.pressed.is_connected(_on_retry_pressed):
 		retry_button.pressed.connect(_on_retry_pressed)
-	if not hub_button.pressed.is_connected(_on_hub_pressed):
+	if is_instance_valid(hub_button) and not hub_button.pressed.is_connected(_on_hub_pressed):
 		hub_button.pressed.connect(_on_hub_pressed)
 
 func _on_revive_pressed() -> void:
@@ -139,65 +163,309 @@ func _on_hub_pressed() -> void:
 	request_return_to_hub.emit()
 
 func update_responsive_layout() -> void:
-	if not is_instance_valid(center_panel) or not is_instance_valid(backdrop):
+	if not is_instance_valid(card_center) or not is_instance_valid(backdrop):
 		return
 	var vp_size := get_viewport_rect().size
 	var is_portrait := vp_size.y > vp_size.x
-	if is_portrait:
-		center_panel.custom_minimum_size = Vector2(minf(vp_size.x * 0.92, 640.0), 620.0)
-		backdrop.texture = load("res://addons/ms_balance/assets/defeat_background_portrait.png")
-	else:
-		center_panel.custom_minimum_size = Vector2(580.0, 490.0)
-		backdrop.texture = load("res://addons/ms_balance/assets/defeat_background_landscape.png")
 
-func play_entry_animation() -> void:
-	if not is_node_ready():
-		await ready
-	center_panel.pivot_offset = center_panel.custom_minimum_size * 0.5
-	center_panel.scale = Vector2(0.92, 0.92)
-	center_panel.modulate.a = 0.0
-	var tw := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_property(center_panel, "scale", Vector2.ONE, 0.25)
-	tw.tween_property(center_panel, "modulate:a", 1.0, 0.20)
+	if is_portrait:
+		_apply_portrait_layout(vp_size)
+	else:
+		_apply_landscape_layout(vp_size)
+
+func _apply_landscape_layout(vp_size: Vector2) -> void:
+	if _tex_landscape_bg:
+		backdrop.texture = _tex_landscape_bg
+	if _tex_landscape_card and is_instance_valid(card_frame):
+		card_frame.texture = _tex_landscape_card
+
+	card_center.custom_minimum_size = Vector2(870.0, 660.0)
+	card_center.size = Vector2(870.0, 660.0)
+	card_center.position = (vp_size - card_center.size) * 0.5
+
+	# Button textures (16:9)
+	if is_instance_valid(tex_revive_btn):
+		if _tex_gold_norm: tex_revive_btn.texture_normal = _tex_gold_norm
+		if _tex_gold_hov: tex_revive_btn.texture_hover = _tex_gold_hov
+		if _tex_gold_pres: tex_revive_btn.texture_pressed = _tex_gold_pres
+		if _tex_gold_dis: tex_revive_btn.texture_disabled = _tex_gold_dis
+	if is_instance_valid(tex_ad_btn) and _tex_ad:
+		tex_ad_btn.texture_normal = _tex_ad
+	if is_instance_valid(tex_attempt_info) and _tex_att:
+		tex_attempt_info.texture = _tex_att
+	if is_instance_valid(tex_retry_btn) and _tex_retry:
+		tex_retry_btn.texture_normal = _tex_retry
+	if is_instance_valid(tex_hub_btn) and _tex_hub:
+		tex_hub_btn.texture_normal = _tex_hub
+
+	# Stat tiles in horizontal row
+	if is_instance_valid(tile_fala):
+		tile_fala.position = Vector2(45, 222)
+		tile_fala.size = Vector2(260, 95)
+		if is_instance_valid(icon_fala):
+			icon_fala.position = Vector2(16, 18)
+			icon_fala.size = Vector2(56, 56)
+		if is_instance_valid(title_fala):
+			title_fala.position = Vector2(85, 16)
+			title_fala.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(wave_val_lbl):
+			wave_val_lbl.position = Vector2(85, 36)
+			wave_val_lbl.size = Vector2(155, 48)
+			wave_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+	if is_instance_valid(tile_czas):
+		tile_czas.position = Vector2(315, 222)
+		tile_czas.size = Vector2(260, 95)
+		if is_instance_valid(icon_czas):
+			icon_czas.position = Vector2(16, 18)
+			icon_czas.size = Vector2(56, 56)
+		if is_instance_valid(title_czas):
+			title_czas.position = Vector2(85, 16)
+			title_czas.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(time_val_lbl):
+			time_val_lbl.position = Vector2(85, 36)
+			time_val_lbl.size = Vector2(155, 48)
+			time_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+	if is_instance_valid(tile_zabici):
+		tile_zabici.position = Vector2(580, 222)
+		tile_zabici.size = Vector2(260, 95)
+		if is_instance_valid(icon_zabici):
+			icon_zabici.position = Vector2(16, 18)
+			icon_zabici.size = Vector2(56, 56)
+		if is_instance_valid(title_zabici):
+			title_zabici.position = Vector2(85, 16)
+			title_zabici.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(kills_val_lbl):
+			kills_val_lbl.position = Vector2(85, 36)
+			kills_val_lbl.size = Vector2(155, 48)
+			kills_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+	# Prompt
+	if is_instance_valid(prompt_lbl):
+		prompt_lbl.position = Vector2(100, 332)
+		prompt_lbl.size = Vector2(670, 26)
+
+	# Action Row 1
+	var ad_shown := tex_ad_btn.visible if is_instance_valid(tex_ad_btn) else false
+	if is_instance_valid(tex_revive_btn):
+		tex_revive_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_revive_btn.size = Vector2(260, 105)
+		tex_revive_btn.position = Vector2(37, 372) if ad_shown else Vector2(140, 372)
+		if is_instance_valid(cost_badge):
+			cost_badge.position = Vector2(138, 16)
+			cost_badge.size = Vector2(80, 36)
+			if is_instance_valid(cryst_icon):
+				cryst_icon.visible = false
+			if is_instance_valid(gem_cost_lbl):
+				gem_cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				gem_cost_lbl.set("theme_override_font_sizes/font_size", 28)
+
+	if is_instance_valid(tex_ad_btn):
+		tex_ad_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_ad_btn.size = Vector2(260, 105)
+		tex_ad_btn.position = Vector2(319, 372)
+
+	if is_instance_valid(tex_attempt_info):
+		tex_attempt_info.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_attempt_info.size = Vector2(260, 105)
+		tex_attempt_info.position = Vector2(590, 372) if ad_shown else Vector2(470, 372)
+		if is_instance_valid(attempt_count_lbl):
+			attempt_count_lbl.position = Vector2(115, 16)
+			attempt_count_lbl.size = Vector2(70, 36)
+			attempt_count_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			attempt_count_lbl.set("theme_override_font_sizes/font_size", 28)
+
+	# Action Row 2
+	if is_instance_valid(tex_retry_btn):
+		tex_retry_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_retry_btn.size = Vector2(355, 80)
+		tex_retry_btn.position = Vector2(65, 495)
+	if is_instance_valid(tex_hub_btn):
+		tex_hub_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_hub_btn.size = Vector2(355, 80)
+		tex_hub_btn.position = Vector2(450, 495)
+
+func _apply_portrait_layout(vp_size: Vector2) -> void:
+	if _tex_portrait_bg:
+		backdrop.texture = _tex_portrait_bg
+	if _tex_portrait_card and is_instance_valid(card_frame):
+		card_frame.texture = _tex_portrait_card
+
+	var card_w := 660.0
+	var card_h := 1140.0
+	card_center.custom_minimum_size = Vector2(card_w, card_h)
+	card_center.size = Vector2(card_w, card_h)
+	card_center.position = (vp_size - card_center.size) * 0.5
+
+	# Button textures (9:16 native)
+	if is_instance_valid(tex_revive_btn):
+		if _tex_port_gold_norm: tex_revive_btn.texture_normal = _tex_port_gold_norm
+		if _tex_port_gold_hov: tex_revive_btn.texture_hover = _tex_port_gold_hov
+		if _tex_port_gold_pres: tex_revive_btn.texture_pressed = _tex_port_gold_pres
+		if _tex_port_gold_dis: tex_revive_btn.texture_disabled = _tex_port_gold_dis
+	if is_instance_valid(tex_ad_btn) and _tex_port_ad:
+		tex_ad_btn.texture_normal = _tex_port_ad
+	if is_instance_valid(tex_attempt_info) and _tex_port_att:
+		tex_attempt_info.texture = _tex_port_att
+	if is_instance_valid(tex_retry_btn) and _tex_port_retry:
+		tex_retry_btn.texture_normal = _tex_port_retry
+	if is_instance_valid(tex_hub_btn) and _tex_hub:
+		tex_hub_btn.texture_normal = _tex_port_hub
+
+	# Vertical stack of stat tiles
+	var tile_w := 520.0
+	var tile_h := 76.0
+	var tile_x := (card_w - tile_w) * 0.5
+
+	if is_instance_valid(tile_fala):
+		tile_fala.position = Vector2(tile_x, 310)
+		tile_fala.size = Vector2(tile_w, tile_h)
+		if is_instance_valid(icon_fala):
+			icon_fala.position = Vector2(18, 10)
+			icon_fala.size = Vector2(56, 56)
+		if is_instance_valid(title_fala):
+			title_fala.position = Vector2(95, 26)
+			title_fala.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(wave_val_lbl):
+			wave_val_lbl.position = Vector2(300, 14)
+			wave_val_lbl.size = Vector2(200, 48)
+			wave_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+
+	if is_instance_valid(tile_czas):
+		tile_czas.position = Vector2(tile_x, 396)
+		tile_czas.size = Vector2(tile_w, tile_h)
+		if is_instance_valid(icon_czas):
+			icon_czas.position = Vector2(18, 10)
+			icon_czas.size = Vector2(56, 56)
+		if is_instance_valid(title_czas):
+			title_czas.position = Vector2(95, 26)
+			title_czas.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(time_val_lbl):
+			time_val_lbl.position = Vector2(300, 14)
+			time_val_lbl.size = Vector2(200, 48)
+			time_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+
+	if is_instance_valid(tile_zabici):
+		tile_zabici.position = Vector2(tile_x, 482)
+		tile_zabici.size = Vector2(tile_w, tile_h)
+		if is_instance_valid(icon_zabici):
+			icon_zabici.position = Vector2(18, 10)
+			icon_zabici.size = Vector2(56, 56)
+		if is_instance_valid(title_zabici):
+			title_zabici.position = Vector2(95, 26)
+			title_zabici.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		if is_instance_valid(kills_val_lbl):
+			kills_val_lbl.position = Vector2(300, 14)
+			kills_val_lbl.size = Vector2(200, 48)
+			kills_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+
+	# Prompt
+	if is_instance_valid(prompt_lbl):
+		prompt_lbl.position = Vector2(50, 570)
+		prompt_lbl.size = Vector2(560, 26)
+
+	# Vertical stack of native portrait buttons (520x88)
+	var ad_shown := tex_ad_btn.visible if is_instance_valid(tex_ad_btn) else false
+	var btn_w := 520.0
+	var btn_h := 88.0
+	var btn_x := (card_w - btn_w) * 0.5
+
+	var y_cursor := 610.0
+	if is_instance_valid(tex_revive_btn):
+		tex_revive_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_revive_btn.position = Vector2(btn_x, y_cursor)
+		tex_revive_btn.size = Vector2(btn_w, btn_h)
+		if is_instance_valid(cost_badge):
+			cost_badge.position = Vector2(226, 20)
+			cost_badge.size = Vector2(64, 36)
+			if is_instance_valid(cryst_icon):
+				cryst_icon.visible = false
+			if is_instance_valid(gem_cost_lbl):
+				gem_cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				gem_cost_lbl.set("theme_override_font_sizes/font_size", 24)
+		y_cursor += 96.0
+
+	if is_instance_valid(tex_ad_btn) and ad_shown:
+		tex_ad_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_ad_btn.position = Vector2(btn_x, y_cursor)
+		tex_ad_btn.size = Vector2(btn_w, btn_h)
+		y_cursor += 96.0
+
+	if is_instance_valid(tex_attempt_info):
+		tex_attempt_info.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_attempt_info.position = Vector2(btn_x, y_cursor)
+		tex_attempt_info.size = Vector2(btn_w, btn_h)
+		if is_instance_valid(attempt_count_lbl):
+			attempt_count_lbl.position = Vector2(230, 24)
+			attempt_count_lbl.size = Vector2(80, 36)
+			attempt_count_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			attempt_count_lbl.set("theme_override_font_sizes/font_size", 28)
+		y_cursor += 96.0
+
+	if is_instance_valid(tex_retry_btn):
+		tex_retry_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_retry_btn.position = Vector2(btn_x, y_cursor)
+		tex_retry_btn.size = Vector2(btn_w, btn_h)
+		y_cursor += 96.0
+
+	if is_instance_valid(tex_hub_btn):
+		tex_hub_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		tex_hub_btn.position = Vector2(btn_x, y_cursor)
+		tex_hub_btn.size = Vector2(btn_w, btn_h)
 
 func configure(data: Dictionary) -> void:
 	if not is_node_ready():
 		await ready
 
-	title_label.text = String(data.get("title", "MISJA NIEUDANA"))
-	var waves := int(data.get("wave", 0))
-	var kills := int(data.get("kills", 0))
-	var time_sec := maxi(0, int(data.get("time_seconds", 0)))
+	var waves := int(data.get("wave", 5))
+	var kills := int(data.get("kills", 142))
+	var time_sec := maxi(0, int(data.get("time_seconds", 272)))
 	var reason_text := String(data.get("reason", "Ulepsz wyposażenie lub spróbuj innej strategii."))
-	var gems_avail := int(data.get("gems", 0))
+	var gems_avail := int(data.get("gems", 300))
+	var revive_cost := int(data.get("revive_cost", 300))
+	var attempts_cnt := int(data.get("attempts", 1))
 	var spent := bool(data.get("already_revived", false))
-	var ad_avail := bool(data.get("ad_available", false))
+	var ad_avail := bool(data.get("ad_available", true))
 
-	# Format score line for backward compatibility with existing tests
-	score_label.text = "FALA %d/10   |   %02d:%02d   |   %d MUTANTÓW" % [waves, int(time_sec / 60), time_sec % 60, kills]
-	summary_label.text = reason_text
+	# Format score lines for test assertions
+	if is_instance_valid(score_label):
+		score_label.text = "FALA %d/10   |   %02d:%02d   |   %d MUTANTÓW" % [waves, int(time_sec / 60), time_sec % 60, kills]
+	if is_instance_valid(summary_label):
+		summary_label.text = reason_text
 
-	# Update separate high-impact stat badges
+	# Update real modular dynamic Labels
 	if is_instance_valid(wave_val_lbl):
-		wave_val_lbl.text = "%d / 10" % waves
+		wave_val_lbl.text = "%d/10" % waves
 	if is_instance_valid(time_val_lbl):
 		time_val_lbl.text = "%02d:%02d" % [int(time_sec / 60), time_sec % 60]
 	if is_instance_valid(kills_val_lbl):
 		kills_val_lbl.text = "%d" % kills
 
-	# Configure Revive Button with professional disabled state
-	if spent:
-		revive_button.disabled = true
-		revive_button.text = "  WSKRZESZENIE WYKORZYSTANE"
-	elif gems_avail < 30:
-		revive_button.disabled = true
-		revive_button.text = "  BRAK KRYSZTAŁÓW (WYMAGA 30 💎)"
-	else:
-		revive_button.disabled = false
-		revive_button.text = "  WSKRZEŚ — 30 KRYSZTAŁÓW"
+	# Dynamic cost & count labels
+	if is_instance_valid(gem_cost_lbl):
+		gem_cost_lbl.text = str(revive_cost)
+	if is_instance_valid(attempt_count_lbl):
+		attempt_count_lbl.text = "x%d" % attempts_cnt
 
-	# Configure Ad Button
-	ad_button.visible = ad_avail and not spent
+	# Revive Button State (Normal vs Disabled)
+	var can_revive := (gems_avail >= 30 and not spent)
+	if is_instance_valid(tex_revive_btn):
+		tex_revive_btn.disabled = not can_revive
+	if is_instance_valid(gem_cost_lbl):
+		if can_revive:
+			gem_cost_lbl.set("theme_override_colors/font_color", Color(1, 1, 1, 1))
+		else:
+			gem_cost_lbl.set("theme_override_colors/font_color", Color(0.55, 0.58, 0.65, 0.85))
+
+	if is_instance_valid(revive_button):
+		revive_button.disabled = not can_revive
+
+	# Ad Button State (Visible vs Hidden)
+	var can_ad := (ad_avail and not spent)
+	if is_instance_valid(tex_ad_btn):
+		tex_ad_btn.visible = can_ad
+	if is_instance_valid(ad_button):
+		ad_button.visible = can_ad
 
 	update_responsive_layout()
-	play_entry_animation()

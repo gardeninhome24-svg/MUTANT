@@ -17,7 +17,7 @@ var walk_frames: Array[Texture2D] = []
 var attack_frames: Array[Texture2D] = []
 var death_frames: Array[Texture2D] = []
 var sheet_fps: float = 9.0
-var asset_status: String = "TEMP_REFERENCE"
+var asset_status: String = "HD_MUTANT_V2"
 var effects_layer: Node2D = null
 
 # Mechanika telegrafowanego ataku dla Bossa / Minibossa (0.95s ostrzeżenia na ziemi) + strzały dystansowe i fazy Bossa
@@ -89,7 +89,7 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 		var vis_info := AssetRegistry.apply_enemy_visual(sprite, enemy_id)
 		is_animated_sheet = bool(vis_info.get("is_animated", false))
 		sheet_fps = float(vis_info.get("fps", 9.0))
-		asset_status = String(vis_info.get("status", "TEMP_REFERENCE"))
+		asset_status = String(vis_info.get("status", "HD_MUTANT_V2"))
 		base_scale = vis_info.get("base_scale", Vector2(0.56, 0.56))
 		walk_frames.clear()
 		for f in vis_info.get("walk_frames", []):

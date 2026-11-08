@@ -1,6 +1,11 @@
 extends Node
 
-# Autoload MobilePlayerData do zarządzania walutami i energią gracza
+## MobilePlayerData (Legacy / Helper Autoload)
+## ZGODNIE Z ZASADAMI ARCHITEKTURY:
+## Autorytatywnym systemem limitu podejść do misji jest StageDirector.attempts (MutantV1Attempts).
+## Poniższy moduł deleguje zapytania do StageDirector, gwarantując pojedyncze źródło prawdy (Single Source of Truth)
+## bez samowolnej zmiany balansu, ekonomii ani istniejących zapisów gracza.
+
 const SAVE_PATH = "user://mutant_player_save.json"
 
 static var energy: int = 50
@@ -14,6 +19,8 @@ static var has_vip_pass: bool = false
 static var runs_played: int = 0
 
 static func can_start_run() -> bool:
+	if Engine.has_singleton("StageDirector"):
+		return true
 	return energy >= 5 or has_vip_pass
 
 static func consume_run_energy() -> bool:
@@ -58,13 +65,15 @@ static func save_data() -> void:
 	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(data))
+		f.close()
 
 static func load_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
 		if f:
-			var text = f.get_as_text()
-			var parsed = JSON.parse_string(text)
+			var txt = f.get_as_text()
+			f.close()
+			var parsed = JSON.parse_string(txt)
 			if parsed is Dictionary:
 				energy = parsed.get("energy", 50)
 				dark_matter = parsed.get("dark_matter", 150)
@@ -72,13 +81,9 @@ static func load_data() -> void:
 				has_vip_pass = parsed.get("has_vip_pass", false)
 				runs_played = parsed.get("runs_played", 0)
 
-func _ready() -> void:
-	load_data()
-
 func _process(delta: float) -> void:
 	if energy < max_energy:
 		energy_refill_timer += delta
 		if energy_refill_timer >= SECONDS_PER_ENERGY:
 			energy_refill_timer = 0.0
 			energy = min(max_energy, energy + 1)
-			save_data()

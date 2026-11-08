@@ -127,7 +127,7 @@ func apply_class_and_talents(reset_full_hp: bool = false) -> void:
 			shoot_frames.clear()
 			soldier_walk_frames.clear()
 			soldier_shoot_frames.clear()
-			for fi in range(1, 6):
+			for fi in range(1, 7):
 				var wt := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_walk_%d.png" % [cls_id, fi])
 				var st := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_shoot_%d.png" % [cls_id, fi])
 				if wt:
