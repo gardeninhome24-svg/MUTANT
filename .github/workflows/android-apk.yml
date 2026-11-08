@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       publish_to_itch:
-        description: "Publish built APK to the private itch.io project (requires BUTLER_API_KEY)"
+        description: "Publish built APK to private itch.io project (requires BUTLER_API_KEY)"
         type: boolean
         required: false
         default: false
@@ -17,9 +17,13 @@ permissions:
 jobs:
   android:
     name: Build Android APK (Godot 4.7.2)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.7.2
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      ANDROID_HOME: /usr/lib/android-sdk
+      ANDROID_SDK_ROOT: /usr/lib/android-sdk
 
     steps:
       - name: Checkout game files
@@ -27,10 +31,26 @@ jobs:
         with:
           lfs: true
 
-      - name: Import project resources
+      - name: Set up Godot templates and Android SDK
+        shell: bash
         run: |
+          set -euo pipefail
+          # Container setup is under /root, but GitHub Actions changes HOME to /github/home.
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          mkdir -p "$HOME/.config/godot"
+          cp -a /root/.config/godot/. "$HOME/.config/godot/"
+          # Godot's editor settings in the image contain Java, SDK and debug keystore paths.
+          java -version
+          test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_debug.apk"
+          test -f /root/debug.keystore
+          # Match Android build tools to current target SDK instead of the image's older 33.0.2.
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
           godot --version
-          godot --headless --path . --editor --import --quit
+
+      - name: Import project resources
+        run: godot --headless --path . --editor --import --quit
 
       - name: Export Android debug APK
         run: |
