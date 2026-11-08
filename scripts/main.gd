@@ -232,7 +232,7 @@ func _apply_responsive_hud_layout() -> void:
 			stats_card.offset_bottom = 54.0 + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -245.0
+			currency_bar.offset_left = -355.0
 			currency_bar.offset_top = 8.0 + safe_top
 			currency_bar.offset_right = -10.0
 			currency_bar.offset_bottom = 48.0 + safe_top
