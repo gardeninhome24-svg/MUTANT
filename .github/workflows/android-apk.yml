@@ -1,0 +1,59 @@
+name: MutantSurvivor Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      publish_to_itch:
+        description: "Publish built APK to the private itch.io project (requires BUTLER_API_KEY)"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: Build Android APK (Godot 4.7.2)
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout game files
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Import project resources
+        run: |
+          godot --version
+          godot --headless --path . --editor --import --quit
+
+      - name: Export Android debug APK
+        run: |
+          mkdir -p build/android
+          godot --headless --path . --export-debug "Android" build/android/MutantSurvivor.apk
+          test -s build/android/MutantSurvivor.apk
+          ls -lh build/android/MutantSurvivor.apk
+
+      - name: Store APK for private testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Android-APK
+          path: build/android/MutantSurvivor.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish APK to itch.io (only when explicitly requested)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_to_itch == true }}
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          if [ -z "$BUTLER_API_KEY" ]; then
+            echo "Missing GitHub Actions secret: BUTLER_API_KEY"
+            exit 1
+          fi
+          butler push build/android banusgames/mutantsurvivor:android-beta --userversion "build-${GITHUB_RUN_NUMBER}"
