@@ -257,8 +257,8 @@ func _apply_responsive_hud_layout() -> void:
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0
-			bottom_weapons_panel.offset_top = -76.0
-			bottom_weapons_panel.offset_right = 350.0
+			bottom_weapons_panel.offset_top = -68.0
+			bottom_weapons_panel.offset_right = 295.0
 			bottom_weapons_panel.offset_bottom = -12.0
 		if powers_hbox:
 			powers_hbox.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -268,10 +268,10 @@ func _apply_responsive_hud_layout() -> void:
 			powers_hbox.offset_bottom = -12.0
 		if joystick:
 			joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-			joystick.offset_left = 24.0
-			joystick.offset_top = -255.0
-			joystick.offset_right = 184.0
-			joystick.offset_bottom = -95.0
+			joystick.offset_left = 20.0
+			joystick.offset_top = -228.0
+			joystick.offset_right = 152.0
+			joystick.offset_bottom = -96.0
 		if fire_btn:
 			fire_btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 			fire_btn.offset_left = -150.0
@@ -1596,7 +1596,7 @@ func _refresh_weapon_loadout_bar() -> void:
 
 	for slot_data in items:
 		var slot_box := PanelContainer.new()
-		slot_box.custom_minimum_size = Vector2(56, 50)
+		slot_box.custom_minimum_size = Vector2(46, 44) if StageDirector.is_portrait_mode() else Vector2(56, 50)
 		var st := StyleBoxFlat.new()
 		st.bg_color = Color(0.08, 0.12, 0.19, 0.95)
 		st.border_width_left = 1
@@ -1618,7 +1618,7 @@ func _refresh_weapon_loadout_bar() -> void:
 		if active and not String(slot_data["icon"]).is_empty():
 			var tr := TextureRect.new()
 			tr.texture = AssetRegistry.get_tex(String(slot_data["icon"]))
-			tr.custom_minimum_size = Vector2(34, 28)
+			tr.custom_minimum_size = Vector2(28, 23) if StageDirector.is_portrait_mode() else Vector2(34, 28)
 			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			v.add_child(tr)
