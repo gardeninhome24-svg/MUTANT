@@ -348,7 +348,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.add_child(btn_v)
 
 		var ic_rect := TextureRect.new()
-		ic_rect.custom_minimum_size = Vector2(28, 28)
+		ic_rect.custom_minimum_size = Vector2(24, 24)
 		ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -359,7 +359,7 @@ func _build_commercial_hub_ui() -> void:
 		var lbl := Label.new()
 		lbl.text = String(nd["name"])
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 11)
+		lbl.add_theme_font_size_override("font_size", 10)
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn_v.add_child(lbl)
 
@@ -374,14 +374,14 @@ func _build_base_tab_content() -> void:
 	# W układzie portretowym (9:16) postać i miasto stanowią integralne tło w górnej połowie.
 	# Przestrzeń w górnej części (spacer) pozwala podziwiać żołnierza na tle ruin.
 	var hero_spacer := Control.new()
-	hero_spacer.custom_minimum_size = Vector2(0, 360)
+	hero_spacer.custom_minimum_size = Vector2(0, 275)
 	base_vbox.add_child(hero_spacer)
 
 	# --------------------------------------------------------------------------
 	# KARTA AKTUALNEGO ETAPU (Sci-Fi z obramowaniem cyjanowym card_stage_clean.png)
 	# --------------------------------------------------------------------------
 	stage_card = PanelContainer.new()
-	stage_card.custom_minimum_size = Vector2(580, 270)
+	stage_card.custom_minimum_size = Vector2(500, 220)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
 	stage_card.add_theme_stylebox_override("panel", card_st)
@@ -482,7 +482,7 @@ func _build_base_tab_content() -> void:
 	# DUŻY ZŁOTY PRZYCISK „GRAJ ▶” (btn_play_gold_clean.png)
 	# --------------------------------------------------------------------------
 	play_big_btn = Button.new()
-	play_big_btn.custom_minimum_size = Vector2(500, 126)
+	play_big_btn.custom_minimum_size = Vector2(420, 88)
 	play_big_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var play_tex_st := StyleBoxTexture.new()
 	play_tex_st.texture = load("res://assets/ui/target_theme/btn_play_gold_clean.png")
@@ -795,7 +795,7 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(bottom_nav_panel):
 		bottom_nav_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 		bottom_nav_panel.offset_left = 12.0 if portrait else 28.0
-		bottom_nav_panel.offset_top = -76.0 if portrait else -68.0
+		bottom_nav_panel.offset_top = -68.0 if portrait else -68.0
 		bottom_nav_panel.offset_right = -12.0 if portrait else -28.0
 		bottom_nav_panel.offset_bottom = -6.0 if portrait else -4.0
 
@@ -804,7 +804,7 @@ func _apply_responsive_menu_layout() -> void:
 		middle_root.offset_left = 0.0
 		middle_root.offset_top = 72.0 + safe_top
 		middle_root.offset_right = 0.0
-		middle_root.offset_bottom = -80.0 if portrait else -72.0
+		middle_root.offset_bottom = -72.0 if portrait else -72.0
 
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "📱 9:16" if portrait else "🖥 16:9"
