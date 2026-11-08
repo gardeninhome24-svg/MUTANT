@@ -2,6 +2,8 @@ extends CharacterBody2D
 class_name Player
 
 @export var move_speed: float = 255.0
+@export var move_acceleration: float = 1800.0
+@export var move_deceleration: float = 2400.0
 @export var max_health: float = 160.0
 var current_health: float = 160.0
 var health_regen: float = 0.5
@@ -308,7 +310,11 @@ func _physics_process(delta: float) -> void:
 	if external_move_dir != Vector2.ZERO:
 		final_input = external_move_dir
 
-	velocity = final_input * move_speed
+	# Smooth short thumbstick corrections without a long slippery stop.
+	# Keep keyboard movement and equipment speed bonuses on the same path.
+	var target_velocity := final_input.limit_length(1.0) * move_speed
+	var response := move_acceleration if not final_input.is_zero_approx() else move_deceleration
+	velocity = velocity.move_toward(target_velocity, response * delta)
 	move_and_slide()
 	_clamp_to_arena()
 
