@@ -118,6 +118,8 @@ var dash_skill_btn: Button = null
 var grenade_skill_btn: Button = null
 var vortex_skill_btn: Button = null
 var orient_hud_btn: Button = null
+var journal_hud_btn: Button = null
+var profile_hud_btn: Button = null
 
 var npc_dialogue_panel: PanelContainer = null
 var npc_portrait_rect: TextureRect = null
@@ -143,6 +145,7 @@ func _ready() -> void:
 	current_stage_num = StageDirector.current_stage
 	_build_layered_arena(current_stage_num)
 	_setup_extended_hud_and_profile()
+	_style_combat_hud()
 
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
@@ -190,6 +193,7 @@ func _refresh_hero_hud_avatar() -> void:
 func _on_orientation_changed(_is_portrait: bool) -> void:
 	_apply_responsive_hud_layout()
 	_configure_input_mode_hud()
+	_update_objectives_ui()
 
 func _apply_responsive_hud_layout() -> void:
 	var portrait := StageDirector.is_portrait_mode()
@@ -199,7 +203,25 @@ func _apply_responsive_hud_layout() -> void:
 		cam.zoom = Vector2(0.92, 0.92) if portrait else Vector2(1.0, 1.0)
 
 	if is_instance_valid(orient_hud_btn):
-		orient_hud_btn.text = "📱 9:16" if portrait else "🖥 16:9"
+		orient_hud_btn.text = "9:16" if portrait else "16:9"
+		orient_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(64, 30)
+	if is_instance_valid(journal_hud_btn):
+		journal_hud_btn.text = "DZIENNIK" if not portrait else "LOG"
+		journal_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(78, 30)
+	if is_instance_valid(profile_hud_btn):
+		profile_hud_btn.text = "RPG"
+		profile_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(68, 30)
+	if is_instance_valid(currency_bar):
+		currency_bar.add_theme_constant_override("separation", 8 if portrait else 18)
+		for coin_group in [get_node_or_null("HUD/HUDRoot/CurrencyBar/EnergyHBox"), get_node_or_null("HUD/HUDRoot/CurrencyBar/DMHBox")]:
+			if coin_group is HBoxContainer:
+				coin_group.add_theme_constant_override("separation", 3 if portrait else 6)
+				var icon_rect := coin_group.get_node_or_null("Icon") as TextureRect
+				if icon_rect:
+					icon_rect.custom_minimum_size = Vector2(18, 18) if portrait else Vector2(28, 28)
+		for lbl in [energy_label, dark_matter_label]:
+			if lbl:
+				lbl.add_theme_font_size_override("font_size", 11 if portrait else 14)
 	if is_instance_valid(chapter_label):
 		chapter_label.clip_text = true
 		chapter_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -232,28 +254,28 @@ func _apply_responsive_hud_layout() -> void:
 			stats_card.offset_bottom = 54.0 + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -355.0
+			currency_bar.offset_left = -302.0
 			currency_bar.offset_top = 8.0 + safe_top
 			currency_bar.offset_right = -10.0
-			currency_bar.offset_bottom = 48.0 + safe_top
+			currency_bar.offset_bottom = 38.0 + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
-			wave_progress_box.offset_left = -160.0
-			wave_progress_box.offset_top = 58.0 + safe_top
-			wave_progress_box.offset_right = 160.0
-			wave_progress_box.offset_bottom = 98.0 + safe_top
+			wave_progress_box.offset_left = -145.0
+			wave_progress_box.offset_top = 60.0 + safe_top
+			wave_progress_box.offset_right = 145.0
+			wave_progress_box.offset_bottom = 100.0 + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
 			objectives_panel.offset_top = 60.0 + safe_top
-			objectives_panel.offset_right = 195.0
+			objectives_panel.offset_right = 198.0
 			objectives_panel.offset_bottom = 138.0 + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			radar_panel.offset_left = -115.0
-			radar_panel.offset_top = 128.0 + safe_top
+			radar_panel.offset_left = -98.0
+			radar_panel.offset_top = 114.0 + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = 233.0 + safe_top
+			radar_panel.offset_bottom = 202.0 + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0
@@ -340,6 +362,35 @@ func _apply_responsive_hud_layout() -> void:
 			npc_dialogue_panel.offset_top = -172.0
 			npc_dialogue_panel.offset_right = 290.0
 			npc_dialogue_panel.offset_bottom = -92.0
+
+func _style_combat_hud() -> void:
+	# Shared dark, low-noise visual treatment for the actual in-combat HUD.
+	# Retain the existing node tree, mechanics and landscape layout.
+	for panel in [stats_card, objectives_panel, radar_panel]:
+		if not is_instance_valid(panel):
+			continue
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(0.025, 0.045, 0.075, 0.78)
+		style.border_color = Color(0.19, 0.58, 0.67, 0.52)
+		style.set_border_width_all(1)
+		style.set_corner_radius_all(7)
+		style.set_content_margin_all(5.0)
+		panel.add_theme_stylebox_override("panel", style)
+	if is_instance_valid(wave_label):
+		wave_label.add_theme_font_size_override("font_size", 12)
+		wave_label.add_theme_color_override("font_color", Color(0.98, 0.82, 0.45))
+		wave_label.add_theme_color_override("font_outline_color", Color(0.02, 0.04, 0.07))
+		wave_label.add_theme_constant_override("outline_size", 3)
+	if is_instance_valid(wave_timer_bar):
+		wave_timer_bar.custom_minimum_size = Vector2(0, 6)
+	if is_instance_valid(boss_hp_bar):
+		boss_hp_bar.custom_minimum_size = Vector2(0, 9)
+	if is_instance_valid(radar_panel):
+		radar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if is_instance_valid(objectives_panel):
+		objectives_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if is_instance_valid(stats_card):
+		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _on_joystick_dir(dir: Vector2) -> void:
 	if is_instance_valid(player):
@@ -744,13 +795,13 @@ func _update_objectives_ui() -> void:
 	var obj_pl := StageDirector.translate_objective(primary_objective_type)
 	var pct := 100 if primary_objective_done else int(roundf(clampf(primary_objective_progress / maxf(0.1, primary_objective_required_sec), 0.0, 1.0) * 100.0))
 	if primary_objective_type == "defeat_boss":
-		obj1_label.text = "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
+		obj1_label.text = "%s Boss (%d/1)" % [c1, 1 if primary_objective_done else 0] if StageDirector.is_portrait_mode() else "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
 	elif primary_objective_type == "defend_node":
-		obj1_label.text = "%s %s (%d%% | HP: %d/%d)" % [c1, obj_pl, pct, int(primary_objective_hp), int(primary_objective_max_hp)]
+		obj1_label.text = "%s Obrona %d%% (HP %d)" % [c1, pct, int(primary_objective_hp)] if StageDirector.is_portrait_mode() else "%s %s (%d%% | HP: %d/%d)" % [c1, obj_pl, pct, int(primary_objective_hp), int(primary_objective_max_hp)]
 	else:
-		obj1_label.text = "%s %s (%d%%)" % [c1, obj_pl, pct]
-	obj2_label.text = "%s Próbki DNA (%d/%d)" % [c2, data_cores_collected, data_cores_total]
-	obj3_label.text = "%s Przetrwaj 10 fal (Fala %d/%d | Zabici: %d)" % [c3, current_wave_num, max_waves_in_stage, enemies_killed_in_run]
+		obj1_label.text = "%s Cel misji: %d%%" % [c1, pct] if StageDirector.is_portrait_mode() else "%s %s (%d%%)" % [c1, obj_pl, pct]
+	obj2_label.text = "%s DNA %d/%d" % [c2, data_cores_collected, data_cores_total] if StageDirector.is_portrait_mode() else "%s Próbki DNA (%d/%d)" % [c2, data_cores_collected, data_cores_total]
+	obj3_label.text = "%s Fale %d/%d" % [c3, current_wave_num, max_waves_in_stage] if StageDirector.is_portrait_mode() else "%s Przetrwaj 10 fal (Fala %d/%d | Zabici: %d)" % [c3, current_wave_num, max_waves_in_stage, enemies_killed_in_run]
 
 func _process(delta: float) -> void:
 	if run_result_state != "active":
@@ -1228,12 +1279,20 @@ func _setup_extended_hud_and_profile() -> void:
 
 		if is_instance_valid(obj_header):
 			obj_header.add_theme_font_size_override("font_size", 10)
+			obj_header.text = "MISJA / CELE"
+			obj_header.clip_text = true
 		if is_instance_valid(obj1_label):
 			obj1_label.add_theme_font_size_override("font_size", 9)
+			obj1_label.clip_text = true
+			obj1_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if is_instance_valid(obj2_label):
 			obj2_label.add_theme_font_size_override("font_size", 9)
+			obj2_label.clip_text = true
+			obj2_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if is_instance_valid(obj3_label):
 			obj3_label.add_theme_font_size_override("font_size", 9)
+			obj3_label.clip_text = true
+			obj3_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
 	# 1. Przyciski w prawym górnym rogu: 📓 Dziennik, 👤 RPG [TAB] oraz 📱/🖥 9:16↔16:9
 	if currency_bar:
@@ -1246,6 +1305,7 @@ func _setup_extended_hud_and_profile() -> void:
 				npc_journal_modal.visible = not npc_journal_modal.visible
 		)
 		currency_bar.add_child(log_btn)
+		journal_hud_btn = log_btn
 
 		var prof_btn := Button.new()
 		prof_btn.text = "👤 RPG"
@@ -1253,9 +1313,10 @@ func _setup_extended_hud_and_profile() -> void:
 		prof_btn.add_theme_font_size_override("font_size", 11)
 		prof_btn.pressed.connect(toggle_user_profile_panel)
 		currency_bar.add_child(prof_btn)
+		profile_hud_btn = prof_btn
 
 		orient_hud_btn = Button.new()
-		orient_hud_btn.text = "📱 9:16"
+		orient_hud_btn.text = "9:16"
 		orient_hud_btn.custom_minimum_size = Vector2(64, 30)
 		orient_hud_btn.add_theme_font_size_override("font_size", 11)
 		orient_hud_btn.pressed.connect(func(): StageDirector.toggle_orientation_mode())
