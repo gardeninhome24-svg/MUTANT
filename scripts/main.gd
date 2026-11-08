@@ -232,16 +232,34 @@ func _apply_responsive_hud_layout() -> void:
 	# Dopasowanie okien modalnych (UpgradePanel, WinPanel, DeathPanel) do szerokości 720px w pionie 9:16
 	if is_instance_valid(cards_container):
 		cards_container.add_theme_constant_override("separation", 10 if portrait else 20)
+	var up_vbox := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox") as VBoxContainer
+	if is_instance_valid(up_vbox):
+		up_vbox.add_theme_constant_override("separation", 10 if portrait else 20)
 	var up_title := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(up_title):
-		up_title.add_theme_font_size_override("font_size", 20 if portrait else 28)
+		up_title.add_theme_font_size_override("font_size", 18 if portrait else 28)
+		up_title.text = "WYBIERZ ULEPSZENIE" if portrait else "AWANS! WYBIERZ MODUŁ BOJOWY"
 	var win_title := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(win_title):
-		win_title.add_theme_font_size_override("font_size", 21 if portrait else 32)
+		win_title.add_theme_font_size_override("font_size", 20 if portrait else 32)
+		win_title.text = "ETAP UKOŃCZONY" if portrait else "ETAP UKOŃCZONY! ODBLOKOWANO KOLEJNY ETAP!"
 	var death_title := get_node_or_null("HUD/HUDRoot/DeathPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(death_title):
-		death_title.add_theme_font_size_override("font_size", 22 if portrait else 32)
+		death_title.add_theme_font_size_override("font_size", 20 if portrait else 32)
+		death_title.text = "MISJA NIEUDANA" if portrait else "ODDZIAŁ ZOSTAŁ PRZEŁAMANY"
 
+	for path in ["HUD/HUDRoot/WinPanel/CenterContainer/VBox", "HUD/HUDRoot/DeathPanel/CenterContainer/VBox"]:
+		var modal_vbox := get_node_or_null(path) as VBoxContainer
+		if modal_vbox:
+			modal_vbox.add_theme_constant_override("separation", 10 if portrait else 18)
+	var revive_hbox := get_node_or_null("HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox") as HBoxContainer
+	if revive_hbox:
+		revive_hbox.add_theme_constant_override("separation", 8 if portrait else 20)
+	for path in ["HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox/ReviveAdBtn", "HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox/ReviveDMBtn"]:
+		var revive_btn := get_node_or_null(path) as Button
+		if revive_btn:
+			revive_btn.custom_minimum_size = Vector2(160, 44) if portrait else Vector2(210, 48)
+			revive_btn.add_theme_font_size_override("font_size", 11 if portrait else 14)
 	var safe_top := StageDirector.get_safe_top_margin()
 
 	if portrait:
@@ -1082,15 +1100,15 @@ func _on_reroll_pressed() -> void:
 func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	var portrait := StageDirector.is_portrait_mode()
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(205 if portrait else 236, 295 if portrait else 310)
+	panel.custom_minimum_size = Vector2(192 if portrait else 236, 246 if portrait else 310)
 
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.10, 0.16, 0.97)
+	style.bg_color = Color(0.035, 0.065, 0.105, 0.97)
 	style.border_width_left = 2
 	style.border_width_top = 2
 	style.border_width_right = 2
 	style.border_width_bottom = 2
-	style.border_color = Color(0.25, 0.90, 0.45, 0.90)
+	style.border_color = Color(0.18, 0.72, 0.78, 0.82)
 	style.corner_radius_top_left = 10
 	style.corner_radius_top_right = 10
 	style.corner_radius_bottom_left = 10
@@ -1098,19 +1116,20 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 8 if portrait else 10)
+	margin.add_theme_constant_override("margin_right", 8 if portrait else 10)
+	margin.add_theme_constant_override("margin_top", 8 if portrait else 12)
+	margin.add_theme_constant_override("margin_bottom", 8 if portrait else 12)
 
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 8)
+	vbox.add_theme_constant_override("separation", 5 if portrait else 8)
 
 	var icon_path: String = POWER_ICONS.get(upgrade_data["id"], "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png")
 	var icon_rect := TextureRect.new()
 	icon_rect.texture = AssetRegistry.get_tex(icon_path)
-	icon_rect.custom_minimum_size = Vector2(64, 64)
+	icon_rect.custom_minimum_size = Vector2(48, 48) if portrait else Vector2(64, 64)
+	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
@@ -1120,13 +1139,14 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	title.text = String(upgrade_data["name"]).to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title.add_theme_font_size_override("font_size", 12 if portrait else 15)
 	title.add_theme_color_override("font_color", Color(0.38, 0.96, 1.0))
 
 	var desc := Label.new()
 	desc.text = String(upgrade_data["desc"])
 	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.add_theme_font_size_override("font_size", 12)
+	desc.add_theme_font_size_override("font_size", 10 if portrait else 12)
 
 	# Gwiazdki poziomu (★ ★ ★ ☆ ☆) zgodnie z arkuszem -9.png
 	var stars_lbl := Label.new()
@@ -1135,11 +1155,12 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 		stars_str += "★ " if s_i < tier else "☆ "
 	stars_lbl.text = stars_str.strip_edges()
 	stars_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stars_lbl.add_theme_font_size_override("font_size", 11 if portrait else 14)
 	stars_lbl.add_theme_color_override("font_color", Color(1.0, 0.84, 0.22))
 
 	var btn := Button.new()
 	btn.text = "WYBIERZ"
-	btn.custom_minimum_size = Vector2(150, 38)
+	btn.custom_minimum_size = Vector2(120, 36) if portrait else Vector2(150, 38)
 	btn.pressed.connect(func():
 		apply_upgrade(String(upgrade_data["id"]))
 		upgrade_panel.visible = false
@@ -1465,7 +1486,7 @@ func _setup_extended_hud_and_profile() -> void:
 			restart_w_btn.expand_icon = true
 
 		var menu_w_btn := Button.new()
-		menu_w_btn.custom_minimum_size = Vector2(240, 44)
+		menu_w_btn.custom_minimum_size = Vector2(196, 40)
 		menu_w_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		menu_w_btn.text = " POWRÓT DO MENU GŁÓWNEGO"
 		if ResourceLoader.exists("res://assets/ui/fixpack_20261108/icons/return.png"):
@@ -1495,7 +1516,7 @@ func _setup_extended_hud_and_profile() -> void:
 		death_vbox.move_child(death_summary_lbl, 2)
 
 		var menu_d_btn := Button.new()
-		menu_d_btn.custom_minimum_size = Vector2(240, 44)
+		menu_d_btn.custom_minimum_size = Vector2(196, 40)
 		menu_d_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		menu_d_btn.text = " POWRÓT DO MENU GŁÓWNEGO"
 		if ResourceLoader.exists("res://assets/ui/fixpack_20261108/icons/return.png"):
