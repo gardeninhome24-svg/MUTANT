@@ -112,6 +112,7 @@ func _build_commercial_hub_ui() -> void:
 	top_st.content_margin_top = 8
 	top_st.content_margin_bottom = 8
 	top_hub_panel.add_theme_stylebox_override("panel", top_st)
+	top_hub_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(top_hub_panel)
 
 	var top_h := HBoxContainer.new()
@@ -236,6 +237,7 @@ func _build_commercial_hub_ui() -> void:
 	settings_btn.flat = true
 	var set_tex := TextureRect.new()
 	set_tex.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	set_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	set_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	set_tex.texture = load("res://assets/ui/target_theme/icon_settings.png")
@@ -253,6 +255,7 @@ func _build_commercial_hub_ui() -> void:
 	inbox_btn.flat = true
 	var mail_tex := TextureRect.new()
 	mail_tex.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	mail_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	mail_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	mail_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mail_tex.texture = load("res://assets/ui/target_theme/icon_mail.png")
@@ -274,6 +277,7 @@ func _build_commercial_hub_ui() -> void:
 	base_scroll = ScrollContainer.new()
 	base_scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	base_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	base_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
 	middle_root.add_child(base_scroll)
 
 	var base_margin := MarginContainer.new()
