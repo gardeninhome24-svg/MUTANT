@@ -67,13 +67,27 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Publish APK to itch.io (only when explicitly requested)
+      # Publishing is opt-in: builds from ordinary pushes are NOT exposed to testers.
+      - name: Publish APK to private itch.io beta (manual opt-in only)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_to_itch == true }}
+        shell: bash
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          if [ -z "$BUTLER_API_KEY" ]; then
-            echo "Missing GitHub Actions secret: BUTLER_API_KEY"
+          set -euo pipefail
+          if [ -z "${BUTLER_API_KEY}" ]; then
+            echo "::error::Set the BUTLER_API_KEY repository secret first."
             exit 1
           fi
-          butler push build/android banusgames/mutantsurvivor:android-beta --userversion "build-${GITHUB_RUN_NUMBER}"
+          # Official stable channel for CI; butler is not part of the Godot image.
+          curl --fail --location --silent --show-error \
+            "https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default" \
+            --output /tmp/itch-butler.zip
+          mkdir -p /tmp/itch-butler
+          python3 -m zipfile -e /tmp/itch-butler.zip /tmp/itch-butler
+          chmod +x /tmp/itch-butler/butler
+          /tmp/itch-butler/butler version
+          test -s build/android/MutantSurvivor.apk
+          /tmp/itch-butler/butler push build/android \
+            banusgames/mutantsurvivor:android-beta \
+            --userversion "android-beta-${GITHUB_RUN_NUMBER}"
