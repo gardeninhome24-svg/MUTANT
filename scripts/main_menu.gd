@@ -613,6 +613,16 @@ func _build_base_tab_content() -> void:
 	play_big_btn.tooltip_text = "Rozpocznij misję"
 	play_big_btn.pressed.connect(_on_play_pressed)
 	base_vbox.add_child(play_big_btn)
+	# Second main action matches the approved reference and opens a real campaign screen.
+	var continue_btn := Button.new()
+	continue_btn.name = "ContinueCampaignButton"
+	continue_btn.text = "▶  KONTYNUUJ KAMPANIĘ"
+	continue_btn.custom_minimum_size = Vector2(300, 52)
+	continue_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	SurvivorVisualSystem.decorate_button(continue_btn, SurvivorVisualSystem.LIME, 52.0)
+	continue_btn.add_theme_font_size_override("font_size", 17)
+	continue_btn.pressed.connect(func(): switch_hub_tab(3))
+	base_vbox.add_child(continue_btn)
 	# Preserve the approved golden PLAY artwork while making the disabled state clear.
 
 	# Pomocniczy wiersz opcji (dyskretny, przezroczysty sci-fi bez czarnych prostokątów)
