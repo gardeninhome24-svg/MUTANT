@@ -60,6 +60,7 @@ var selected_bag_instance_id: String = ""
 
 # --- TAB 2: KAMPANIA 1-100 & TALENTY ---
 var talent_rows: Dictionary = {}
+var chapter_map_buttons: Dictionary = {}
 var stage_info_lbl: Label
 var stage_boss_preview: TextureRect
 var diff_info_lbl: Label
@@ -1302,6 +1303,28 @@ func _build_tab_campaign_and_talents() -> Control:
 	SurvivorVisualSystem.decorate_button(b_next10, SurvivorVisualSystem.CYAN, 46.0)
 	stage_nav.add_child(b_next10)
 
+	# Ten chapter milestones make the 100-stage journey visible instead
+	# of presenting only developer-style numeric jump buttons.
+	var chapter_heading := Label.new()
+	chapter_heading.text = "MAPA KAMPANII  •  10 ROZDZIAŁÓW"
+	SurvivorVisualSystem.decorate_section(chapter_heading, SurvivorVisualSystem.LIME, 16)
+	c_vbox.add_child(chapter_heading)
+	var chapter_grid := GridContainer.new()
+	chapter_grid.name = "CampaignChapterMap"
+	chapter_grid.columns = 5
+	chapter_grid.add_theme_constant_override("h_separation", 6)
+	chapter_grid.add_theme_constant_override("v_separation", 6)
+	c_vbox.add_child(chapter_grid)
+	for chapter_idx in range(1, 11):
+		var chapter_start: int = (chapter_idx - 1) * 10 + 1
+		var chapter_btn := Button.new()
+		chapter_btn.text = "%02d\n%03d–%03d" % [chapter_idx, chapter_start, chapter_start + 9]
+		chapter_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		SurvivorVisualSystem.decorate_button(chapter_btn, SurvivorVisualSystem.LIME, 68.0)
+		chapter_btn.pressed.connect(func(): _select_stage(chapter_start))
+		chapter_grid.add_child(chapter_btn)
+		chapter_map_buttons[chapter_idx] = chapter_btn
+
 	var diff_row := VBoxContainer.new()
 	diff_row.add_theme_constant_override("separation", 6)
 	c_vbox.add_child(diff_row)
@@ -1806,6 +1829,13 @@ func refresh_ui() -> void:
 	# Tab 1: Ekwipunek
 	_refresh_inventory_tab_ui()
 
+	# Chapter nodes are real stage navigation, with locked chapters disabled.
+	for chapter_idx in chapter_map_buttons.keys():
+		var chapter_start: int = (int(chapter_idx) - 1) * 10 + 1
+		var chapter_button: Button = chapter_map_buttons[chapter_idx]
+		chapter_button.disabled = chapter_start > StageDirector.max_unlocked_stage
+		var selected := StageDirector.current_stage >= chapter_start and StageDirector.current_stage <= chapter_start + 9
+		chapter_button.modulate = Color(1.0, 0.95, 0.48) if selected else (Color.WHITE if not chapter_button.disabled else Color(0.65, 0.67, 0.69))
 	# Tab 2: Kampania & Talenty
 	for t_id in talent_rows.keys():
 		var row: Dictionary = talent_rows[t_id]
