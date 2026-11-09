@@ -54,8 +54,9 @@ func _run() -> void:
 	if is_instance_valid(production_overlay):
 		var logo: TextureRect = production_overlay.find_child("MutantSurvivorLogo", true, false) as TextureRect
 		_assert(is_instance_valid(logo) and logo.texture != null, "Real branded MutantSurvivor logo texture is loaded")
+		_assert(is_instance_valid(logo) and logo.texture.resource_path.ends_with("logo_production_vector.svg"), "Logo uses font-independent metal wordmark")
 		var logo_letters: HBoxContainer = production_overlay.find_child("BrandedLogoLetters", true, false) as HBoxContainer
-		_assert(is_instance_valid(logo_letters) and logo_letters.get_child_count() == 2, "Visible logo text is rendered by native Godot labels")
+		_assert(is_instance_valid(logo_letters) and not logo_letters.visible, "Older duplicate logo lettering is hidden")
 		var left_actions: VBoxContainer = production_overlay.find_child("BaseLeftActions", true, false) as VBoxContainer
 		var right_actions: VBoxContainer = production_overlay.find_child("BaseRightActions", true, false) as VBoxContainer
 		_assert(is_instance_valid(left_actions) and left_actions.get_child_count() == 3, "Three left base actions exist")
@@ -85,6 +86,8 @@ func _run() -> void:
 			var nav_button: Button = tab as Button
 			_assert(not nav_button.flat, "Bottom navigation renders its own highlighted panel")
 			_assert(nav_button.has_theme_stylebox_override("normal"), "Bottom tab has actual state-specific style")
+			var nav_art: TextureRect = nav_button.find_child("*", true, false) as TextureRect
+			_assert(is_instance_valid(nav_art) and nav_art.texture != null, "Bottom navigation icon is a real texture")
 		menu.call("switch_hub_tab", 2)
 		var equipment_button: Button = navigation_buttons[2] as Button
 		_assert(equipment_button.has_theme_stylebox_override("normal"), "Selected equipment tab stays visually styled")
