@@ -149,6 +149,10 @@ func _capture() -> void:
 	if not await _shot("12_campaign_420x933.png"):
 		quit(1)
 		return
+	compact_menu.call("switch_hub_tab", 5)
+	if not await _shot("13_rewards_420x933.png"):
+		quit(1)
+		return
 	compact_menu.queue_free()
 	await process_frame
 	print("PHONE SHOT CAPTURE COMPLETED")
