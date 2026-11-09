@@ -112,6 +112,7 @@ var is_online_mode: bool = true
 var last_known_unix_time: int = 0
 var daily_free_pack_claimed: bool = false
 var daily_reset_day: int = -1 # UTC day index; preserve existing daily claims when upgrading saves.
+var last_daily_calendar_claim_day: int = -1
 var daily_missions: Array = []
 
 var _sfx_player: AudioStreamPlayer = null
@@ -450,6 +451,8 @@ func _load_static_json_data() -> void:
 		var parsed: Variant = JSON.parse_string(raw_stages)
 		if parsed is Array:
 			stages_data = parsed
+		elif parsed is Dictionary and parsed.get("stages") is Array:
+			stages_data = parsed["stages"]
 	if FileAccess.file_exists(DIFFICULTY_JSON_PATH):
 		var raw_diff := FileAccess.get_file_as_string(DIFFICULTY_JSON_PATH)
 		var parsed_diff: Variant = JSON.parse_string(raw_diff)
@@ -606,6 +609,7 @@ func save_campaign_profile() -> void:
 		"daily_claimed_days": daily_claimed_days,
 		"daily_free_pack_claimed": daily_free_pack_claimed,
 		"daily_reset_day": daily_reset_day,
+		"last_daily_calendar_claim_day": last_daily_calendar_claim_day,
 		"daily_missions": daily_missions,
 		"battle_pass_xp": battle_pass_xp,
 		"battle_pass_premium_unlocked": battle_pass_premium_unlocked,
@@ -629,8 +633,8 @@ func load_campaign_profile() -> void:
 	var raw := FileAccess.get_file_as_string(path)
 	var data: Variant = JSON.parse_string(raw)
 	if data is Dictionary:
-		current_stage = clampi(int(data.get("current_stage", 1)), 1, 100)
 		max_unlocked_stage = clampi(int(data.get("max_unlocked_stage", 1)), 1, 100)
+		current_stage = clampi(int(data.get("current_stage", 1)), 1, max_unlocked_stage)
 		selected_difficulty_id = String(data.get("selected_difficulty_id", "ocalaly"))
 		selected_class_id = String(data.get("selected_class_id", "soldier"))
 		selected_skin_id = String(data.get("selected_skin_id", "default"))
@@ -650,6 +654,9 @@ func load_campaign_profile() -> void:
 		daily_login_day = clampi(int(data.get("daily_login_day", 1)), 1, 7)
 		daily_free_pack_claimed = bool(data.get("daily_free_pack_claimed", false))
 		daily_reset_day = int(data.get("daily_reset_day", -1))
+		# Legacy saves already containing calendar claims must not receive another
+		# reward on the same migration day.
+		last_daily_calendar_claim_day = int(data.get("last_daily_calendar_claim_day", int(Time.get_unix_time_from_system() / 86400) if not data.get("daily_claimed_days", []).is_empty() else -1))
 		battle_pass_xp = maxi(0, int(data.get("battle_pass_xp", 450)))
 		battle_pass_premium_unlocked = bool(data.get("battle_pass_premium_unlocked", false))
 		vip_sandbox_active = bool(data.get("vip_sandbox_active", false))
@@ -804,7 +811,7 @@ func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dict
 	var candidates: Array = []
 	for it in catalog.get("items", []):
 		if it is Dictionary and String(it.get("rarity", "")) == rarity:
-			if not forced_rarity.is_empty() or int(it.get("min_stage", 1)) <= maxi(stage_num, 50):
+			if int(it.get("min_stage", 1)) <= clampi(stage_num, 1, 100):
 				candidates.append(it)
 	if candidates.is_empty():
 		for it in catalog.get("items", []):
@@ -1057,11 +1064,18 @@ func refill_attempts_sandbox() -> void:
 	save_campaign_profile()
 
 func claim_daily_reward(day_num: int) -> Dictionary:
+	# Day seven rewards must never be accessible on the first login.
+	# One reward per UTC day, strictly in order; persist the claim timestamp.
+	_refresh_daily_progress()
+	var today: int = int(maxi(int(Time.get_unix_time_from_system()), last_known_unix_time) / 86400)
+	if day_num != daily_login_day or daily_claimed_days.has(day_num) or last_daily_calendar_claim_day >= today:
+		return {"ok": false}
 	if daily_claimed_days.has(day_num):
 		return {"ok": false}
 	for r in DAILY_REWARDS_TABLE:
 		if int(r["day"]) == day_num:
 			daily_claimed_days.append(day_num)
+			last_daily_calendar_claim_day = today
 			credits += int(r["credits"])
 			dark_matter_gems += int(r["gems"])
 			scrap_materials += int(r["scrap"])
@@ -1097,6 +1111,7 @@ func get_stage_config(stage_num: int = -1) -> Dictionary:
 		base_cfg["progress_dialogue"] = m2.get("progress_dialogue", [])
 		base_cfg["completion_dialogue"] = m2.get("completion_dialogue", [])
 		base_cfg["rewards_v2"] = m2.get("rewards", {})
+		base_cfg["replay_credits_multiplier"] = m2.get("replay_credits_multiplier", 0.35)
 		base_cfg["mandatory_stage_unlock"] = m2.get("mandatory_stage_unlock", s + 1)
 
 		var w5: Dictionary = m2.get("wave5", {})
