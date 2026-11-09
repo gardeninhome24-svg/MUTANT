@@ -403,7 +403,7 @@ func _build_base_overlays() -> void:
 
 	base_logo = TextureRect.new()
 	base_logo.name = "MutantSurvivorLogo"
-	base_logo.texture = load("res://assets/ui/target_theme/logo_mutant_survivor.svg")
+	base_logo.texture = load("res://assets/ui/target_theme/logo_production_vector.svg")
 	base_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	base_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	base_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -414,6 +414,7 @@ func _build_base_overlays() -> void:
 	base_logo_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	base_logo_title.add_theme_constant_override("separation", 0)
 	base_overlay.add_child(base_logo_title)
+	base_logo_title.visible = false # New font-independent texture contains the metallic wordmark.
 	for part in [
 		{"text": "MUTANT", "color": Color(0.92, 0.95, 0.96)},
 		{"text": "SURVIVOR", "color": SurvivorVisualSystem.LIME}
