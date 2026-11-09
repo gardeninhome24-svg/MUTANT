@@ -900,6 +900,7 @@ const RARITY_TIERS := ["common", "rare", "epic", "legendary", "mythic"]
 func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
 	if cost_gems <= 0 or dark_matter_gems < cost_gems:
 		return {}
+	var previous_pity := pity_chest_counter
 	pity_chest_counter += 1
 	var forced_r := ""
 	if pity_chest_counter >= 50:
@@ -907,11 +908,12 @@ func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
 		pity_chest_counter = 0
 	var item := roll_new_equipment_drop(max_unlocked_stage, forced_r, false)
 	if item.is_empty():
-		# Never charge currency for an empty loot table.
-		pity_chest_counter = maxi(0, pity_chest_counter - 1)
+		# Never charge currency OR erase guaranteed-chest pity on unavailable loot.
+		pity_chest_counter = previous_pity
 		return {}
 	if not spend_premium_gems(cost_gems):
 		inventory.erase(item)
+		pity_chest_counter = previous_pity
 		return {}
 	if not forced_r.is_empty() or String(item.get("rarity", "")) in ["legendary", "mythic"]:
 		pity_chest_counter = 0
