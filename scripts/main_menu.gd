@@ -1148,6 +1148,11 @@ func _apply_responsive_menu_layout() -> void:
 		stage_preview.custom_minimum_size = Vector2(156, 205) if portrait else Vector2(175, 180)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(560.0 if portrait else 600.0, available_width), 92.0 if portrait else 100.0)
+	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
+	if is_instance_valid(campaign_continue):
+		campaign_continue.custom_minimum_size = Vector2(minf(480.0, available_width), 50.0 if compact_hub else 60.0)
+		campaign_continue.add_theme_font_size_override("font_size", 13 if compact_hub else 19)
+
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 348.0) if portrait else 145.0)
