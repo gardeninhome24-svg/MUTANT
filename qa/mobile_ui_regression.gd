@@ -32,6 +32,12 @@ func _run() -> void:
 	var card: Control = menu.get("stage_card") as Control
 	var play: Button = menu.get("play_big_btn") as Button
 	var hero: Control = menu.get("hero_spacer_control") as Control
+	var progress: Label = menu.get("campaign_progress_label") as Label
+	var progress_bar: ProgressBar = menu.get("campaign_progress_bar") as ProgressBar
+	_assert(is_instance_valid(progress), "Menu campaign progress label exists")
+	_assert(is_instance_valid(progress_bar), "Menu campaign progress bar exists")
+	if is_instance_valid(progress):
+		_assert(progress.text.contains("KAMPANIA"), "Campaign progress status uses game data")
 	_assert(is_instance_valid(card), "Stage card is instantiated")
 	_assert(is_instance_valid(play), "Play CTA is instantiated")
 	_assert(is_instance_valid(hero), "Hero spacer is instantiated")
