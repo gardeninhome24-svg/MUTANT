@@ -128,3 +128,13 @@ static func decorate_art_button(button: Button, accent: Color = GOLD, height: fl
 		button.add_theme_stylebox_override("pressed", pressed)
 	if disabled != null:
 		button.add_theme_stylebox_override("disabled", disabled)
+
+# A hand-authored, scalable 9-slice metal frame. It is a *UI texture*, not
+# a flattened screenshot, so buttons and text remain accessible and clickable.
+const PRODUCTION_METAL_PANEL := "res://assets/ui/target_theme/production_metal_panel.svg"
+
+static func metal_panel(accent: Color = CYAN) -> StyleBox:
+	var frame := texture_style(PRODUCTION_METAL_PANEL, 26.0, 16.0)
+	if frame == null:
+		return panel(accent, true)
+	return frame
