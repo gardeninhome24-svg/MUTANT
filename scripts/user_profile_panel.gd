@@ -978,8 +978,7 @@ func _build_tab_inventory_backpack() -> Control:
 			tile.pressed.connect(func():
 				selected_inspect_slot_id = slot_key
 				var equipped_id: String = String(StageDirector.equipped_items.get(slot_key, ""))
-				if not equipped_id.is_empty():
-					selected_bag_instance_id = equipped_id
+				selected_bag_instance_id = equipped_id
 				filter_slot = slot_key
 				refresh_ui()
 			)
@@ -1262,6 +1261,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var cap_id: String = inst_id
 		click_b.pressed.connect(func():
 			selected_bag_instance_id = cap_id
+			selected_inspect_slot_id = slot
 			refresh_ui()
 		)
 		cell.add_child(click_b)
@@ -1295,7 +1295,7 @@ func _refresh_inventory_quick_actions() -> void:
 	var has_item: bool = not item.is_empty()
 	var slot: String = String(item.get("slot", selected_inspect_slot_id))
 	var is_equipped: bool = has_item and String(StageDirector.equipped_items.get(slot, "")) == selected_bag_instance_id
-	inv_quick_info.text = String(item.get("name", "WYBIERZ ITEM")).left(20)
+	inv_quick_info.text = String(item.get("name", "PUSTY SLOT — WYBIERZ PRZEDMIOT")).left(24)
 	inv_quick_equip.disabled = not has_item or is_equipped
 	inv_quick_unequip.disabled = not is_equipped
 
