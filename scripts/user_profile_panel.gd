@@ -63,6 +63,12 @@ var selected_bag_instance_id: String = ""
 var talent_rows: Dictionary = {}
 var chapter_map_buttons: Dictionary = {}
 var stage_info_lbl: Label
+var campaign_chapter_lbl: Label
+var campaign_npc_lbl: Label
+var campaign_goal_lbl: Label
+var campaign_hazard_lbl: Label
+var campaign_boss_lbl: Label
+var campaign_reward_lbl: Label
 var stage_boss_preview: TextureRect
 var diff_info_lbl: Label
 var practice_check_btn: Button
@@ -256,7 +262,10 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(campaign_chapters):
 		campaign_chapters.columns = 2 if narrow else 5
 	if is_instance_valid(stage_info_lbl):
-		stage_info_lbl.add_theme_font_size_override("font_size", 11 if narrow else 17)
+		stage_info_lbl.add_theme_font_size_override("font_size", 14 if narrow else 21)
+	for detail_label in [campaign_chapter_lbl, campaign_npc_lbl, campaign_goal_lbl, campaign_hazard_lbl, campaign_boss_lbl, campaign_reward_lbl]:
+		if is_instance_valid(detail_label):
+			detail_label.add_theme_font_size_override("font_size", 10 if narrow else (17 if detail_label == campaign_chapter_lbl else 14))
 
 	# The equipment presentation must fit the *physical* narrow viewport.
 	# The previous 225px operator and 80px columns forced horizontal overflow.
@@ -1374,11 +1383,39 @@ func _build_tab_campaign_and_talents() -> Control:
 	stage_boss_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mid_h.add_child(stage_boss_preview)
 
+	var mission_details := VBoxContainer.new()
+	mission_details.name = "CampaignMissionDetails"
+	mission_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mission_details.add_theme_constant_override("separation", 7)
+	mid_h.add_child(mission_details)
 	stage_info_lbl = Label.new()
-	stage_info_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stage_info_lbl.name = "CampaignStageHeading"
 	stage_info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stage_info_lbl.add_theme_font_size_override("font_size", 17)
-	mid_h.add_child(stage_info_lbl)
+	stage_info_lbl.add_theme_font_size_override("font_size", 21)
+	stage_info_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
+	stage_info_lbl.add_theme_color_override("font_outline_color", Color(0.02, 0.04, 0.05))
+	stage_info_lbl.add_theme_constant_override("outline_size", 3)
+	mission_details.add_child(stage_info_lbl)
+	for label_info in [
+		{"name": "CampaignChapterHeading", "color": SurvivorVisualSystem.LIME, "size": 17},
+		{"name": "CampaignNPC", "color": SurvivorVisualSystem.GOLD, "size": 14},
+		{"name": "CampaignObjective", "color": SurvivorVisualSystem.TEXT, "size": 14},
+		{"name": "CampaignHazard", "color": SurvivorVisualSystem.TEXT, "size": 14},
+		{"name": "CampaignBossName", "color": SurvivorVisualSystem.TEXT, "size": 14},
+		{"name": "CampaignFirstRewards", "color": SurvivorVisualSystem.GOLD, "size": 14}
+	]:
+		var detail := Label.new()
+		detail.name = String(label_info["name"])
+		detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		detail.add_theme_font_size_override("font_size", int(label_info["size"]))
+		detail.add_theme_color_override("font_color", label_info["color"])
+		mission_details.add_child(detail)
+	campaign_chapter_lbl = mission_details.get_node("CampaignChapterHeading") as Label
+	campaign_npc_lbl = mission_details.get_node("CampaignNPC") as Label
+	campaign_goal_lbl = mission_details.get_node("CampaignObjective") as Label
+	campaign_hazard_lbl = mission_details.get_node("CampaignHazard") as Label
+	campaign_boss_lbl = mission_details.get_node("CampaignBossName") as Label
+	campaign_reward_lbl = mission_details.get_node("CampaignFirstRewards") as Label
 
 	# Use a compact directional row and a separate grid for chapter shortcuts.
 	# Nine buttons in one HBox can overflow the 9:16 campaign panel.
@@ -2055,16 +2092,15 @@ func refresh_ui() -> void:
 	var r_cred := int(rew_v2.get("soft_credits", 100 + StageDirector.current_stage * 18)) if rew_v2.get("soft_credits") != null else (100 + StageDirector.current_stage * 18)
 	var materials: Dictionary = rew_v2.get("materials", {}) if rew_v2.get("materials") is Dictionary else {}
 	var r_scrap := int(materials.get("scrap", 2 + int(StageDirector.current_stage / 10)))
-	stage_info_lbl.text = (
-		"ETAP %03d/100: %s (Rozdział %d — %s)\n" % [
-			StageDirector.current_stage, String(st_cfg.get("name", "Operacja")), int(st_cfg.get("chapter", 1)), String(st_cfg.get("chapter_name", "Pustkowia"))
-		] +
-		"• Dowódca NPC: %s  |  • Cel: %s\n" % [String(st_cfg.get("npc", "Mara")), obj_pl] +
-		"• Zagrożenie: %s  |  • %s\n" % [haz_pl, boss_name] +
-		"• Pierwsze ukończenie: +%d Kr, +%d Złomu i ekwipunek RPG" % [
-			r_cred, r_scrap
-		]
-	)
+	stage_info_lbl.text = "ETAP %03d/100" % StageDirector.current_stage
+	campaign_chapter_lbl.text = "%s  •  ROZDZIAŁ %d" % [
+		String(st_cfg.get("name", "Operacja")).to_upper(), int(st_cfg.get("chapter", 1))
+	]
+	campaign_npc_lbl.text = "◉  DOWÓDCA: %s" % String(st_cfg.get("npc", "Mara"))
+	campaign_goal_lbl.text = "⌖  CEL: %s" % obj_pl
+	campaign_hazard_lbl.text = "⚠  ZAGROŻENIE: %s" % haz_pl
+	campaign_boss_lbl.text = "☣  %s" % boss_name
+	campaign_reward_lbl.text = "PIERWSZA NAGRODA: +%d Kr  •  +%d Złomu  •  RPG" % [r_cred, r_scrap]
 
 	var diff_cfg := StageDirector.get_difficulty_profile()
 	diff_info_lbl.text = "Trudność: %s (HP x%.2f | Nagrody x%.2f)" % [
