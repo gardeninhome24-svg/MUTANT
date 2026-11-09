@@ -30,6 +30,18 @@ No changes should be called "verified" solely because APK export passes.
 - [ ] Verify app upgrades over a previous signed APK without deleting save data.
 - [ ] Run at least one full stage on each tester's Android phone.
 
+## Signed APK release pipeline (manual)
+- The normal Android workflow creates **debug** APKs for internal testing.
+- The separate `Signed Android Release (manual)` workflow creates a **release-signed** APK. It does not upload to itch.io.
+- Before running it, generate a permanent release keystore using Godot's Android signing guide, back up the keystore and its password securely, and add these GitHub Actions secrets:
+  - `ANDROID_RELEASE_KEYSTORE_BASE64`: base64-encoded bytes of the *same permanent keystore* for all releases.
+  - `ANDROID_RELEASE_KEY_ALIAS`: key alias.
+  - `ANDROID_RELEASE_KEY_PASSWORD`: signing password.
+- Never add a keystore, key password or generated signing credentials to repository files or chat.
+- The first install signed with the release certificate cannot update a different certificate's debug APK in-place. Before sending it to testers, **back up their local game progress**, then test the debug-to-release migration.
+- Increase the Android package version code for every release, and keep the application ID/certificate stable. Record SHA-256 of each published APK.
+- Complete full device QA before manually distributing a signed APK.
+
 ## itch.io release
 - [ ] Tester has explicitly approved the APK for private beta distribution.
 - [ ] Workflow_dispatch with `publish_to_itch=true` finishes successfully.
