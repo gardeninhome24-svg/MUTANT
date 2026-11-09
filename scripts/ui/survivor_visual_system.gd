@@ -76,3 +76,55 @@ static func decorate_inventory_card(card: Control, rarity: String, selected: boo
 		decorate_button(card, accent)
 		if selected:
 			card.add_theme_stylebox_override("normal", button_style(accent, "hover"))
+
+# Real nine-slice artwork: keep corners sharp while the middle stretches on phones.
+# Missing textures fall back to the established inexpensive flat style.
+const PANEL_STAGE := "res://assets/ui/target_theme/card_stage_clean.png"
+const PANEL_NAV := "res://assets/ui/target_theme/bottom_nav_bar.png"
+const BUTTON_GOLD := "res://assets/ms_beta_kit/ui/buttons/primary_gold_normal.png"
+const BUTTON_GOLD_PRESSED := "res://assets/ms_beta_kit/ui/buttons/primary_gold_pressed.png"
+const BUTTON_GOLD_DISABLED := "res://assets/ms_beta_kit/ui/buttons/primary_gold_disabled.png"
+const BUTTON_CYAN := "res://assets/ms_beta_kit/ui/buttons/secondary_cyan_normal.png"
+const BUTTON_CYAN_PRESSED := "res://assets/ms_beta_kit/ui/buttons/secondary_cyan_pressed.png"
+const BUTTON_CYAN_DISABLED := "res://assets/ms_beta_kit/ui/buttons/secondary_cyan_disabled.png"
+
+static func texture_style(path: String, inset: float = 16.0, padding: float = 10.0) -> StyleBoxTexture:
+	if not ResourceLoader.exists(path):
+		return null
+	var texture := load(path) as Texture2D
+	if texture == null:
+		return null
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	# Nine-slice insets are bounded for small source images.
+	var margin := minf(inset, minf(float(texture.get_width()), float(texture.get_height())) * 0.24)
+	style.texture_margin_left = margin
+	style.texture_margin_right = margin
+	style.texture_margin_top = margin
+	style.texture_margin_bottom = margin
+	style.set_content_margin_all(padding)
+	return style
+
+static func artwork_panel(path: String, accent: Color = CYAN, emphasis: bool = false) -> StyleBox:
+	var textured := texture_style(path, 18.0, 12.0)
+	if textured != null:
+		return textured
+	return panel(accent, emphasis)
+
+static func decorate_art_button(button: Button, accent: Color = GOLD, height: float = 48.0) -> void:
+	decorate_button(button, accent, height)
+	var is_gold := accent == GOLD
+	var normal_path := BUTTON_GOLD if is_gold else BUTTON_CYAN
+	var pressed_path := BUTTON_GOLD_PRESSED if is_gold else BUTTON_CYAN_PRESSED
+	var disabled_path := BUTTON_GOLD_DISABLED if is_gold else BUTTON_CYAN_DISABLED
+	var normal := texture_style(normal_path, 14.0, 8.0)
+	var pressed := texture_style(pressed_path, 14.0, 8.0)
+	var disabled := texture_style(disabled_path, 14.0, 8.0)
+	if normal != null:
+		button.add_theme_stylebox_override("normal", normal)
+		button.add_theme_stylebox_override("hover", normal)
+		button.add_theme_stylebox_override("focus", button_style(accent, "focus"))
+	if pressed != null:
+		button.add_theme_stylebox_override("pressed", pressed)
+	if disabled != null:
+		button.add_theme_stylebox_override("disabled", disabled)
