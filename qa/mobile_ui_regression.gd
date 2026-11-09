@@ -97,6 +97,14 @@ func _run() -> void:
 	var progress_bar: ProgressBar = menu.get("campaign_progress_bar") as ProgressBar
 	_assert(is_instance_valid(progress), "Menu campaign progress label exists")
 	_assert(is_instance_valid(progress_bar), "Menu campaign progress bar exists")
+	var milestone_row: HBoxContainer = menu.find_child("CampaignMilestones", true, false) as HBoxContainer
+	_assert(is_instance_valid(milestone_row), "Campaign progress has visible stage milestones")
+	if is_instance_valid(milestone_row):
+		_assert(milestone_row.get_child_count() == 5, "Five progress milestones are shown")
+		for marker in milestone_row.get_children():
+			var marker_label: Label = marker as Label
+			_assert(is_instance_valid(marker_label) and not marker_label.text.is_empty(), "Progress marker contains live level text")
+
 	if is_instance_valid(progress):
 		_assert(progress.text.contains("KAMPANIA"), "Campaign progress status uses game data")
 	_assert(is_instance_valid(card), "Stage card is instantiated")
