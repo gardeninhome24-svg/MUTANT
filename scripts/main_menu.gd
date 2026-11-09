@@ -572,7 +572,9 @@ func _build_base_tab_content() -> void:
 	stage_details_lbl = Label.new()
 	stage_details_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stage_details_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stage_details_lbl.clip_text = true
+	stage_details_lbl.custom_minimum_size.y = 34.0
+	stage_details_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	stage_details_lbl.clip_text = false
 	stage_details_lbl.add_theme_font_size_override("font_size", 20)
 	stage_details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stage_details_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
@@ -1212,6 +1214,7 @@ func _apply_responsive_menu_layout() -> void:
 		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (31 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
 		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (23 if portrait else 25))
+		stage_details_lbl.custom_minimum_size.y = 22.0 if compact_hub else 36.0
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
 
