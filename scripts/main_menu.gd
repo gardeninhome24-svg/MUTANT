@@ -61,6 +61,7 @@ var stage_quick_buttons: Array[Button] = []
 var bottom_nav_panel: PanelContainer = null
 var base_overlay: Control = null
 var base_logo: TextureRect = null
+var base_logo_title: HBoxContainer = null
 var base_left_actions: VBoxContainer = null
 var base_right_actions: VBoxContainer = null
 var nav_buttons: Array[Button] = []
@@ -405,6 +406,24 @@ func _build_base_overlays() -> void:
 	base_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	base_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	base_overlay.add_child(base_logo)
+	base_logo_title = HBoxContainer.new()
+	base_logo_title.name = "BrandedLogoLetters"
+	base_logo_title.alignment = BoxContainer.ALIGNMENT_CENTER
+	base_logo_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	base_logo_title.add_theme_constant_override("separation", 0)
+	base_overlay.add_child(base_logo_title)
+	for part in [
+		{"text": "MUTANT", "color": Color(0.92, 0.95, 0.96)},
+		{"text": "SURVIVOR", "color": SurvivorVisualSystem.LIME}
+	]:
+		var letter_label := Label.new()
+		letter_label.text = String(part["text"])
+		letter_label.add_theme_color_override("font_color", part["color"])
+		letter_label.add_theme_color_override("font_outline_color", Color(0.0, 0.02, 0.02))
+		letter_label.add_theme_constant_override("outline_size", 5)
+		letter_label.add_theme_font_size_override("font_size", 37)
+		letter_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		base_logo_title.add_child(letter_label)
 
 	base_left_actions = VBoxContainer.new()
 	base_left_actions.name = "BaseLeftActions"
@@ -1006,6 +1025,15 @@ func _apply_responsive_menu_layout() -> void:
 		base_logo.offset_right = -45.0 if compact_hub else -68.0
 		base_logo.offset_top = 0.0
 		base_logo.offset_bottom = 72.0 if compact_hub else 90.0
+	if is_instance_valid(base_logo_title):
+		base_logo_title.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		base_logo_title.offset_left = 0.0
+		base_logo_title.offset_right = 0.0
+		base_logo_title.offset_top = 27.0
+		base_logo_title.offset_bottom = 79.0
+		for label in base_logo_title.get_children():
+			if label is Label:
+				label.add_theme_font_size_override("font_size", 20 if compact_hub else (35 if portrait else 39))
 	for side_index in range(2):
 		var actions: VBoxContainer = base_left_actions if side_index == 0 else base_right_actions
 		if not is_instance_valid(actions):
