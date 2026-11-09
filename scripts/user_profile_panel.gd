@@ -1481,7 +1481,7 @@ func _refresh_store_tab_ui() -> void:
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.custom_minimum_size.y = 202.0
+		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 202.0)
 		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(accent, true))
 		store_cards_grid.add_child(card)
 
