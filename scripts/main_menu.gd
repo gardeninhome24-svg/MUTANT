@@ -994,10 +994,11 @@ func _apply_responsive_menu_layout() -> void:
 		base_logo.offset_top = 4.0
 		base_logo.offset_bottom = 48.0 if compact_hub else 58.0
 		base_logo.add_theme_font_size_override("font_size", 20 if compact_hub else (32 if portrait else 38))
-	for actions in [base_left_actions, base_right_actions]:
+	for side_index in range(2):
+		var actions: VBoxContainer = base_left_actions if side_index == 0 else base_right_actions
 		if not is_instance_valid(actions):
 			continue
-		var left_side := actions == base_left_actions
+		var left_side: bool = side_index == 0
 		actions.set_anchors_preset(Control.PRESET_TOP_LEFT if left_side else Control.PRESET_TOP_RIGHT)
 		actions.offset_left = 8.0 if left_side else (-56.0 if compact_hub else -124.0)
 		actions.offset_right = (56.0 if compact_hub else 124.0) if left_side else -8.0
