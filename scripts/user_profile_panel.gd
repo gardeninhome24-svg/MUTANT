@@ -57,6 +57,10 @@ var inv_materials_lbl: Label
 var inv_chest_btn: Button = null
 var inv_grid: GridContainer
 var inv_detail_box: PanelContainer
+var inv_quick_info: Label = null
+var inv_quick_equip: Button = null
+var inv_quick_unequip: Button = null
+var inv_bag_heading: Label = null
 var selected_bag_instance_id: String = ""
 
 # --- TAB 2: KAMPANIA 1-100 & TALENTY ---
@@ -237,7 +241,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(inv_slot_filters_grid):
 		inv_slot_filters_grid.columns = (2 if narrow else 4) if portrait else 7
 	if is_instance_valid(inv_grid):
-		inv_grid.columns = (2 if narrow else 4) if portrait else 6
+		inv_grid.columns = (4 if narrow else 5) if portrait else 8
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(250, 285)
 	for talent_id in talent_rows.keys():
@@ -964,7 +968,7 @@ func _build_tab_inventory_backpack() -> Control:
 		for slot_id in (LEFT_SLOTS if side == 0 else RIGHT_SLOTS):
 			var tile := Button.new()
 			tile.name = "EquipSlot_" + slot_id
-			tile.tooltip_text = slot_id.capitalize() + " • przejdź do operatora"
+			tile.tooltip_text = slot_id.capitalize() + " • wybierz slot"
 			tile.icon = load("res://assets/items/%s_common.png" % slot_id) as Texture2D
 			tile.expand_icon = true
 			tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -973,7 +977,11 @@ func _build_tab_inventory_backpack() -> Control:
 			var slot_key: String = slot_id
 			tile.pressed.connect(func():
 				selected_inspect_slot_id = slot_key
-				switch_tab(0)
+				var equipped_id: String = String(StageDirector.equipped_items.get(slot_key, ""))
+				if not equipped_id.is_empty():
+					selected_bag_instance_id = equipped_id
+				filter_slot = slot_key
+				refresh_ui()
 			)
 			gear_column.add_child(tile)
 
@@ -1082,11 +1090,19 @@ func _build_tab_inventory_backpack() -> Control:
 	# Siatka przedmiotów z dużymi ikonami HD i kolorowymi ramkami rzadkości
 	var grid_panel := _create_subpanel()
 	vbox.add_child(grid_panel)
+	var bag_content := VBoxContainer.new()
+	bag_content.add_theme_constant_override("separation", 6)
+	grid_panel.add_child(bag_content)
+	inv_bag_heading = Label.new()
+	inv_bag_heading.name = "InventoryBagHeading"
+	SurvivorVisualSystem.decorate_section(inv_bag_heading, SurvivorVisualSystem.GOLD, 16)
+	bag_content.add_child(inv_bag_heading)
 	inv_grid = GridContainer.new()
-	inv_grid.columns = 4 if StageDirector.is_portrait_mode() else 6
+	inv_grid.name = "MetinBackpackGrid"
+	inv_grid.columns = 5 if StageDirector.is_portrait_mode() else 8
 	inv_grid.add_theme_constant_override("h_separation", 8)
 	inv_grid.add_theme_constant_override("v_separation", 8)
-	grid_panel.add_child(inv_grid)
+	bag_content.add_child(inv_grid)
 
 	# Panel szczegółów wybranego przedmiotu i porównania ze założonym
 	inv_detail_box = _create_subpanel(Color(0.28, 0.96, 0.65, 0.85))
@@ -1157,7 +1173,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var is_sel := (selected_bag_instance_id == inst_id)
 
 		var cell := PanelContainer.new()
-		cell.custom_minimum_size = Vector2(138, 156) if StageDirector.is_portrait_mode() else Vector2(158, 148)
+		cell.custom_minimum_size = Vector2(76, 95) if narrow_portrait_ui else (Vector2(104, 120) if StageDirector.is_portrait_mode() else Vector2(100, 110))
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cst := StyleBoxFlat.new()
 		cst.bg_color = Color(r_col.r * 0.16, r_col.g * 0.16, r_col.b * 0.18, 0.95)
@@ -1195,7 +1211,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(AssetRegistry.get_item_icon_path(it))
 		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ic.custom_minimum_size = Vector2(65, 64) if StageDirector.is_portrait_mode() else Vector2(72, 70)
+		ic.custom_minimum_size = Vector2(42, 44) if narrow_portrait_ui else Vector2(65, 65)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		cv.add_child(ic)
