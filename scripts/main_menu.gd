@@ -1123,19 +1123,19 @@ func _apply_responsive_menu_layout() -> void:
 		base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if is_instance_valid(base_logo):
 		base_logo.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		base_logo.offset_left = 45.0 if compact_hub else 68.0
-		base_logo.offset_right = -45.0 if compact_hub else -68.0
+		base_logo.offset_left = 32.0 if compact_hub else 50.0
+		base_logo.offset_right = -32.0 if compact_hub else -50.0
 		base_logo.offset_top = 0.0
 		base_logo.offset_bottom = 72.0 if compact_hub else 90.0
 	if is_instance_valid(base_logo_title):
 		base_logo_title.set_anchors_preset(Control.PRESET_TOP_WIDE)
 		base_logo_title.offset_left = 0.0
 		base_logo_title.offset_right = 0.0
-		base_logo_title.offset_top = 27.0
-		base_logo_title.offset_bottom = 79.0
+		base_logo_title.offset_top = 20.0
+		base_logo_title.offset_bottom = 94.0
 		for label in base_logo_title.get_children():
 			if label is Label:
-				label.add_theme_font_size_override("font_size", 20 if compact_hub else (35 if portrait else 39))
+				label.add_theme_font_size_override("font_size", 21 if compact_hub else (43 if portrait else 47))
 	for side_index in range(2):
 		var actions: VBoxContainer = base_left_actions if side_index == 0 else base_right_actions
 		if not is_instance_valid(actions):
@@ -1202,7 +1202,7 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 348.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 395.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
 		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (31 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
@@ -1253,7 +1253,10 @@ func update_labels() -> void:
 	if is_instance_valid(stage_title_lbl):
 		stage_title_lbl.text = "ETAP %03d" % StageDirector.current_stage
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.text = String(cfg.get("chapter_name", cfg.get("name", "Krio Lab")))
+		var stage_subtitle := String(cfg.get("name", "")).strip_edges()
+		if stage_subtitle.is_empty():
+			stage_subtitle = String(cfg.get("chapter_name", "Pustkowia")).strip_edges()
+		stage_details_lbl.text = stage_subtitle.to_upper()
 	if is_instance_valid(mission_description):
 		mission_description.text = String(cfg.get("description", "Oczyść sektor i zabezpiecz cel misji."))
 	if is_instance_valid(stage_pwr_lbl):
