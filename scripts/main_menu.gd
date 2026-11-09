@@ -498,7 +498,7 @@ func _build_base_tab_content() -> void:
 	card_margin.add_child(stage_row)
 	stage_preview = TextureRect.new()
 	stage_preview.name = "StageEnvironmentPreview"
-	stage_preview.texture = load("res://assets/ui/target_theme/stage_card_bg.png")
+	stage_preview.texture = load("res://assets/biomes/dead_city/stage_background.png")
 	stage_preview.custom_minimum_size = Vector2(156, 205)
 	stage_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
