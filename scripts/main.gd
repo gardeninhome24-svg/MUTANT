@@ -961,7 +961,7 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 	if run_result_state != "active":
 		return
 	enemies_killed_in_run += 1
-	StageDirector.record_daily_mission_progress("kill_mutants", 1)
+	# MutantEnemy.die() already records each kill exactly once.
 	_update_objectives_ui()
 	if enemy == active_boss:
 		if current_wave_num >= max_waves_in_stage:
