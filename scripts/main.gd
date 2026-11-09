@@ -151,6 +151,8 @@ func _ready() -> void:
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
 
 	_apply_responsive_hud_layout()
+	if not get_viewport().size_changed.is_connected(_apply_responsive_hud_layout):
+		get_viewport().size_changed.connect(_apply_responsive_hud_layout)
 	_configure_input_mode_hud()
 
 	update_currency_display()
@@ -195,8 +197,13 @@ func _on_orientation_changed(_is_portrait: bool) -> void:
 	_configure_input_mode_hud()
 	_update_objectives_ui()
 
+func _is_compact_portrait_hud(view_width: float) -> bool:
+	return StageDirector.is_portrait_mode() and view_width < 600.0
+
 func _apply_responsive_hud_layout() -> void:
 	var portrait := StageDirector.is_portrait_mode()
+	var view_width := get_viewport_rect().size.x
+	var compact := _is_compact_portrait_hud(view_width)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
@@ -272,46 +279,46 @@ func _apply_responsive_hud_layout() -> void:
 			stats_card.offset_bottom = 54.0 + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -302.0
+			currency_bar.offset_left = -190.0 if compact else -302.0
 			currency_bar.offset_top = 8.0 + safe_top
 			currency_bar.offset_right = -10.0
 			currency_bar.offset_bottom = 38.0 + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
-			wave_progress_box.offset_left = -145.0
-			wave_progress_box.offset_top = 60.0 + safe_top
-			wave_progress_box.offset_right = 145.0
-			wave_progress_box.offset_bottom = 100.0 + safe_top
+			wave_progress_box.offset_left = -115.0 if compact else -145.0
+			wave_progress_box.offset_top = (145.0 if compact else 60.0) + safe_top
+			wave_progress_box.offset_right = 115.0 if compact else 145.0
+			wave_progress_box.offset_bottom = (183.0 if compact else 100.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
 			objectives_panel.offset_top = 60.0 + safe_top
-			objectives_panel.offset_right = 198.0
+			objectives_panel.offset_right = 188.0 if compact else 198.0
 			objectives_panel.offset_bottom = 138.0 + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 			radar_panel.offset_left = -98.0
-			radar_panel.offset_top = 114.0 + safe_top
+			radar_panel.offset_top = (60.0 if compact else 114.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = 202.0 + safe_top
+			radar_panel.offset_bottom = (140.0 if compact else 202.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0
-			bottom_weapons_panel.offset_top = -68.0
-			bottom_weapons_panel.offset_right = 295.0
-			bottom_weapons_panel.offset_bottom = -12.0
+			bottom_weapons_panel.offset_top = -128.0 if compact else -68.0
+			bottom_weapons_panel.offset_right = 260.0 if compact else 295.0
+			bottom_weapons_panel.offset_bottom = -78.0 if compact else -12.0
 		if powers_hbox:
 			powers_hbox.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-			powers_hbox.offset_left = -355.0
+			powers_hbox.offset_left = -355.0 if not compact else -330.0
 			powers_hbox.offset_top = -74.0
 			powers_hbox.offset_right = -12.0
 			powers_hbox.offset_bottom = -12.0
 		if joystick:
 			joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			joystick.offset_left = 20.0
-			joystick.offset_top = -228.0
+			joystick.offset_top = -300.0 if compact else -228.0
 			joystick.offset_right = 152.0
-			joystick.offset_bottom = -96.0
+			joystick.offset_bottom = -168.0 if compact else -96.0
 		if fire_btn:
 			fire_btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 			fire_btn.offset_left = -150.0
@@ -327,9 +334,9 @@ func _apply_responsive_hud_layout() -> void:
 		if npc_dialogue_panel:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			npc_dialogue_panel.offset_left = -220.0
-			npc_dialogue_panel.offset_top = 225.0 + safe_top
+			npc_dialogue_panel.offset_top = 205.0 + safe_top if compact else 225.0 + safe_top
 			npc_dialogue_panel.offset_right = 220.0
-			npc_dialogue_panel.offset_bottom = 312.0 + safe_top
+			npc_dialogue_panel.offset_bottom = 292.0 + safe_top if compact else 312.0 + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
