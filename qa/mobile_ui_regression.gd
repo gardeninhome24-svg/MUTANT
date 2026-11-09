@@ -118,6 +118,14 @@ func _run() -> void:
 		if is_instance_valid(filter_grid):
 			_assert(filter_grid.columns <= 7, "Filters have a bounded column count")
 
+		var rewards_grid: GridContainer = profile.get("daily_grid") as GridContainer
+		_assert(is_instance_valid(rewards_grid), "Daily rewards calendar exists")
+		if is_instance_valid(rewards_grid):
+			_assert(rewards_grid.get_child_count() == 7, "All seven daily rewards have real cards")
+			for reward_panel in rewards_grid.get_children():
+				_assert(reward_panel.custom_minimum_size.y >= 140.0, "Daily reward card has readable mobile height")
+				var reward_button: Button = reward_panel.find_children("*", "Button", true, false)[0] as Button
+				_assert(reward_button.custom_minimum_size.y >= 44.0, "Claim reward button is touch friendly")
 		var depot: PanelContainer = profile.find_child("StoreDepotBanner", true, false) as PanelContainer
 		_assert(is_instance_valid(depot), "Shop has its own production depot illustration")
 		if is_instance_valid(depot):
