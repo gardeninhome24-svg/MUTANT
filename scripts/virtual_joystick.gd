@@ -64,6 +64,11 @@ func update_joystick(touch_pos: Vector2) -> void:
 	output_vector = diff.normalized() * adjusted if adjusted > 0.0 else Vector2.ZERO
 	direction_changed.emit(output_vector)
 
+func cancel_touch() -> void:
+	# Explicitly release finger ownership when a modal/pause opens.
+	touch_index = -1
+	reset_knob()
+
 func reset_knob() -> void:
 	if not is_node_ready():
 		return
