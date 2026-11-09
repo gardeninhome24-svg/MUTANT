@@ -1384,7 +1384,7 @@ func _build_tab_premium_store() -> Control:
 	sandbox_status_lbl.add_theme_color_override("font_color", Color(0.75, 0.92, 1.0))
 	b_vbox.add_child(sandbox_status_lbl)
 
-	var top_actions_h := HBoxContainer.new()
+	var top_actions_h := VBoxContainer.new() # Full-width actions avoid clipped labels on 420px phones
 	top_actions_h.add_theme_constant_override("separation", 8)
 	b_vbox.add_child(top_actions_h)
 
