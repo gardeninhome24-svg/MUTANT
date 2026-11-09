@@ -347,8 +347,8 @@ func _build_commercial_hub_ui() -> void:
 		var tab_btn := Button.new()
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		tab_btn.flat = true
-		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.LIME, 58.0)
+		tab_btn.flat = false
+		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -648,6 +648,7 @@ func switch_hub_tab(tab_id: int) -> void:
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
 		var active := (i == current_hub_tab)
+		nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, "hover" if active else "normal"))
 		nb.modulate = Color(1.0, 1.0, 1.0, 1.0) if active else Color(0.65, 0.75, 0.85, 0.65)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
