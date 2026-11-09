@@ -45,6 +45,18 @@ func _run() -> void:
 	if is_instance_valid(hero):
 		_assert(hero.custom_minimum_size.y <= 172, "Hero spacer leaves room for navigation")
 
+	# Exercise the responsive calculations at three portrait sizes without
+	# relying on only the default 720px design canvas.
+	for test_width in [720.0, 540.0, 420.0]:
+		menu.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		menu.size = Vector2(test_width, test_width * 16.0 / 9.0)
+		menu.call("_apply_responsive_menu_layout")
+		var limit := maxf(180.0, test_width - 44.0)
+		if is_instance_valid(card):
+			_assert(card.custom_minimum_size.x <= limit + 0.01, "Stage card fits %dpx mobile width" % int(test_width))
+		if is_instance_valid(play):
+			_assert(play.custom_minimum_size.x <= limit + 0.01, "Play button fits %dpx mobile width" % int(test_width))
+
 	var profile: Control = menu.get("user_profile_panel") as Control
 	_assert(is_instance_valid(profile), "RPG panel exists in hub")
 	if is_instance_valid(profile):
