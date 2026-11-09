@@ -831,6 +831,55 @@ func _build_tab_inventory_backpack() -> Control:
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 8)
 
+	# Real six-slot loadout preview. Each tile navigates to the live RPG
+	# inspector instead of pretending to equip items from a decorative image.
+	var loadout_frame := _create_subpanel(SurvivorVisualSystem.LIME)
+	loadout_frame.name = "EquipmentLoadoutShowcase"
+	vbox.add_child(loadout_frame)
+	var loadout_col := VBoxContainer.new()
+	loadout_col.add_theme_constant_override("separation", 8)
+	loadout_frame.add_child(loadout_col)
+	var loadout_heading := Label.new()
+	loadout_heading.text = "ZBROJOWNIA  •  6 SLOTÓW RPG"
+	SurvivorVisualSystem.decorate_section(loadout_heading, SurvivorVisualSystem.GOLD, 21)
+	loadout_col.add_child(loadout_heading)
+	var gear_row := HBoxContainer.new()
+	gear_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	gear_row.add_theme_constant_override("separation", 8)
+	loadout_col.add_child(gear_row)
+	for side in range(3):
+		if side == 1:
+			var operator_image := TextureRect.new()
+			operator_image.name = "EquipmentOperatorPortrait"
+			operator_image.texture = load("res://assets/player/hero_survivor.png")
+			operator_image.custom_minimum_size = Vector2(225, 300)
+			operator_image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			operator_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			operator_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			gear_row.add_child(operator_image)
+			continue
+		var gear_column := VBoxContainer.new()
+		gear_column.name = "EquipmentLeftSlots" if side == 0 else "EquipmentRightSlots"
+		gear_column.custom_minimum_size = Vector2(82, 0)
+		gear_column.alignment = BoxContainer.ALIGNMENT_CENTER
+		gear_column.add_theme_constant_override("separation", 10)
+		gear_row.add_child(gear_column)
+		for slot_id in (LEFT_SLOTS if side == 0 else RIGHT_SLOTS):
+			var tile := Button.new()
+			tile.name = "EquipSlot_" + slot_id
+			tile.tooltip_text = slot_id.capitalize() + " • przejdź do operatora"
+			tile.icon = load("res://assets/items/%s_common.png" % slot_id) as Texture2D
+			tile.expand_icon = true
+			tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			tile.custom_minimum_size = Vector2(80, 80)
+			SurvivorVisualSystem.decorate_button(tile, SurvivorVisualSystem.CYAN, 80.0)
+			var slot_key: String = slot_id
+			tile.pressed.connect(func():
+				selected_inspect_slot_id = slot_key
+				switch_tab(0)
+			)
+			gear_column.add_child(tile)
+
 	# Belka materiałów do ulepszeń + otwieranie skrzyni
 	var top_bar := _create_subpanel(Color(0.22, 0.85, 1.0, 0.78))
 	vbox.add_child(top_bar)
