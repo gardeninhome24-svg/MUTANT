@@ -20,6 +20,9 @@ var top_header_hbox: HBoxContainer
 var currencies_lbl: Label
 var tab_buttons_hbox: HBoxContainer
 var tab_buttons: Array[Button] = []
+var profile_title_lbl: Label = null
+var profile_orient_btn: Button = null
+var inv_slot_filters_grid: GridContainer = null
 var tab_containers: Array[Control] = []
 
 # --- TAB 0: PANEL POSTACI RPG (Bohater w centrum + 6 slotów wokół niego) ---
@@ -261,6 +264,18 @@ func _apply_responsive_metrics() -> void:
 		main_card.offset_right = -36
 		main_card.offset_bottom = -16
 
+	if is_instance_valid(profile_title_lbl):
+		profile_title_lbl.text = "POSTAĆ / EKWIPUNEK" if portrait else "CENTRUM DOWODZENIA RPG"
+		profile_title_lbl.add_theme_font_size_override("font_size", 13 if portrait else 17)
+	if is_instance_valid(profile_orient_btn):
+		profile_orient_btn.text = "9:16" if portrait else "16:9"
+		profile_orient_btn.custom_minimum_size = Vector2(54, 34) if portrait else Vector2(118, 34)
+	for i in range(tab_buttons.size()):
+		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
+		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
+		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
+	if is_instance_valid(inv_slot_filters_grid):
+		inv_slot_filters_grid.columns = 4 if portrait else 7
 	if is_instance_valid(inv_grid):
 		inv_grid.columns = 4 if portrait else 6
 	if is_instance_valid(store_cards_grid):
@@ -318,6 +333,7 @@ func _build_ui() -> void:
 	title_lbl.add_theme_font_size_override("font_size", 17)
 	title_lbl.add_theme_color_override("font_color", Color(0.28, 0.95, 1.0))
 	top_header_hbox.add_child(title_lbl)
+	profile_title_lbl = title_lbl
 
 	var orient_btn := Button.new()
 	orient_btn.text = "📱/🖥 9:16↔16:9"
@@ -325,6 +341,7 @@ func _build_ui() -> void:
 	orient_btn.add_theme_font_size_override("font_size", 12)
 	orient_btn.pressed.connect(func(): StageDirector.toggle_orientation_mode())
 	top_header_hbox.add_child(orient_btn)
+	profile_orient_btn = orient_btn
 
 	var close_btn := Button.new()
 	close_btn.text = "✕ ZAMKNIJ"
@@ -882,9 +899,12 @@ func _build_tab_inventory_backpack() -> Control:
 	f_vbox.add_theme_constant_override("separation", 6)
 	filter_card.add_child(f_vbox)
 
-	var slot_f_hbox := HBoxContainer.new()
-	slot_f_hbox.add_theme_constant_override("separation", 4)
-	f_vbox.add_child(slot_f_hbox)
+	# Seven filter buttons in one HBox overflow narrow phones.
+	inv_slot_filters_grid = GridContainer.new()
+	inv_slot_filters_grid.columns = 4 if StageDirector.is_portrait_mode() else 7
+	inv_slot_filters_grid.add_theme_constant_override("h_separation", 4)
+	inv_slot_filters_grid.add_theme_constant_override("v_separation", 4)
+	f_vbox.add_child(inv_slot_filters_grid)
 
 	var slot_filters := [
 		{"id": "all", "label": "Wszystkie"},
@@ -906,7 +926,7 @@ func _build_tab_inventory_backpack() -> Control:
 			filter_slot = sf_id
 			refresh_ui()
 		)
-		slot_f_hbox.add_child(b)
+		inv_slot_filters_grid.add_child(b)
 		inv_slot_filter_btns[sf_id] = b
 
 	# Pasek filtru rzadkości oraz sortowania
@@ -1015,7 +1035,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var is_sel := (selected_bag_instance_id == inst_id)
 
 		var cell := PanelContainer.new()
-		cell.custom_minimum_size = Vector2(148, 108)
+		cell.custom_minimum_size = Vector2(124, 96) if StageDirector.is_portrait_mode() else Vector2(148, 108)
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cst := StyleBoxFlat.new()
 		cst.bg_color = Color(r_col.r * 0.16, r_col.g * 0.16, r_col.b * 0.18, 0.95)
@@ -1048,7 +1068,8 @@ func _refresh_inventory_tab_ui() -> void:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(AssetRegistry.get_item_icon_path(it))
-		ic.custom_minimum_size = Vector2(48, 44)
+		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ic.custom_minimum_size = Vector2(40, 36) if StageDirector.is_portrait_mode() else Vector2(48, 44)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		cv.add_child(ic)
@@ -1070,6 +1091,7 @@ func _refresh_inventory_tab_ui() -> void:
 
 		var click_b := Button.new()
 		click_b.flat = true
+		click_b.mouse_filter = Control.MOUSE_FILTER_STOP
 		click_b.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		var cap_id: String = inst_id
 		click_b.pressed.connect(func():
