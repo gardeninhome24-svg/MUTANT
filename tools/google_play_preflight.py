@@ -50,13 +50,15 @@ if re.search(r"const\s+BETA_TEST_GEMS_ENABLED\s*:\s*bool\s*=\s*true", director):
 else:
     passed.append("No unconditional beta-gem flag detected")
 
-workflow = ROOT / ".github" / "workflows" / "android-release-signed.yml"
+workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
-    block("Release pipeline", "Signed Android release workflow missing")
-elif "--export-release" in workflow.read_text(encoding="utf-8") and ".aab" not in workflow.read_text(encoding="utf-8"):
-    block("Signed AAB", "Release workflow exports an APK, not a Google Play AAB")
+    block("Release AAB pipeline", "No separate signed Google Play AAB workflow found")
 else:
-    passed.append("Release workflow mentions AAB; validate signing in Play Console")
+    workflow_text = workflow.read_text(encoding="utf-8")
+    if "--export-release" not in workflow_text or "Android Google Play AAB" not in workflow_text or ".aab" not in workflow_text:
+        block("Signed AAB", "Google Play workflow does not export the signed Android Google Play AAB preset")
+    else:
+        passed.append("Isolated signed AAB workflow configured; credentials and output still need verification")
 
 print("MutantSurvivor — Google Play static preflight")
 for detail in passed:
