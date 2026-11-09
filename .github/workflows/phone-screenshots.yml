@@ -63,6 +63,10 @@ jobs:
             --script res://qa/capture_phone_layout.gd -- \
             --out /tmp/mutantsurvivor-phone-shots \
             2>&1 | tee /tmp/mutantsurvivor-visual-render.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Failed to load script|Failed loading resource|PHONE SHOT ERROR:)" /tmp/mutantsurvivor-visual-render.log; then
+            echo "::error::Visual capture reported a runtime or rendering error."
+            exit 1
+          fi
           test -s /tmp/mutantsurvivor-phone-shots/01_menu_720x1280.png
           test -s /tmp/mutantsurvivor-phone-shots/05_shop_720x1280.png
           test -s /tmp/mutantsurvivor-phone-shots/06_rewards_720x1280.png
@@ -73,24 +77,28 @@ jobs:
           # Validate the PNG header's real dimensions rather than trusting
           # a file name or successful exit from Godot.
           python3 - <<'PY'
-          import glob, struct
+          import glob, struct, hashlib, os
           shots = glob.glob("/tmp/mutantsurvivor-phone-shots/*.png")
           assert len(shots) == 10, f"Expected 10 actual rendered screenshots, got {len(shots)}"
+          hashes = set()
           for path in shots:
+              assert os.path.getsize(path) > 20000, f"Screenshot unexpectedly small/blank: {path}"
               with open(path, "rb") as file:
                   head = file.read(24)
               assert head[:8] == b"\x89PNG\r\n\x1a\n", f"Not PNG: {path}"
               width, height = struct.unpack(">II", head[16:24])
               expected = (420, 933) if "420x933" in path else (720, 1280)
               assert (width, height) == expected, f"{path}: {(width, height)} != {expected}"
+              hashes.add(hashlib.sha256(open(path, "rb").read()).hexdigest())
               print(f"Validated real PNG: {path} {width}x{height}")
+          assert len(hashes) >= 8, "Screenshots are unexpectedly identical; scene switching or rendering may be broken"
           PY
 
       - name: Upload actual rendered screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MutantSurvivor-Phone-720x1280-Screenshots
+          name: MutantSurvivor-Phone-Two-Resolutions-Screenshots
           path: /tmp/mutantsurvivor-phone-shots/*.png
           if-no-files-found: warn
           retention-days: 14
