@@ -44,6 +44,12 @@ jobs:
             exit 1
           fi
 
+      - name: Pre-beta structural validation (campaign and scenes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/prebeta_validation.gd
+
       - name: Smoke test combat scene
         shell: bash
         run: |
