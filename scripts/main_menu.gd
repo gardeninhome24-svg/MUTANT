@@ -334,7 +334,7 @@ func _build_commercial_hub_ui() -> void:
 	nav_box_st.content_margin_right = 6
 	nav_box_st.content_margin_top = 4
 	nav_box_st.content_margin_bottom = 6
-	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_NAV, SurvivorVisualSystem.CYAN, true))
+	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.LIME, true))
 	add_child(bottom_nav_panel)
 
 	var nav_hbox := HBoxContainer.new()
@@ -358,9 +358,6 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
 		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
-		var bare_tile := StyleBoxEmpty.new()
-		for state in ["normal", "hover", "pressed", "focus"]:
-			tab_btn.add_theme_stylebox_override(state, bare_tile)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -831,15 +828,9 @@ func switch_hub_tab(tab_id: int) -> void:
 		var active := (i == current_hub_tab)
 		SurvivorVisualSystem.decorate_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
 		if active:
-			nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.metal_panel(SurvivorVisualSystem.LIME))
-			nb.add_theme_stylebox_override("hover", SurvivorVisualSystem.metal_panel(SurvivorVisualSystem.LIME))
-		else:
-			var transparent_tile := StyleBoxEmpty.new()
-			nb.add_theme_stylebox_override("normal", transparent_tile)
-			nb.add_theme_stylebox_override("hover", transparent_tile)
-			nb.add_theme_stylebox_override("pressed", transparent_tile)
-			nb.add_theme_stylebox_override("focus", transparent_tile)
-		nb.modulate = Color.WHITE if active else Color(0.88, 0.90, 0.91, 1.0)
+			nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME, "hover"))
+			nb.add_theme_stylebox_override("hover", SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME, "hover"))
+		nb.modulate = Color.WHITE if active else Color(0.86, 0.91, 0.94, 1.0)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
 			if is_instance_valid(v) and v.get_child_count() >= 2:
@@ -1075,9 +1066,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(22, 24) if compact_hub else Vector2(46, 48)
+					nav_child.custom_minimum_size = Vector2(24, 26) if compact_hub else Vector2(38, 39)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 16)
+					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 13)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
