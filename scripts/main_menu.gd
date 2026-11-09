@@ -40,6 +40,7 @@ var weapon_icon_tex: TextureRect = null
 var weapon_name_lbl: Label = null
 
 var stage_card: PanelContainer = null
+var stage_preview: TextureRect = null
 var hero_spacer_control: Control = null
 var stage_title_lbl: Label = null
 var stage_details_lbl: Label = null
@@ -473,10 +474,22 @@ func _build_base_tab_content() -> void:
 	card_margin.add_theme_constant_override("margin_bottom", 16)
 	stage_card.add_child(card_margin)
 
+	var stage_row := HBoxContainer.new()
+	stage_row.add_theme_constant_override("separation", 12)
+	card_margin.add_child(stage_row)
+	stage_preview = TextureRect.new()
+	stage_preview.name = "StageEnvironmentPreview"
+	stage_preview.texture = load("res://assets/biomes/wasteland/stage_background.png")
+	stage_preview.custom_minimum_size = Vector2(156, 166)
+	stage_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	stage_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	stage_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stage_row.add_child(stage_preview)
 	var st_vbox := VBoxContainer.new()
+	st_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	st_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	st_vbox.add_theme_constant_override("separation", 4)
-	card_margin.add_child(st_vbox)
+	stage_row.add_child(st_vbox)
 
 	# Górny wiersz karty: ◀ ETAP 030 ▶
 	var title_h := HBoxContainer.new()
@@ -1014,6 +1027,9 @@ func _apply_responsive_menu_layout() -> void:
 	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
 		stage_card.custom_minimum_size = Vector2(minf(520.0 if portrait else 580.0, available_width), 222.0 if portrait else 240.0)
+	if is_instance_valid(stage_preview):
+		stage_preview.visible = not compact_hub
+		stage_preview.custom_minimum_size = Vector2(156, 166) if portrait else Vector2(175, 180)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
