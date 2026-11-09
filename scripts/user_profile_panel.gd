@@ -1554,7 +1554,7 @@ func _request_player_shop_purchase(prod: Dictionary) -> void:
 	if price <= 0 or not is_instance_valid(store_purchase_dialog):
 		return
 	pending_store_purchase = prod.duplicate(true)
-	store_purchase_dialog.dialog_text = "Kupić %s za %d kryształów?\\nObecne saldo: %d kryształów." % [
+	store_purchase_dialog.dialog_text = "Kupić %s za %d kryształów?\nObecne saldo: %d kryształów." % [
 		String(prod.get("title", "przedmiot")), price, StageDirector.dark_matter_gems
 	]
 	store_purchase_dialog.popup_centered(Vector2i(440, 230))
