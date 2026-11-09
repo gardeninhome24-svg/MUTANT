@@ -85,6 +85,18 @@ func _test_equipment_and_save() -> void:
 	_assert(not stage.get_item_instance("qa_weapon").is_empty(), "Save/load restores inventory")
 	_assert(String(stage.equipped_items.get("weapon", "")) == "qa_weapon", "Save/load restores equipped weapon")
 	_assert(int(stage.get_item_instance("qa_weapon").get("level", -1)) == 1, "Save/load restores upgrade level")
+	# Preserve a valid .bak, then corrupt only the disposable QA primary file.
+	stage.save_campaign_profile()
+	var credits_safe: int = stage.credits
+	var corrupt_file := FileAccess.open(stage.get_active_save_path(), FileAccess.WRITE)
+	_assert(corrupt_file != null, "Can open temporary QA save for corruption test")
+	if corrupt_file:
+		corrupt_file.store_string("{invalid json")
+		corrupt_file.close()
+	stage.credits = 0
+	stage.load_campaign_profile()
+	_assert(stage.credits == credits_safe, "Corrupted save recovers last valid campaign backup")
+	_assert(not stage.get_item_instance("qa_weapon").is_empty(), "Backup restores equipment after corruption")
 	# Daily pack can be claimed once per UTC day, then returns after the date changes.
 	stage.daily_reset_day = int(Time.get_unix_time_from_system() / 86400)
 	stage.daily_free_pack_claimed = false
