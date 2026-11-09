@@ -334,7 +334,7 @@ func _build_commercial_hub_ui() -> void:
 	nav_box_st.content_margin_right = 6
 	nav_box_st.content_margin_top = 4
 	nav_box_st.content_margin_bottom = 6
-	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, true))
+	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_NAV, SurvivorVisualSystem.CYAN, true))
 	add_child(bottom_nav_panel)
 
 	var nav_hbox := HBoxContainer.new()
@@ -357,7 +357,10 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
-		SurvivorVisualSystem.decorate_metal_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		var bare_tile := StyleBoxEmpty.new()
+		for state in ["normal", "hover", "pressed", "focus"]:
+			tab_btn.add_theme_stylebox_override(state, bare_tile)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -826,8 +829,17 @@ func switch_hub_tab(tab_id: int) -> void:
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
 		var active := (i == current_hub_tab)
-		SurvivorVisualSystem.decorate_metal_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
-		nb.modulate = Color.WHITE if active else Color(0.85, 0.89, 0.93, 0.92)
+		SurvivorVisualSystem.decorate_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
+		if active:
+			nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.metal_panel(SurvivorVisualSystem.LIME))
+			nb.add_theme_stylebox_override("hover", SurvivorVisualSystem.metal_panel(SurvivorVisualSystem.LIME))
+		else:
+			var transparent_tile := StyleBoxEmpty.new()
+			nb.add_theme_stylebox_override("normal", transparent_tile)
+			nb.add_theme_stylebox_override("hover", transparent_tile)
+			nb.add_theme_stylebox_override("pressed", transparent_tile)
+			nb.add_theme_stylebox_override("focus", transparent_tile)
+		nb.modulate = Color.WHITE if active else Color(0.88, 0.90, 0.91, 1.0)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
 			if is_instance_valid(v) and v.get_child_count() >= 2:
