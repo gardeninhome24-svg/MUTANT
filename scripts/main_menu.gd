@@ -357,7 +357,8 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
-		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 54.0)
+		tab_btn.custom_minimum_size = Vector2(0, 56)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -1094,9 +1095,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(24, 26) if compact_hub else Vector2(48, 49)
+					nav_child.custom_minimum_size = Vector2(22, 24) if compact_hub else Vector2(34, 35)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 16)
+					nav_child.add_theme_font_size_override("font_size", 9 if compact_hub else 13)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
@@ -1115,16 +1116,16 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(bottom_nav_panel):
 		bottom_nav_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 		bottom_nav_panel.offset_left = 12.0 if portrait else 28.0
-		bottom_nav_panel.offset_top = (-82.0 if compact_hub else -112.0) if portrait else -82.0
+		bottom_nav_panel.offset_top = (-78.0 if compact_hub else -94.0) if portrait else -82.0
 		bottom_nav_panel.offset_right = -12.0 if portrait else -28.0
-		bottom_nav_panel.offset_bottom = -6.0 if portrait else -4.0
+		bottom_nav_panel.offset_bottom = -10.0 if portrait else -4.0
 
 	if is_instance_valid(middle_root):
 		middle_root.set_anchors_preset(Control.PRESET_FULL_RECT)
 		middle_root.offset_left = 0.0
 		middle_root.offset_top = 72.0 + safe_top
 		middle_root.offset_right = 0.0
-		middle_root.offset_bottom = (-88.0 if compact_hub else -118.0) if portrait else -88.0
+		middle_root.offset_bottom = (-84.0 if compact_hub else -100.0) if portrait else -88.0
 
 	if is_instance_valid(base_overlay):
 		base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
