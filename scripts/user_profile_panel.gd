@@ -300,7 +300,9 @@ func _build_ui() -> void:
 	main_card.clip_contents = true
 	var card_style := StyleBoxFlat.new()
 	if embedded_in_hub:
-		card_style.bg_color = Color(0, 0, 0, 0.0)
+		# Dark backing is essential: the scenic hub illustration previously
+		# showed through equipment text, icons and campaign descriptions.
+		card_style.bg_color = Color(0.025, 0.045, 0.075, 0.96)
 		card_style.border_width_left = 0
 		card_style.border_width_top = 0
 		card_style.border_width_right = 0
@@ -1263,7 +1265,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 	var c_title := Label.new()
 	c_title.text = "KAMPANIA 1–100"
-	c_title.add_theme_font_size_override("font_size", 14)
+	c_title.add_theme_font_size_override("font_size", 17)
 	c_title.add_theme_color_override("font_color", Color(1.0, 0.86, 0.28))
 	c_vbox.add_child(c_title)
 
@@ -1280,7 +1282,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	stage_info_lbl = Label.new()
 	stage_info_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stage_info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stage_info_lbl.add_theme_font_size_override("font_size", 12)
+	stage_info_lbl.add_theme_font_size_override("font_size", 14)
 	mid_h.add_child(stage_info_lbl)
 
 	# Use a compact directional row and a separate grid for chapter shortcuts.
@@ -1316,7 +1318,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		jb.text = "%03d" % target_s
 		jb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		jb.custom_minimum_size = Vector2(0, 34)
-		jb.add_theme_font_size_override("font_size", 11)
+		jb.add_theme_font_size_override("font_size", 13)
 		jb.pressed.connect(func(): _select_stage(target_s))
 		stage_jump_grid.add_child(jb)
 
