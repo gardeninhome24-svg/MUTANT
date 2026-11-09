@@ -1209,7 +1209,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	c_vbox.add_child(mid_h)
 
 	stage_boss_preview = TextureRect.new()
-	stage_boss_preview.custom_minimum_size = Vector2(88, 88)
+	stage_boss_preview.custom_minimum_size = Vector2(118, 118)
 	stage_boss_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_boss_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mid_h.add_child(stage_boss_preview)
@@ -1238,6 +1238,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_prev10.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_prev10.custom_minimum_size = Vector2(0, 34)
 	b_prev10.pressed.connect(func(): _select_stage(StageDirector.current_stage - 10))
+	SurvivorVisualSystem.decorate_button(b_prev10, SurvivorVisualSystem.CYAN, 46.0)
 	stage_nav.add_child(b_prev10)
 
 	var b_prev1 := Button.new()
@@ -1245,6 +1246,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_prev1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_prev1.custom_minimum_size = Vector2(0, 34)
 	b_prev1.pressed.connect(func(): _select_stage(StageDirector.current_stage - 1))
+	SurvivorVisualSystem.decorate_button(b_prev1, SurvivorVisualSystem.CYAN, 46.0)
 	stage_nav.add_child(b_prev1)
 
 	for s_jump in [1, 10, 30, 50, 100]:
@@ -1254,6 +1256,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		jb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		jb.custom_minimum_size = Vector2(0, 34)
 		jb.add_theme_font_size_override("font_size", 13)
+		SurvivorVisualSystem.decorate_button(jb, SurvivorVisualSystem.LIME, 46.0)
 		jb.pressed.connect(func(): _select_stage(target_s))
 		stage_jump_grid.add_child(jb)
 
@@ -1262,6 +1265,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_next1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_next1.custom_minimum_size = Vector2(0, 34)
 	b_next1.pressed.connect(func(): _select_stage(StageDirector.current_stage + 1))
+	SurvivorVisualSystem.decorate_button(b_next1, SurvivorVisualSystem.CYAN, 46.0)
 	stage_nav.add_child(b_next1)
 
 	var b_next10 := Button.new()
@@ -1269,6 +1273,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_next10.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_next10.custom_minimum_size = Vector2(0, 34)
 	b_next10.pressed.connect(func(): _select_stage(StageDirector.current_stage + 10))
+	SurvivorVisualSystem.decorate_button(b_next10, SurvivorVisualSystem.CYAN, 46.0)
 	stage_nav.add_child(b_next10)
 
 	var diff_row := VBoxContainer.new()
@@ -1293,6 +1298,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		refresh_ui()
 		emit_signal("profile_updated")
 	)
+	SurvivorVisualSystem.decorate_button(diff_cycle_btn, SurvivorVisualSystem.GOLD, 46.0)
 	diff_row.add_child(diff_cycle_btn)
 
 	practice_check_btn = Button.new()
@@ -1303,6 +1309,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		refresh_ui()
 		emit_signal("profile_updated")
 	)
+	SurvivorVisualSystem.decorate_button(practice_check_btn, SurvivorVisualSystem.LIME, 46.0)
 	diff_row.add_child(practice_check_btn)
 
 	# Warsztat Talentów
@@ -1314,7 +1321,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 	for t_def in TALENT_DEFS:
 		var t_id := String(t_def["id"])
-		var row_card := _create_subpanel()
+		var row_card := _create_subpanel(SurvivorVisualSystem.LIME)
 		vbox.add_child(row_card)
 		var row_hbox := HBoxContainer.new()
 		row_hbox.add_theme_constant_override("separation", 10)
@@ -1322,7 +1329,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(String(t_def["icon"]))
-		ic.custom_minimum_size = Vector2(40, 40)
+		ic.custom_minimum_size = Vector2(56, 56)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		row_hbox.add_child(ic)
@@ -1339,6 +1346,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		desc_lbl.text = String(t_def["desc"])
 		desc_lbl.add_theme_font_size_override("font_size", 11)
 		desc_lbl.add_theme_color_override("font_color", Color(0.68, 0.82, 0.94))
+		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		info_v.add_child(desc_lbl)
 
 		var upg_btn := Button.new()
@@ -1346,6 +1354,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		upg_btn.add_theme_font_size_override("font_size", 12)
 		var b_cost: int = int(t_def["base_cost"])
 		upg_btn.pressed.connect(func(): _upgrade_talent(t_id, b_cost))
+		SurvivorVisualSystem.decorate_button(upg_btn, SurvivorVisualSystem.GOLD, 46.0)
 		row_hbox.add_child(upg_btn)
 
 		talent_rows[t_id] = {
