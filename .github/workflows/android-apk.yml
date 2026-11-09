@@ -68,6 +68,16 @@ jobs:
             exit 1
           fi
 
+      - name: Verify production art paths and list remaining static sprites
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/production_art_audit.gd 2>&1 | tee /tmp/production-art-audit.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|ART FAIL:|ART RESOURCES FAILED:)" /tmp/production-art-audit.log; then
+            echo "::error::Missing art resources or art-audit script regression."
+            exit 1
+          fi
+
       - name: Portrait HUD overlap and required art resource gate
         shell: bash
         run: |
