@@ -620,18 +620,35 @@ func save_campaign_profile() -> void:
 		"class_progression": class_progression,
 		"pity_chest_counter": pity_chest_counter
 	}
-	var f := FileAccess.open(get_active_save_path(), FileAccess.WRITE)
+	var path := get_active_save_path()
+	# Preserve the last valid save before replacing the primary file.
+	# This lets beta users recover from interrupted writes/corrupt JSON.
+	if FileAccess.file_exists(path):
+		var previous_raw := FileAccess.get_file_as_string(path)
+		if JSON.parse_string(previous_raw) is Dictionary:
+			var backup_file := FileAccess.open(path + ".bak", FileAccess.WRITE)
+			if backup_file:
+				backup_file.store_string(previous_raw)
+				backup_file.flush()
+				backup_file.close()
+	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(data, "\t"))
+		f.flush()
 		f.close()
+	else:
+		push_error("Cannot write campaign save file: " + path)
 	emit_signal("profile_data_changed")
 
 func load_campaign_profile() -> void:
 	var path := get_active_save_path()
-	if not FileAccess.file_exists(path):
-		return
-	var raw := FileAccess.get_file_as_string(path)
-	var data: Variant = JSON.parse_string(raw)
+	var data: Variant = null
+	if FileAccess.file_exists(path):
+		data = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not (data is Dictionary) and FileAccess.file_exists(path + ".bak"):
+		data = JSON.parse_string(FileAccess.get_file_as_string(path + ".bak"))
+		if data is Dictionary:
+			push_warning("Restored valid campaign save from backup")
 	if data is Dictionary:
 		max_unlocked_stage = clampi(int(data.get("max_unlocked_stage", 1)), 1, 100)
 		current_stage = clampi(int(data.get("current_stage", 1)), 1, max_unlocked_stage)
