@@ -814,12 +814,12 @@ func _apply_responsive_menu_layout() -> void:
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
-	var available_width := maxf(280.0, size.x - (44.0 if portrait else 110.0))
+	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
 		stage_card.custom_minimum_size = Vector2(minf(380.0 if portrait else 500.0, available_width), 184.0 if portrait else 220.0)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
-		play_big_btn.text = "GRAJ" if play_big_btn.get_theme_stylebox("normal") == null else ""
+		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, 172.0 if portrait else 100.0)
 	if is_instance_valid(stage_title_lbl):
