@@ -808,14 +808,8 @@ func _ensure_starter_equipment() -> void:
 				item["base_power"] = float(tpl.get("base_power", 10.0))
 				inventory.append(item)
 				equipped_items[String(item["slot"])] = String(item["instance_id"])
-		# Dodaj 1 rzadki przedmiot do przetestowania w ekwipunku
-		var rare_tpl := content_db.item_by_id("weapon_rare_01")
-		if not rare_tpl.is_empty():
-			var r_item := MutantV1EquipmentRoller.roll_item(rare_tpl, affix_doc, rng)
-			r_item["name"] = String(rare_tpl.get("name", "Wyrzutnia stabilizowana"))
-			r_item["slot"] = "weapon"
-			r_item["base_power"] = float(rare_tpl.get("base_power", 16.25))
-			inventory.append(r_item)
+		# Only starter-tier gear is granted for free. Rare/epic equipment must be
+		# earned through play, not injected for developer demonstrations.
 
 func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dictionary:
 	if content_db == null:
