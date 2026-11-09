@@ -77,8 +77,15 @@ func _capture() -> void:
 	if not await _shot("05_combat_720x1280.png"):
 		quit(1)
 		return
-	combat.call("_apply_responsive_hud_layout", 420.0)
-	if not await _shot("06_compact_hud_simulation_420.png"):
+	# Actually resize the GUI window; passing 420 to a layout function while
+	# keeping a 720px viewport produced a misleading screenshot previously.
+	var compact_size := Vector2i(420, 933)
+	root.size = compact_size
+	DisplayServer.window_set_size(compact_size)
+	for i in range(6):
+		await process_frame
+	combat.call("_apply_responsive_hud_layout")
+	if not await _shot("06_combat_actual_420x933.png"):
 		quit(1)
 		return
 	paused = false
