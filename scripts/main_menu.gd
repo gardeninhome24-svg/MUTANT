@@ -14,6 +14,7 @@ var current_hub_tab: int = 0 # 0=Baza, 1=Postać, 2=Ekwipunek, 3=Kampania, 4=Skl
 
 # Górny Pasek Dowódcy
 var top_hub_panel: PanelContainer = null
+var top_hub_content: HBoxContainer = null
 var avatar_tex: TextureRect = null
 var account_lvl_lbl: Label = null
 var account_xp_bar: ProgressBar = null
@@ -119,6 +120,7 @@ func _build_commercial_hub_ui() -> void:
 	add_child(top_hub_panel)
 
 	var top_h := HBoxContainer.new()
+	top_hub_content = top_h
 	top_h.add_theme_constant_override("separation", 12)
 	top_h.alignment = BoxContainer.ALIGNMENT_CENTER
 	top_hub_panel.add_child(top_h)
@@ -815,6 +817,36 @@ func _on_orientation_changed(_is_portrait: bool) -> void:
 func _apply_responsive_menu_layout() -> void:
 	var portrait := StageDirector.is_portrait_mode()
 	var safe_top := StageDirector.get_safe_top_margin()
+	var compact_hub := portrait and get_viewport_rect().size.x < 600.0
+
+	# On phones around 420px, the normal 720px header cannot physically
+	# contain the portrait, three wallets and settings at full desktop scale.
+	if is_instance_valid(top_hub_content):
+		top_hub_content.add_theme_constant_override("separation", 3 if compact_hub else 12)
+		for row_child in top_hub_content.get_children():
+			if row_child is HBoxContainer:
+				row_child.add_theme_constant_override("separation", 3 if compact_hub else 8)
+				for element in row_child.get_children():
+					if element is TextureRect:
+						element.custom_minimum_size = Vector2(17, 17) if compact_hub else Vector2(24, 24)
+					elif element is Label:
+						element.add_theme_font_size_override("font_size", 11 if compact_hub else 15)
+	if is_instance_valid(avatar_tex):
+		avatar_tex.custom_minimum_size = Vector2(30, 30) if compact_hub else Vector2(46, 46)
+	if is_instance_valid(account_xp_bar):
+		account_xp_bar.custom_minimum_size = Vector2(40, 6) if compact_hub else Vector2(72, 6)
+	if is_instance_valid(account_lvl_lbl):
+		account_lvl_lbl.add_theme_font_size_override("font_size", 11 if compact_hub else 14)
+	if is_instance_valid(settings_btn):
+		settings_btn.custom_minimum_size = Vector2(28, 30) if compact_hub else Vector2(36, 36)
+	for nav_btn in nav_buttons:
+		var nav_content := nav_btn.get_child(0) as VBoxContainer
+		if is_instance_valid(nav_content):
+			for nav_child in nav_content.get_children():
+				if nav_child is TextureRect:
+					nav_child.custom_minimum_size = Vector2(23, 23) if compact_hub else Vector2(32, 32)
+				elif nav_child is Label:
+					nav_child.add_theme_font_size_override("font_size", 11 if compact_hub else 13)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
