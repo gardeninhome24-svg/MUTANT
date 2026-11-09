@@ -1721,7 +1721,7 @@ func _refresh_store_tab_ui() -> void:
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 226.0)
+		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 280.0)
 		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(accent))
 		store_cards_grid.add_child(card)
 
@@ -1741,7 +1741,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(String(prod["icon"]))
-		ic.custom_minimum_size = Vector2(106, 112)
+		ic.custom_minimum_size = Vector2(135, 148)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		top_h.add_child(ic)
@@ -1754,19 +1754,19 @@ func _refresh_store_tab_ui() -> void:
 		var title_l := Label.new()
 		title_l.text = String(prod["title"])
 		title_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		title_l.add_theme_font_size_override("font_size", 15)
+		title_l.add_theme_font_size_override("font_size", 16)
 		title_l.add_theme_color_override("font_color", Color(0.98, 0.98, 1.0))
 		tv.add_child(title_l)
 
 		var desc_l := Label.new()
 		desc_l.text = String(prod["contents"])
 		desc_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc_l.add_theme_font_size_override("font_size", 12)
+		desc_l.add_theme_font_size_override("font_size", 13)
 		desc_l.add_theme_color_override("font_color", Color(0.76, 0.88, 0.98))
 		tv.add_child(desc_l)
 
 		var buy_btn := Button.new()
-		buy_btn.custom_minimum_size = Vector2(0, 50)
+		buy_btn.custom_minimum_size = Vector2(0, 57)
 		buy_btn.add_theme_font_size_override("font_size", 12)
 		var gem_price := int(StageDirector.SKIN_GEM_PRICES.get(skin_unlock, 0))
 		var is_skin := not skin_unlock.is_empty() and gem_price > 0
@@ -1782,7 +1782,7 @@ func _refresh_store_tab_ui() -> void:
 		else:
 			buy_btn.text = "NIEDOSTĘPNE — W PRZYGOTOWANIU"
 		buy_btn.disabled = not (can_buy_skin or can_refill)
-		SurvivorVisualSystem.decorate_button(buy_btn, SurvivorVisualSystem.GOLD if not buy_btn.disabled else SurvivorVisualSystem.MUTED, 48.0)
+		SurvivorVisualSystem.decorate_art_button(buy_btn, SurvivorVisualSystem.GOLD, 57.0) if not buy_btn.disabled else SurvivorVisualSystem.decorate_button(buy_btn, SurvivorVisualSystem.MUTED, 57.0)
 		var cap_prod: Dictionary = prod
 		buy_btn.pressed.connect(func(): _request_player_shop_purchase(cap_prod))
 		cv.add_child(buy_btn)
