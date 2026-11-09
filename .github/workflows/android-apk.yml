@@ -58,6 +58,16 @@ jobs:
           set -euo pipefail
           godot --headless --path . --script res://qa/prebeta_validation.gd
 
+      - name: Gameplay regression (bosses, rewards, equipment, saves)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/gameplay_regression.gd 2>&1 | tee /tmp/gameplay-regression.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource|GAMEPLAY REGRESSION FAIL)" /tmp/gameplay-regression.log; then
+            echo "::error::Gameplay regression logged an error."
+            exit 1
+          fi
+
       - name: Smoke test booting the main menu (headless)
         shell: bash
         run: |
