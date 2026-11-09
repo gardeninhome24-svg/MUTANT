@@ -1761,7 +1761,13 @@ func _refresh_store_tab_ui() -> void:
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 280.0)
-		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(accent))
+		var frame_path: String = ""
+		if p_id == "skin_neon_hunter":
+			frame_path = "res://assets/ui/target_theme/offer_frame_cyan.png"
+		elif p_id == "skin_hazmat_trooper":
+			frame_path = "res://assets/ui/target_theme/offer_frame_lime.png"
+		var reference_frame: StyleBoxTexture = SurvivorVisualSystem.texture_style(frame_path, 14.0, 13.0) if not frame_path.is_empty() else null
+		card.add_theme_stylebox_override("panel", reference_frame if reference_frame != null else SurvivorVisualSystem.metal_panel(accent))
 		store_cards_grid.add_child(card)
 
 		var cv := VBoxContainer.new()
