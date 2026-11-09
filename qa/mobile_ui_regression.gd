@@ -54,6 +54,8 @@ func _run() -> void:
 	if is_instance_valid(production_overlay):
 		var logo: TextureRect = production_overlay.find_child("MutantSurvivorLogo", true, false) as TextureRect
 		_assert(is_instance_valid(logo) and logo.texture != null, "Real branded MutantSurvivor logo texture is loaded")
+		var logo_letters: HBoxContainer = production_overlay.find_child("BrandedLogoLetters", true, false) as HBoxContainer
+		_assert(is_instance_valid(logo_letters) and logo_letters.get_child_count() == 2, "Visible logo text is rendered by native Godot labels")
 		var left_actions: VBoxContainer = production_overlay.find_child("BaseLeftActions", true, false) as VBoxContainer
 		var right_actions: VBoxContainer = production_overlay.find_child("BaseRightActions", true, false) as VBoxContainer
 		_assert(is_instance_valid(left_actions) and left_actions.get_child_count() == 3, "Three left base actions exist")
