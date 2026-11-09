@@ -551,7 +551,9 @@ func _build_base_tab_content() -> void:
 	stage_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stage_title_lbl.clip_text = true
 	stage_title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stage_title_lbl.add_theme_font_size_override("font_size", 28)
+	stage_title_lbl.add_theme_font_size_override("font_size", 32)
+	stage_title_lbl.add_theme_color_override("font_outline_color", Color(0.02, 0.04, 0.045))
+	stage_title_lbl.add_theme_constant_override("outline_size", 5)
 	stage_title_lbl.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	stage_title_lbl.text = "ETAP 030"
 	title_h.add_child(stage_title_lbl)
@@ -572,7 +574,8 @@ func _build_base_tab_content() -> void:
 	stage_details_lbl.add_theme_font_size_override("font_size", 20)
 	stage_details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stage_details_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
-	stage_details_lbl.add_theme_color_override("font_color", Color(0.92, 0.96, 1.0))
+	stage_details_lbl.add_theme_color_override("font_outline_color", Color(0.0, 0.07, 0.035))
+	stage_details_lbl.add_theme_constant_override("outline_size", 3)
 	stage_details_lbl.text = "Krio Lab"
 	st_vbox.add_child(stage_details_lbl)
 	mission_description = Label.new()
@@ -583,13 +586,22 @@ func _build_base_tab_content() -> void:
 	st_vbox.add_child(mission_description)
 
 	# Zalecana moc
+	var power_frame := PanelContainer.new()
+	power_frame.name = "RecommendedPowerFrame"
+	var power_style := SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME, "normal")
+	power_style.bg_color = Color(0.025, 0.115, 0.065, 0.96)
+	power_style.set_border_width_all(2)
+	power_style.set_content_margin_all(6.0)
+	power_frame.add_theme_stylebox_override("panel", power_style)
+	power_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	st_vbox.add_child(power_frame)
 	stage_pwr_lbl = Label.new()
 	stage_pwr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stage_pwr_lbl.clip_text = true
 	stage_pwr_lbl.add_theme_font_size_override("font_size", 15)
 	stage_pwr_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
-	stage_pwr_lbl.text = "Zalecana moc: 4 850"
-	st_vbox.add_child(stage_pwr_lbl)
+	stage_pwr_lbl.text = "ZALECANA MOC  590"
+	power_frame.add_child(stage_pwr_lbl)
 
 	# Odstęp
 	var r_sp := Control.new()
@@ -604,10 +616,19 @@ func _build_base_tab_content() -> void:
 	reward_heading.add_theme_font_size_override("font_size", 12)
 	reward_heading.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
 	st_vbox.add_child(reward_heading)
+	var reward_frame := PanelContainer.new()
+	reward_frame.name = "MissionRewardsFrame"
+	var reward_style := StyleBoxFlat.new()
+	reward_style.bg_color = Color(0.015, 0.065, 0.068, 0.95)
+	reward_style.border_color = Color(0.44, 0.73, 0.18, 0.8)
+	reward_style.border_width_bottom = 2
+	reward_style.set_content_margin_all(6.0)
+	reward_frame.add_theme_stylebox_override("panel", reward_style)
+	st_vbox.add_child(reward_frame)
 	stage_rewards_hbox = HBoxContainer.new()
 	stage_rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	stage_rewards_hbox.add_theme_constant_override("separation", 14)
-	st_vbox.add_child(stage_rewards_hbox)
+	stage_rewards_hbox.add_theme_constant_override("separation", 18)
+	reward_frame.add_child(stage_rewards_hbox)
 
 	var r_c := TextureRect.new()
 	r_c.custom_minimum_size = Vector2(46, 42)
@@ -1168,7 +1189,7 @@ func _apply_responsive_menu_layout() -> void:
 				if reward_icon is TextureRect:
 					reward_icon.custom_minimum_size = Vector2(27, 28) if compact_hub else Vector2(46, 42)
 	if is_instance_valid(mission_description):
-		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 12)
+		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 14)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = true
 		stage_preview.custom_minimum_size = Vector2(96, 174) if compact_hub else (Vector2(156, 205) if portrait else Vector2(175, 180))
@@ -1183,9 +1204,9 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 348.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (27 if portrait else 30))
+		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (31 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (18 if portrait else 20))
+		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (23 if portrait else 25))
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
 
