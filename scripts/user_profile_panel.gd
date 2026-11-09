@@ -234,6 +234,15 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(205, 215)
+	var jump_shortcuts := find_child("StageJumpGrid", true, false) as GridContainer
+	if is_instance_valid(jump_shortcuts):
+		jump_shortcuts.columns = 3 if narrow else 5
+	var campaign_chapters := find_child("CampaignChapterMap", true, false) as GridContainer
+	if is_instance_valid(campaign_chapters):
+		campaign_chapters.columns = 2 if narrow else 5
+	if is_instance_valid(stage_info_lbl):
+		stage_info_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+
 	# The equipment presentation must fit the *physical* narrow viewport.
 	# The previous 225px operator and 80px columns forced horizontal overflow.
 	var equip_portrait := find_child("EquipmentOperatorPortrait", true, false) as TextureRect
