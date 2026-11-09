@@ -165,6 +165,15 @@ func _capture() -> void:
 		quit(1)
 		return
 	compact_menu.call("switch_hub_tab", 3)
+	if is_instance_valid(phone_profile):
+		phone_profile.call("_apply_responsive_metrics", 420.0)
+	for i in range(3):
+		await process_frame
+	var chapters: Control = phone_profile.find_child("CampaignChapterMap", true, false) as Control if is_instance_valid(phone_profile) else null
+	if is_instance_valid(chapters) and chapters.get_global_rect().end.x > 419.0:
+		printerr("PHONE SHOT ERROR: campaign chapters clipped at 420px: " + str(chapters.get_global_rect()))
+		quit(1)
+		return
 	if not await _shot("12_campaign_420x933.png"):
 		quit(1)
 		return
