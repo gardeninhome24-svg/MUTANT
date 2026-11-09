@@ -100,14 +100,13 @@ func _run() -> void:
 		if is_instance_valid(store_cards):
 			_assert(store_cards.get_child_count() == 6, "Shop only shows six curated player-facing offers")
 
-		# Switch the actual viewport so the responsive grid logic is exercised,
-		# not only an artificially scaled menu control.
+		# Godot headless can preserve its configured 720px root viewport even
+		# when root.size is assigned. Drive the SAME production layout function
+		# with the requested width explicitly to avoid false test failures.
 		var stage_manager_narrow = root.get_node_or_null("StageDirector")
 		if stage_manager_narrow != null:
 			stage_manager_narrow.orientation_mode = "portrait"
-		root.size = Vector2i(420, 933)
-		await process_frame
-		profile.call("_apply_responsive_metrics")
+		profile.call("_apply_responsive_metrics", 420.0)
 		if is_instance_valid(inv_grid):
 			_assert(inv_grid.columns == 2, "420px backpack shows two touch-friendly columns")
 		if is_instance_valid(filter_grid):
@@ -116,7 +115,11 @@ func _run() -> void:
 			_assert(store_cards.columns == 1, "420px shop uses a single product column")
 		if is_instance_valid(store_categories):
 			_assert(store_categories.columns == 2, "420px shop navigation wraps to two columns")
-		root.size = Vector2i(720, 1280)
+		profile.call("_apply_responsive_metrics", 720.0)
+		if is_instance_valid(inv_grid):
+			_assert(inv_grid.columns == 4, "720px backpack returns to four columns")
+		if is_instance_valid(store_cards):
+			_assert(store_cards.columns == 2, "720px shop returns to two columns")
 
 	menu.queue_free()
 	await process_frame
