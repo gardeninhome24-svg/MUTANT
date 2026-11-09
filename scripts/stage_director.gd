@@ -1181,7 +1181,7 @@ func claim_daily_reward(day_num: int) -> Dictionary:
 			scrap_materials += int(r["scrap"])
 			var dropped_item := {}
 			if bool(r["chest"]):
-				dropped_item = roll_new_equipment_drop(current_stage, "rare")
+				dropped_item = roll_new_equipment_drop(current_stage) # Guaranteed stage-appropriate item, rarity per normal loot odds
 			if day_num >= daily_login_day and daily_login_day < 7:
 				daily_login_day = day_num + 1
 			save_campaign_profile()
