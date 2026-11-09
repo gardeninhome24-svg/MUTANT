@@ -212,6 +212,28 @@ func _test_combat_and_bosses() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Instantiate the final chapter's real scene and final boss, not only stage 1.
+	stage.current_stage = 100
+	stage.max_unlocked_stage = 100
+	stage.is_practice_mode = true
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_assert(int(battle.get("current_stage_num")) == 100, "Final campaign stage 100 starts")
+	battle.call("start_wave", 100, 10)
+	var end_boss = battle.get("active_boss")
+	_assert(is_instance_valid(end_boss), "Final stage 100 spawns its boss")
+	if is_instance_valid(end_boss):
+		_assert(String(end_boss.enemy_id) == "boss_ch10", "Final boss is Architekt Zero archetype")
+		_assert(end_boss.max_health > 0.0, "Final boss has positive scaled HP")
+	battle.set("primary_objective_done", true)
+	battle.set("wave_time_left", 0.0)
+	_assert(not bool(battle.call("_can_claim_victory")), "Stage 100 cannot win before final boss defeat")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 func _finish() -> void:
 	paused = false
 	if failures.is_empty():
