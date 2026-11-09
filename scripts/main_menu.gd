@@ -520,7 +520,7 @@ func _build_base_tab_content() -> void:
 		var stage_crop := AtlasTexture.new()
 		stage_crop.atlas = stage_source
 		var source_size: Vector2 = stage_source.get_size()
-		stage_crop.region = Rect2(source_size.x * 0.69, source_size.y * 0.25, source_size.x * 0.29, source_size.y * 0.48)
+		stage_crop.region = Rect2(source_size.x * 0.04, source_size.y * 0.12, source_size.x * 0.28, source_size.y * 0.67)
 		stage_preview.texture = stage_crop
 	stage_preview.custom_minimum_size = Vector2(156, 205)
 	stage_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
