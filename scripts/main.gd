@@ -200,9 +200,9 @@ func _on_orientation_changed(_is_portrait: bool) -> void:
 func _is_compact_portrait_hud(view_width: float) -> bool:
 	return StageDirector.is_portrait_mode() and view_width < 600.0
 
-func _apply_responsive_hud_layout() -> void:
+func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	var portrait := StageDirector.is_portrait_mode()
-	var view_width := get_viewport_rect().size.x
+	var view_width := view_width_override if view_width_override > 0.0 else get_viewport_rect().size.x
 	var compact := _is_compact_portrait_hud(view_width)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
@@ -333,9 +333,9 @@ func _apply_responsive_hud_layout() -> void:
 			dash_btn.offset_bottom = -115.0
 		if npc_dialogue_panel:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
-			npc_dialogue_panel.offset_left = -220.0
+			npc_dialogue_panel.offset_left = -maxf(90.0, view_width * 0.5 - 12.0) if compact else -220.0
 			npc_dialogue_panel.offset_top = 205.0 + safe_top if compact else 225.0 + safe_top
-			npc_dialogue_panel.offset_right = 220.0
+			npc_dialogue_panel.offset_right = maxf(90.0, view_width * 0.5 - 12.0) if compact else 220.0
 			npc_dialogue_panel.offset_bottom = 292.0 + safe_top if compact else 312.0 + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
