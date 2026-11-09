@@ -393,7 +393,7 @@ func _build_base_overlays() -> void:
 	base_overlay = Control.new()
 	base_overlay.name = "BaseProductionOverlay"
 	base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	base_overlay.mouse_filter = Control.MOUSE_FILTER_PASS
+	base_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	middle_root.add_child(base_overlay)
 
 	base_logo = Label.new()
@@ -571,9 +571,9 @@ func _build_base_tab_content() -> void:
 	play_big_btn.add_theme_stylebox_override("hover", play_tex_st)
 	play_big_btn.add_theme_stylebox_override("pressed", play_tex_st)
 	play_big_btn.add_theme_stylebox_override("disabled", SurvivorVisualSystem.button_style(SurvivorVisualSystem.GOLD, "disabled"))
-	play_big_btn.add_theme_font_size_override("font_size", 32)
+	play_big_btn.add_theme_font_size_override("font_size", 25)
 	play_big_btn.add_theme_color_override("font_color", Color(0.05, 0.05, 0.05, 1.0))
-	play_big_btn.text = ""
+	play_big_btn.text = "ROZPOCZNIJ MISJĘ"
 	play_big_btn.pressed.connect(_on_play_pressed)
 	base_vbox.add_child(play_big_btn)
 	# Preserve the approved golden PLAY artwork while making the disabled state clear.
@@ -1016,7 +1016,7 @@ func _apply_responsive_menu_layout() -> void:
 		stage_card.custom_minimum_size = Vector2(minf(380.0 if portrait else 500.0, available_width), 184.0 if portrait else 220.0)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
-		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
+		play_big_btn.text = "ROZPOCZNIJ MISJĘ"
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, 172.0 if portrait else 100.0)
 	if is_instance_valid(stage_title_lbl):
