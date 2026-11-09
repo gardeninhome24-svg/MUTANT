@@ -126,6 +126,17 @@ func _capture() -> void:
 	compact_menu.call("switch_hub_tab", 0)
 	for i in range(3):
 		await process_frame
+	for key in ["stage_card", "play_big_btn"]:
+		var essential: Control = compact_menu.get(key) as Control
+		if not is_instance_valid(essential):
+			printerr("PHONE SHOT ERROR: missing home control: " + key)
+			quit(1)
+			return
+		var frame: Rect2 = essential.get_global_rect()
+		if frame.position.x < -1.0 or frame.end.x > 421.0:
+			printerr("PHONE SHOT ERROR: home " + key + " clipped at 420px: " + str(frame))
+			quit(1)
+			return
 	if not await _shot("14_menu_420x933.png"):
 		quit(1)
 		return
