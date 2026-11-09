@@ -449,15 +449,32 @@ func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, d
 	action.text = ""
 	action.tooltip_text = title
 	action.set_meta("full_label", title)
-	action.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	action.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
-	action.expand_icon = true
-	action.custom_minimum_size = Vector2(64, 58)
+	action.custom_minimum_size = Vector2(76, 76)
 	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action.add_theme_font_size_override("font_size", 11)
+	SurvivorVisualSystem.decorate_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 76.0)
+	var action_content := VBoxContainer.new()
+	action_content.name = "SideActionContent"
+	action_content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	action_content.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_content.add_theme_constant_override("separation", 2)
+	action_content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action.add_child(action_content)
+	var action_icon := TextureRect.new()
+	action_icon.name = "SideActionIcon"
+	action_icon.custom_minimum_size = Vector2(38, 40)
+	action_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	action_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	action_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if ResourceLoader.exists(icon_path):
-		action.icon = load(icon_path) as Texture2D
-	SurvivorVisualSystem.decorate_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 58.0)
+		action_icon.texture = load(icon_path) as Texture2D
+	action_content.add_child(action_icon)
+	var action_caption := Label.new()
+	action_caption.name = "SideActionCaption"
+	action_caption.text = title
+	action_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	action_caption.add_theme_font_size_override("font_size", 10)
+	action_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_content.add_child(action_caption)
 	action.pressed.connect(func():
 		StageDirector.play_sfx("ui_click")
 		if destination == -1:
@@ -1059,15 +1076,23 @@ func _apply_responsive_menu_layout() -> void:
 			continue
 		var left_side: bool = side_index == 0
 		actions.set_anchors_preset(Control.PRESET_TOP_LEFT if left_side else Control.PRESET_TOP_RIGHT)
-		actions.offset_left = 8.0 if left_side else (-62.0 if compact_hub else -76.0)
-		actions.offset_right = (62.0 if compact_hub else 76.0) if left_side else -8.0
+		actions.offset_left = 8.0 if left_side else (-62.0 if compact_hub else -86.0)
+		actions.offset_right = (62.0 if compact_hub else 86.0) if left_side else -8.0
 		actions.offset_top = 65.0
-		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (48 if compact_hub else 61)
+		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (66 if compact_hub else 85)
 		for btn in actions.get_children():
 			if btn is Button:
-				btn.custom_minimum_size = Vector2(0, 48.0 if compact_hub else 58.0)
-				btn.text = "" # Icon-only tiles: no icon/text collision
+				btn.custom_minimum_size = Vector2(0, 66.0 if compact_hub else 76.0)
+				btn.text = ""
 				btn.tooltip_text = String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
+				var action_content := btn.get_node_or_null("SideActionContent") as VBoxContainer
+				if is_instance_valid(action_content):
+					var caption := action_content.get_node_or_null("SideActionCaption") as Label
+					var icon_rect := action_content.get_node_or_null("SideActionIcon") as TextureRect
+					if is_instance_valid(caption):
+						caption.add_theme_font_size_override("font_size", 8 if compact_hub else 10)
+					if is_instance_valid(icon_rect):
+						icon_rect.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(38, 40)
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
