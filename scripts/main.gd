@@ -334,9 +334,9 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		if npc_dialogue_panel:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			npc_dialogue_panel.offset_left = -maxf(90.0, view_width * 0.5 - 12.0) if compact else -220.0
-			npc_dialogue_panel.offset_top = 205.0 + safe_top if compact else 225.0 + safe_top
+			npc_dialogue_panel.offset_top = (224.0 if compact else 226.0) + safe_top
 			npc_dialogue_panel.offset_right = maxf(90.0, view_width * 0.5 - 12.0) if compact else 220.0
-			npc_dialogue_panel.offset_bottom = 292.0 + safe_top if compact else 312.0 + safe_top
+			npc_dialogue_panel.offset_bottom = (354.0 if compact else 355.0) + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
@@ -751,10 +751,14 @@ func show_npc_comms(speaker: String, text: String) -> void:
 		return
 	var p_path: String = AssetRegistry.NPC_PORTRAITS.get(speaker, AssetRegistry.NPC_PORTRAITS["Mara"])
 	npc_portrait_rect.texture = AssetRegistry.get_tex(p_path)
-	npc_speaker_lbl.text = "📻 KOMUNIKAT DOWÓDZTWA — %s:" % speaker.to_upper()
-	npc_text_lbl.text = text
+	npc_speaker_lbl.text = "RADIO • %s" % speaker.to_upper()
+	# Only a short teaser is shown over combat; the full message is in the journal.
+	var preview := text.strip_edges()
+	if preview.length() > 125:
+		preview = preview.substr(0, 122).strip_edges() + "…"
+	npc_text_lbl.text = preview
 	npc_dialogue_panel.visible = true
-	npc_hide_timer = 3.2
+	npc_hide_timer = 4.2
 	var log_entry := "[Etap %03d | Fala %d] %s: %s" % [current_stage_num, current_wave_num, speaker.to_upper(), text]
 	if not npc_dialogue_history.has(log_entry):
 		npc_dialogue_history.append(log_entry)
@@ -1450,7 +1454,7 @@ func _setup_extended_hud_and_profile() -> void:
 	npc_dialogue_panel.add_child(npc_hbox)
 
 	npc_portrait_rect = TextureRect.new()
-	npc_portrait_rect.custom_minimum_size = Vector2(54, 62)
+	npc_portrait_rect.custom_minimum_size = Vector2(42, 48)
 	npc_portrait_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	npc_portrait_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	npc_hbox.add_child(npc_portrait_rect)
@@ -1461,13 +1465,13 @@ func _setup_extended_hud_and_profile() -> void:
 	npc_hbox.add_child(npc_vbox)
 
 	npc_speaker_lbl = Label.new()
-	npc_speaker_lbl.add_theme_font_size_override("font_size", 12)
+	npc_speaker_lbl.add_theme_font_size_override("font_size", 13)
 	npc_speaker_lbl.add_theme_color_override("font_color", Color(0.4, 1.0, 0.65))
 	npc_vbox.add_child(npc_speaker_lbl)
 
 	npc_text_lbl = Label.new()
 	npc_text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	npc_text_lbl.add_theme_font_size_override("font_size", 12)
+	npc_text_lbl.add_theme_font_size_override("font_size", 13)
 	npc_text_lbl.add_theme_color_override("font_color", Color(0.92, 0.96, 1.0))
 	npc_vbox.add_child(npc_text_lbl)
 
