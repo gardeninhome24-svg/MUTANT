@@ -67,6 +67,7 @@ var practice_check_btn: Button
 var store_category_filter: String = "all"
 var store_cat_btns: Dictionary = {}
 var store_cards_grid: GridContainer
+var store_categories_grid: GridContainer = null
 var sandbox_status_lbl: Label
 var store_purchase_dialog: ConfirmationDialog = null
 var pending_store_purchase: Dictionary = {}
@@ -94,140 +95,58 @@ const TALENT_DEFS := [
 
 const STORE_PRODUCTS := [
 	{
-		"id": "special_commander_bundle",
-		"category": "special",
-		"category_label": "🔥 OFERTA SPECJALNA",
-		"title": "Zestaw Dowódcy Sektora A-03",
-		"contents": "• Oferta planowana, obecnie niedostępna\n• Bez testowego dodawania zasobów",
-		"price_label": "W przygotowaniu",
-		"icon": "res://assets/mutantsurvivor_ch01/icons/chest.png",
-		"accent": Color(1.0, 0.68, 0.18),
-		"once": true
-	},
-	{
-		"id": "battle_pass_s1",
-		"category": "battle_pass",
-		"category_label": "🏆 PRZEPUSTKA BITEWNA",
-		"title": "Przepustka Sezon 1: Mutacje",
-		"contents": "• Sezonowa ścieżka kosmetyczna\n• Nagrody wizualne bez przewagi bojowej\n• Oferta po wdrożeniu płatności",
-		"price_label": "W przygotowaniu",
-		"icon": "res://assets/mutantsurvivor_ch01/icons/star_badge.png",
-		"accent": Color(0.85, 0.45, 1.0),
-		"once": true
-	},
-	{
-		"id": "vip_pass_a03",
-		"category": "vip",
-		"category_label": "👑 STATUS VIP",
-		"title": "Karta VIP Kompleksu A-03",
-		"contents": "• Odznaka i efekty kosmetyczne\n• Bez premii do obrażeń i postępu\n• Oferta po wdrożeniu płatności",
-		"price_label": "W przygotowaniu",
-		"icon": "res://assets/mutantsurvivor_ch01/icons/keycard_icon.png",
-		"accent": Color(1.0, 0.84, 0.22),
-		"once": true
-	},
-	{
-		"id": "starter_pack_01",
-		"category": "starter",
-		"category_label": "📦 PAKIET STARTOWY",
-		"title": "Pakiet Startowy Ocalałego",
-		"contents": "• Oferta planowana, obecnie niedostępna\n• Brak darmowych testowych przedmiotów",
-		"price_label": "W przygotowaniu",
-		"icon": "res://assets/mutantsurvivor_ch01/icons/loot_crate_icon.png",
-		"accent": Color(0.28, 0.92, 0.55),
-		"once": true
-	},
-	{
-		"id": "skin_neon_hunter",
-		"category": "skins",
-		"category_label": "🎭 SKIN OPERATORA",
-		"title": "Skin HD: Cyber Ronin X-9",
-		"contents": "• Unikalna sylwetka Cyber Ronina\n• Neonowa poświata na arenie\n• Trwałe odblokowanie na koncie",
+		"id": "skin_neon_hunter", "category": "skins",
+		"category_label": "SKÓRKI OPERATORÓW",
+		"title": "Cyber Ronin X-9",
+		"contents": "Wygląd operatora Cyber Ronin • bez bonusów bojowych • na stałe",
 		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/cyber_ronin.png",
-		"accent": Color(0.25, 0.92, 1.0),
-		"once": true,
-		"skin_unlock": "neon_hunter"
+		"accent": Color(0.25, 0.92, 1.0), "once": true, "skin_unlock": "neon_hunter"
 	},
 	{
-		"id": "skin_hazmat_trooper",
-		"category": "skins",
-		"category_label": "🎭 SKIN OPERATORA",
-		"title": "Skin HD: Szturmowiec Bio-Hazmat",
-		"contents": "• Pancerz przeciwskażeniowy Hazmat\n• Toksyczna zielona obręcz\n• Trwałe odblokowanie na koncie",
+		"id": "skin_hazmat_trooper", "category": "skins",
+		"category_label": "SKÓRKI OPERATORÓW",
+		"title": "Szturmowiec Bio-Hazmat",
+		"contents": "Wygląd kombinezonu Hazmat • bez bonusów bojowych • na stałe",
 		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/hazmat_trooper.png",
-		"accent": Color(0.45, 1.0, 0.35),
-		"once": true,
-		"skin_unlock": "hazmat_trooper"
+		"accent": Color(0.45, 1.0, 0.35), "once": true, "skin_unlock": "hazmat_trooper"
 	},
 	{
-		"id": "skin_void_sniper",
-		"category": "skins",
-		"category_label": "🎭 SKIN OPERATORA",
-		"title": "Skin HD: Snajper Otchłani",
-		"contents": "• Sylwetka Zwiadowcy Otchłani\n• Fioletowy płaszcz kamuflujący\n• Trwałe odblokowanie na koncie",
-		"price_label": "150 kryształów",
-		"icon": "res://assets/mutantsurvivor_ch01/characters/void_sniper.png",
-		"accent": Color(0.78, 0.42, 1.0),
-		"once": true,
-		"skin_unlock": "void_sniper"
-	},
-	{
-		"id": "skin_crimson_storm",
-		"category": "skins",
-		"category_label": "🎭 SKIN OPERATORA",
-		"title": "Skin HD: Karmazynowy Medyk",
-		"contents": "• Sylwetka Karmazynowego Korpusu\n• Czerwone opancerzenie bojowe\n• Trwałe odblokowanie na koncie",
+		"id": "skin_crimson_storm", "category": "skins",
+		"category_label": "SKÓRKI OPERATORÓW",
+		"title": "Karmazynowy Medyk",
+		"contents": "Wygląd medyka • bez bonusów bojowych • na stałe",
 		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/crimson_medic.png",
-		"accent": Color(1.0, 0.35, 0.45),
-		"once": true,
-		"skin_unlock": "crimson_storm"
+		"accent": Color(1.0, 0.35, 0.45), "once": true, "skin_unlock": "crimson_storm"
 	},
 	{
-		"id": "gear_epic_crate",
-		"category": "gear",
-		"category_label": "⚔ WYPOSAŻENIE PREMIUM",
-		"title": "Skrzynia Zbrojeniowa [Epicka]",
-		"contents": "• Docelowo ekwipunek z gry, nie z płatnego losowania\n• Przedmioty epickie zdobywasz w operacjach",
-		"price_label": "60 kryształów",
-		"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_7.png",
-		"accent": Color(0.75, 0.38, 1.0),
-		"once": false
+		"id": "skin_void_sniper", "category": "skins",
+		"category_label": "SKÓRKI OPERATORÓW",
+		"title": "Snajper Otchłani",
+		"contents": "Wygląd zwiadowcy • bez bonusów bojowych • na stałe",
+		"price_label": "150 kryształów",
+		"icon": "res://assets/mutantsurvivor_ch01/characters/void_sniper.png",
+		"accent": Color(0.78, 0.42, 1.0), "once": true, "skin_unlock": "void_sniper"
 	},
 	{
-		"id": "gear_mythic_crate",
-		"category": "gear",
-		"category_label": "⚔ WYPOSAŻENIE PREMIUM",
-		"title": "Skrzynia Rdzenia [Legendarna/Mityczna]",
-		"contents": "• Docelowo nagrody rozgrywki, bez płatnego losowania\n• Przedmioty najwyższych klas z operacji",
-		"price_label": "140 kryształów",
-		"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_11.png",
-		"accent": Color(1.0, 0.32, 0.48),
-		"once": false
-	},
-	{
-		"id": "attempts_refill_full",
-		"category": "attempts",
-		"category_label": "🎯 PRÓBY KAMPANII",
-		"title": "Pełne Odnowienie Prób (5/5)",
-		"contents": "• Natychmiast przywraca 5/5 Prób Kampanii\n• Gotowość do kolejnych etapów",
+		"id": "attempts_refill_full", "category": "attempts",
+		"category_label": "PRÓBY KAMPANII",
+		"title": "Odnowienie prób 5/5",
+		"contents": "Odnawia wszystkie próby • normalna regeneracja pozostaje darmowa",
 		"price_label": "60 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/energy_cell.png",
-		"accent": Color(0.28, 0.95, 0.72),
-		"once": false
+		"accent": Color(0.28, 0.95, 0.72), "once": false
 	},
 	{
-		"id": "crystals_pack_500",
-		"category": "crystals",
-		"category_label": "💎 KRYSZTAŁY",
-		"title": "Pakiet 500 Kryształów Ciemnej Materii",
-		"contents": "• 500 kryształów premium\n• Zakup za prawdziwe pieniądze dopiero po podłączeniu bezpiecznej płatności",
+		"id": "crystals_pack_500", "category": "crystals",
+		"category_label": "KRYSZTAŁY PREMIUM",
+		"title": "500 kryształów",
+		"contents": "Zakup za prawdziwe pieniądze zostanie uruchomiony dopiero po wdrożeniu bezpiecznej płatności.",
 		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/purple_crystal.png",
-		"accent": Color(0.82, 0.45, 1.0),
-		"once": false
+		"accent": Color(0.82, 0.45, 1.0), "once": false
 	}
 ]
 
@@ -291,6 +210,8 @@ func _apply_responsive_metrics() -> void:
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
+	if is_instance_valid(store_categories_grid):
+		store_categories_grid.columns = (2 if narrow else 4) if portrait else 4
 	if is_instance_valid(daily_grid):
 		daily_grid.columns = (2 if narrow else 4) if portrait else 7
 
@@ -1486,20 +1407,16 @@ func _build_tab_premium_store() -> Control:
 
 	# Pasek 8 kategorii sklepu
 	var cats_grid := GridContainer.new()
-	cats_grid.columns = 5
+	store_categories_grid = cats_grid
+	cats_grid.columns = 4
 	cats_grid.add_theme_constant_override("h_separation", 4)
 	cats_grid.add_theme_constant_override("v_separation", 4)
 	vbox.add_child(cats_grid)
 
 	var store_cats := [
-		{"id": "all", "label": "Wszystkie (8)"},
-		{"id": "special", "label": "Oferty Spec."},
-		{"id": "battle_pass", "label": "Przepustka"},
-		{"id": "vip", "label": "Status VIP"},
-		{"id": "starter", "label": "Pakiety Start."},
-		{"id": "skins", "label": "Skiny HD"},
-		{"id": "gear", "label": "Wyposażenie"},
-		{"id": "attempts", "label": "Próby 5/5"},
+		{"id": "all", "label": "Wszystkie"},
+		{"id": "skins", "label": "Skórki"},
+		{"id": "attempts", "label": "Próby"},
 		{"id": "crystals", "label": "Kryształy"}
 	]
 	for sc in store_cats:
