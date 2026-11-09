@@ -999,12 +999,14 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_quick_equip = Button.new()
 	inv_quick_equip.name = "InventoryQuickEquip"
 	inv_quick_equip.text = "ZAŁÓŻ"
+	inv_quick_equip.custom_minimum_size = Vector2(88, 48)
 	SurvivorVisualSystem.decorate_metal_button(inv_quick_equip, SurvivorVisualSystem.LIME, 48.0)
 	inv_quick_equip.pressed.connect(_inventory_quick_equip_selected)
 	quick_row.add_child(inv_quick_equip)
 	inv_quick_unequip = Button.new()
 	inv_quick_unequip.name = "InventoryQuickUnequip"
 	inv_quick_unequip.text = "ZDEJMIJ"
+	inv_quick_unequip.custom_minimum_size = Vector2(88, 48)
 	SurvivorVisualSystem.decorate_metal_button(inv_quick_unequip, SurvivorVisualSystem.CYAN, 48.0)
 	inv_quick_unequip.pressed.connect(_inventory_quick_unequip_selected)
 	quick_row.add_child(inv_quick_unequip)
@@ -1248,10 +1250,12 @@ func _refresh_inventory_tab_ui() -> void:
 		cv.add_child(ic)
 
 		var nm := Label.new()
-		nm.text = String(it.get("name", "Moduł"))
+		var item_full_name := String(it.get("name", "Moduł"))
+		nm.text = item_full_name.left(12) + ("…" if item_full_name.length() > 12 else "")
+		nm.tooltip_text = item_full_name
 		nm.clip_text = true
 		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		nm.add_theme_font_size_override("font_size", 13)
+		nm.add_theme_font_size_override("font_size", 10 if narrow_portrait_ui else 11)
 		nm.add_theme_color_override("font_color", r_col)
 		cv.add_child(nm)
 
