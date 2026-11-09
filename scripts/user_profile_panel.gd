@@ -77,7 +77,6 @@ var daily_reset_lbl: Label
 var bp_label: Label
 var bp_bar: ProgressBar
 
-const BETA_SANDBOX_PURCHASES_ENABLED: bool = false # Closed beta: evaluate F2P progression without free test top-ups.
 const CLASS_ORDER := ["soldier", "engineer", "medic", "scout"]
 const SKIN_ORDER := ["default", "gold_veteran", "neon_hunter", "crimson_storm", "hazmat_trooper", "void_sniper"]
 const DIFF_ORDER := ["rekrut", "ocalaly", "weteran", "koszmar", "apokalipsa"]
@@ -97,8 +96,8 @@ const STORE_PRODUCTS := [
 		"category": "special",
 		"category_label": "🔥 OFERTA SPECJALNA",
 		"title": "Zestaw Dowódcy Sektora A-03",
-		"contents": "• Epicka Broń Bojowa\n• +1 500 Kredytów\n• +30 Złomu Technicznego",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"contents": "• Oferta planowana, obecnie niedostępna\n• Bez testowego dodawania zasobów",
+		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/chest.png",
 		"accent": Color(1.0, 0.68, 0.18),
 		"once": true
@@ -108,8 +107,8 @@ const STORE_PRODUCTS := [
 		"category": "battle_pass",
 		"category_label": "🏆 PRZEPUSTKA BITEWNA",
 		"title": "Przepustka Sezon 1: Mutacje",
-		"contents": "• Odblokowanie ścieżki Premium\n• +600 XP Przepustki\n• Legendarny Artefakt Rdzenia",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"contents": "• Sezonowa ścieżka kosmetyczna\n• Nagrody wizualne bez przewagi bojowej\n• Oferta po wdrożeniu płatności",
+		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/star_badge.png",
 		"accent": Color(0.85, 0.45, 1.0),
 		"once": true
@@ -119,8 +118,8 @@ const STORE_PRODUCTS := [
 		"category": "vip",
 		"category_label": "👑 STATUS VIP",
 		"title": "Karta VIP Kompleksu A-03",
-		"contents": "• Odznaka Dowódcy VIP\n• Natychmiast: +500 Kr i +150 Kryształów\n• +15 Złomu do ulepszeń",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"contents": "• Odznaka i efekty kosmetyczne\n• Bez premii do obrażeń i postępu\n• Oferta po wdrożeniu płatności",
+		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/keycard_icon.png",
 		"accent": Color(1.0, 0.84, 0.22),
 		"once": true
@@ -130,8 +129,8 @@ const STORE_PRODUCTS := [
 		"category": "starter",
 		"category_label": "📦 PAKIET STARTOWY",
 		"title": "Pakiet Startowy Ocalałego",
-		"contents": "• +3 000 Kredytów\n• +25 Złomu Technicznego\n• Rzadki Hełm Taktyczny",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"contents": "• Oferta planowana, obecnie niedostępna\n• Brak darmowych testowych przedmiotów",
+		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/loot_crate_icon.png",
 		"accent": Color(0.28, 0.92, 0.55),
 		"once": true
@@ -142,7 +141,7 @@ const STORE_PRODUCTS := [
 		"category_label": "🎭 SKIN OPERATORA",
 		"title": "Skin HD: Cyber Ronin X-9",
 		"contents": "• Unikalna sylwetka Cyber Ronina\n• Neonowa poświata na arenie\n• Trwałe odblokowanie na koncie",
-		"price_label": "120 Kryształów [SANDBOX]",
+		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/cyber_ronin.png",
 		"accent": Color(0.25, 0.92, 1.0),
 		"once": true,
@@ -154,7 +153,7 @@ const STORE_PRODUCTS := [
 		"category_label": "🎭 SKIN OPERATORA",
 		"title": "Skin HD: Szturmowiec Bio-Hazmat",
 		"contents": "• Pancerz przeciwskażeniowy Hazmat\n• Toksyczna zielona obręcz\n• Trwałe odblokowanie na koncie",
-		"price_label": "120 Kryształów [SANDBOX]",
+		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/hazmat_trooper.png",
 		"accent": Color(0.45, 1.0, 0.35),
 		"once": true,
@@ -166,7 +165,7 @@ const STORE_PRODUCTS := [
 		"category_label": "🎭 SKIN OPERATORA",
 		"title": "Skin HD: Snajper Otchłani",
 		"contents": "• Sylwetka Zwiadowcy Otchłani\n• Fioletowy płaszcz kamuflujący\n• Trwałe odblokowanie na koncie",
-		"price_label": "150 Kryształów [SANDBOX]",
+		"price_label": "150 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/void_sniper.png",
 		"accent": Color(0.78, 0.42, 1.0),
 		"once": true,
@@ -178,7 +177,7 @@ const STORE_PRODUCTS := [
 		"category_label": "🎭 SKIN OPERATORA",
 		"title": "Skin HD: Karmazynowy Medyk",
 		"contents": "• Sylwetka Karmazynowego Korpusu\n• Czerwone opancerzenie bojowe\n• Trwałe odblokowanie na koncie",
-		"price_label": "120 Kryształów [SANDBOX]",
+		"price_label": "120 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/characters/crimson_medic.png",
 		"accent": Color(1.0, 0.35, 0.45),
 		"once": true,
@@ -189,8 +188,8 @@ const STORE_PRODUCTS := [
 		"category": "gear",
 		"category_label": "⚔ WYPOSAŻENIE PREMIUM",
 		"title": "Skrzynia Zbrojeniowa [Epicka]",
-		"contents": "• Gwarantowany przedmiot Epicki\n• Losowe 3 afiksy bojowe\n• +5 Złomu Technicznego",
-		"price_label": "60 Kryształów [SANDBOX]",
+		"contents": "• Docelowo ekwipunek z gry, nie z płatnego losowania\n• Przedmioty epickie zdobywasz w operacjach",
+		"price_label": "60 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_7.png",
 		"accent": Color(0.75, 0.38, 1.0),
 		"once": false
@@ -200,8 +199,8 @@ const STORE_PRODUCTS := [
 		"category": "gear",
 		"category_label": "⚔ WYPOSAŻENIE PREMIUM",
 		"title": "Skrzynia Rdzenia [Legendarna/Mityczna]",
-		"contents": "• Gwarantowany przedmiot Legendarny lub Mityczny\n• Do 4 afiksów bojowych\n• +12 Złomu Technicznego",
-		"price_label": "140 Kryształów [SANDBOX]",
+		"contents": "• Docelowo nagrody rozgrywki, bez płatnego losowania\n• Przedmioty najwyższych klas z operacji",
+		"price_label": "140 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_11.png",
 		"accent": Color(1.0, 0.32, 0.48),
 		"once": false
@@ -212,7 +211,7 @@ const STORE_PRODUCTS := [
 		"category_label": "🎯 PRÓBY KAMPANII",
 		"title": "Pełne Odnowienie Prób (5/5)",
 		"contents": "• Natychmiast przywraca 5/5 Prób Kampanii\n• Gotowość do kolejnych etapów",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"price_label": "60 kryształów",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/energy_cell.png",
 		"accent": Color(0.28, 0.95, 0.72),
 		"once": false
@@ -222,8 +221,8 @@ const STORE_PRODUCTS := [
 		"category": "crystals",
 		"category_label": "💎 KRYSZTAŁY",
 		"title": "Pakiet 500 Kryształów Ciemnej Materii",
-		"contents": "• +500 Kryształów Ciemnej Materii\n• Do wykorzystania w Sklepie i Zbrojowni",
-		"price_label": "SANDBOX TEST (0 PLN)",
+		"contents": "• 500 kryształów premium\n• Zakup za prawdziwe pieniądze dopiero po podłączeniu bezpiecznej płatności",
+		"price_label": "W przygotowaniu",
 		"icon": "res://assets/mutantsurvivor_ch01/icons/purple_crystal.png",
 		"accent": Color(0.82, 0.45, 1.0),
 		"once": false
