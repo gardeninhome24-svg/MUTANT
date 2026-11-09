@@ -38,7 +38,7 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
             xvfb xauth libgl1-mesa-dri libglx-mesa0 libegl1 \
             libxcursor1 libxinerama1 libxi6 libxrandr2 libxrender1 libxfixes3 \
-            libfontconfig1 fontconfig libxkbcommon0 libwayland-cursor0
+            libfontconfig1 fontconfig libxkbcommon0 libwayland-cursor0 python3
           ldconfig
           test -f /usr/lib/x86_64-linux-gnu/libXcursor.so.1 || ldconfig -p | grep -q libXcursor.so.1
           mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
