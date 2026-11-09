@@ -51,6 +51,7 @@ var inv_slot_filter_btns: Dictionary = {}
 var inv_rarity_btn: Button
 var inv_sort_btn: Button
 var inv_materials_lbl: Label
+var inv_chest_btn: Button = null
 var inv_grid: GridContainer
 var inv_detail_box: PanelContainer
 var selected_bag_instance_id: String = ""
@@ -274,6 +275,10 @@ func _apply_responsive_metrics() -> void:
 		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
 		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
+	if is_instance_valid(inv_chest_btn):
+		inv_chest_btn.text = "SKRZYNIA · 80 Kr" if portrait else "SKRZYNIA ZBROJOWNI (-80 Kr)"
+		inv_chest_btn.custom_minimum_size = Vector2(126, 34) if portrait else Vector2(180, 34)
+		inv_chest_btn.add_theme_font_size_override("font_size", 10 if portrait else 12)
 	if is_instance_valid(inv_slot_filters_grid):
 		inv_slot_filters_grid.columns = 4 if portrait else 7
 	if is_instance_valid(inv_grid):
@@ -891,6 +896,7 @@ func _build_tab_inventory_backpack() -> Control:
 			emit_signal("profile_updated")
 	)
 	top_h.add_child(chest_btn)
+	inv_chest_btn = chest_btn
 
 	# Pasek filtrów slotu (Wszystkie, Broń, Hełm, Pancerz, Rękawice, Buty, Artefakt)
 	var filter_card := _create_subpanel()
@@ -976,9 +982,10 @@ func _build_tab_inventory_backpack() -> Control:
 func _refresh_inventory_tab_ui() -> void:
 	if not is_instance_valid(inv_grid):
 		return
-	inv_materials_lbl.text = "🔩 Materiały do ulepszeń: %d Kredytów  |  %d szt. Złomu Technicznego  |  Pojemność plecaka: %d szt." % [
-		StageDirector.credits, StageDirector.scrap_materials, StageDirector.inventory.size()
-	]
+	if StageDirector.is_portrait_mode():
+		inv_materials_lbl.text = "KR %d  •  ZŁOM %d  •  PLECAK %d" % [StageDirector.credits, StageDirector.scrap_materials, StageDirector.inventory.size()]
+	else:
+		inv_materials_lbl.text = "Materiały: %d Kredytów  |  %d Złomu Technicznego  |  Plecak: %d" % [StageDirector.credits, StageDirector.scrap_materials, StageDirector.inventory.size()]
 
 	for sf_id in inv_slot_filter_btns.keys():
 		var b: Button = inv_slot_filter_btns[sf_id]
@@ -1060,7 +1067,11 @@ func _refresh_inventory_tab_ui() -> void:
 		cell.add_child(cv)
 
 		var top_tag := Label.new()
-		top_tag.text = "✓ ZAŁOŻONO | +%d" % lvl if is_eq else "%s | +%d" % [String(StageDirector.GEAR_SLOT_NAMES.get(slot, slot)), lvl]
+		if StageDirector.is_portrait_mode():
+			top_tag.text = "ZAŁOŻONY +%d" % lvl if is_eq else "%s +%d" % [String(StageDirector.GEAR_SLOT_NAMES.get(slot, slot)), lvl]
+		else:
+			top_tag.text = "✓ ZAŁOŻONO | +%d" % lvl if is_eq else "%s | +%d" % [String(StageDirector.GEAR_SLOT_NAMES.get(slot, slot)), lvl]
+		top_tag.clip_text = true
 		top_tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		top_tag.add_theme_font_size_override("font_size", 10)
 		top_tag.add_theme_color_override("font_color", Color(0.38, 1.0, 0.62) if is_eq else Color(0.78, 0.88, 1.0))
