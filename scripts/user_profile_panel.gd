@@ -210,9 +210,9 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(hero_arena_row):
 		hero_arena_row.add_theme_constant_override("separation", 5 if narrow else 14)
 	if is_instance_valid(hero_pedestal):
-		hero_pedestal.custom_minimum_size = Vector2(166, 264) if narrow else Vector2(280, 330)
+		hero_pedestal.custom_minimum_size = Vector2(166, 304) if narrow else Vector2(350, 480)
 	if is_instance_valid(hero_center_tex):
-		hero_center_tex.custom_minimum_size = Vector2(146, 225) if narrow else Vector2(250, 280)
+		hero_center_tex.custom_minimum_size = Vector2(146, 265) if narrow else Vector2(320, 425)
 	for flank in [left_slots_vbox, right_slots_vbox]:
 		if is_instance_valid(flank):
 			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(82, 0)
@@ -225,6 +225,8 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inv_slot_filters_grid.columns = (2 if narrow else 4) if portrait else 7
 	if is_instance_valid(inv_grid):
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
+	if is_instance_valid(stage_boss_preview):
+		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(205, 215)
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(store_categories_grid):
@@ -465,7 +467,7 @@ func _build_tab_character_showcase() -> Control:
 	hero_pedestal = center_pedestal
 	center_pedestal.clip_contents = true
 	center_pedestal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	center_pedestal.custom_minimum_size = Vector2(280, 330)
+	center_pedestal.custom_minimum_size = Vector2(350, 480)
 	var ped_st := StyleBoxFlat.new()
 	ped_st.bg_color = Color(0, 0, 0, 0.0) # Przezroczyste, tło podestu widać bezpośrednio
 	ped_st.border_width_left = 0
@@ -492,7 +494,7 @@ func _build_tab_character_showcase() -> Control:
 	center_pedestal.add_child(ped_vbox)
 
 	hero_center_tex = TextureRect.new()
-	hero_center_tex.custom_minimum_size = Vector2(250, 280)
+	hero_center_tex.custom_minimum_size = Vector2(320, 425)
 	hero_center_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	hero_center_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	ped_vbox.add_child(hero_center_tex)
@@ -1220,6 +1222,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	vbox.add_theme_constant_override("separation", 10)
 
 	var camp_card := _create_subpanel(Color(0.25, 0.90, 1.0, 0.80))
+	camp_card.custom_minimum_size = Vector2(0, 370)
 	vbox.add_child(camp_card)
 	var c_vbox := VBoxContainer.new()
 	c_vbox.add_theme_constant_override("separation", 8)
@@ -1227,7 +1230,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 	var c_title := Label.new()
 	c_title.text = "KAMPANIA 1–100"
-	c_title.add_theme_font_size_override("font_size", 17)
+	c_title.add_theme_font_size_override("font_size", 24)
 	c_title.add_theme_color_override("font_color", Color(1.0, 0.86, 0.28))
 	c_vbox.add_child(c_title)
 
@@ -1236,7 +1239,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	c_vbox.add_child(mid_h)
 
 	stage_boss_preview = TextureRect.new()
-	stage_boss_preview.custom_minimum_size = Vector2(118, 118)
+	stage_boss_preview.custom_minimum_size = Vector2(205, 215)
 	stage_boss_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_boss_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mid_h.add_child(stage_boss_preview)
@@ -1244,7 +1247,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	stage_info_lbl = Label.new()
 	stage_info_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stage_info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stage_info_lbl.add_theme_font_size_override("font_size", 14)
+	stage_info_lbl.add_theme_font_size_override("font_size", 15)
 	mid_h.add_child(stage_info_lbl)
 
 	# Use a compact directional row and a separate grid for chapter shortcuts.
@@ -1784,7 +1787,7 @@ func _upgrade_talent(talent_id: String, base_cost: int) -> void:
 
 func _create_subpanel(border_col: Color = Color(0.20, 0.58, 0.82, 0.70)) -> PanelContainer:
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(border_col, false))
+	panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(border_col))
 	return panel
 
 func refresh_ui() -> void:
