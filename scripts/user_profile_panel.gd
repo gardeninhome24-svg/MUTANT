@@ -979,7 +979,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var is_sel := (selected_bag_instance_id == inst_id)
 
 		var cell := PanelContainer.new()
-		cell.custom_minimum_size = Vector2(124, 96) if StageDirector.is_portrait_mode() else Vector2(148, 108)
+		cell.custom_minimum_size = Vector2(124, 114) if StageDirector.is_portrait_mode() else Vector2(148, 108)
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cst := StyleBoxFlat.new()
 		cst.bg_color = Color(r_col.r * 0.16, r_col.g * 0.16, r_col.b * 0.18, 0.95)
@@ -1010,7 +1010,7 @@ func _refresh_inventory_tab_ui() -> void:
 			top_tag.text = "✓ ZAŁOŻONO | +%d" % lvl if is_eq else "%s | +%d" % [String(StageDirector.GEAR_SLOT_NAMES.get(slot, slot)), lvl]
 		top_tag.clip_text = true
 		top_tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		top_tag.add_theme_font_size_override("font_size", 10)
+		top_tag.add_theme_font_size_override("font_size", 11)
 		top_tag.add_theme_color_override("font_color", Color(0.38, 1.0, 0.62) if is_eq else Color(0.78, 0.88, 1.0))
 		cv.add_child(top_tag)
 
@@ -1026,14 +1026,14 @@ func _refresh_inventory_tab_ui() -> void:
 		nm.text = String(it.get("name", "Moduł"))
 		nm.clip_text = true
 		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		nm.add_theme_font_size_override("font_size", 11)
+		nm.add_theme_font_size_override("font_size", 13)
 		nm.add_theme_color_override("font_color", r_col)
 		cv.add_child(nm)
 
 		var pw := Label.new()
 		pw.text = "Moc: %.1f" % pwr
 		pw.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		pw.add_theme_font_size_override("font_size", 10)
+		pw.add_theme_font_size_override("font_size", 11)
 		pw.add_theme_color_override("font_color", Color(0.92, 0.96, 1.0))
 		cv.add_child(pw)
 
@@ -1390,8 +1390,8 @@ func _build_tab_premium_store() -> Control:
 
 	free_daily_pack_btn = Button.new()
 	free_daily_pack_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	free_daily_pack_btn.custom_minimum_size = Vector2(0, 32)
-	free_daily_pack_btn.add_theme_font_size_override("font_size", 11)
+	free_daily_pack_btn.custom_minimum_size = Vector2(0, 44)
+	free_daily_pack_btn.add_theme_font_size_override("font_size", 12)
 	free_daily_pack_btn.pressed.connect(func():
 		if StageDirector.claim_daily_free_shop_pack():
 			sandbox_status_lbl.text = "Odebrano codzienne zaopatrzenie: +150 Kr i +5 Złomu."
@@ -1402,7 +1402,7 @@ func _build_tab_premium_store() -> Control:
 
 	var odds_btn := Button.new()
 	odds_btn.text = "📊 SZANSE LOSOWANIA (DROP ODDS %)"
-	odds_btn.custom_minimum_size = Vector2(230, 32)
+	odds_btn.custom_minimum_size = Vector2(170, 44)
 	odds_btn.add_theme_font_size_override("font_size", 11)
 	odds_btn.pressed.connect(func():
 		sandbox_status_lbl.text = StageDirector.get_drop_probabilities_text()
@@ -1427,8 +1427,8 @@ func _build_tab_premium_store() -> Control:
 		var cid: String = String(sc["id"])
 		var cb := Button.new()
 		cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cb.custom_minimum_size = Vector2(0, 28)
-		cb.add_theme_font_size_override("font_size", 10)
+		cb.custom_minimum_size = Vector2(0, 40)
+		cb.add_theme_font_size_override("font_size", 12)
 		cb.text = String(sc["label"])
 		cb.pressed.connect(func():
 			store_category_filter = cid
@@ -1487,7 +1487,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var cat_lbl := Label.new()
 		cat_lbl.text = String(prod["category_label"])
-		cat_lbl.add_theme_font_size_override("font_size", 10)
+		cat_lbl.add_theme_font_size_override("font_size", 11)
 		cat_lbl.add_theme_color_override("font_color", accent)
 		cv.add_child(cat_lbl)
 
@@ -1510,20 +1510,20 @@ func _refresh_store_tab_ui() -> void:
 		var title_l := Label.new()
 		title_l.text = String(prod["title"])
 		title_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		title_l.add_theme_font_size_override("font_size", 12)
+		title_l.add_theme_font_size_override("font_size", 14)
 		title_l.add_theme_color_override("font_color", Color(0.98, 0.98, 1.0))
 		tv.add_child(title_l)
 
 		var desc_l := Label.new()
 		desc_l.text = String(prod["contents"])
 		desc_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc_l.add_theme_font_size_override("font_size", 10)
+		desc_l.add_theme_font_size_override("font_size", 12)
 		desc_l.add_theme_color_override("font_color", Color(0.76, 0.88, 0.98))
 		tv.add_child(desc_l)
 
 		var buy_btn := Button.new()
-		buy_btn.custom_minimum_size = Vector2(0, 34)
-		buy_btn.add_theme_font_size_override("font_size", 11)
+		buy_btn.custom_minimum_size = Vector2(0, 44)
+		buy_btn.add_theme_font_size_override("font_size", 12)
 		var gem_price := int(StageDirector.SKIN_GEM_PRICES.get(skin_unlock, 0))
 		var is_skin := not skin_unlock.is_empty() and gem_price > 0
 		var is_refill := p_id == "attempts_refill_full"
