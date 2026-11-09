@@ -773,7 +773,8 @@ func claim_daily_mission(mission_id: String) -> bool:
 				m["claimed"] = true
 				daily_missions[i] = m
 				credits += int(m.get("credits", 100))
-				dark_matter_gems += int(m.get("gems", 0))
+				# Legacy saved missions may contain pre-release gem rewards.
+				# Never mint premium currency from a free mission.
 				scrap_materials += int(m.get("scrap", 3))
 				play_sfx("victory")
 				save_campaign_profile()
@@ -1133,7 +1134,6 @@ func claim_daily_reward(day_num: int) -> Dictionary:
 			last_daily_calendar_claim_day = today
 			credits += int(r["credits"])
 			# Premium currency is not awarded by normal calendar login.
-			dark_matter_gems += 0
 			scrap_materials += int(r["scrap"])
 			var dropped_item := {}
 			if bool(r["chest"]):
