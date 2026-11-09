@@ -1766,12 +1766,10 @@ func _on_player_died() -> void:
 		if has_used_revive:
 			ad_btn.disabled = true
 			ad_btn.text = "✓ WSKRZESZENIE WYKORZYSTANE (LIMIT 1/ETAP)"
-		elif not StageDirector.is_online_mode:
-			ad_btn.disabled = true
-			ad_btn.text = "📴 REKLAMA NIEDOSTĘPNA (TRYB OFFLINE)"
 		else:
-			ad_btn.disabled = false
-			ad_btn.text = "📺 WSKRZEŚ ZA REKLAMĘ (65% HP + 3.5s TARCZY)"
+			# No rewarded-ad SDK / verified completion callback in this beta.
+			ad_btn.disabled = true
+			ad_btn.text = "REKLAMY NIEDOSTĘPNE W BECIE"
 	if is_instance_valid(prem_btn):
 		prem_btn.disabled = has_used_revive
 	if is_instance_valid(death_summary_lbl):
@@ -1780,6 +1778,9 @@ func _on_player_died() -> void:
 			"Nagroda za porażkę zostanie rozliczona dopiero po rezygnacji z wskrzeszenia.\n" +
 			("Możesz skorzystać z 1 wskrzeszenia (z 3.5s tarczą ochronną), powtórzyć etap lub wrócić do bazy." if not has_used_revive else "Limit 1 wskrzeszenia na etap został już wykorzystany.")
 		)
+	player.external_move_dir = Vector2.ZERO
+	if is_instance_valid(joystick):
+		joystick.cancel_touch()
 	get_tree().paused = true
 	death_panel.visible = true
 
@@ -1792,7 +1793,7 @@ func _on_player_died() -> void:
 			"reason": "Etap %03d: Ulepsz wyposażenie lub spróbuj innej strategii." % current_stage_num,
 			"already_revived": has_used_revive,
 			"gems": StageDirector.dark_matter_gems,
-			"ad_available": StageDirector.is_online_mode
+			"ad_available": false
 		}
 		defeat_overlay_inst.call("configure", cfg_data)
 		var bdrop := defeat_overlay_inst.get_node_or_null("Backdrop") as TextureRect
@@ -1804,15 +1805,9 @@ func _on_player_died() -> void:
 		defeat_overlay_inst.visible = true
 
 func _on_revive_ad_pressed() -> void:
-	if run_result_state != "awaiting_revive" or has_used_revive or not StageDirector.is_online_mode:
-		return
-	# SANDBOX ONLY. In production grant solely after verified rewarded-ad callback.
-	has_used_revive = true
-	run_result_state = "active"
-	death_panel.visible = false
-	if is_instance_valid(defeat_overlay_inst): defeat_overlay_inst.visible = false
-	get_tree().paused = false
-	player.revive(0.65)
+	# Block unverified ad rewards until the Android rewarded-ad SDK is integrated.
+	# Re-enable only inside the SDK's successful server-verified completion callback.
+	return
 
 func _on_revive_premium_pressed() -> void:
 	if run_result_state != "awaiting_revive" or has_used_revive:
@@ -1842,9 +1837,9 @@ func _on_buy_energy_pack() -> void:
 		update_currency_display()
 
 func _on_watch_ad_for_energy() -> void:
-	StageDirector.credits += 75
-	StageDirector.save_campaign_profile()
-	update_currency_display()
+	# Previous prototype granted 75 credits without displaying an advertisement.
+	# No reward is issued until an ad completion callback is integrated and verified.
+	return
 
 func update_currency_display() -> void:
 	energy_label.text = "%d" % StageDirector.credits
