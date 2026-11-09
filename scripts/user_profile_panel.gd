@@ -1262,7 +1262,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	camp_card.add_child(c_vbox)
 
 	var c_title := Label.new()
-	c_title.text = "🗺 DOWÓDZTWO OPERACJI — KAMPANIA 1–100 (10 ROZDZIAŁÓW / 5 BIOMÓW)"
+	c_title.text = "KAMPANIA 1–100"
 	c_title.add_theme_font_size_override("font_size", 14)
 	c_title.add_theme_color_override("font_color", Color(1.0, 0.86, 0.28))
 	c_vbox.add_child(c_title)
@@ -1283,9 +1283,17 @@ func _build_tab_campaign_and_talents() -> Control:
 	stage_info_lbl.add_theme_font_size_override("font_size", 12)
 	mid_h.add_child(stage_info_lbl)
 
+	# Use a compact directional row and a separate grid for chapter shortcuts.
+	# Nine buttons in one HBox can overflow the 9:16 campaign panel.
 	var stage_nav := HBoxContainer.new()
 	stage_nav.add_theme_constant_override("separation", 6)
 	c_vbox.add_child(stage_nav)
+	var stage_jump_grid := GridContainer.new()
+	stage_jump_grid.name = "StageJumpGrid"
+	stage_jump_grid.columns = 5
+	stage_jump_grid.add_theme_constant_override("h_separation", 5)
+	stage_jump_grid.add_theme_constant_override("v_separation", 4)
+	c_vbox.add_child(stage_jump_grid)
 
 	var b_prev10 := Button.new()
 	b_prev10.text = "⏪ -10"
@@ -1304,12 +1312,12 @@ func _build_tab_campaign_and_talents() -> Control:
 	for s_jump in [1, 10, 30, 50, 100]:
 		var target_s: int = int(s_jump)
 		var jb := Button.new()
-		jb.text = "Etap %03d" % target_s
+		jb.text = "%03d" % target_s
 		jb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		jb.custom_minimum_size = Vector2(0, 34)
 		jb.add_theme_font_size_override("font_size", 11)
 		jb.pressed.connect(func(): _select_stage(target_s))
-		stage_nav.add_child(jb)
+		stage_jump_grid.add_child(jb)
 
 	var b_next1 := Button.new()
 	b_next1.text = "+1 ▶"
@@ -1325,8 +1333,8 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_next10.pressed.connect(func(): _select_stage(StageDirector.current_stage + 10))
 	stage_nav.add_child(b_next10)
 
-	var diff_row := HBoxContainer.new()
-	diff_row.add_theme_constant_override("separation", 8)
+	var diff_row := VBoxContainer.new()
+	diff_row.add_theme_constant_override("separation", 6)
 	c_vbox.add_child(diff_row)
 
 	diff_info_lbl = Label.new()
@@ -1361,7 +1369,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 	# Warsztat Talentów
 	var t_header := Label.new()
-	t_header.text = "⚙ TRWAŁE TALENTY DOWÓDCY (WSPÓLNE DLA WSZYSTKICH KLAS):"
+	t_header.text = "TALENTY DOWÓDCY"
 	t_header.add_theme_font_size_override("font_size", 14)
 	t_header.add_theme_color_override("font_color", Color(0.35, 0.96, 1.0))
 	vbox.add_child(t_header)
