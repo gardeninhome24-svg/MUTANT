@@ -66,6 +66,10 @@ func _run() -> void:
 		_check(int(cfg.get("stage", n)) == n, "Stage %03d config resolves" % n)
 		_check(int(cfg.get("waves", 0)) == 10, "Stage %03d has 10 waves" % n)
 		_check(not String(cfg.get("scene_type", "")).is_empty(), "Stage %03d has main objective" % n)
+		var regular_stats: Dictionary = stage.get_enemy_scaled_stats("biegacz", n, 650.0, "normal")
+		_check(float(regular_stats.get("max_hp", 0.0)) > 0.0 and float(regular_stats.get("damage", 0.0)) > 0.0, "Stage %03d has valid enemy HP and damage" % n)
+		if String(cfg.get("scene_type", "")) == "defeat_boss":
+			_check(not String(cfg.get("boss_id", "")).is_empty(), "Defeat-boss objective has a boss on stage %03d" % n)
 		if n % 10 == 0:
 			_check(not String(cfg.get("boss_id", "")).is_empty(), "Chapter boss available at stage %03d" % n)
 		var result: Dictionary = stage.complete_stage_run(n, true, 10)
