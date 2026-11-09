@@ -227,6 +227,19 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(205, 215)
+	# The equipment presentation must fit the *physical* narrow viewport.
+	# The previous 225px operator and 80px columns forced horizontal overflow.
+	var equip_portrait := find_child("EquipmentOperatorPortrait", true, false) as TextureRect
+	if is_instance_valid(equip_portrait):
+		equip_portrait.custom_minimum_size = Vector2(135, 214) if narrow else Vector2(225, 300)
+	for col_name in ["EquipmentLeftSlots", "EquipmentRightSlots"]:
+		var gear_column := find_child(col_name, true, false) as VBoxContainer
+		if is_instance_valid(gear_column):
+			gear_column.custom_minimum_size = Vector2(58, 0) if narrow else Vector2(82, 0)
+			gear_column.add_theme_constant_override("separation", 4 if narrow else 10)
+			for tile in gear_column.get_children():
+				if tile is Button:
+					tile.custom_minimum_size = Vector2(56, 66) if narrow else Vector2(80, 80)
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(store_categories_grid):
@@ -416,12 +429,14 @@ func _build_tab_character_showcase() -> Control:
 	top_v.add_child(title_row)
 
 	commander_title_lbl = Label.new()
+	commander_title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	commander_title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	commander_title_lbl.add_theme_font_size_override("font_size", 15)
 	commander_title_lbl.add_theme_color_override("font_color", Color(1.0, 0.92, 0.42))
 	title_row.add_child(commander_title_lbl)
 
 	hero_power_lbl = Label.new()
+	hero_power_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hero_power_lbl.add_theme_font_size_override("font_size", 15)
 	hero_power_lbl.add_theme_color_override("font_color", Color(0.35, 1.0, 0.58))
 	title_row.add_child(hero_power_lbl)
@@ -557,7 +572,14 @@ func _build_tab_character_showcase() -> Control:
 
 	var skin_hbox := HBoxContainer.new()
 	skin_hbox.add_theme_constant_override("separation", 4)
-	sel_vbox.add_child(skin_hbox)
+	var skin_scroll := ScrollContainer.new()
+	skin_scroll.name = "OperatorSkinScroller"
+	skin_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	skin_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	skin_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	skin_scroll.custom_minimum_size = Vector2(0, 40)
+	sel_vbox.add_child(skin_scroll)
+	skin_scroll.add_child(skin_hbox)
 	var skin_lbl := Label.new()
 	skin_lbl.text = "Skin HD:"
 	skin_lbl.custom_minimum_size = Vector2(52, 0)
