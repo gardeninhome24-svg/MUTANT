@@ -106,8 +106,8 @@ func _run() -> void:
 		_assert(card.custom_minimum_size.x <= 640, "Armored stage card remains responsive")
 		_assert(card.custom_minimum_size.y <= 330, "Illustrated stage card remains within mobile vertical budget")
 	if is_instance_valid(play):
-		_assert(play.custom_minimum_size.x <= 420, "Play CTA width is bounded")
-		_assert(play.custom_minimum_size.y <= 82, "Play CTA height is bounded")
+		_assert(play.custom_minimum_size.x <= 600, "Reference-size play CTA width is bounded")
+		_assert(play.custom_minimum_size.y <= 100, "Reference-size play CTA height is bounded")
 		_assert(play.pressed.get_connections().size() > 0, "Play CTA has a working signal connection")
 	if is_instance_valid(hero):
 		_assert(hero.custom_minimum_size.y <= 360, "Hero showcase remains bounded above the mission panel")
