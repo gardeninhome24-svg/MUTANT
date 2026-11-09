@@ -1267,6 +1267,21 @@ func _refresh_inventory_tab_ui() -> void:
 		cell.add_child(click_b)
 		inv_grid.add_child(cell)
 
+	# Always display a Metin-style 30-cell bag; never hide items beyond 30.
+	for empty_index in range(maxi(0, 30 - filtered.size())):
+		var empty_slot := PanelContainer.new()
+		empty_slot.name = "BackpackEmpty_%02d" % empty_index
+		empty_slot.custom_minimum_size = Vector2(76, 95) if narrow_portrait_ui else (Vector2(104, 120) if StageDirector.is_portrait_mode() else Vector2(100, 110))
+		var empty_style := StyleBoxFlat.new()
+		empty_style.bg_color = Color(0.025, 0.055, 0.065, 0.95)
+		empty_style.set_border_width_all(2)
+		empty_style.border_color = Color(0.21, 0.36, 0.39, 0.75)
+		empty_style.set_corner_radius_all(5)
+		empty_slot.add_theme_stylebox_override("panel", empty_style)
+		inv_grid.add_child(empty_slot)
+	if is_instance_valid(inv_bag_heading):
+		inv_bag_heading.text = "PLECAK  %d / %d" % [filtered.size(), maxi(30, filtered.size())]
+	_refresh_inventory_quick_actions()
 	_refresh_inventory_detail_panel()
 
 func _refresh_inventory_quick_actions() -> void:
