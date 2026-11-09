@@ -480,7 +480,7 @@ func _build_base_tab_content() -> void:
 	# KARTA AKTUALNEGO ETAPU (Sci-Fi z obramowaniem cyjanowym card_stage_clean.png)
 	# --------------------------------------------------------------------------
 	stage_card = PanelContainer.new()
-	stage_card.custom_minimum_size = Vector2(500, 220)
+	stage_card.custom_minimum_size = Vector2(500, 270)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
 	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_STAGE, SurvivorVisualSystem.GOLD, true))
@@ -498,8 +498,8 @@ func _build_base_tab_content() -> void:
 	card_margin.add_child(stage_row)
 	stage_preview = TextureRect.new()
 	stage_preview.name = "StageEnvironmentPreview"
-	stage_preview.texture = load("res://assets/biomes/wasteland/stage_background.png")
-	stage_preview.custom_minimum_size = Vector2(156, 166)
+	stage_preview.texture = load("res://assets/ui/target_theme/stage_card_bg.png")
+	stage_preview.custom_minimum_size = Vector2(156, 205)
 	stage_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	stage_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -670,6 +670,9 @@ func _build_base_tab_content() -> void:
 
 	# A compact roadmap fills the formerly empty lower half with real progress,
 	# without adding fake rewards or another store widget.
+	var progress_gap := Control.new()
+	progress_gap.custom_minimum_size = Vector2(0, 18)
+	base_vbox.add_child(progress_gap)
 	var progress_card := PanelContainer.new()
 	progress_card.name = "CampaignProgressCard"
 	progress_card.custom_minimum_size = Vector2(0, 105)
@@ -1054,10 +1057,10 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(520.0 if portrait else 580.0, available_width), 222.0 if portrait else 240.0)
+		stage_card.custom_minimum_size = Vector2(minf(520.0 if portrait else 580.0, available_width), 270.0 if portrait else 260.0)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = not compact_hub
-		stage_preview.custom_minimum_size = Vector2(156, 166) if portrait else Vector2(175, 180)
+		stage_preview.custom_minimum_size = Vector2(156, 205) if portrait else Vector2(175, 180)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
