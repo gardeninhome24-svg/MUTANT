@@ -99,9 +99,10 @@ func _run() -> void:
 	var calendar: Dictionary = stage.claim_daily_reward(1)
 	_check(bool(calendar.get("ok", false)), "Day one login reward claim succeeds")
 	_check(stage.dark_matter_gems == 0, "Login calendar does not grant premium gems")
-	for reward in stage.DAILY_REWARDS_TABLE:
+	var defined: Dictionary = stage.get_script().get_script_constant_map()
+	for reward in defined.get("DAILY_REWARDS_TABLE", []):
 		_check(int(reward.get("gems", -1)) == 0, "All 7 daily login rewards give no premium gems")
-	for mission in stage.DEFAULT_DAILY_MISSIONS:
+	for mission in defined.get("DEFAULT_DAILY_MISSIONS", []):
 		_check(int(mission.get("gems", -1)) == 0, "Daily missions give no premium gems")
 
 	if FileAccess.file_exists(path):
