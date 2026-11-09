@@ -42,7 +42,7 @@ static func button_style(accent: Color, state: String = "normal") -> StyleBoxFla
 	return style
 
 static func decorate_button(button: Button, accent: Color = CYAN, minimum_height: float = 44.0) -> void:
-	button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, minimum_height)
+	button.custom_minimum_size = Vector2(button.custom_minimum_size.x, maxf(button.custom_minimum_size.y, minimum_height))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		button.add_theme_stylebox_override(state, button_style(accent, state))
 	button.add_theme_color_override("font_color", TEXT)
