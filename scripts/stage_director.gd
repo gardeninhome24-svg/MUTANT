@@ -620,6 +620,16 @@ func get_class_max_stage(cls_id: String) -> int:
 	var p: Dictionary = class_progression.get(cls_id, {})
 	return clampi(int(p.get("max_stage", 1)), 1, 100)
 
+func _parse_save_dictionary(raw: String) -> Dictionary:
+	# JSON.parse_string prints engine-level ERROR lines for intentionally
+	# corrupted QA files. The low-level parser returns a status without
+	# alarming players or making a recoverable backup look like a crash.
+	var parser := JSON.new()
+	if parser.parse(raw) != OK:
+		return {}
+	var data: Variant = parser.data
+	return data if data is Dictionary else {}
+
 func save_campaign_profile() -> void:
 	_sync_active_class_to_dict()
 	var data := {
@@ -670,7 +680,7 @@ func save_campaign_profile() -> void:
 	# This lets beta users recover from interrupted writes/corrupt JSON.
 	if FileAccess.file_exists(path):
 		var previous_raw := FileAccess.get_file_as_string(path)
-		if JSON.parse_string(previous_raw) is Dictionary:
+		if not _parse_save_dictionary(previous_raw).is_empty():
 			var backup_file := FileAccess.open(path + ".bak", FileAccess.WRITE)
 			if backup_file:
 				backup_file.store_string(previous_raw)
@@ -689,12 +699,12 @@ func load_campaign_profile() -> void:
 	var path := get_active_save_path()
 	var data: Variant = null
 	if FileAccess.file_exists(path):
-		data = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not (data is Dictionary) and FileAccess.file_exists(path + ".bak"):
-		data = JSON.parse_string(FileAccess.get_file_as_string(path + ".bak"))
-		if data is Dictionary:
+		data = _parse_save_dictionary(FileAccess.get_file_as_string(path))
+	if (not (data is Dictionary) or data.is_empty()) and FileAccess.file_exists(path + ".bak"):
+		data = _parse_save_dictionary(FileAccess.get_file_as_string(path + ".bak"))
+		if data is Dictionary and not data.is_empty():
 			push_warning("Restored valid campaign save from backup")
-	if data is Dictionary:
+	if data is Dictionary and not data.is_empty():
 		max_unlocked_stage = clampi(int(data.get("max_unlocked_stage", 1)), 1, 100)
 		current_stage = clampi(int(data.get("current_stage", 1)), 1, max_unlocked_stage)
 		selected_difficulty_id = String(data.get("selected_difficulty_id", "ocalaly"))
