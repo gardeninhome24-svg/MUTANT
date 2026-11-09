@@ -69,6 +69,12 @@ func _run() -> void:
 						_assert(action_button.pressed.get_connections().size() > 0, "Base shortcut has a live click handler")
 						_assert(action_button.icon != null, "Base shortcut uses actual artwork")
 
+	var campaign_continue: Button = menu.find_child("ContinueCampaignButton", true, false) as Button
+	_assert(is_instance_valid(campaign_continue), "Home has dedicated Continue Campaign action")
+	if is_instance_valid(campaign_continue):
+		_assert(campaign_continue.pressed.get_connections().size() > 0, "Continue Campaign has real navigation callback")
+		_assert(campaign_continue.custom_minimum_size.y >= 44.0, "Continue Campaign is touch friendly")
+
 	var navigation_buttons: Array = menu.get("nav_buttons")
 	_assert(navigation_buttons.size() == 5, "Five primary game tabs are present")
 	if navigation_buttons.size() == 5:
