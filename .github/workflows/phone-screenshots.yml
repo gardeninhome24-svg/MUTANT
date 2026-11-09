@@ -10,6 +10,7 @@ on:
       - "scripts/main.gd"
       - "scripts/main_menu.gd"
       - "scripts/user_profile_panel.gd"
+      - "scripts/ui/**"
       - "scripts/stage_director.gd"
       - "assets/ui/**"
       - "scenes/main/main.tscn"
