@@ -1534,6 +1534,7 @@ func _refresh_store_tab_ui() -> void:
 		b.modulate = Color(1.0, 0.88, 0.32) if (String(cid) == store_category_filter) else Color(0.82, 0.88, 0.96)
 
 	for c in store_cards_grid.get_children():
+		store_cards_grid.remove_child(c)
 		c.queue_free()
 
 	for prod in STORE_PRODUCTS:
@@ -1914,6 +1915,7 @@ func refresh_ui() -> void:
 func _refresh_daily_and_bp_ui() -> void:
 	if is_instance_valid(daily_grid):
 		for c in daily_grid.get_children():
+			daily_grid.remove_child(c)
 			c.queue_free()
 		for r in StageDirector.DAILY_REWARDS_TABLE:
 			var d_num := int(r["day"])
