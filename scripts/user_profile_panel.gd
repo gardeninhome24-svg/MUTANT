@@ -614,8 +614,8 @@ func _build_tab_character_showcase() -> Control:
 		s_btn.clip_text = true
 		s_btn.text = String(s_cfg["name"])
 		s_btn.pressed.connect(func():
-			if not StageDirector.unlocked_skins.has(s_key):
-				StageDirector.unlocked_skins.append(s_key)
+			if not StageDirector.unlocked_skins.has(s_key) and s_key != "default":
+				return
 			StageDirector.selected_skin_id = s_key
 			StageDirector.save_campaign_profile()
 			if is_instance_valid(player_ref):
@@ -1789,7 +1789,9 @@ func refresh_ui() -> void:
 		btn.modulate = Color(0.38, 1.0, 0.65) if (String(cid) == cls_id) else Color(0.85, 0.90, 1.0)
 	for sid in skin_buttons.keys():
 		var sbtn: Button = skin_buttons[sid]
-		sbtn.modulate = Color(1.0, 0.88, 0.35) if (String(sid) == StageDirector.selected_skin_id) else Color(0.82, 0.88, 0.96)
+		var skin_owned := StageDirector.unlocked_skins.has(String(sid)) or String(sid) == "default"
+		sbtn.disabled = not skin_owned
+		sbtn.modulate = Color(1.0, 0.88, 0.35) if (String(sid) == StageDirector.selected_skin_id) else (Color(0.82, 0.88, 0.96) if skin_owned else Color(0.48, 0.51, 0.58))
 
 	if is_instance_valid(left_slots_vbox) and is_instance_valid(right_slots_vbox):
 		for c in left_slots_vbox.get_children():
