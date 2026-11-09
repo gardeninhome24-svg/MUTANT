@@ -97,12 +97,40 @@ jobs:
           assert len(hashes) >= 10, "Screenshots are unexpectedly identical; scene switching or rendering may be broken"
           PY
 
+      - name: Build a browser-viewable visual review gallery
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html import escape
+          gallery = Path("/tmp/mutantsurvivor-phone-shots")
+          pictures = sorted(gallery.glob("*.png"))
+          cards = []
+          for picture in pictures:
+              label = escape(picture.stem.replace("_", " "))
+              name = escape(picture.name)
+              cards.append(f'<article><h2>{label}</h2><a href="{name}"><img src="{name}" loading="lazy" alt="{label}"></a></article>')
+          page = """<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>MutantSurvivor — Real Godot Visual QA</title>
+          <style>body{background:#0c1520;color:#eef7f8;font:16px system-ui;margin:24px}
+          h1{color:#c8ee45}p{color:#b0c1cd}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+          article{background:#16222e;border:1px solid #527279;border-radius:12px;padding:12px}
+          h2{font-size:15px;color:#f2c061}img{width:100%;max-width:420px;height:auto;display:block;margin:auto}
+          a:focus-visible{outline:3px solid #cbf15a}</style></head><body>
+          <h1>MutantSurvivor — rzeczywiste zrzuty Godota</h1>
+          <p>Renderowanie Xvfb, nie zrzuty z telefonu. Kliknij obraz, aby zobaczyć pełną rozdzielczość.</p>
+          <main>""" + "\n".join(cards) + "</main></body></html>"
+          (gallery / "index.html").write_text(page, encoding="utf-8")
+          print(f"Gallery generated: {len(pictures)} screenshots")
+          PY
+
       - name: Upload actual rendered screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: MutantSurvivor-Phone-Two-Resolutions-Screenshots
-          path: /tmp/mutantsurvivor-phone-shots/*.png
+          path: /tmp/mutantsurvivor-phone-shots/
           if-no-files-found: warn
           retention-days: 14
 
