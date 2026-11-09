@@ -1425,6 +1425,39 @@ func _build_tab_campaign_and_talents() -> Control:
 	campaign_hazard_lbl = mission_details.get_node("CampaignHazard") as Label
 	campaign_boss_lbl = mission_details.get_node("CampaignBossName") as Label
 	campaign_reward_lbl = mission_details.get_node("CampaignFirstRewards") as Label
+	# Large illustrated rewards are separate from the stage text, like the approved campaign art.
+	var reward_strip := PanelContainer.new()
+	reward_strip.name = "CampaignRewardStrip"
+	reward_strip.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PRODUCTION_METAL_PANEL, SurvivorVisualSystem.LIME, false))
+	c_vbox.add_child(reward_strip)
+	var reward_row := HBoxContainer.new()
+	reward_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	reward_row.add_theme_constant_override("separation", 6)
+	reward_strip.add_child(reward_row)
+	for reward_spec in [
+		{"id": "Credits", "icon": "res://assets/ui/target_theme/reward_cog.png", "caption": "KREDYTY"},
+		{"id": "Scrap", "icon": "res://assets/ui/target_theme/reward_cog.png", "caption": "ZŁOM"},
+		{"id": "Equipment", "icon": "res://assets/ui/target_theme/reward_xp.png", "caption": "RPG"}
+	]:
+		var reward_cell := VBoxContainer.new()
+		reward_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		reward_cell.alignment = BoxContainer.ALIGNMENT_CENTER
+		reward_row.add_child(reward_cell)
+		var reward_icon := TextureRect.new()
+		reward_icon.name = "CampaignRewardIcon" + String(reward_spec["id"])
+		reward_icon.texture = load(String(reward_spec["icon"])) as Texture2D
+		reward_icon.custom_minimum_size = Vector2(46, 40)
+		reward_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		reward_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		reward_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		reward_cell.add_child(reward_icon)
+		var reward_label := Label.new()
+		reward_label.name = "CampaignRewardValue" + String(reward_spec["id"])
+		reward_label.text = String(reward_spec["caption"])
+		reward_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		reward_label.add_theme_font_size_override("font_size", 14)
+		reward_label.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
+		reward_cell.add_child(reward_label)
 
 	# Use a compact directional row and a separate grid for chapter shortcuts.
 	# Nine buttons in one HBox can overflow the 9:16 campaign panel.
@@ -2133,6 +2166,12 @@ func refresh_ui() -> void:
 	campaign_hazard_lbl.text = "⚠  ZAGROŻENIE: %s" % haz_pl
 	campaign_boss_lbl.text = "☣  %s" % boss_name
 	campaign_reward_lbl.text = "PIERWSZA NAGRODA: +%d Kr  •  +%d Złomu  •  RPG" % [r_cred, r_scrap]
+	var credit_label: Label = find_child("CampaignRewardValueCredits", true, false) as Label
+	var scrap_label: Label = find_child("CampaignRewardValueScrap", true, false) as Label
+	if is_instance_valid(credit_label):
+		credit_label.text = "+%d Kr" % r_cred
+	if is_instance_valid(scrap_label):
+		scrap_label.text = "+%d Złomu" % r_scrap
 
 	var diff_cfg := StageDirector.get_difficulty_profile()
 	diff_info_lbl.text = "Trudność: %s (HP x%.2f | Nagrody x%.2f)" % [
