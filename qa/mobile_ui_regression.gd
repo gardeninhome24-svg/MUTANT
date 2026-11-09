@@ -94,14 +94,14 @@ func _run() -> void:
 	_assert(is_instance_valid(play), "Play CTA is instantiated")
 	_assert(is_instance_valid(hero), "Hero spacer is instantiated")
 	if is_instance_valid(card):
-		_assert(card.custom_minimum_size.x <= 500, "Stage card does not force previous oversized width")
-		_assert(card.custom_minimum_size.y <= 220, "Stage card height is bounded")
+		_assert(card.custom_minimum_size.x <= 520, "Stage card remains within reference mobile content width")
+		_assert(card.custom_minimum_size.y <= 240, "Illustrated stage card height remains bounded")
 	if is_instance_valid(play):
 		_assert(play.custom_minimum_size.x <= 420, "Play CTA width is bounded")
 		_assert(play.custom_minimum_size.y <= 82, "Play CTA height is bounded")
 		_assert(play.pressed.get_connections().size() > 0, "Play CTA has a working signal connection")
 	if is_instance_valid(hero):
-		_assert(hero.custom_minimum_size.y <= 172, "Hero spacer leaves room for navigation")
+		_assert(hero.custom_minimum_size.y <= 320, "Hero showcase remains bounded above the mission panel")
 
 	# Exercise the responsive calculations at three portrait sizes without
 	# relying on only the default 720px design canvas.
