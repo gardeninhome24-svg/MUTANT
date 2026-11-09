@@ -280,6 +280,15 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 			for tile in gear_column.get_children():
 				if tile is Button:
 					tile.custom_minimum_size = Vector2(56, 66) if narrow else Vector2(80, 80)
+	var welcome_art := find_child("WelcomePackageArtwork", true, false) as TextureRect
+	if is_instance_valid(welcome_art):
+		welcome_art.custom_minimum_size = Vector2(120, 122) if narrow else Vector2(235, 156)
+	var welcome_title := find_child("WelcomePackageTitle", true, false) as Label
+	if is_instance_valid(welcome_title):
+		welcome_title.add_theme_font_size_override("font_size", 16 if narrow else 24)
+	var welcome_panel := find_child("StoreDepotBanner", true, false) as PanelContainer
+	if is_instance_valid(welcome_panel):
+		welcome_panel.custom_minimum_size = Vector2(0, 145 if narrow else 186)
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(store_categories_grid):
@@ -1601,7 +1610,7 @@ func _build_tab_premium_store() -> Control:
 	# while product descriptions remain on solid readable cards below.
 	var depot_frame := PanelContainer.new()
 	depot_frame.name = "StoreDepotBanner"
-	depot_frame.custom_minimum_size = Vector2(0, 130)
+	depot_frame.custom_minimum_size = Vector2(0, 186)
 	depot_frame.clip_contents = true
 	depot_frame.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
 	vbox.add_child(depot_frame)
@@ -1619,8 +1628,9 @@ func _build_tab_premium_store() -> Control:
 	depot_row.add_theme_constant_override("separation", 12)
 	depot_frame.add_child(depot_row)
 	var depot_crate := TextureRect.new()
-	depot_crate.texture = load("res://assets/ui/target_theme/prop_crate.png")
-	depot_crate.custom_minimum_size = Vector2(112, 106)
+	depot_crate.name = "WelcomePackageArtwork"
+	depot_crate.texture = load("res://assets/ui/target_theme/welcome_pack_reference.png")
+	depot_crate.custom_minimum_size = Vector2(235, 156)
 	depot_crate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	depot_crate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	depot_crate.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1630,9 +1640,10 @@ func _build_tab_premium_store() -> Control:
 	depot_copy.alignment = BoxContainer.ALIGNMENT_CENTER
 	depot_row.add_child(depot_copy)
 	var depot_title := Label.new()
+	depot_title.name = "WelcomePackageTitle"
 	depot_title.text = "PAKIET POWITALNY"
 	depot_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	SurvivorVisualSystem.decorate_section(depot_title, SurvivorVisualSystem.GOLD, 18)
+	SurvivorVisualSystem.decorate_section(depot_title, SurvivorVisualSystem.GOLD, 24)
 	depot_copy.add_child(depot_title)
 	var depot_subtitle := Label.new()
 	depot_subtitle.text = "+150 kredytów  •  +5 złomu"
@@ -1650,14 +1661,14 @@ func _build_tab_premium_store() -> Control:
 	var b_title := Label.new()
 	b_title.text = "ZBROJOWNIA • SKLEP OPERATORA"
 	b_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	b_title.add_theme_font_size_override("font_size", 14)
+	b_title.add_theme_font_size_override("font_size", 25)
 	b_title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.30))
 	b_vbox.add_child(b_title)
 
 	sandbox_status_lbl = Label.new()
 	sandbox_status_lbl.text = "Skórki kupujesz za kryształy. Kredyty, złom i ekwipunek zdobywasz w rozgrywce. Zakup kryształów za pieniądze jest jeszcze wyłączony."
 	sandbox_status_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	sandbox_status_lbl.add_theme_font_size_override("font_size", 11)
+	sandbox_status_lbl.add_theme_font_size_override("font_size", 13)
 	sandbox_status_lbl.add_theme_color_override("font_color", Color(0.75, 0.92, 1.0))
 	b_vbox.add_child(sandbox_status_lbl)
 
@@ -1723,13 +1734,22 @@ func _build_tab_premium_store() -> Control:
 	store_cards_grid.add_theme_constant_override("v_separation", 8)
 	vbox.add_child(store_cards_grid)
 
+	# The art direction puts branding before the welcome chest and the
+	# single drop-odds action below it. Reparent only live Godot controls:
+	# rewards, purchases and all click handlers remain connected.
+	free_daily_pack_btn.reparent(depot_copy)
+	top_actions_h.reparent(vbox)
+	vbox.move_child(banner, 0)
+	vbox.move_child(depot_frame, 1)
+	vbox.move_child(top_actions_h, 2)
+
 	return vbox
 
 func _refresh_store_tab_ui() -> void:
 	if not is_instance_valid(store_cards_grid):
 		return
 	if is_instance_valid(free_daily_pack_btn):
-		free_daily_pack_btn.text = "✓ ZAOPATRZENIE ODEBRANE" if StageDirector.daily_free_pack_claimed else "ODBIERZ ZAOPATRZENIE: +150 Kr, +5 Złomu"
+		free_daily_pack_btn.text = "✓ ODEBRANO" if StageDirector.daily_free_pack_claimed else "ODBIERZ ZAOPATRZENIE"
 		free_daily_pack_btn.disabled = StageDirector.daily_free_pack_claimed
 	for cid in store_cat_btns.keys():
 		var b: Button = store_cat_btns[cid]
@@ -1760,7 +1780,7 @@ func _refresh_store_tab_ui() -> void:
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 280.0)
+		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 225.0)
 		var frame_path: String = ""
 		if p_id == "skin_neon_hunter":
 			frame_path = "res://assets/ui/target_theme/offer_frame_cyan.png"
@@ -1792,7 +1812,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(String(prod["icon"]))
-		ic.custom_minimum_size = Vector2(135, 148)
+		ic.custom_minimum_size = Vector2(110, 130)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		top_h.add_child(ic)
