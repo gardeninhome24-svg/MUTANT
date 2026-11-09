@@ -75,6 +75,13 @@ func _run() -> void:
 		if is_instance_valid(jumps):
 			_assert(jumps.columns == 5, "Five campaign shortcuts occupy their own grid")
 			_assert(jumps.get_child_count() == 5, "Five chapter shortcuts are present")
+		var skins: Dictionary = profile.get("skin_buttons")
+		var stage_manager = root.get_node_or_null("StageDirector")
+		if stage_manager != null:
+			for skin_id in skins.keys():
+				var skin_button: Button = skins[skin_id]
+				if not stage_manager.unlocked_skins.has(String(skin_id)) and String(skin_id) != "default":
+					_assert(skin_button.disabled, "Unowned premium skin %s cannot be selected for free" % String(skin_id))
 		var inv_grid: GridContainer = profile.get("inv_grid") as GridContainer
 		var filter_grid: GridContainer = profile.get("inv_slot_filters_grid") as GridContainer
 		_assert(is_instance_valid(inv_grid), "Backpack slot grid exists")
