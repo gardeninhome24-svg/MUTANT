@@ -147,7 +147,7 @@ func _build_commercial_hub_ui() -> void:
 	account_xp_bar.custom_minimum_size = Vector2(72, 6)
 	account_xp_bar.show_percentage = false
 	account_xp_bar.max_value = 100.0
-	account_xp_bar.value = 65.0
+	account_xp_bar.value = 0.0
 	var xp_bg := StyleBoxFlat.new()
 	xp_bg.bg_color = Color(0.08, 0.16, 0.24, 0.9)
 	xp_bg.corner_radius_top_left = 3
