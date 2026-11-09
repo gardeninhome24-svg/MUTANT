@@ -11,6 +11,10 @@ const STAGES_JSON_PATH := "res://gamedesign/etapy_001_100.json"
 const DIFFICULTY_JSON_PATH := "res://gamedesign/PROFILE_TRUDNOSCI.json"
 const V1_DATA_DIR := "res://mutant_v1/data/"
 const DEFAULT_SAVE_PATH := "user://mutant_campaign_save.json"
+# Closed beta only. Set to false before public release. Does not alter prices,
+# rewards or payment logic. Grants once per save, including legacy beta saves.
+const BETA_TEST_GEMS_ENABLED: bool = true
+const BETA_TEST_GEMS_AMOUNT: int = 10000
 
 static var save_path_override: String = ""
 
@@ -37,7 +41,8 @@ var selected_skin_id: String = "default"
 var character_level: int = 1
 var character_xp: int = 0
 var credits: int = 350
-var dark_matter_gems: int = 180
+var dark_matter_gems: int = 0
+var beta_test_gems_granted: bool = false
 var scrap_materials: int = 12
 var cleared_stages: Dictionary = {} # stage_num (String) -> best_stars (int)
 var first_clears_v2: Dictionary = {} # mission_id (String) -> bool
@@ -354,6 +359,7 @@ func _ready() -> void:
 	_setup_audio_synthesizer()
 	_load_static_json_data()
 	load_campaign_profile()
+	_grant_beta_test_gems_once()
 	_ensure_starter_equipment()
 	_ensure_daily_missions()
 	refresh_attempts()
@@ -526,6 +532,14 @@ func toggle_orientation_mode() -> void:
 func get_active_save_path() -> String:
 	return save_path_override if not save_path_override.is_empty() else DEFAULT_SAVE_PATH
 
+func _grant_beta_test_gems_once() -> bool:
+	if not BETA_TEST_GEMS_ENABLED or beta_test_gems_granted:
+		return false
+	dark_matter_gems += BETA_TEST_GEMS_AMOUNT
+	beta_test_gems_granted = true
+	save_campaign_profile()
+	return true
+
 func _sync_active_class_to_dict() -> void:
 	if not class_progression.has(selected_class_id):
 		class_progression[selected_class_id] = {}
@@ -596,6 +610,7 @@ func save_campaign_profile() -> void:
 		"character_xp": character_xp,
 		"credits": credits,
 		"dark_matter_gems": dark_matter_gems,
+		"beta_test_gems_granted": beta_test_gems_granted,
 		"scrap_materials": scrap_materials,
 		"cleared_stages": cleared_stages,
 		"first_clears_v2": first_clears_v2,
@@ -663,7 +678,10 @@ func load_campaign_profile() -> void:
 		character_level = clampi(int(data.get("character_level", 1)), 1, 100)
 		character_xp = maxi(0, int(data.get("character_xp", 0)))
 		credits = maxi(0, int(data.get("credits", 350)))
+		# Existing accounts retain their balance; new accounts start at 0 before
+		# the one-time beta grant. The legacy 180 fallback only covers old saves.
 		dark_matter_gems = maxi(0, int(data.get("dark_matter_gems", 180)))
+		beta_test_gems_granted = bool(data.get("beta_test_gems_granted", false))
 		scrap_materials = maxi(0, int(data.get("scrap_materials", 12)))
 		attempts = clampi(int(data.get("attempts", 5)), 0, 5)
 		next_attempt_at = int(data.get("next_attempt_at", 0))
