@@ -115,6 +115,12 @@ func _test_rewards() -> void:
 	_assert(not bool(repeat.get("is_first_clear", true)), "Replay does not repeat first-clear entitlement")
 	_assert(StageDirector.max_unlocked_stage == 2, "Replay cannot skip further stages")
 
+func _get_daily_progress(mission_id: String) -> int:
+	for entry in StageDirector.daily_missions:
+		if entry is Dictionary and String(entry.get("id", "")) == mission_id:
+			return int(entry.get("progress", 0))
+	return 0
+
 func _test_combat_and_bosses() -> void:
 	var packed: PackedScene = load("res://scenes/main/main.tscn") as PackedScene
 	_assert(packed != null, "Battle scene loads")
@@ -130,6 +136,16 @@ func _test_combat_and_bosses() -> void:
 	_assert(int(battle.get("current_wave_num")) == 1, "Battle starts at wave 1")
 	# Stop automatic time progression while exercising deterministic wave transitions.
 	battle.set_process(false)
+	var kills_before: int = _get_daily_progress("kill_mutants")
+	battle.call("spawn_wave_enemy")
+	var enemies: Array[Node] = get_nodes_in_group("enemies")
+	_assert(not enemies.is_empty(), "Wave spawns a real mutant")
+	if not enemies.is_empty():
+		var mutant: MutantEnemy = enemies[0] as MutantEnemy
+		if is_instance_valid(mutant):
+			mutant.take_damage(mutant.max_health + 500.0)
+			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "One mutant death counts as exactly one daily kill")
+			_assert(int(battle.get("enemies_killed_in_run")) == 1, "Mutant death updates run kill counter")
 	battle.call("start_wave", 1, 5)
 	_assert(int(battle.get("current_wave_num")) == 5, "Wave 5 can be started")
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 5 spawns a miniboss")
@@ -145,7 +161,10 @@ func _test_combat_and_bosses() -> void:
 	battle.set("boss_spawned_this_run", true)
 	battle.set("boss_killed_this_run", false)
 	_assert(not bool(battle.call("_can_claim_victory")), "Cannot win while the final boss lives")
-	battle.set("boss_killed_this_run", true)
+	var final_boss: MutantEnemy = battle.get("active_boss") as MutantEnemy
+	if is_instance_valid(final_boss):
+		final_boss.take_damage(final_boss.max_health + 500.0)
+	_assert(bool(battle.get("boss_killed_this_run")), "Killing final boss updates victory requirement")
 	_assert(bool(battle.call("_can_claim_victory")), "Win is possible after boss and objective completion")
 	# Exercise the actual victory screen/state without spending attempts or granting rewards.
 	battle.call("_on_stage_victory")
