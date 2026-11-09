@@ -1,0 +1,78 @@
+name: MutantSurvivor Signed Android Release (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  signed-release:
+    name: Signed release APK (requires private keystore)
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      ANDROID_HOME: /usr/lib/android-sdk
+      ANDROID_SDK_ROOT: /usr/lib/android-sdk
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Configure Godot and Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable" "$HOME/.config/godot"
+          cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          cp -a /root/.config/godot/. "$HOME/.config/godot/"
+          test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_release.apk"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          godot --version
+
+      - name: Import resources and smoke-test menu
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit
+          godot --headless --path . --quit-after 30 2>&1 | tee /tmp/release-startup.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource)" /tmp/release-startup.log; then
+            echo "::error::Startup errors detected. Signed release blocked."
+            exit 1
+          fi
+
+      - name: Sign and export release APK
+        shell: bash
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ENCODED_KEYSTORE" ] || [ -z "$RELEASE_KEY_ALIAS" ] || [ -z "$RELEASE_KEY_PASSWORD" ]; then
+            echo "::error::Missing release signing secrets. Do not reuse debug or temporary keys."
+            exit 1
+          fi
+          mkdir -p build/android
+          umask 077
+          KEYSTORE_FILE="$(mktemp /tmp/mutantsurvivor-release.XXXXXX.keystore)"
+          trap 'rm -f "$KEYSTORE_FILE"' EXIT
+          printf '%s' "$ENCODED_KEYSTORE" | base64 --decode > "$KEYSTORE_FILE"
+          test -s "$KEYSTORE_FILE"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$KEYSTORE_FILE"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_USER="$RELEASE_KEY_ALIAS"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$RELEASE_KEY_PASSWORD"
+          godot --headless --path . --export-release "Android" build/android/MutantSurvivor-release.apk
+          test -s build/android/MutantSurvivor-release.apk
+          sha256sum build/android/MutantSurvivor-release.apk
+
+      - name: Archive signed APK (not automatically published)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-SIGNED-RELEASE-APK
+          path: build/android/MutantSurvivor-release.apk
+          if-no-files-found: error
+          retention-days: 30
