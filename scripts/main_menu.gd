@@ -1144,8 +1144,8 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(mission_description):
 		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 12)
 	if is_instance_valid(stage_preview):
-		stage_preview.visible = not compact_hub
-		stage_preview.custom_minimum_size = Vector2(156, 205) if portrait else Vector2(175, 180)
+		stage_preview.visible = true
+		stage_preview.custom_minimum_size = Vector2(96, 174) if compact_hub else (Vector2(156, 205) if portrait else Vector2(175, 180))
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(560.0 if portrait else 600.0, available_width), 92.0 if portrait else 100.0)
 	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
