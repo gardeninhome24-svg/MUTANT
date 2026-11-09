@@ -111,6 +111,7 @@ var lang: String = "pl" # "pl", "en", "de"
 var is_online_mode: bool = true
 var last_known_unix_time: int = 0
 var daily_free_pack_claimed: bool = false
+var daily_reset_day: int = -1 # UTC day index; preserve existing daily claims when upgrading saves.
 var daily_missions: Array = []
 
 var _sfx_player: AudioStreamPlayer = null
@@ -355,6 +356,7 @@ func _ready() -> void:
 	_ensure_starter_equipment()
 	_ensure_daily_missions()
 	refresh_attempts()
+	_refresh_daily_progress()
 	call_deferred("set_orientation_mode", orientation_mode, true)
 
 func _setup_audio_synthesizer() -> void:
@@ -603,6 +605,7 @@ func save_campaign_profile() -> void:
 		"daily_login_day": daily_login_day,
 		"daily_claimed_days": daily_claimed_days,
 		"daily_free_pack_claimed": daily_free_pack_claimed,
+		"daily_reset_day": daily_reset_day,
 		"daily_missions": daily_missions,
 		"battle_pass_xp": battle_pass_xp,
 		"battle_pass_premium_unlocked": battle_pass_premium_unlocked,
@@ -646,6 +649,7 @@ func load_campaign_profile() -> void:
 		last_known_unix_time = int(data.get("last_known_unix_time", 0))
 		daily_login_day = clampi(int(data.get("daily_login_day", 1)), 1, 7)
 		daily_free_pack_claimed = bool(data.get("daily_free_pack_claimed", false))
+		daily_reset_day = int(data.get("daily_reset_day", -1))
 		battle_pass_xp = maxi(0, int(data.get("battle_pass_xp", 450)))
 		battle_pass_premium_unlocked = bool(data.get("battle_pass_premium_unlocked", false))
 		vip_sandbox_active = bool(data.get("vip_sandbox_active", false))
@@ -685,12 +689,28 @@ func load_campaign_profile() -> void:
 			}
 			_sync_active_class_from_dict()
 
+func _refresh_daily_progress() -> void:
+	# Advance only when the effective clock moves forward; never reward clock rollback.
+	var effective_now := maxi(int(Time.get_unix_time_from_system()), last_known_unix_time)
+	var today := int(effective_now / 86400)
+	if daily_reset_day < 0:
+		# Existing saves may have a claimed pack: do not grant it a second time on migration.
+		daily_reset_day = today
+		save_campaign_profile()
+	elif today > daily_reset_day:
+		daily_reset_day = today
+		daily_free_pack_claimed = false
+		daily_missions.clear()
+		_ensure_daily_missions()
+		save_campaign_profile()
+
 func _ensure_daily_missions() -> void:
 	if daily_missions.is_empty():
 		for m in DEFAULT_DAILY_MISSIONS:
 			daily_missions.append((m as Dictionary).duplicate(true))
 
 func record_daily_mission_progress(mission_id: String, amount: int = 1) -> void:
+	_refresh_daily_progress()
 	_ensure_daily_missions()
 	for i in range(daily_missions.size()):
 		var m: Dictionary = daily_missions[i]
@@ -700,6 +720,7 @@ func record_daily_mission_progress(mission_id: String, amount: int = 1) -> void:
 			daily_missions[i] = m
 
 func claim_daily_mission(mission_id: String) -> bool:
+	_refresh_daily_progress()
 	_ensure_daily_missions()
 	for i in range(daily_missions.size()):
 		var m: Dictionary = daily_missions[i]
@@ -718,6 +739,7 @@ func claim_daily_mission(mission_id: String) -> bool:
 	return false
 
 func claim_daily_free_shop_pack() -> bool:
+	_refresh_daily_progress()
 	if daily_free_pack_claimed:
 		return false
 	daily_free_pack_claimed = true
@@ -729,6 +751,7 @@ func claim_daily_free_shop_pack() -> bool:
 	return true
 
 func get_daily_reset_countdown_str() -> String:
+	_refresh_daily_progress()
 	var now_u := int(Time.get_unix_time_from_system())
 	var sec_in_day := 86400
 	var rem := sec_in_day - (now_u % sec_in_day)
