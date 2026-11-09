@@ -1431,13 +1431,32 @@ func _build_tab_premium_store() -> Control:
 	depot_frame.clip_contents = true
 	depot_frame.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
 	vbox.add_child(depot_frame)
-	var depot_image := TextureRect.new()
-	depot_image.texture = load("res://assets/ui/target_theme/bg_store_depot.png")
-	depot_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	depot_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	depot_image.modulate = Color(0.87, 0.91, 0.97, 0.92)
-	depot_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	depot_frame.add_child(depot_image)
+	# Actual welcome content; avoid a blank decorative rectangle on 420px phones.
+	var depot_row := HBoxContainer.new()
+	depot_row.add_theme_constant_override("separation", 12)
+	depot_frame.add_child(depot_row)
+	var depot_crate := TextureRect.new()
+	depot_crate.texture = load("res://assets/ui/target_theme/prop_crate.png")
+	depot_crate.custom_minimum_size = Vector2(112, 106)
+	depot_crate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	depot_crate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	depot_crate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	depot_row.add_child(depot_crate)
+	var depot_copy := VBoxContainer.new()
+	depot_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	depot_copy.alignment = BoxContainer.ALIGNMENT_CENTER
+	depot_row.add_child(depot_copy)
+	var depot_title := Label.new()
+	depot_title.text = "PAKIET POWITALNY"
+	depot_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	SurvivorVisualSystem.decorate_section(depot_title, SurvivorVisualSystem.GOLD, 18)
+	depot_copy.add_child(depot_title)
+	var depot_subtitle := Label.new()
+	depot_subtitle.text = "+150 kredytów  •  +5 złomu"
+	depot_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	depot_subtitle.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
+	depot_subtitle.add_theme_font_size_override("font_size", 13)
+	depot_copy.add_child(depot_subtitle)
 
 	var banner := _create_subpanel(Color(1.0, 0.80, 0.22, 0.90))
 	vbox.add_child(banner)
@@ -1578,7 +1597,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(String(prod["icon"]))
-		ic.custom_minimum_size = Vector2(92, 94)
+		ic.custom_minimum_size = Vector2(106, 112)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		top_h.add_child(ic)
