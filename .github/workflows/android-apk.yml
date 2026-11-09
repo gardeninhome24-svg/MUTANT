@@ -58,6 +58,16 @@ jobs:
           set -euo pipefail
           godot --headless --path . --script res://qa/prebeta_validation.gd
 
+      - name: Full 100-stage F2P progression and rewards audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/campaign_100_f2p.gd 2>&1 | tee /tmp/campaign-100-f2p.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource|F2P FAIL:|F2P FAILED:)" /tmp/campaign-100-f2p.log; then
+            echo "::error::100-stage F2P progression regression failed."
+            exit 1
+          fi
+
       - name: Gameplay regression (bosses, rewards, equipment, saves)
         shell: bash
         run: |
