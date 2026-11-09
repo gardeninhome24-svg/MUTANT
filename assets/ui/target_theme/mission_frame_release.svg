@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="380" viewBox="0 0 640 380">
+<defs>
+<linearGradient id="steel" x2=".7" y2="1"><stop stop-color="#81979b"/><stop offset=".18" stop-color="#1d3035"/><stop offset=".52" stop-color="#10191c"/><stop offset=".8" stop-color="#536266"/><stop offset="1" stop-color="#a6acaa"/></linearGradient>
+<linearGradient id="inside" x2="0" y2="1"><stop stop-color="#142c2e"/><stop offset=".37" stop-color="#08171a"/><stop offset="1" stop-color="#03090d"/></linearGradient>
+<linearGradient id="flare" x2="1" y2="0"><stop stop-color="#7cda16"/><stop offset=".4" stop-color="#193a17"/><stop offset="1" stop-color="#7ed40b"/></linearGradient>
+</defs>
+<path d="M20 9H620L635 28V345L609 371H30L4 351V31Z" fill="#030809" stroke="#020709" stroke-width="7"/>
+<path d="M25 5H614L637 28V348L615 376H27L2 352V28Z" fill="url(#steel)" stroke="#a3b5b5" stroke-width="3"/>
+<path d="M36 21H603L618 38V338L601 359H39L20 339V38Z" fill="url(#inside)" stroke="#010609" stroke-width="4"/>
+<path d="M28 50V28L47 15H110M530 15H601L626 40V85" fill="none" stroke="#cad0cc" stroke-width="4"/>
+<path d="M18 127V304M622 110V298" stroke="#496166" stroke-width="5"/>
+<path d="M26 65V140M26 276V334M612 44V120M612 275V345" stroke="#a1e922" stroke-width="4"/>
+<path d="M42 29H596" stroke="#83ca12" stroke-width="2" opacity=".78"/>
+<path d="M42 349H594" stroke="#94cc22" stroke-width="3"/>
+<path d="M72 365H280M365 365H560" stroke="#d58b18" stroke-width="5"/>
+<path d="M56 8H168L146 17H78ZM470 8H568L550 17H490Z" fill="#e6a02b"/>
+<path d="M58 370H190L176 377H72ZM446 370H560L548 377H466Z" fill="#9edf19"/>
+<path d="M44 24H85M95 24H136M146 24H187" stroke="#e19c24" stroke-width="5"/>
+<path d="M466 354H507M517 354H557M567 354H600" stroke="#c98c16" stroke-width="6"/>
+<path d="M23 26L42 13H76M621 350L602 369H564" fill="none" stroke="#c9d4d5" stroke-width="3"/>
+<path d="M30 58H50M590 58H610M30 324H50M590 324H610" stroke="#ed9b23" stroke-width="5"/>
+<path d="M55 53H585" stroke="#3b6463" stroke-width="2" opacity=".6"/>
+<path d="M55 328H585" stroke="#132a2a" stroke-width="2"/>
+<circle cx="24" cy="40" r="4" fill="#02090b" stroke="#b9c5c5"/><circle cx="617" cy="40" r="4" fill="#02090b" stroke="#b9c5c5"/>
+<circle cx="25" cy="341" r="4" fill="#02090b" stroke="#b9c5c5"/><circle cx="614" cy="341" r="4" fill="#02090b" stroke="#b9c5c5"/>
+</svg>
