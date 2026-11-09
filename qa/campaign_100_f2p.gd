@@ -40,7 +40,7 @@ func _run() -> void:
 	stage.current_stage = 1
 	stage.max_unlocked_stage = 1
 	stage.credits = 350
-	stage.dark_matter_gems = 180
+	stage.dark_matter_gems = 0
 	stage.scrap_materials = 12
 	stage.battle_pass_xp = 0
 	stage.inventory = []
@@ -82,7 +82,7 @@ func _run() -> void:
 		_check(int(stage.max_unlocked_stage) == mini(100, n + 1), "Stage %03d unlocks next stage only" % n)
 		_check(int(result.get("earned_credits", 0)) > 0, "Stage %03d gives F2P credits" % n)
 		_check(int(result.get("earned_character_xp", 0)) > 0, "Stage %03d gives F2P account XP" % n)
-		_check(stage.credits >= 0 and stage.dark_matter_gems == 180, "No premium currency spent after stage %03d" % n)
+		_check(stage.credits >= 0 and stage.dark_matter_gems == 0, "All 100 stages playable with zero premium balance after stage %03d" % n)
 		_check(stage.purchased_sandbox_packs.is_empty(), "No test-store top-ups after stage %03d" % n)
 		if n == 1 or n == 50 or n == 100:
 			print("F2P CHECKPOINT stage=%d unlocked=%d credits=%d XP=%d gear=%d" % [
