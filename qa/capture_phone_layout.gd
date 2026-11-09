@@ -123,6 +123,12 @@ func _capture() -> void:
 	root.add_child(compact_menu)
 	await process_frame
 	compact_menu.call("_apply_responsive_menu_layout")
+	compact_menu.call("switch_hub_tab", 0)
+	for i in range(3):
+		await process_frame
+	if not await _shot("14_menu_420x933.png"):
+		quit(1)
+		return
 	compact_menu.call("switch_hub_tab", 4)
 	for i in range(4):
 		await process_frame
