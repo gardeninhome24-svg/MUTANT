@@ -86,6 +86,10 @@ func _capture() -> void:
 	# Actually resize the GUI window; passing 420 to a layout function while
 	# keeping a 720px viewport produced a misleading screenshot previously.
 	var compact_size := Vector2i(420, 933)
+	# The configured portrait canvas is 720 logical pixels. Override its
+	# content scale here too: otherwise 420 physical pixels merely show a
+	# shrunken 720px UI and do not exercise true narrow layouts.
+	root.content_scale_size = compact_size
 	root.size = compact_size
 	DisplayServer.window_set_size(compact_size)
 	for i in range(6):
