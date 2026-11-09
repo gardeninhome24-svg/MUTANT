@@ -101,6 +101,43 @@ jobs:
             exit 1
           fi
 
+      - name: Publish QA results in workflow summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## MutantSurvivor — pre-beta automated tests"
+            echo ""
+            echo "Commit: \`$GITHUB_SHA\`"
+            echo ""
+            echo "| QA stage | Result |"
+            echo "|---|---|"
+            for entry in "Campaign 100 F2P:/tmp/campaign-100-f2p.log" "Gameplay bosses, rewards, equipment, saves:/tmp/gameplay-regression.log" "Menu startup:/tmp/mutantsurvivor-startup.log" "Combat startup:/tmp/mutantsurvivor-combat.log"; do
+              name="${entry%%:*}"
+              log="${entry#*:}"
+              if [ -s "$log" ]; then
+                echo "| $name | Log available |"
+              else
+                echo "| $name | Not executed or no log |"
+              fi
+            done
+            echo ""
+            echo "Actual test status is shown by each job step (green/red), not by log existence. Android device QA is still required."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve headless QA logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-QA-failure-logs
+          path: |
+            /tmp/campaign-100-f2p.log
+            /tmp/gameplay-regression.log
+            /tmp/mutantsurvivor-startup.log
+            /tmp/mutantsurvivor-combat.log
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Export Android debug APK
         run: |
           mkdir -p build/android
