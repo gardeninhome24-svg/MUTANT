@@ -126,6 +126,11 @@ func _run() -> void:
 		if stage_manager_narrow != null:
 			stage_manager_narrow.orientation_mode = "portrait"
 		profile.call("_apply_responsive_metrics", 420.0)
+		var pedestal: PanelContainer = profile.get("hero_pedestal") as PanelContainer
+		_assert(is_instance_valid(pedestal), "Character showcase has a real illustrated hangar panel")
+		if is_instance_valid(pedestal):
+			_assert(pedestal.custom_minimum_size.x <= 166.0, "420px character display does not force a 280px pedestal")
+			_assert(is_instance_valid(pedestal.get_node_or_null("ArmoryBackdrop")), "Operator hangar art exists within character panel")
 		if is_instance_valid(inv_grid):
 			_assert(inv_grid.columns == 2, "420px backpack shows two touch-friendly columns")
 		if is_instance_valid(filter_grid):
