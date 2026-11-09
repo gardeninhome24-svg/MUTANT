@@ -35,6 +35,7 @@ func _run() -> void:
 	_test_starter_gear()
 	_test_equipment_and_save()
 	_test_rarity_fusion_protection()
+	_test_premium_chest_safety()
 	_test_rewards()
 	await _test_combat_and_bosses()
 	# Test files live only inside the CI runner, never inside an APK.
@@ -148,6 +149,27 @@ func _test_rarity_fusion_protection() -> void:
 	_assert(String(result.get("rarity", "")) == "rare", "Fusion gives exactly rare, never common")
 	_assert(stage.inventory.size() == 1, "Successful fusion replaces three inputs with one item")
 	_assert(not stage.equipped_items.has("weapon"), "Successful fusion unequips consumed item")
+
+func _test_premium_chest_safety() -> void:
+	# A 50th chest at stage 1 cannot contain the guaranteed legendary
+	# (legendary templates begin at stage 47). It must cost nothing and
+	# keep the pity guarantee for a later eligible stage.
+	stage.max_unlocked_stage = 1
+	stage.dark_matter_gems = 100
+	stage.beta_test_gems_remaining = 0
+	stage.pity_chest_counter = 49
+	var items_before: int = stage.inventory.size()
+	var item: Dictionary = stage.open_purchased_chest(50)
+	_assert(item.is_empty(), "Locked guaranteed legendary chest refuses early-stage purchase")
+	_assert(stage.dark_matter_gems == 100, "Rejected chest never charges premium currency")
+	_assert(stage.pity_chest_counter == 49, "Rejected guaranteed chest preserves pity count")
+	_assert(stage.inventory.size() == items_before, "Rejected chest does not add junk loot")
+	stage.max_unlocked_stage = 47
+	item = stage.open_purchased_chest(50)
+	_assert(not item.is_empty(), "Guaranteed legendary chest unlocks on stage 47")
+	_assert(String(item.get("rarity", "")) == "legendary", "Pity chest awards promised legendary rarity")
+	_assert(stage.dark_matter_gems == 50, "Successful chest charges once")
+	_assert(stage.pity_chest_counter == 0, "Successful pity chest resets guarantee")
 
 func _test_rewards() -> void:
 	# Practice wins and losses must never grant persistent rewards.
