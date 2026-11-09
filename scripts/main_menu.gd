@@ -50,6 +50,7 @@ var diff_btn: Button = null
 var play_big_btn: Button = null
 var campaign_progress_label: Label = null
 var campaign_progress_bar: ProgressBar = null
+var base_power_label: Label = null
 var practice_btn: Button = null
 var stage_prev_btn: Button = null
 var stage_next_btn: Button = null
@@ -473,7 +474,7 @@ func _build_base_tab_content() -> void:
 	r_c.custom_minimum_size = Vector2(46, 42)
 	r_c.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	r_c.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	r_c.texture = load("res://assets/ui/target_theme/reward_crystal.png")
+	r_c.texture = load("res://assets/ui/target_theme/icon_star_coin.png")
 	stage_rewards_hbox.add_child(r_c)
 
 	var r_g := TextureRect.new()
@@ -599,9 +600,41 @@ func _build_base_tab_content() -> void:
 	campaign_progress_bar.add_theme_stylebox_override("fill", progress_fill)
 	progress_col.add_child(campaign_progress_bar)
 
+	# Real-player quick actions fill the former empty hub area.
+	var quick_card := PanelContainer.new()
+	quick_card.name = "OperatorQuickActions"
+	quick_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, false))
+	base_vbox.add_child(quick_card)
+	var quick_content := VBoxContainer.new()
+	quick_content.add_theme_constant_override("separation", 8)
+	quick_card.add_child(quick_content)
+	var quick_heading := Label.new()
+	quick_heading.text = "CENTRUM OPERACYJNE"
+	SurvivorVisualSystem.decorate_section(quick_heading, SurvivorVisualSystem.GOLD, 17)
+	quick_content.add_child(quick_heading)
+	base_power_label = Label.new()
+	base_power_label.add_theme_font_size_override("font_size", 14)
+	base_power_label.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
+	quick_content.add_child(base_power_label)
+	var quick_buttons := HBoxContainer.new()
+	quick_buttons.add_theme_constant_override("separation", 8)
+	quick_content.add_child(quick_buttons)
+	for entry in [
+		{"text": "KAMPANIA", "tab": 3, "color": SurvivorVisualSystem.LIME},
+		{"text": "NAGRODY", "tab": 5, "color": SurvivorVisualSystem.GOLD},
+		{"text": "EKWIPUNEK", "tab": 2, "color": SurvivorVisualSystem.CYAN}
+	]:
+		var shortcut := Button.new()
+		shortcut.text = String(entry["text"])
+		shortcut.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		SurvivorVisualSystem.decorate_button(shortcut, entry["color"], 48.0)
+		var destination: int = int(entry["tab"])
+		shortcut.pressed.connect(func(): switch_hub_tab(destination))
+		quick_buttons.add_child(shortcut)
+
 	# Dolny odstęp aby treść nie chowała się pod paskiem nawigacji
 	var bot_sp := Control.new()
-	bot_sp.custom_minimum_size = Vector2(0, 120)
+	bot_sp.custom_minimum_size = Vector2(0, 22)
 	base_vbox.add_child(bot_sp)
 
 func _jump_to_stage(s_num: int) -> void:
@@ -923,6 +956,8 @@ func update_labels() -> void:
 		campaign_progress_label.text = "KAMPANIA  •  %d / 100 ETAPÓW" % finished
 	if is_instance_valid(campaign_progress_bar):
 		campaign_progress_bar.value = maxi(0, StageDirector.max_unlocked_stage - 1)
+	if is_instance_valid(base_power_label):
+		base_power_label.text = "MOC OPERATORA  %d     |     ODBLOKOWANO ETAP %03d" % [StageDirector.get_total_combat_power(), StageDirector.max_unlocked_stage]
 
 	if is_instance_valid(inbox_status_lbl):
 		inbox_status_lbl.text = "Status zrzutu: ✓ ODEBRANO" if bool(StageDirector.inbox_claimed.get("welcome_drop", false)) else "Status zrzutu: 🎁 DO ODBIORU!"
