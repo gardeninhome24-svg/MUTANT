@@ -1768,6 +1768,10 @@ func _refresh_store_tab_ui() -> void:
 			frame_path = "res://assets/ui/target_theme/offer_frame_lime.png"
 		elif p_id == "skin_crimson_storm":
 			frame_path = "res://assets/ui/target_theme/offer_frame_red.png"
+		elif p_id == "skin_void_sniper" or p_id == "crystals_pack_500":
+			frame_path = "res://assets/ui/target_theme/offer_frame_purple.png"
+		elif p_id == "attempts_refill_full":
+			frame_path = "res://assets/ui/target_theme/offer_frame_cyan.png"
 		var reference_frame: StyleBoxTexture = SurvivorVisualSystem.texture_style(frame_path, 14.0, 13.0) if not frame_path.is_empty() else null
 		card.add_theme_stylebox_override("panel", reference_frame if reference_frame != null else SurvivorVisualSystem.metal_panel(accent))
 		store_cards_grid.add_child(card)
