@@ -1182,8 +1182,16 @@ func _refresh_inventory_tab_ui() -> void:
 		return StageDirector.get_item_effective_power(a) > StageDirector.get_item_effective_power(b)
 	)
 
-	if selected_bag_instance_id.is_empty() and filtered.size() > 0:
-		selected_bag_instance_id = String(filtered[0].get("instance_id", ""))
+	# Never allow quick actions to operate on a hidden item after filter changes.
+	var selection_visible := false
+	for visible_item in filtered:
+		if String(visible_item.get("instance_id", "")) == selected_bag_instance_id:
+			selection_visible = true
+			break
+	if not selection_visible:
+		selected_bag_instance_id = String(filtered[0].get("instance_id", "")) if not filtered.is_empty() else ""
+		if not selected_bag_instance_id.is_empty():
+			selected_inspect_slot_id = String(filtered[0].get("slot", "weapon"))
 
 	for it in filtered:
 		var inst_id := String(it.get("instance_id", ""))
