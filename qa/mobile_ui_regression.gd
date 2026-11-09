@@ -108,6 +108,12 @@ func _run() -> void:
 	if is_instance_valid(progress):
 		_assert(progress.text.contains("KAMPANIA"), "Campaign progress status uses game data")
 	_assert(is_instance_valid(card), "Stage card is instantiated")
+	if is_instance_valid(card):
+		var reference_frame: StyleBox = card.get_theme_stylebox("panel")
+		_assert(reference_frame is StyleBoxTexture, "Mission card renders genuine approved reference art")
+		if reference_frame is StyleBoxTexture:
+			_assert((reference_frame as StyleBoxTexture).texture != null, "Reference frame has a live imported texture")
+
 	_assert(is_instance_valid(play), "Play CTA is instantiated")
 	_assert(is_instance_valid(hero), "Hero spacer is instantiated")
 	if is_instance_valid(card):
