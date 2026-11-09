@@ -86,8 +86,11 @@ func _run() -> void:
 			var nav_button: Button = tab as Button
 			_assert(not nav_button.flat, "Bottom navigation renders its own highlighted panel")
 			_assert(nav_button.has_theme_stylebox_override("normal"), "Bottom tab has actual state-specific style")
-			var nav_art: TextureRect = nav_button.find_child("*", true, false) as TextureRect
-			_assert(is_instance_valid(nav_art) and nav_art.texture != null, "Bottom navigation icon is a real texture")
+			var icon_nodes: Array[Node] = nav_button.find_children("*", "TextureRect", true, false)
+			_assert(icon_nodes.size() >= 1, "Bottom navigation has an icon node")
+			if not icon_nodes.is_empty():
+				var nav_art: TextureRect = icon_nodes[0] as TextureRect
+				_assert(is_instance_valid(nav_art) and nav_art.texture != null, "Bottom navigation icon is a real texture")
 		menu.call("switch_hub_tab", 2)
 		var equipment_button: Button = navigation_buttons[2] as Button
 		_assert(equipment_button.has_theme_stylebox_override("normal"), "Selected equipment tab stays visually styled")
