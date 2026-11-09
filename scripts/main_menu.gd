@@ -378,7 +378,7 @@ func _build_commercial_hub_ui() -> void:
 		btn_v.add_child(ic_rect)
 
 		var lbl := Label.new()
-		lbl.text = String(nd["name"])
+		lbl.text = String(nd["name"]).to_upper()
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 12)
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -595,6 +595,12 @@ func _build_base_tab_content() -> void:
 	st_vbox.add_child(r_sp)
 
 	# Wiersz 3 nagród etapu: Kryształ, Zębatka, XP
+	var reward_heading := Label.new()
+	reward_heading.text = "NAGRODY ZA UKOŃCZENIE"
+	reward_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	reward_heading.add_theme_font_size_override("font_size", 12)
+	reward_heading.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
+	st_vbox.add_child(reward_heading)
 	stage_rewards_hbox = HBoxContainer.new()
 	stage_rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	stage_rewards_hbox.add_theme_constant_override("separation", 14)
@@ -1032,9 +1038,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(20, 20) if compact_hub else Vector2(28, 28)
+					nav_child.custom_minimum_size = Vector2(22, 24) if compact_hub else Vector2(37, 38)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 9 if compact_hub else 12)
+					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 14)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
