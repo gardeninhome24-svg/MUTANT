@@ -130,27 +130,27 @@ func _test_combat_and_bosses() -> void:
 	_assert(int(battle.get("current_wave_num")) == 1, "Battle starts at wave 1")
 	# Stop automatic time progression while exercising deterministic wave transitions.
 	battle.set_process(false)
-	battle.start_wave(1, 5)
+	battle.call("start_wave", 1, 5)
 	_assert(int(battle.get("current_wave_num")) == 5, "Wave 5 can be started")
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 5 spawns a miniboss")
 	if is_instance_valid(battle.get("active_boss")):
-		_assert(String(battle.active_boss.tier) == "miniboss", "Wave 5 enemy has miniboss tier")
-	battle.start_wave(1, 10)
+		_assert(String((battle.get("active_boss") as MutantEnemy).tier) == "miniboss", "Wave 5 enemy has miniboss tier")
+	battle.call("start_wave", 1, 10)
 	_assert(int(battle.get("current_wave_num")) == 10, "Wave 10 can be started")
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 10 spawns a boss")
 	if is_instance_valid(battle.get("active_boss")):
-		_assert(String(battle.active_boss.tier) == "boss", "Wave 10 enemy has boss tier")
-	battle.primary_objective_done = true
-	battle.wave_time_left = 0.0
-	battle.boss_spawned_this_run = true
-	battle.boss_killed_this_run = false
-	_assert(not battle._can_claim_victory(), "Cannot win while the final boss lives")
-	battle.boss_killed_this_run = true
-	_assert(battle._can_claim_victory(), "Win is possible after boss and objective completion")
+		_assert(String((battle.get("active_boss") as MutantEnemy).tier) == "boss", "Wave 10 enemy has boss tier")
+	battle.set("primary_objective_done", true)
+	battle.set("wave_time_left", 0.0)
+	battle.set("boss_spawned_this_run", true)
+	battle.set("boss_killed_this_run", false)
+	_assert(not bool(battle.call("_can_claim_victory")), "Cannot win while the final boss lives")
+	battle.set("boss_killed_this_run", true)
+	_assert(bool(battle.call("_can_claim_victory")), "Win is possible after boss and objective completion")
 	# Exercise the actual victory screen/state without spending attempts or granting rewards.
-	battle._on_stage_victory()
+	battle.call("_on_stage_victory")
 	_assert(String(battle.get("run_result_state")) == "victory", "Victory transitions into victory state")
-	_assert(battle.win_panel.visible, "Victory panel becomes visible")
+	_assert((battle.get("win_panel") as Control).visible, "Victory panel becomes visible")
 	paused = false
 	battle.queue_free()
 	await process_frame
@@ -160,9 +160,9 @@ func _test_combat_and_bosses() -> void:
 	root.add_child(battle)
 	await process_frame
 	battle.set_process(false)
-	battle._on_player_died()
+	battle.call("_on_player_died")
 	_assert(String(battle.get("run_result_state")) == "awaiting_revive", "Defeat transitions into revive state")
-	_assert(battle.death_panel.visible, "Defeat panel becomes visible")
+	_assert((battle.get("death_panel") as Control).visible, "Defeat panel becomes visible")
 	paused = false
 	battle.queue_free()
 	await process_frame
