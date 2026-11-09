@@ -27,6 +27,8 @@ var tab_containers: Array[Control] = []
 
 # --- TAB 0: PANEL POSTACI RPG (Bohater w centrum + 6 slotów wokół niego) ---
 var hero_center_tex: TextureRect
+var hero_pedestal: PanelContainer = null
+var hero_arena_row: HBoxContainer = null
 var hero_weapon_badge_tex: TextureRect
 var hero_weapon_badge_lbl: Label
 var hero_power_lbl: Label
@@ -204,6 +206,16 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
 		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
+	if is_instance_valid(hero_arena_row):
+		hero_arena_row.add_theme_constant_override("separation", 5 if narrow else 14)
+	if is_instance_valid(hero_pedestal):
+		hero_pedestal.custom_minimum_size = Vector2(166, 264) if narrow else Vector2(280, 330)
+	if is_instance_valid(hero_center_tex):
+		hero_center_tex.custom_minimum_size = Vector2(146, 225) if narrow else Vector2(250, 280)
+	for flank in [left_slots_vbox, right_slots_vbox]:
+		if is_instance_valid(flank):
+			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(82, 0)
+			flank.add_theme_constant_override("separation", 4 if narrow else 10)
 	if is_instance_valid(inv_chest_btn):
 		inv_chest_btn.text = "SKRZYNIA · 80 Kr" if portrait else "SKRZYNIA ZBROJOWNI (-80 Kr)"
 		inv_chest_btn.custom_minimum_size = Vector2(126, 34) if portrait else Vector2(180, 34)
@@ -436,6 +448,7 @@ func _build_tab_character_showcase() -> Control:
 	vbox.add_child(arena_card)
 
 	var arena_hbox := HBoxContainer.new()
+	hero_arena_row = arena_hbox
 	arena_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	arena_hbox.add_theme_constant_override("separation", 14)
 	arena_card.add_child(arena_hbox)
@@ -448,6 +461,8 @@ func _build_tab_character_showcase() -> Control:
 
 	# Środkowy Obszar Bohatera na Podeście
 	var center_pedestal := PanelContainer.new()
+	hero_pedestal = center_pedestal
+	center_pedestal.clip_contents = true
 	center_pedestal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	center_pedestal.custom_minimum_size = Vector2(280, 330)
 	var ped_st := StyleBoxFlat.new()
@@ -458,6 +473,17 @@ func _build_tab_character_showcase() -> Control:
 	ped_st.border_width_bottom = 0
 	center_pedestal.add_theme_stylebox_override("panel", ped_st)
 	arena_hbox.add_child(center_pedestal)
+	# Hangar artwork belongs to the character presentation, not behind a
+	# nearly opaque modal panel. Keep it as a passive backdrop to live slots.
+	var hangar := TextureRect.new()
+	hangar.name = "ArmoryBackdrop"
+	hangar.texture = load("res://assets/ui/target_theme/bg_armory_pedestal.png")
+	hangar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hangar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hangar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	hangar.modulate = Color(0.75, 0.87, 0.85, 0.67)
+	hangar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center_pedestal.add_child(hangar)
 
 	var ped_vbox := VBoxContainer.new()
 	ped_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
