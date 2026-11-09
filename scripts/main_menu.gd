@@ -1107,7 +1107,7 @@ func _apply_responsive_menu_layout() -> void:
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
-	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
+	var available_width := maxf(180.0, get_viewport_rect().size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
 		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), 320.0 if portrait else 330.0)
 	if is_instance_valid(stage_preview):
