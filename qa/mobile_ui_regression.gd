@@ -67,7 +67,10 @@ func _run() -> void:
 					_assert(is_instance_valid(action_button), "Base shortcut is a real Button")
 					if is_instance_valid(action_button):
 						_assert(action_button.pressed.get_connections().size() > 0, "Base shortcut has a live click handler")
-						_assert(action_button.icon != null, "Base shortcut uses actual artwork")
+						var tile_icon: TextureRect = action_button.find_child("SideActionIcon", true, false) as TextureRect
+						var tile_caption: Label = action_button.find_child("SideActionCaption", true, false) as Label
+						_assert(is_instance_valid(tile_icon) and tile_icon.texture != null, "Side tile contains real icon art")
+						_assert(is_instance_valid(tile_caption) and not tile_caption.text.is_empty(), "Side tile has a readable caption")
 
 	var campaign_continue: Button = menu.find_child("ContinueCampaignButton", true, false) as Button
 	_assert(is_instance_valid(campaign_continue), "Home has dedicated Continue Campaign action")
