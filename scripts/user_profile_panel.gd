@@ -222,7 +222,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		hero_center_tex.custom_minimum_size = Vector2(146, 265) if narrow else Vector2(320, 425)
 	for flank in [left_slots_vbox, right_slots_vbox]:
 		if is_instance_valid(flank):
-			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(82, 0)
+			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(112, 0)
 			flank.add_theme_constant_override("separation", 4 if narrow else 10)
 	if is_instance_valid(inv_chest_btn):
 		inv_chest_btn.text = "SKRZYNIA · 80 Kr" if portrait else "SKRZYNIA ZBROJOWNI (-80 Kr)"
@@ -504,7 +504,7 @@ func _build_tab_character_showcase() -> Control:
 	arena_card.add_child(arena_hbox)
 
 	left_slots_vbox = VBoxContainer.new()
-	left_slots_vbox.custom_minimum_size = Vector2(82, 0)
+	left_slots_vbox.custom_minimum_size = Vector2(112, 0)
 	left_slots_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	left_slots_vbox.add_theme_constant_override("separation", 10)
 	arena_hbox.add_child(left_slots_vbox)
@@ -563,7 +563,7 @@ func _build_tab_character_showcase() -> Control:
 	w_badge_hbox.add_child(hero_weapon_badge_lbl)
 
 	right_slots_vbox = VBoxContainer.new()
-	right_slots_vbox.custom_minimum_size = Vector2(82, 0)
+	right_slots_vbox.custom_minimum_size = Vector2(112, 0)
 	right_slots_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	right_slots_vbox.add_theme_constant_override("separation", 10)
 	arena_hbox.add_child(right_slots_vbox)
@@ -689,23 +689,25 @@ func _build_slot_widget(slot_id: String) -> Control:
 	var border_col := Color(1.0, 0.90, 0.28) if is_selected else (r_col if not item.is_empty() else Color(0.24, 0.34, 0.48, 0.75))
 
 	var card := Button.new()
-	card.custom_minimum_size = Vector2(80, 84)
-	card.flat = true
+	card.custom_minimum_size = Vector2(76, 92) if narrow_portrait_ui else Vector2(112, 118)
+	SurvivorVisualSystem.decorate_button(card, border_col, 92.0 if narrow_portrait_ui else 118.0)
+	card.flat = false
 	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0.03, 0.08, 0.16, 0.82) if not item.is_empty() else Color(0.02, 0.05, 0.10, 0.65)
+	st.bg_color = Color(0.025, 0.07, 0.105, 0.97) if not item.is_empty() else Color(0.015, 0.035, 0.05, 0.94)
+	st.shadow_color = Color(border_col.r, border_col.g, border_col.b, 0.42 if is_selected else 0.15)
+	st.shadow_size = 5 if is_selected else 3
 	st.border_width_left = 3 if is_selected else 2
 	st.border_width_top = 3 if is_selected else 2
 	st.border_width_right = 3 if is_selected else 2
 	st.border_width_bottom = 3 if is_selected else 2
 	st.border_color = border_col
-	st.corner_radius_top_left = 10
-	st.corner_radius_top_right = 10
-	st.corner_radius_bottom_left = 10
-	st.corner_radius_bottom_right = 10
+	st.corner_radius_top_left = 7
+	st.corner_radius_top_right = 7
+	st.corner_radius_bottom_left = 7
+	st.corner_radius_bottom_right = 7
 	card.add_theme_stylebox_override("normal", st)
 	card.add_theme_stylebox_override("hover", st)
 	card.add_theme_stylebox_override("pressed", st)
-	SurvivorVisualSystem.decorate_button(card, border_col, 98.0)
 
 	var v := VBoxContainer.new()
 	v.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -717,14 +719,14 @@ func _build_slot_widget(slot_id: String) -> Control:
 	var slot_lbl := Label.new()
 	slot_lbl.text = slot_title.to_upper()
 	slot_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	slot_lbl.add_theme_font_size_override("font_size", 9)
+	slot_lbl.add_theme_font_size_override("font_size", 9 if narrow_portrait_ui else 12)
 	slot_lbl.add_theme_color_override("font_color", Color(0.60, 0.85, 1.0))
 	v.add_child(slot_lbl)
 
 	var icon_r := TextureRect.new()
 	var icon_path := AssetRegistry.get_item_icon_path(item) if not item.is_empty() else String(AssetRegistry.EQUIPMENT_SLOT_ICONS.get(slot_id, ""))
 	icon_r.texture = AssetRegistry.get_tex(icon_path)
-	icon_r.custom_minimum_size = Vector2(44, 44)
+	icon_r.custom_minimum_size = Vector2(48, 46) if narrow_portrait_ui else Vector2(72, 70)
 	icon_r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon_r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if item.is_empty():
@@ -733,7 +735,7 @@ func _build_slot_widget(slot_id: String) -> Control:
 
 	var btm_lbl := Label.new()
 	btm_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	btm_lbl.add_theme_font_size_override("font_size", 9)
+	btm_lbl.add_theme_font_size_override("font_size", 9 if narrow_portrait_ui else 12)
 	if item.is_empty():
 		btm_lbl.text = "PUSTY"
 		btm_lbl.add_theme_color_override("font_color", Color(0.45, 0.55, 0.65))
