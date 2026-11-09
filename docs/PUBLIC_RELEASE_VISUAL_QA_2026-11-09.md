@@ -106,3 +106,30 @@ przed zielonym wykonaniem `Portrait HUD overlap and required art resource gate`.
 - [ ] Test aktualizacji wydaniowego APK z zachowaniem zapisu i certyfikatu.
 - [ ] Komplet licencji zasobów, sklep/płatności (jeśli mają być dostępne),
       polityka prywatności i zasady dystrybucji.
+
+
+## Pakiet HUD mobile — podział informacji według priorytetu
+
+Docelowe zasady, zgodne z popularnymi grami survivor na telefonach:
+- **góra**: zdrowie/XP, waluta i licznik fal; cele i radar niżej;
+- **środek**: możliwie niezasłonięta arena, bez zbędnych przycisków;
+- **dół**: joystick i pomocnicze informacje o uzbrojeniu; ręczne
+  przyciski strzału/uniku pozostają ukryte w trybie automatycznego ataku;
+- **pauza/modale**: awans, ekwipunek, zwycięstwo/porażka poza podstawową
+  przestrzenią walki.
+
+Wprowadzono wariant poniżej 600 jednostek szerokości:
+licznik fal jest przenoszony na oddzielny poziomy pas,
+minimapa trafia obok celów, pasek broni nad umiejętnościami,
+a joystick zostaje oddzielony od dolnego HUD. Dialog NPC
+ma szerokość ograniczoną do viewportu. Zmiana rozmiaru
+viewportu uruchamia ponowne rozmieszczenie HUD-u.
+
+Dopisano regresję `qa/visual_release_gate.gd` sprawdzającą
+geometrię także w wariancie 420 jednostek. Jest to **test
+struktury i offsetów**, nie sprawdzenie pixeli ani poprawności
+dotyku. Najnowszy wynik GitHub Actions wymaga potwierdzenia.
+
+Pozostają niezatwierdzone: kadry z Androida, rzeczywisty
+multitouch, płynność, estetyka mutantów, animacje, weryfikacja
+100 walk oraz docelowe podpisanie i aktualizacja APK.
