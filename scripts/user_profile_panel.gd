@@ -1286,6 +1286,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	# Use a compact directional row and a separate grid for chapter shortcuts.
 	# Nine buttons in one HBox can overflow the 9:16 campaign panel.
 	var stage_nav := HBoxContainer.new()
+	stage_nav.name = "StageDirectionRow"
 	stage_nav.add_theme_constant_override("separation", 6)
 	c_vbox.add_child(stage_nav)
 	var stage_jump_grid := GridContainer.new()
