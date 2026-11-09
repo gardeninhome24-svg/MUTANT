@@ -95,11 +95,13 @@ func _run() -> void:
 	await process_frame
 	var safe_top: float = stage.get_safe_top_margin()
 	if is_instance_valid(wave):
-		_check(absf(wave.offset_top - (145.0 + safe_top)) < 0.1, "Narrow portrait wave timer moves to a separate row")
+		_check(absf(wave.offset_top - (190.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
 	if is_instance_valid(radar):
 		_check(absf(radar.offset_top - (60.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
 	if is_instance_valid(currencies):
-		_check(absf(currencies.offset_left - (-190.0)) < 0.1, "Narrow portrait currency bar is compact")
+		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
+	if is_instance_valid(currencies) and is_instance_valid(wave):
+		_check(currencies.offset_bottom + 2.0 <= wave.offset_top, "420px currency and wave rows do not overlap")
 	if is_instance_valid(weapons) and is_instance_valid(powers):
 		_check(weapons.offset_bottom <= powers.offset_top - 2.0, "Narrow portrait weapon and power bars occupy separate rows")
 	if is_instance_valid(joystick) and is_instance_valid(weapons):
