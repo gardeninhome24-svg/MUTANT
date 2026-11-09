@@ -156,6 +156,18 @@ func _run() -> void:
 		if is_instance_valid(store_cards):
 			_assert(store_cards.get_child_count() == 6, "Shop only shows six curated player-facing offers")
 
+		# Repeated profile refreshes must replace, not accumulate, live cards.
+		# Godot queue_free() is deferred: child count must be correct immediately,
+		# not only after another frame (as happened in the failed build).
+		if is_instance_valid(rewards_grid) and is_instance_valid(store_cards):
+			for refresh_index in range(3):
+				profile.call("refresh_ui")
+				_assert(rewards_grid.get_child_count() == 7, "Daily cards stay at seven after refresh %d" % (refresh_index + 1))
+				_assert(store_cards.get_child_count() == 6, "Shop cards stay at six after refresh %d" % (refresh_index + 1))
+			await process_frame
+			_assert(rewards_grid.get_child_count() == 7, "Daily card count stays stable on next frame")
+			_assert(store_cards.get_child_count() == 6, "Shop card count stays stable on next frame")
+
 		# Godot headless can preserve its configured 720px root viewport even
 		# when root.size is assigned. Drive the SAME production layout function
 		# with the requested width explicitly to avoid false test failures.
