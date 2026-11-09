@@ -29,6 +29,25 @@ func _run() -> void:
 	menu.call("_apply_responsive_menu_layout")
 	await process_frame
 
+	# Sprint 1: check reusable production components, not hardcoded per-screen colors.
+	var sample_button := Button.new()
+	SurvivorVisualSystem.decorate_button(sample_button, SurvivorVisualSystem.GOLD)
+	_assert(sample_button.custom_minimum_size.y >= 44.0, "Shared UI button meets mobile touch target")
+	_assert(sample_button.has_theme_stylebox_override("normal"), "Shared UI has normal button state")
+	_assert(sample_button.has_theme_stylebox_override("hover"), "Shared UI has hover button state")
+	_assert(sample_button.has_theme_stylebox_override("pressed"), "Shared UI has pressed button state")
+	_assert(sample_button.has_theme_stylebox_override("disabled"), "Shared UI has disabled button state")
+	var sample_panel := SurvivorVisualSystem.panel(SurvivorVisualSystem.LIME, true)
+	_assert(sample_panel.get_border_width(SIDE_TOP) >= 2, "Important card has visible metallic border")
+	_assert(SurvivorVisualSystem.rarity_color("legendary") != SurvivorVisualSystem.rarity_color("common"), "Rare gear palette is visually distinct")
+	var quick_card := menu.find_child("OperatorQuickActions", true, false)
+	_assert(is_instance_valid(quick_card), "Home screen has functional operator shortcuts")
+	if is_instance_valid(quick_card):
+		var quick_buttons: Array[Node] = quick_card.find_children("*", "Button", true, false)
+		_assert(quick_buttons.size() == 3, "Operator dashboard exposes 3 live navigation shortcuts")
+		for quick in quick_buttons:
+			_assert((quick as Button).pressed.get_connections().size() > 0, "Shortcut has connected action")
+
 	var card: Control = menu.get("stage_card") as Control
 	var play: Button = menu.get("play_big_btn") as Button
 	var hero: Control = menu.get("hero_spacer_control") as Control
