@@ -1,0 +1,70 @@
+name: MutantSurvivor Phone Resolution Screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "qa/capture_phone_layout.gd"
+      - ".github/workflows/phone-screenshots.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  phone-render:
+    name: Render 720x1280 menu and combat
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+    steps:
+      - name: Checkout project and large assets
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install virtual screen and OpenGL rendering libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb xauth libgl1-mesa-dri libglx-mesa0 libegl1
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          mkdir -p /tmp/mutantsurvivor-phone-shots
+
+      - name: Import game assets
+        run: godot --headless --path . --editor --import --quit
+
+      - name: Render phone screenshot frames in virtual X11 display
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          set -euo pipefail
+          xvfb-run -a -s "-screen 0 720x1280x24" \
+            godot --path . --rendering-method gl_compatibility \
+            --resolution 720x1280 \
+            --script res://qa/capture_phone_layout.gd -- \
+            --out /tmp/mutantsurvivor-phone-shots \
+            2>&1 | tee /tmp/mutantsurvivor-visual-render.log
+          test -s /tmp/mutantsurvivor-phone-shots/01_menu_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/05_combat_720x1280.png
+
+      - name: Upload actual rendered screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Phone-720x1280-Screenshots
+          path: /tmp/mutantsurvivor-phone-shots/*.png
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload render diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Phone-Render-Logs
+          path: /tmp/mutantsurvivor-visual-render.log
+          if-no-files-found: warn
+          retention-days: 14
