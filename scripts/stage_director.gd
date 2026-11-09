@@ -862,7 +862,7 @@ func _ensure_starter_equipment() -> void:
 		# Only starter-tier gear is granted for free. Rare/epic equipment must be
 		# earned through play, not injected for developer demonstrations.
 
-func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dictionary:
+func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "", persist: bool = true) -> Dictionary:
 	if content_db == null:
 		return {}
 	var affix_doc: Dictionary = content_db.documents.get("affixes_and_drops_v2.json", {})
@@ -890,25 +890,27 @@ func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dict
 	rolled["slot"] = String(tpl.get("slot", "weapon"))
 	rolled["base_power"] = float(tpl.get("base_power", 10.0))
 	inventory.append(rolled)
-	save_campaign_profile()
+	if persist:
+		save_campaign_profile()
 	return rolled
 
 const RARITY_TIERS := ["common", "rare", "epic", "legendary", "mythic"]
 
 func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
-	if cost_gems < 0 or dark_matter_gems < cost_gems:
+	if cost_gems <= 0 or dark_matter_gems < cost_gems:
 		return {}
 	pity_chest_counter += 1
 	var forced_r := ""
 	if pity_chest_counter >= 50:
 		forced_r = "legendary"
 		pity_chest_counter = 0
-	var item := roll_new_equipment_drop(max_unlocked_stage, forced_r)
+	var item := roll_new_equipment_drop(max_unlocked_stage, forced_r, false)
 	if item.is_empty():
 		# Never charge currency for an empty loot table.
 		pity_chest_counter = maxi(0, pity_chest_counter - 1)
 		return {}
 	if not spend_premium_gems(cost_gems):
+		inventory.erase(item)
 		return {}
 	if not forced_r.is_empty() or String(item.get("rarity", "")) in ["legendary", "mythic"]:
 		pity_chest_counter = 0
@@ -932,6 +934,11 @@ func fuse_equipment_triplet(id1: String, id2: String, id3: String) -> Dictionary
 	if tier_idx == -1 or tier_idx >= RARITY_TIERS.size() - 1:
 		return {}
 	var target_rarity: String = RARITY_TIERS[tier_idx + 1]
+	# Obtain a valid result before consuming the three inputs; if there is no
+	# eligible loot at this stage, the player keeps every source item.
+	var fused_item := roll_new_equipment_drop(max_unlocked_stage, target_rarity, false)
+	if fused_item.is_empty():
+		return {}
 
 	for slot in equipped_items.keys():
 		if equipped_items[slot] in [id1, id2, id3]:
@@ -945,7 +952,6 @@ func fuse_equipment_triplet(id1: String, id2: String, id3: String) -> Dictionary
 		new_inv.append(it)
 	inventory = new_inv
 
-	var fused_item := roll_new_equipment_drop(max_unlocked_stage, target_rarity)
 	save_campaign_profile()
 	emit_signal("profile_data_changed")
 	return fused_item
