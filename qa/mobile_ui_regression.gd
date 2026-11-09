@@ -48,6 +48,18 @@ func _run() -> void:
 		for quick in quick_buttons:
 			_assert((quick as Button).pressed.get_connections().size() > 0, "Shortcut has connected action")
 
+	var navigation_buttons: Array = menu.get("nav_buttons")
+	_assert(navigation_buttons.size() == 5, "Five primary game tabs are present")
+	if navigation_buttons.size() == 5:
+		for tab in navigation_buttons:
+			var nav_button: Button = tab as Button
+			_assert(not nav_button.flat, "Bottom navigation renders its own highlighted panel")
+			_assert(nav_button.has_theme_stylebox_override("normal"), "Bottom tab has actual state-specific style")
+		menu.call("switch_hub_tab", 2)
+		var equipment_button: Button = navigation_buttons[2] as Button
+		_assert(equipment_button.has_theme_stylebox_override("normal"), "Selected equipment tab stays visually styled")
+		menu.call("switch_hub_tab", 0)
+
 	var card: Control = menu.get("stage_card") as Control
 	var play: Button = menu.get("play_big_btn") as Button
 	var hero: Control = menu.get("hero_spacer_control") as Control
