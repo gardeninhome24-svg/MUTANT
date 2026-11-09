@@ -505,7 +505,7 @@ func _build_base_tab_content() -> void:
 	stage_card.custom_minimum_size = Vector2(630, 315)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
-	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel("res://assets/ui/target_theme/mission_frame_release.svg", SurvivorVisualSystem.LIME, true))
+	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel("res://assets/ui/target_theme/mission_frame_reference.webp", SurvivorVisualSystem.LIME, true))
 	base_vbox.add_child(stage_card)
 
 	var card_margin := MarginContainer.new()
