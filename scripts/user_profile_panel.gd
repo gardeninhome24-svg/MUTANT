@@ -167,11 +167,15 @@ func _on_orientation_changed(_is_portrait: bool) -> void:
 	_apply_responsive_metrics()
 	refresh_ui()
 
-func _apply_responsive_metrics() -> void:
+func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if not is_instance_valid(main_card):
 		return
 	var portrait := StageDirector.is_portrait_mode()
-	var narrow := portrait and get_viewport_rect().size.x < 600.0
+	# The production UI reads its actual viewport. In headless QA, Godot may
+	# retain its configured 720px render size even after SceneTree.root.size
+	# changes. An explicit test width exercises the same layout branch.
+	var available_width := test_width_override if test_width_override > 0.0 else get_viewport_rect().size.x
+	var narrow := portrait and available_width < 600.0
 	main_card.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if embedded_in_hub:
 		main_card.offset_left = 8
