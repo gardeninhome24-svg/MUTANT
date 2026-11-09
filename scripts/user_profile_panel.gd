@@ -1522,6 +1522,15 @@ func _build_tab_premium_store() -> Control:
 	depot_frame.clip_contents = true
 	depot_frame.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
 	vbox.add_child(depot_frame)
+	var depot_backdrop := TextureRect.new()
+	depot_backdrop.name = "StoreWelcomeBackdrop"
+	depot_backdrop.texture = load("res://assets/ui/target_theme/bg_store_depot.png")
+	depot_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	depot_backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	depot_backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	depot_backdrop.modulate = Color(0.55, 0.66, 0.67, 0.72)
+	depot_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	depot_frame.add_child(depot_backdrop)
 	# Actual welcome content; avoid a blank decorative rectangle on 420px phones.
 	var depot_row := HBoxContainer.new()
 	depot_row.add_theme_constant_override("separation", 12)
