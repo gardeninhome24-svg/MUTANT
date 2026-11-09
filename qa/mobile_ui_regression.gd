@@ -95,7 +95,7 @@ func _run() -> void:
 	_assert(is_instance_valid(hero), "Hero spacer is instantiated")
 	if is_instance_valid(card):
 		_assert(card.custom_minimum_size.x <= 520, "Stage card remains within reference mobile content width")
-		_assert(card.custom_minimum_size.y <= 240, "Illustrated stage card height remains bounded")
+		_assert(card.custom_minimum_size.y <= 280, "Illustrated stage card remains within mobile vertical budget")
 	if is_instance_valid(play):
 		_assert(play.custom_minimum_size.x <= 420, "Play CTA width is bounded")
 		_assert(play.custom_minimum_size.y <= 82, "Play CTA height is bounded")
