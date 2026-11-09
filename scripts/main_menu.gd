@@ -59,7 +59,7 @@ var stage_quick_buttons: Array[Button] = []
 # Dolny Pasek Nawigacji (5 zakładek)
 var bottom_nav_panel: PanelContainer = null
 var base_overlay: Control = null
-var base_logo: Label = null
+var base_logo: TextureRect = null
 var base_left_actions: VBoxContainer = null
 var base_right_actions: VBoxContainer = null
 var nav_buttons: Array[Button] = []
@@ -302,7 +302,7 @@ func _build_commercial_hub_ui() -> void:
 	base_vbox = VBoxContainer.new()
 	base_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	base_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	base_vbox.add_theme_constant_override("separation", 12)
+	base_vbox.add_theme_constant_override("separation", 10)
 	base_margin.add_child(base_vbox)
 
 	_build_base_tab_content()
@@ -397,16 +397,12 @@ func _build_base_overlays() -> void:
 	base_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	middle_root.add_child(base_overlay)
 
-	base_logo = Label.new()
+	base_logo = TextureRect.new()
 	base_logo.name = "MutantSurvivorLogo"
-	base_logo.text = "MUTANT SURVIVOR"
-	base_logo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	base_logo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	base_logo.texture = load("res://assets/ui/target_theme/logo_mutant_survivor.svg")
+	base_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	base_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	base_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	base_logo.add_theme_font_size_override("font_size", 35)
-	base_logo.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
-	base_logo.add_theme_color_override("font_outline_color", Color(0.015, 0.025, 0.03))
-	base_logo.add_theme_constant_override("outline_size", 6)
 	base_overlay.add_child(base_logo)
 
 	base_left_actions = VBoxContainer.new()
@@ -464,7 +460,7 @@ func _build_base_tab_content() -> void:
 	# KARTA AKTUALNEGO ETAPU (Sci-Fi z obramowaniem cyjanowym card_stage_clean.png)
 	# --------------------------------------------------------------------------
 	stage_card = PanelContainer.new()
-	stage_card.custom_minimum_size = Vector2(380, 194)
+	stage_card.custom_minimum_size = Vector2(500, 220)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
 	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_STAGE, SurvivorVisualSystem.GOLD, true))
@@ -644,7 +640,7 @@ func _build_base_tab_content() -> void:
 	# without adding fake rewards or another store widget.
 	var progress_card := PanelContainer.new()
 	progress_card.name = "CampaignProgressCard"
-	progress_card.custom_minimum_size = Vector2(0, 84)
+	progress_card.custom_minimum_size = Vector2(0, 105)
 	var progress_style := StyleBoxFlat.new()
 	progress_style.bg_color = Color(0.025, 0.055, 0.09, 0.92)
 	progress_style.border_color = Color(0.12, 0.56, 0.74, 0.76)
@@ -675,6 +671,7 @@ func _build_base_tab_content() -> void:
 	var quick_card := PanelContainer.new()
 	quick_card.name = "OperatorQuickActions"
 	quick_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, false))
+	quick_card.custom_minimum_size = Vector2(0, 100)
 	base_vbox.add_child(quick_card)
 	var quick_content := VBoxContainer.new()
 	quick_content.add_theme_constant_override("separation", 8)
@@ -992,11 +989,10 @@ func _apply_responsive_menu_layout() -> void:
 		base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if is_instance_valid(base_logo):
 		base_logo.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		base_logo.offset_left = 65.0 if compact_hub else 120.0
-		base_logo.offset_right = -65.0 if compact_hub else -120.0
-		base_logo.offset_top = 4.0
-		base_logo.offset_bottom = 48.0 if compact_hub else 58.0
-		base_logo.add_theme_font_size_override("font_size", 20 if compact_hub else (32 if portrait else 38))
+		base_logo.offset_left = 45.0 if compact_hub else 68.0
+		base_logo.offset_right = -45.0 if compact_hub else -68.0
+		base_logo.offset_top = 0.0
+		base_logo.offset_bottom = 72.0 if compact_hub else 90.0
 	for side_index in range(2):
 		var actions: VBoxContainer = base_left_actions if side_index == 0 else base_right_actions
 		if not is_instance_valid(actions):
@@ -1017,12 +1013,12 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(380.0 if portrait else 500.0, available_width), 184.0 if portrait else 220.0)
+		stage_card.custom_minimum_size = Vector2(minf(520.0 if portrait else 580.0, available_width), 222.0 if portrait else 240.0)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, 172.0 if portrait else 100.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (260.0 if compact_hub else 305.0) if portrait else 120.0)
 	if is_instance_valid(stage_title_lbl):
 		stage_title_lbl.add_theme_font_size_override("font_size", 24 if portrait else 30)
 	if is_instance_valid(stage_details_lbl):
