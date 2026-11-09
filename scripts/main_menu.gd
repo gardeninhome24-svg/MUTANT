@@ -414,7 +414,7 @@ func _build_base_overlays() -> void:
 
 	base_logo = TextureRect.new()
 	base_logo.name = "MutantSurvivorLogo"
-	base_logo.texture = load("res://assets/ui/target_theme/logo_production_vector.svg")
+	base_logo.texture = load("res://assets/ui/target_theme/logo_reference_exact.png")
 	base_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	base_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	base_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
