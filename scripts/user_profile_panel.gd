@@ -977,6 +977,8 @@ func _build_tab_inventory_backpack() -> Control:
 			)
 			gear_column.add_child(tile)
 
+	# The showcase uses equipped item data on every UI refresh; the initial
+	# common icons in the scene are merely loading placeholders.
 	# Belka materiałów do ulepszeń + otwieranie skrzyni
 	var top_bar := _create_subpanel(Color(0.22, 0.85, 1.0, 0.78))
 	vbox.add_child(top_bar)
@@ -2038,6 +2040,26 @@ func _create_subpanel(border_col: Color = Color(0.20, 0.58, 0.82, 0.70)) -> Pane
 	panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(border_col))
 	return panel
 
+func _refresh_equipment_loadout_art() -> void:
+	for slot_id in LEFT_SLOTS + RIGHT_SLOTS:
+		var tile: Button = find_child("EquipSlot_" + String(slot_id), true, false) as Button
+		if not is_instance_valid(tile):
+			continue
+		var equipped_id: String = String(StageDirector.equipped_items.get(slot_id, ""))
+		var equipped_item: Dictionary = StageDirector.get_item_instance(equipped_id)
+		var icon_path: String = String(AssetRegistry.EQUIPMENT_SLOT_ICONS.get(slot_id, ""))
+		if not equipped_item.is_empty():
+			icon_path = AssetRegistry.get_item_icon_path(equipped_item)
+		var actual_icon: Texture2D = AssetRegistry.get_tex(icon_path)
+		if actual_icon != null:
+			tile.icon = actual_icon
+		tile.modulate = Color.WHITE if not equipped_item.is_empty() else Color(0.63, 0.72, 0.80, 0.86)
+		var title: String = String(StageDirector.GEAR_SLOT_NAMES.get(slot_id, slot_id))
+		if equipped_item.is_empty():
+			tile.tooltip_text = title + " • pusty slot"
+		else:
+			tile.tooltip_text = "%s • %s +%d" % [title, String(equipped_item.get("name", title)), int(equipped_item.get("level", 0))]
+
 func refresh_ui() -> void:
 	if not is_inside_tree():
 		return
@@ -2096,6 +2118,7 @@ func refresh_ui() -> void:
 			right_slots_vbox.add_child(_build_slot_widget(String(s_right)))
 
 	_refresh_character_inspector()
+	_refresh_equipment_loadout_art()
 
 	# Podsumowanie statystyk
 	var eq_b := StageDirector.get_total_equipment_bonuses()
