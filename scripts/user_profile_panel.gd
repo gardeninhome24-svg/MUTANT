@@ -210,9 +210,9 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
 		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
 	if is_instance_valid(commander_title_lbl):
-		commander_title_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+		commander_title_lbl.add_theme_font_size_override("font_size", 11 if narrow else 19)
 	if is_instance_valid(hero_power_lbl):
-		hero_power_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+		hero_power_lbl.add_theme_font_size_override("font_size", 11 if narrow else 18)
 		hero_power_lbl.text = ("⚔ %d" if narrow else "⚔ MOC BOJOWA: %d") % StageDirector.get_total_combat_power()
 	if is_instance_valid(hero_arena_row):
 		hero_arena_row.add_theme_constant_override("separation", 5 if narrow else 14)
@@ -463,7 +463,7 @@ func _build_tab_character_showcase() -> Control:
 	commander_title_lbl.autowrap_mode = TextServer.AUTOWRAP_OFF
 	commander_title_lbl.clip_text = true
 	commander_title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	commander_title_lbl.add_theme_font_size_override("font_size", 15)
+	commander_title_lbl.add_theme_font_size_override("font_size", 19)
 	commander_title_lbl.add_theme_color_override("font_color", Color(1.0, 0.92, 0.42))
 	title_row.add_child(commander_title_lbl)
 
@@ -475,7 +475,7 @@ func _build_tab_character_showcase() -> Control:
 
 	class_bonus_lbl = Label.new()
 	class_bonus_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	class_bonus_lbl.add_theme_font_size_override("font_size", 11)
+	class_bonus_lbl.add_theme_font_size_override("font_size", 14)
 	class_bonus_lbl.add_theme_color_override("font_color", Color(0.68, 0.94, 1.0))
 	top_v.add_child(class_bonus_lbl)
 
@@ -484,7 +484,7 @@ func _build_tab_character_showcase() -> Control:
 	top_v.add_child(xp_row)
 
 	account_lvl_lbl = Label.new()
-	account_lvl_lbl.add_theme_font_size_override("font_size", 11)
+	account_lvl_lbl.add_theme_font_size_override("font_size", 13)
 	xp_row.add_child(account_lvl_lbl)
 
 	account_xp_bar = ProgressBar.new()
@@ -589,8 +589,8 @@ func _build_tab_character_showcase() -> Control:
 		var c_cfg: Dictionary = StageDirector.HERO_CLASSES[c_key]
 		var btn := Button.new()
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.custom_minimum_size = Vector2(0, 30)
-		btn.add_theme_font_size_override("font_size", 12)
+		btn.custom_minimum_size = Vector2(0, 48)
+		btn.add_theme_font_size_override("font_size", 15)
 		btn.text = String(c_cfg["name"]).split(" ")[0]
 		btn.pressed.connect(func():
 			StageDirector.switch_class(c_key)
@@ -609,7 +609,7 @@ func _build_tab_character_showcase() -> Control:
 	skin_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	skin_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	skin_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	skin_scroll.custom_minimum_size = Vector2(0, 40)
+	skin_scroll.custom_minimum_size = Vector2(0, 124)
 	sel_vbox.add_child(skin_scroll)
 	skin_scroll.add_child(skin_hbox)
 	var skin_lbl := Label.new()
@@ -622,11 +622,33 @@ func _build_tab_character_showcase() -> Control:
 		var s_key: String = String(sid)
 		var s_cfg: Dictionary = StageDirector.HERO_SKINS[s_key]
 		var s_btn := Button.new()
-		s_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		s_btn.custom_minimum_size = Vector2(0, 28)
-		s_btn.add_theme_font_size_override("font_size", 10)
-		s_btn.clip_text = true
-		s_btn.text = String(s_cfg["name"])
+		s_btn.custom_minimum_size = Vector2(98, 110)
+		s_btn.clip_contents = true
+		s_btn.text = ""
+		s_btn.tooltip_text = String(s_cfg["name"])
+		SurvivorVisualSystem.decorate_metal_button(s_btn, SurvivorVisualSystem.LIME, 110.0)
+		var skin_visual := VBoxContainer.new()
+		skin_visual.name = "SkinVisual"
+		skin_visual.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		skin_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skin_visual.alignment = BoxContainer.ALIGNMENT_CENTER
+		skin_visual.add_theme_constant_override("separation", 1)
+		s_btn.add_child(skin_visual)
+		var thumbnail := TextureRect.new()
+		thumbnail.name = "SkinThumbnail"
+		thumbnail.custom_minimum_size = Vector2(72, 72)
+		thumbnail.texture = AssetRegistry.get_tex(AssetRegistry.get_hero_skin_sprite("soldier", s_key))
+		thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		thumbnail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skin_visual.add_child(thumbnail)
+		var skin_caption := Label.new()
+		skin_caption.text = String(s_cfg["name"]).left(15)
+		skin_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		skin_caption.clip_text = true
+		skin_caption.add_theme_font_size_override("font_size", 11)
+		skin_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skin_visual.add_child(skin_caption)
 		s_btn.pressed.connect(func():
 			if not StageDirector.unlocked_skins.has(s_key) and s_key != "default":
 				return
@@ -646,10 +668,11 @@ func _build_tab_character_showcase() -> Control:
 
 	# Podsumowanie statystyk bojowych
 	var stats_card := _create_subpanel()
+	stats_card.custom_minimum_size = Vector2(0, 100)
 	vbox.add_child(stats_card)
 	stats_summary_lbl = Label.new()
 	stats_summary_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stats_summary_lbl.add_theme_font_size_override("font_size", 11)
+	stats_summary_lbl.add_theme_font_size_override("font_size", 16)
 	stats_summary_lbl.add_theme_color_override("font_color", Color(0.88, 0.95, 1.0))
 	stats_card.add_child(stats_summary_lbl)
 
