@@ -32,6 +32,7 @@ func _run() -> void:
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
+	_test_starter_gear()
 	_test_equipment_and_save()
 	_test_rewards()
 	await _test_combat_and_bosses()
@@ -39,6 +40,16 @@ func _run() -> void:
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	_finish()
+
+func _test_starter_gear() -> void:
+	stage.inventory = []
+	stage.equipped_items = {}
+	stage._ensure_starter_equipment()
+	_assert(stage.inventory.size() == 4, "New account receives four basic items, not developer test loot")
+	for item in stage.inventory:
+		if item is Dictionary:
+			_assert(String(item.get("rarity", "")) == "common", "Starter gear must be common rarity")
+	_assert(stage.equipped_items.size() == 4, "Starter equipment is automatically equipped")
 
 func _test_equipment_and_save() -> void:
 	stage.inventory = [
