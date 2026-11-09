@@ -138,3 +138,16 @@ static func metal_panel(accent: Color = CYAN) -> StyleBox:
 	if frame == null:
 		return panel(accent, true)
 	return frame
+
+# Metallic game-navigation buttons use a real 9-slice graphic; native
+# Godot buttons retain click/focus/disabled behaviour and live text.
+static func decorate_metal_button(button: Button, accent: Color = LIME, height: float = 64.0) -> void:
+	decorate_button(button, accent, height)
+	var normal := texture_style(PRODUCTION_METAL_PANEL, 22.0, 6.0)
+	if normal != null:
+		button.add_theme_stylebox_override("normal", normal)
+		button.add_theme_stylebox_override("hover", normal)
+		button.add_theme_stylebox_override("focus", normal)
+		button.add_theme_stylebox_override("pressed", normal)
+	button.add_theme_color_override("font_color", TEXT)
+	button.add_theme_color_override("font_hover_color", LIME)
