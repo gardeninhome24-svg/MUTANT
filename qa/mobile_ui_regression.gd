@@ -156,6 +156,14 @@ func _run() -> void:
 		if is_instance_valid(jumps):
 			_assert(jumps.columns == 5, "Five stage shortcuts occupy their own grid")
 			_assert(jumps.get_child_count() == 5, "Five quick stage shortcuts remain")
+		var campaign_reward_strip: PanelContainer = profile.find_child("CampaignRewardStrip", true, false) as PanelContainer
+		_assert(is_instance_valid(campaign_reward_strip), "Campaign displays illustrated reward strip")
+		if is_instance_valid(campaign_reward_strip):
+			for reward_name in ["Credits", "Scrap", "Equipment"]:
+				var reward_icon: TextureRect = campaign_reward_strip.find_child("CampaignRewardIcon" + reward_name, true, false) as TextureRect
+				var reward_value: Label = campaign_reward_strip.find_child("CampaignRewardValue" + reward_name, true, false) as Label
+				_assert(is_instance_valid(reward_icon) and reward_icon.texture != null, "Campaign reward has actual artwork: " + reward_name)
+				_assert(is_instance_valid(reward_value) and not reward_value.text.is_empty(), "Campaign reward shows a real label: " + reward_name)
 		var chapters: GridContainer = profile.find_child("CampaignChapterMap", true, false) as GridContainer
 		_assert(is_instance_valid(chapters), "Ten-chapter graphical campaign roadmap exists")
 		if is_instance_valid(chapters):
