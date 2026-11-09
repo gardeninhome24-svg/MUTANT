@@ -875,9 +875,10 @@ func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "", persist
 		if it is Dictionary and String(it.get("rarity", "")) == rarity:
 			if int(it.get("min_stage", 1)) <= clampi(stage_num, 1, 100):
 				candidates.append(it)
-	if candidates.is_empty():
-		# A rarity can be unavailable at an early stage. Fall back only to
-		# common items already unlocked, never to late-game templates.
+	if candidates.is_empty() and forced_rarity.is_empty():
+		# Only randomly rolled equipment may downgrade to a stage-eligible
+		# common item. A forced rarity (fusion, guaranteed prize, paid chest)
+		# must NEVER silently downgrade or consume valuable ingredients.
 		for it in catalog.get("items", []):
 			if it is Dictionary and String(it.get("rarity", "")) == "common" and int(it.get("min_stage", 1)) <= clampi(stage_num, 1, 100):
 				candidates.append(it)
