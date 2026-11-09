@@ -44,6 +44,7 @@ var credits: int = 350
 var dark_matter_gems: int = 0
 var beta_test_gems_granted: bool = false
 var beta_test_gems_remaining: int = 0
+var beta_test_skins_purchased: Array = []
 var scrap_materials: int = 12
 var cleared_stages: Dictionary = {} # stage_num (String) -> best_stars (int)
 var first_clears_v2: Dictionary = {} # mission_id (String) -> bool
@@ -546,12 +547,18 @@ func _grant_beta_test_gems_once() -> bool:
 	return true
 
 func _revoke_unspent_beta_gems() -> void:
-	if beta_test_gems_remaining <= 0:
+	if beta_test_gems_remaining <= 0 and beta_test_skins_purchased.is_empty():
 		return
-	# Only unspent beta credits are revoked. A later real-money wallet is not
-	# affected; earned items are separately reviewed before public release.
+	# Release cleanup affects test-funded cosmetics and unspent beta credits,
+	# not the user's ordinary free-to-play progress or independently owned skins.
 	dark_matter_gems = maxi(0, dark_matter_gems - beta_test_gems_remaining)
 	beta_test_gems_remaining = 0
+	for skin_id in beta_test_skins_purchased:
+		if unlocked_skins.has(skin_id):
+			unlocked_skins.erase(skin_id)
+		if selected_skin_id == String(skin_id):
+			selected_skin_id = "default"
+	beta_test_skins_purchased.clear()
 	save_campaign_profile()
 
 func spend_premium_gems(amount: int) -> bool:
@@ -633,6 +640,7 @@ func save_campaign_profile() -> void:
 		"dark_matter_gems": dark_matter_gems,
 		"beta_test_gems_granted": beta_test_gems_granted,
 		"beta_test_gems_remaining": beta_test_gems_remaining,
+		"beta_test_skins_purchased": beta_test_skins_purchased,
 		"scrap_materials": scrap_materials,
 		"cleared_stages": cleared_stages,
 		"first_clears_v2": first_clears_v2,
@@ -705,6 +713,7 @@ func load_campaign_profile() -> void:
 		dark_matter_gems = maxi(0, int(data.get("dark_matter_gems", 180)))
 		beta_test_gems_granted = bool(data.get("beta_test_gems_granted", false))
 		beta_test_gems_remaining = maxi(0, int(data.get("beta_test_gems_remaining", mini(dark_matter_gems, BETA_TEST_GEMS_AMOUNT) if beta_test_gems_granted else 0)))
+		beta_test_skins_purchased = data.get("beta_test_skins_purchased", []) if data.get("beta_test_skins_purchased", []) is Array else []
 		scrap_materials = maxi(0, int(data.get("scrap_materials", 12)))
 		attempts = clampi(int(data.get("attempts", 5)), 0, 5)
 		next_attempt_at = int(data.get("next_attempt_at", 0))
@@ -1102,9 +1111,12 @@ func buy_skin_with_gems(skin_id: String) -> bool:
 	if dark_matter_gems < price:
 		return false
 	# Payment and ownership are changed together, then persisted.
+	var paid_with_beta_gems := beta_test_gems_remaining >= price
 	if not spend_premium_gems(price):
 		return false
 	unlocked_skins.append(skin_id)
+	if paid_with_beta_gems and not beta_test_skins_purchased.has(skin_id):
+		beta_test_skins_purchased.append(skin_id)
 	selected_skin_id = skin_id
 	save_campaign_profile()
 	emit_signal("profile_data_changed")
