@@ -95,6 +95,21 @@ func _capture() -> void:
 	for i in range(6):
 		await process_frame
 	combat.call("_apply_responsive_hud_layout")
+	for i in range(4):
+		await process_frame
+	var stats: Control = combat.get("stats_card") as Control
+	var currency: Control = combat.get("currency_bar") as Control
+	var wave: Control = combat.get("wave_progress_box") as Control
+	if is_instance_valid(stats) and is_instance_valid(currency):
+		if stats.get_global_rect().intersects(currency.get_global_rect()):
+			printerr("PHONE SHOT ERROR: phone stats and wallet overlap")
+			quit(1)
+			return
+	if is_instance_valid(currency) and is_instance_valid(wave):
+		if currency.get_global_rect().intersects(wave.get_global_rect()):
+			printerr("PHONE SHOT ERROR: phone wallet and wave counter overlap")
+			quit(1)
+			return
 	if not await _shot("08_combat_420x933.png"):
 		quit(1)
 		return
@@ -109,6 +124,16 @@ func _capture() -> void:
 	await process_frame
 	compact_menu.call("_apply_responsive_menu_layout")
 	compact_menu.call("switch_hub_tab", 4)
+	for i in range(4):
+		await process_frame
+	# Check real rendered geometry, not only minimum sizes or mocked offsets.
+	var settings: Control = compact_menu.get("settings_btn") as Control
+	if is_instance_valid(settings):
+		var settings_rect := settings.get_global_rect()
+		if settings_rect.position.x < 0.0 or settings_rect.end.x > 420.0:
+			printerr("PHONE SHOT ERROR: settings clipped in 420px hub: " + str(settings_rect))
+			quit(1)
+			return
 	if not await _shot("09_shop_420x933.png"):
 		quit(1)
 		return
