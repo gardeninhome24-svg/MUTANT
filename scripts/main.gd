@@ -279,16 +279,16 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			stats_card.offset_bottom = 54.0 + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -190.0 if compact else -302.0
-			currency_bar.offset_top = 8.0 + safe_top
+			currency_bar.offset_left = -395.0 if compact else -302.0
+			currency_bar.offset_top = (145.0 if compact else 8.0) + safe_top
 			currency_bar.offset_right = -10.0
-			currency_bar.offset_bottom = 38.0 + safe_top
+			currency_bar.offset_bottom = (180.0 if compact else 38.0) + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -115.0 if compact else -145.0
-			wave_progress_box.offset_top = (145.0 if compact else 60.0) + safe_top
+			wave_progress_box.offset_top = (190.0 if compact else 60.0) + safe_top
 			wave_progress_box.offset_right = 115.0 if compact else 145.0
-			wave_progress_box.offset_bottom = (183.0 if compact else 100.0) + safe_top
+			wave_progress_box.offset_bottom = (230.0 if compact else 100.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
@@ -334,9 +334,9 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		if npc_dialogue_panel:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			npc_dialogue_panel.offset_left = -maxf(90.0, view_width * 0.5 - 12.0) if compact else -220.0
-			npc_dialogue_panel.offset_top = (224.0 if compact else 226.0) + safe_top
+			npc_dialogue_panel.offset_top = (248.0 if compact else 226.0) + safe_top
 			npc_dialogue_panel.offset_right = maxf(90.0, view_width * 0.5 - 12.0) if compact else 220.0
-			npc_dialogue_panel.offset_bottom = (354.0 if compact else 355.0) + safe_top
+			npc_dialogue_panel.offset_bottom = (365.0 if compact else 355.0) + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
