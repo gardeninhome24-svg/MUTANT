@@ -345,11 +345,11 @@ func _build_commercial_hub_ui() -> void:
 	bottom_nav_panel.add_child(nav_hbox)
 
 	var nav_defs := [
-		{"id": 0, "name": "Baza", "icon": "res://assets/ui/target_theme/nav_icon_baza.png"},
-		{"id": 1, "name": "Postać", "icon": "res://assets/ui/target_theme/nav_icon_postac.png"},
-		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/target_theme/nav_icon_ekwipunek.png"},
-		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_icon_kampania.png"},
-		{"id": 4, "name": "Sklep", "icon": "res://assets/ui/target_theme/nav_icon_sklep.png"}
+		{"id": 0, "name": "Baza", "icon": "res://assets/ui/target_theme/nav_clean_baza.svg"},
+		{"id": 1, "name": "Postać", "icon": "res://assets/ui/target_theme/nav_clean_postac.svg"},
+		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg"},
+		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
+		{"id": 4, "name": "Sklep", "icon": "res://assets/ui/target_theme/nav_clean_sklep.svg"}
 	]
 	for nd in nav_defs:
 		var tab_id: int = int(nd["id"])
@@ -438,9 +438,9 @@ func _build_base_overlays() -> void:
 	base_overlay.add_child(base_right_actions)
 
 	for item in [
-		{"title": "POSTAĆ", "path": "res://assets/ui/target_theme/nav_icon_postac.png", "tab": 1},
-		{"title": "EKWIPUNEK", "path": "res://assets/ui/target_theme/nav_icon_ekwipunek.png", "tab": 2},
-		{"title": "SKLEP", "path": "res://assets/ui/target_theme/nav_icon_sklep.png", "tab": 4}
+		{"title": "POSTAĆ", "path": "res://assets/ui/target_theme/nav_clean_postac.svg", "tab": 1},
+		{"title": "EKWIPUNEK", "path": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg", "tab": 2},
+		{"title": "SKLEP", "path": "res://assets/ui/target_theme/nav_clean_sklep.svg", "tab": 4}
 	]:
 		_add_base_action(base_left_actions, String(item["title"]), String(item["path"]), int(item["tab"]))
 	_add_base_action(base_right_actions, "NAGRODY", "res://assets/ms_beta_kit/ui/icons/reward_chest.png", 5)
@@ -860,6 +860,9 @@ func switch_hub_tab(tab_id: int) -> void:
 				var lbl := v.get_child(1) as Label
 				if is_instance_valid(lbl):
 					lbl.add_theme_color_override("font_color", Color(0.35, 0.95, 1.0) if active else Color(0.65, 0.75, 0.85))
+				var icon_rect := v.get_child(0) as TextureRect
+				if is_instance_valid(icon_rect):
+					icon_rect.modulate = SurvivorVisualSystem.LIME if active else Color(0.80, 0.86, 0.89)
 
 	if is_instance_valid(base_overlay):
 		base_overlay.visible = current_hub_tab == 0
@@ -1089,9 +1092,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(24, 26) if compact_hub else Vector2(38, 39)
+					nav_child.custom_minimum_size = Vector2(24, 26) if compact_hub else Vector2(48, 49)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 13)
+					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 16)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
