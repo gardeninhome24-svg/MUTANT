@@ -48,6 +48,22 @@ func _run() -> void:
 		for quick in quick_buttons:
 			_assert((quick as Button).pressed.get_connections().size() > 0, "Shortcut has connected action")
 
+	# Package 1: artwork must be wired to actual interactive home controls.
+	var production_overlay: Control = menu.find_child("BaseProductionOverlay", true, false) as Control
+	_assert(is_instance_valid(production_overlay), "Base production overlay exists")
+	if is_instance_valid(production_overlay):
+		var logo: Label = production_overlay.find_child("MutantSurvivorLogo", true, false) as Label
+		_assert(is_instance_valid(logo) and logo.text == "MUTANT SURVIVOR", "Branded title is visible in the real scene")
+		var left_actions: VBoxContainer = production_overlay.find_child("BaseLeftActions", true, false) as VBoxContainer
+		var right_actions: VBoxContainer = production_overlay.find_child("BaseRightActions", true, false) as VBoxContainer
+		_assert(is_instance_valid(left_actions) and left_actions.get_child_count() == 3, "Three left base actions exist")
+		_assert(is_instance_valid(right_actions) and right_actions.get_child_count() == 2, "Two right base actions exist")
+		for actions in [left_actions, right_actions]:
+			if is_instance_valid(actions):
+				for action in actions.get_children():
+					_assert(action is Button and action.pressed.get_connections().size() > 0, "Base shortcut has a live click handler")
+					_assert(action is Button and action.icon != null, "Base shortcut uses actual artwork")
+
 	var navigation_buttons: Array = menu.get("nav_buttons")
 	_assert(navigation_buttons.size() == 5, "Five primary game tabs are present")
 	if navigation_buttons.size() == 5:
