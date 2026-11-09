@@ -589,6 +589,15 @@ func _create_obstacle_prop(prop_id: String, world_pos: Vector2) -> void:
 	obstacles_layer.add_child(body)
 
 func _spawn_lamp_posts() -> void:
+	# A few soft-light tweens provide biome atmosphere without expensive
+	# per-enemy particles or full-screen post-processing on Android.
+	var biome := String(StageDirector.get_stage_config(StageDirector.current_stage).get("biome", "wasteland"))
+	var lamp_color := Color(1.0, 0.82, 0.42, 1.0)
+	match biome:
+		"cryo_lab": lamp_color = Color(0.40, 0.80, 1.0)
+		"toxic_sewers": lamp_color = Color(0.47, 1.0, 0.36)
+		"reactor": lamp_color = Color(0.76, 0.39, 1.0)
+		"abandoned_city": lamp_color = Color(1.0, 0.57, 0.29)
 	var lamp_positions := [
 		Vector2(-460, -20), Vector2(460, -20),
 		Vector2(-460, 440), Vector2(460, 440)
@@ -602,11 +611,15 @@ func _spawn_lamp_posts() -> void:
 
 		var l := PointLight2D.new()
 		l.texture = LIGHT_COOKIE
-		l.color = Color(1.0, 0.82, 0.42, 1.0)
+		l.color = lamp_color
 		l.energy = 0.65
 		l.texture_scale = 2.0
 		l.position = pos + Vector2(0, -48)
 		decorations_layer.add_child(l)
+		var light_anim := create_tween()
+		light_anim.set_loops()
+		light_anim.tween_property(l, "energy", 0.48, 1.9).set_trans(Tween.TRANS_SINE)
+		light_anim.tween_property(l, "energy", 0.72, 2.1).set_trans(Tween.TRANS_SINE)
 
 func _spawn_primary_mission_target(pos: Vector2, scene_type: String) -> void:
 	var area := Area2D.new()
