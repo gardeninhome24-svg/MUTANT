@@ -194,6 +194,21 @@ func _run() -> void:
 			if is_instance_valid(action):
 				_assert(action.pressed.get_connections().size() > 0, action_name + " has a live handler")
 				_assert(action.custom_minimum_size.y >= 44.0, action_name + " meets touch target")
+		# Filtering to zero matches must clear stale selected items before any
+		# equip or unequip action; preserve the user's state after the test.
+		if is_instance_valid(bag):
+			var prior_slot_filter: String = String(profile.get("filter_slot"))
+			var prior_selected_id: String = String(profile.get("selected_bag_instance_id"))
+			profile.set("filter_slot", "__qa_no_such_slot__")
+			profile.call("_refresh_inventory_tab_ui")
+			_assert(String(profile.get("selected_bag_instance_id")).is_empty(), "Empty filter clears selected backpack item")
+			var quick_equip: Button = profile.find_child("InventoryQuickEquip", true, false) as Button
+			var quick_unequip: Button = profile.find_child("InventoryQuickUnequip", true, false) as Button
+			_assert(is_instance_valid(quick_equip) and quick_equip.disabled, "Empty filter disables quick equip")
+			_assert(is_instance_valid(quick_unequip) and quick_unequip.disabled, "Empty filter disables quick unequip")
+			profile.set("filter_slot", prior_slot_filter)
+			profile.set("selected_bag_instance_id", prior_selected_id)
+			profile.call("_refresh_inventory_tab_ui")
 		for slot_id in ["weapon", "chest", "boots", "helmet", "gloves", "amulet"]:
 			var paperdoll_slot: Button = profile.find_child("EquipSlot_" + slot_id, true, false) as Button
 			_assert(is_instance_valid(paperdoll_slot), "Paperdoll includes " + slot_id)
