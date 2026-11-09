@@ -85,6 +85,20 @@ func _test_equipment_and_save() -> void:
 	_assert(not StageDirector.get_item_instance("qa_weapon").is_empty(), "Save/load restores inventory")
 	_assert(String(StageDirector.equipped_items.get("weapon", "")) == "qa_weapon", "Save/load restores equipped weapon")
 	_assert(int(StageDirector.get_item_instance("qa_weapon").get("level", -1)) == 1, "Save/load restores upgrade level")
+	# Daily pack can be claimed once per UTC day, then returns after the date changes.
+	StageDirector.daily_reset_day = int(Time.get_unix_time_from_system() / 86400)
+	StageDirector.daily_free_pack_claimed = false
+	var daily_start_credits: int = StageDirector.credits
+	_assert(StageDirector.claim_daily_free_shop_pack(), "First daily pack claim succeeds")
+	_assert(not StageDirector.claim_daily_free_shop_pack(), "Second daily pack claim same day is rejected")
+	_assert(StageDirector.credits == daily_start_credits + 150, "Daily pack cannot pay twice in same UTC day")
+	StageDirector.daily_reset_day -= 1
+	_assert(StageDirector.claim_daily_free_shop_pack(), "Daily pack resets on a new UTC day")
+	_assert(StageDirector.credits == daily_start_credits + 300, "Daily pack pays once after day reset")
+	StageDirector.save_campaign_profile()
+	StageDirector.daily_free_pack_claimed = false
+	StageDirector.load_campaign_profile()
+	_assert(StageDirector.daily_free_pack_claimed, "Daily pack claim state survives save/load")
 
 func _test_rewards() -> void:
 	# Practice wins and losses must never grant persistent rewards.
