@@ -375,8 +375,18 @@ func _build_commercial_hub_ui() -> void:
 		ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if ResourceLoader.exists(String(nd["icon"])):
-			ic_rect.texture = load(String(nd["icon"]))
+		var icon_path: String = String(nd["icon"])
+		if ResourceLoader.exists(icon_path):
+			ic_rect.texture = load(icon_path) as Texture2D
+		if ic_rect.texture == null:
+			var fallback_icons: Array[String] = [
+				"res://assets/ui/target_theme/nav_icon_baza.png",
+				"res://assets/ui/target_theme/nav_icon_postac.png",
+				"res://assets/ui/target_theme/nav_icon_ekwipunek.png",
+				"res://assets/ui/target_theme/nav_icon_kampania.png",
+				"res://assets/ui/target_theme/nav_icon_sklep.png"
+			]
+			ic_rect.texture = load(fallback_icons[tab_id]) as Texture2D
 		btn_v.add_child(ic_rect)
 
 		var lbl := Label.new()
