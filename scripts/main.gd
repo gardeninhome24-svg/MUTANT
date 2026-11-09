@@ -1254,9 +1254,9 @@ func _setup_extended_hud_and_profile() -> void:
 	if is_instance_valid(char_level_label):
 		char_level_label.visible = false
 	if is_instance_valid(hp_label):
-		hp_label.add_theme_font_size_override("font_size", 9)
+		hp_label.add_theme_font_size_override("font_size", 11)
 	if is_instance_valid(run_level_label):
-		run_level_label.add_theme_font_size_override("font_size", 9)
+		run_level_label.add_theme_font_size_override("font_size", 11)
 		run_level_label.text = "POZ. 1"
 
 	var avatar_rect := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox/Avatar") as TextureRect
@@ -1340,15 +1340,15 @@ func _setup_extended_hud_and_profile() -> void:
 			obj_header.text = "MISJA / CELE"
 			obj_header.clip_text = true
 		if is_instance_valid(obj1_label):
-			obj1_label.add_theme_font_size_override("font_size", 9)
+			obj1_label.add_theme_font_size_override("font_size", 11)
 			obj1_label.clip_text = true
 			obj1_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if is_instance_valid(obj2_label):
-			obj2_label.add_theme_font_size_override("font_size", 9)
+			obj2_label.add_theme_font_size_override("font_size", 11)
 			obj2_label.clip_text = true
 			obj2_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if is_instance_valid(obj3_label):
-			obj3_label.add_theme_font_size_override("font_size", 9)
+			obj3_label.add_theme_font_size_override("font_size", 11)
 			obj3_label.clip_text = true
 			obj3_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
@@ -1677,8 +1677,8 @@ func _create_power_button(label_txt: String, border_col: Color, cb: Callable) ->
 	st.corner_radius_top_right = 8
 	st.corner_radius_bottom_left = 8
 	st.corner_radius_bottom_right = 8
-	btn.add_theme_stylebox_override("normal", st)
-	btn.add_theme_font_size_override("font_size", 11)
+	SurvivorVisualSystem.decorate_button(btn, border_col, 50.0)
+	btn.add_theme_font_size_override("font_size", 12)
 	btn.pressed.connect(cb)
 	return btn
 
