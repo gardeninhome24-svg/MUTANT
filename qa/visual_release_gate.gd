@@ -89,6 +89,27 @@ func _run() -> void:
 	_not_overlapping(joystick, fire, "Joystick vs fire")
 	_not_overlapping(dash, fire, "Dash vs fire")
 
+	# Test the narrow mobile layout branch, which is different from 720x1280.
+	# This is a structural offset check; a physical Android device still needs QA.
+	combat.call("_apply_responsive_hud_layout", 420.0)
+	await process_frame
+	var safe_top: float = stage.get_safe_top_margin()
+	if is_instance_valid(wave):
+		_check(absf(wave.offset_top - (145.0 + safe_top)) < 0.1, "Narrow portrait wave timer moves to a separate row")
+	if is_instance_valid(radar):
+		_check(absf(radar.offset_top - (60.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
+	if is_instance_valid(currencies):
+		_check(absf(currencies.offset_left - (-190.0)) < 0.1, "Narrow portrait currency bar is compact")
+	if is_instance_valid(weapons) and is_instance_valid(powers):
+		_check(weapons.offset_bottom <= powers.offset_top - 2.0, "Narrow portrait weapon and power bars occupy separate rows")
+	if is_instance_valid(joystick) and is_instance_valid(weapons):
+		_check(joystick.offset_bottom <= weapons.offset_top - 2.0, "Narrow portrait joystick stays above weapon bar")
+	var dialogue: Control = combat.get("npc_dialogue_panel") as Control
+	if is_instance_valid(dialogue):
+		_check(dialogue.offset_right - dialogue.offset_left <= 420.0, "Narrow portrait NPC dialogue fits viewport width")
+	combat.call("_apply_responsive_hud_layout")
+	await process_frame
+
 	for pair in [
 		["Joystick", joystick], ["Fire", fire], ["Dash", dash],
 		["Objectives", goals], ["Stats", stats]
