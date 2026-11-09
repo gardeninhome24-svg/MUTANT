@@ -355,7 +355,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.add_child(btn_v)
 
 		var ic_rect := TextureRect.new()
-		ic_rect.custom_minimum_size = Vector2(24, 24)
+		ic_rect.custom_minimum_size = Vector2(32, 32)
 		ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -366,7 +366,7 @@ func _build_commercial_hub_ui() -> void:
 		var lbl := Label.new()
 		lbl.text = String(nd["name"])
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 10)
+		lbl.add_theme_font_size_override("font_size", 13)
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn_v.add_child(lbl)
 
@@ -833,7 +833,7 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(bottom_nav_panel):
 		bottom_nav_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 		bottom_nav_panel.offset_left = 12.0 if portrait else 28.0
-		bottom_nav_panel.offset_top = -68.0 if portrait else -68.0
+		bottom_nav_panel.offset_top = -82.0 if portrait else -72.0
 		bottom_nav_panel.offset_right = -12.0 if portrait else -28.0
 		bottom_nav_panel.offset_bottom = -6.0 if portrait else -4.0
 
@@ -842,7 +842,7 @@ func _apply_responsive_menu_layout() -> void:
 		middle_root.offset_left = 0.0
 		middle_root.offset_top = 72.0 + safe_top
 		middle_root.offset_right = 0.0
-		middle_root.offset_bottom = -72.0 if portrait else -72.0
+		middle_root.offset_bottom = -88.0 if portrait else -78.0
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
