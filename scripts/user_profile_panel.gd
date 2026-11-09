@@ -1435,8 +1435,8 @@ func _build_tab_campaign_and_talents() -> Control:
 	reward_row.add_theme_constant_override("separation", 6)
 	reward_strip.add_child(reward_row)
 	for reward_spec in [
-		{"id": "Credits", "icon": "res://assets/ui/target_theme/reward_cog.png", "caption": "KREDYTY"},
-		{"id": "Scrap", "icon": "res://assets/ui/target_theme/reward_cog.png", "caption": "ZŁOM"},
+		{"id": "Credits", "icon": "res://addons/ms_balance/assets/ui_v2/icon_gold.png", "caption": "KREDYTY"},
+		{"id": "Scrap", "icon": "res://assets/environment/scrap_crate.png", "caption": "ZŁOM"},
 		{"id": "Equipment", "icon": "res://assets/ui/target_theme/reward_xp.png", "caption": "RPG"}
 	]:
 		var reward_cell := VBoxContainer.new()
