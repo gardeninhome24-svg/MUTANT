@@ -330,7 +330,7 @@ func _build_commercial_hub_ui() -> void:
 	nav_box_st.content_margin_right = 6
 	nav_box_st.content_margin_top = 4
 	nav_box_st.content_margin_bottom = 6
-	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_NAV, SurvivorVisualSystem.CYAN, true))
+	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, true))
 	add_child(bottom_nav_panel)
 
 	var nav_hbox := HBoxContainer.new()
@@ -353,7 +353,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
-		SurvivorVisualSystem.decorate_art_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -361,11 +361,12 @@ func _build_commercial_hub_ui() -> void:
 		btn_v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn_v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		btn_v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		btn_v.add_theme_constant_override("separation", 2)
+		btn_v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		btn_v.add_theme_constant_override("separation", 0)
 		tab_btn.add_child(btn_v)
 
 		var ic_rect := TextureRect.new()
-		ic_rect.custom_minimum_size = Vector2(32, 32)
+		ic_rect.custom_minimum_size = Vector2(28, 28)
 		ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -376,7 +377,7 @@ func _build_commercial_hub_ui() -> void:
 		var lbl := Label.new()
 		lbl.text = String(nd["name"])
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 13)
+		lbl.add_theme_font_size_override("font_size", 12)
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn_v.add_child(lbl)
 
@@ -429,17 +430,18 @@ func _build_base_overlays() -> void:
 func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, destination: int) -> void:
 	var action := Button.new()
 	action.name = "Side" + title.capitalize()
-	action.text = title
+	action.text = ""
+	action.tooltip_text = title
 	action.set_meta("full_label", title)
 	action.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	action.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 	action.expand_icon = true
-	action.custom_minimum_size = Vector2(110, 52)
+	action.custom_minimum_size = Vector2(64, 58)
 	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action.add_theme_font_size_override("font_size", 11)
 	if ResourceLoader.exists(icon_path):
 		action.icon = load(icon_path) as Texture2D
-	SurvivorVisualSystem.decorate_art_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 52.0)
+	SurvivorVisualSystem.decorate_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 58.0)
 	action.pressed.connect(func():
 		StageDirector.play_sfx("ui_click")
 		if destination == -1:
@@ -573,7 +575,8 @@ func _build_base_tab_content() -> void:
 	play_big_btn.add_theme_stylebox_override("disabled", SurvivorVisualSystem.button_style(SurvivorVisualSystem.GOLD, "disabled"))
 	play_big_btn.add_theme_font_size_override("font_size", 25)
 	play_big_btn.add_theme_color_override("font_color", Color(0.05, 0.05, 0.05, 1.0))
-	play_big_btn.text = "ROZPOCZNIJ MISJĘ"
+	play_big_btn.text = "" # The gold artwork already contains GRAJ.
+	play_big_btn.tooltip_text = "Rozpocznij misję"
 	play_big_btn.pressed.connect(_on_play_pressed)
 	base_vbox.add_child(play_big_btn)
 	# Preserve the approved golden PLAY artwork while making the disabled state clear.
@@ -716,7 +719,7 @@ func switch_hub_tab(tab_id: int) -> void:
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
 		var active := (i == current_hub_tab)
-		SurvivorVisualSystem.decorate_art_button(nb, SurvivorVisualSystem.GOLD if active else SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
 		nb.modulate = Color.WHITE if active else Color(0.85, 0.89, 0.93, 0.92)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
@@ -953,9 +956,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(23, 23) if compact_hub else Vector2(32, 32)
+					nav_child.custom_minimum_size = Vector2(20, 20) if compact_hub else Vector2(28, 28)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 11 if compact_hub else 13)
+					nav_child.add_theme_font_size_override("font_size", 9 if compact_hub else 12)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
@@ -1000,14 +1003,14 @@ func _apply_responsive_menu_layout() -> void:
 			continue
 		var left_side: bool = side_index == 0
 		actions.set_anchors_preset(Control.PRESET_TOP_LEFT if left_side else Control.PRESET_TOP_RIGHT)
-		actions.offset_left = 8.0 if left_side else (-56.0 if compact_hub else -124.0)
-		actions.offset_right = (56.0 if compact_hub else 124.0) if left_side else -8.0
+		actions.offset_left = 8.0 if left_side else (-62.0 if compact_hub else -76.0)
+		actions.offset_right = (62.0 if compact_hub else 76.0) if left_side else -8.0
 		actions.offset_top = 65.0
 		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (48 if compact_hub else 61)
 		for btn in actions.get_children():
 			if btn is Button:
-				btn.custom_minimum_size = Vector2(0, 44.0 if compact_hub else 52.0)
-				btn.text = "" if compact_hub else String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
+				btn.custom_minimum_size = Vector2(0, 48.0 if compact_hub else 58.0)
+				btn.text = "" # Icon-only tiles: no icon/text collision
 				btn.tooltip_text = String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
 
 	# Keep the main call to action and stage card inside the actual hub content
@@ -1017,7 +1020,7 @@ func _apply_responsive_menu_layout() -> void:
 		stage_card.custom_minimum_size = Vector2(minf(380.0 if portrait else 500.0, available_width), 184.0 if portrait else 220.0)
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
-		play_big_btn.text = "ROZPOCZNIJ MISJĘ"
+		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, 172.0 if portrait else 100.0)
 	if is_instance_valid(stage_title_lbl):
