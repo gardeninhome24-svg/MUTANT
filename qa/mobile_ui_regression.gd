@@ -181,6 +181,24 @@ func _run() -> void:
 				var skin_button: Button = skins[skin_id]
 				if not stage_manager.unlocked_skins.has(String(skin_id)) and String(skin_id) != "default":
 					_assert(skin_button.disabled, "Unowned premium skin %s cannot be selected for free" % String(skin_id))
+		var bag: GridContainer = profile.find_child("MetinBackpackGrid", true, false) as GridContainer
+		_assert(is_instance_valid(bag), "Metin-style equipment has a real backpack grid")
+		if is_instance_valid(bag):
+			_assert(bag.columns == 5, "Full-size portrait has five columns of backpack slots")
+			_assert(bag.get_child_count() >= 30, "Inventory has at least 30 populated or empty grid cells")
+		var action_row: HBoxContainer = profile.find_child("InventoryQuickActions", true, false) as HBoxContainer
+		_assert(is_instance_valid(action_row), "Equip and unequip available in Inventory")
+		for action_name in ["InventoryQuickEquip", "InventoryQuickUnequip"]:
+			var action: Button = profile.find_child(action_name, true, false) as Button
+			_assert(is_instance_valid(action), action_name + " is a native button")
+			if is_instance_valid(action):
+				_assert(action.pressed.get_connections().size() > 0, action_name + " has a live handler")
+				_assert(action.custom_minimum_size.y >= 44.0, action_name + " meets touch target")
+		for slot_id in ["weapon", "chest", "boots", "helmet", "gloves", "amulet"]:
+			var paperdoll_slot: Button = profile.find_child("EquipSlot_" + slot_id, true, false) as Button
+			_assert(is_instance_valid(paperdoll_slot), "Paperdoll includes " + slot_id)
+			if is_instance_valid(paperdoll_slot):
+				_assert(paperdoll_slot.pressed.get_connections().size() > 0, "Paperdoll slot is clickable: " + slot_id)
 		var inv_grid: GridContainer = profile.get("inv_grid") as GridContainer
 		var filter_grid: GridContainer = profile.get("inv_slot_filters_grid") as GridContainer
 		_assert(is_instance_valid(inv_grid), "Backpack slot grid exists")
