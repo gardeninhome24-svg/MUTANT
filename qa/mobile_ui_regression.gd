@@ -89,6 +89,35 @@ func _run() -> void:
 		if is_instance_valid(filter_grid):
 			_assert(filter_grid.columns <= 7, "Filters have a bounded column count")
 
+		var store_categories: GridContainer = profile.get("store_categories_grid") as GridContainer
+		var store_cards: GridContainer = profile.get("store_cards_grid") as GridContainer
+		var confirmation: ConfirmationDialog = profile.get("store_purchase_dialog") as ConfirmationDialog
+		_assert(is_instance_valid(store_categories), "Shop category navigation exists")
+		_assert(is_instance_valid(store_cards), "Shop product grid exists")
+		_assert(is_instance_valid(confirmation), "Premium purchase requires confirmation")
+		if is_instance_valid(store_categories):
+			_assert(store_categories.get_child_count() == 4, "Shop has four clear customer categories")
+		if is_instance_valid(store_cards):
+			_assert(store_cards.get_child_count() == 6, "Shop only shows six curated player-facing offers")
+
+		# Switch the actual viewport so the responsive grid logic is exercised,
+		# not only an artificially scaled menu control.
+		var stage_manager_narrow = root.get_node_or_null("StageDirector")
+		if stage_manager_narrow != null:
+			stage_manager_narrow.orientation_mode = "portrait"
+		root.size = Vector2i(420, 933)
+		await process_frame
+		profile.call("_apply_responsive_metrics")
+		if is_instance_valid(inv_grid):
+			_assert(inv_grid.columns == 2, "420px backpack shows two touch-friendly columns")
+		if is_instance_valid(filter_grid):
+			_assert(filter_grid.columns == 2, "420px gear filters show two columns")
+		if is_instance_valid(store_cards):
+			_assert(store_cards.columns == 1, "420px shop uses a single product column")
+		if is_instance_valid(store_categories):
+			_assert(store_categories.columns == 2, "420px shop navigation wraps to two columns")
+		root.size = Vector2i(720, 1280)
+
 	menu.queue_free()
 	await process_frame
 	_finish()
