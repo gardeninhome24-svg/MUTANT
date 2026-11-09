@@ -61,8 +61,11 @@ func _run() -> void:
 		for actions in [left_actions, right_actions]:
 			if is_instance_valid(actions):
 				for action in actions.get_children():
-					_assert(action is Button and action.pressed.get_connections().size() > 0, "Base shortcut has a live click handler")
-					_assert(action is Button and action.icon != null, "Base shortcut uses actual artwork")
+					var action_button: Button = action as Button
+					_assert(is_instance_valid(action_button), "Base shortcut is a real Button")
+					if is_instance_valid(action_button):
+						_assert(action_button.pressed.get_connections().size() > 0, "Base shortcut has a live click handler")
+						_assert(action_button.icon != null, "Base shortcut uses actual artwork")
 
 	var navigation_buttons: Array = menu.get("nav_buttons")
 	_assert(navigation_buttons.size() == 5, "Five primary game tabs are present")
