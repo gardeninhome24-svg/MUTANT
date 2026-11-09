@@ -752,13 +752,15 @@ func show_npc_comms(speaker: String, text: String) -> void:
 	var p_path: String = AssetRegistry.NPC_PORTRAITS.get(speaker, AssetRegistry.NPC_PORTRAITS["Mara"])
 	npc_portrait_rect.texture = AssetRegistry.get_tex(p_path)
 	npc_speaker_lbl.text = "RADIO • %s" % speaker.to_upper()
-	# Only a short teaser is shown over combat; the full message is in the journal.
+	# Avoid repeating NPC names in the subtitle; keep original in the log.
 	var preview := text.strip_edges()
-	if preview.length() > 125:
-		preview = preview.substr(0, 122).strip_edges() + "…"
+	if preview.to_lower().begins_with(speaker.to_lower() + ":"):
+		preview = preview.substr(speaker.length() + 1).strip_edges()
+	if preview.length() > 105:
+		preview = preview.substr(0, 102).strip_edges() + "…"
 	npc_text_lbl.text = preview
 	npc_dialogue_panel.visible = true
-	npc_hide_timer = 4.2
+	npc_hide_timer = 3.8
 	var log_entry := "[Etap %03d | Fala %d] %s: %s" % [current_stage_num, current_wave_num, speaker.to_upper(), text]
 	if not npc_dialogue_history.has(log_entry):
 		npc_dialogue_history.append(log_entry)
@@ -1264,7 +1266,7 @@ func _setup_extended_hud_and_profile() -> void:
 		sc_style.content_margin_top = 4
 		sc_style.content_margin_right = 6
 		sc_style.content_margin_bottom = 4
-		stats_card.add_theme_stylebox_override("panel", sc_style)
+		stats_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.LIME, true))
 
 	var margin_c := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin") as MarginContainer
 	if is_instance_valid(margin_c):
