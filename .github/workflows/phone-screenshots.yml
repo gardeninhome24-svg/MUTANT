@@ -78,12 +78,13 @@ jobs:
           test -s /tmp/mutantsurvivor-phone-shots/11_character_420x933.png
           test -s /tmp/mutantsurvivor-phone-shots/12_campaign_420x933.png
           test -s /tmp/mutantsurvivor-phone-shots/13_rewards_420x933.png
+          test -s /tmp/mutantsurvivor-phone-shots/14_menu_420x933.png
           # Validate the PNG header's real dimensions rather than trusting
           # a file name or successful exit from Godot.
           python3 - <<'PY'
           import glob, struct, hashlib, os
           shots = glob.glob("/tmp/mutantsurvivor-phone-shots/*.png")
-          assert len(shots) == 13, f"Expected 13 actual rendered screenshots, got {len(shots)}"
+          assert len(shots) == 14, f"Expected 14 actual rendered screenshots, got {len(shots)}"
           hashes = set()
           for path in shots:
               assert os.path.getsize(path) > 20000, f"Screenshot unexpectedly small/blank: {path}"
