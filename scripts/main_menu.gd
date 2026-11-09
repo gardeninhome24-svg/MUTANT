@@ -40,6 +40,7 @@ var weapon_icon_tex: TextureRect = null
 var weapon_name_lbl: Label = null
 
 var stage_card: PanelContainer = null
+var mission_description: Label = null
 var stage_preview: TextureRect = null
 var hero_spacer_control: Control = null
 var stage_title_lbl: Label = null
@@ -497,21 +498,21 @@ func _build_base_tab_content() -> void:
 	# KARTA AKTUALNEGO ETAPU (Sci-Fi z obramowaniem cyjanowym card_stage_clean.png)
 	# --------------------------------------------------------------------------
 	stage_card = PanelContainer.new()
-	stage_card.custom_minimum_size = Vector2(500, 270)
+	stage_card.custom_minimum_size = Vector2(630, 315)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
-	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_STAGE, SurvivorVisualSystem.GOLD, true))
+	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel("res://assets/ui/target_theme/mission_frame_release.svg", SurvivorVisualSystem.LIME, true))
 	base_vbox.add_child(stage_card)
 
 	var card_margin := MarginContainer.new()
-	card_margin.add_theme_constant_override("margin_left", 24)
-	card_margin.add_theme_constant_override("margin_right", 24)
-	card_margin.add_theme_constant_override("margin_top", 16)
-	card_margin.add_theme_constant_override("margin_bottom", 16)
+	card_margin.add_theme_constant_override("margin_left", 30)
+	card_margin.add_theme_constant_override("margin_right", 30)
+	card_margin.add_theme_constant_override("margin_top", 25)
+	card_margin.add_theme_constant_override("margin_bottom", 25)
 	stage_card.add_child(card_margin)
 
 	var stage_row := HBoxContainer.new()
-	stage_row.add_theme_constant_override("separation", 12)
+	stage_row.add_theme_constant_override("separation", 18)
 	card_margin.add_child(stage_row)
 	stage_preview = TextureRect.new()
 	stage_preview.name = "StageEnvironmentPreview"
@@ -522,7 +523,7 @@ func _build_base_tab_content() -> void:
 		var source_size: Vector2 = stage_source.get_size()
 		stage_crop.region = Rect2(source_size.x * 0.04, source_size.y * 0.12, source_size.x * 0.28, source_size.y * 0.67)
 		stage_preview.texture = stage_crop
-	stage_preview.custom_minimum_size = Vector2(156, 205)
+	stage_preview.custom_minimum_size = Vector2(178, 225)
 	stage_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	stage_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -530,7 +531,7 @@ func _build_base_tab_content() -> void:
 	var st_vbox := VBoxContainer.new()
 	st_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	st_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	st_vbox.add_theme_constant_override("separation", 4)
+	st_vbox.add_theme_constant_override("separation", 6)
 	stage_row.add_child(st_vbox)
 
 	# Górny wiersz karty: ◀ ETAP 030 ▶
@@ -550,7 +551,7 @@ func _build_base_tab_content() -> void:
 
 	stage_title_lbl = Label.new()
 	stage_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stage_title_lbl.add_theme_font_size_override("font_size", 30)
+	stage_title_lbl.add_theme_font_size_override("font_size", 28)
 	stage_title_lbl.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	stage_title_lbl.text = "ETAP 030"
 	title_h.add_child(stage_title_lbl)
@@ -568,27 +569,35 @@ func _build_base_tab_content() -> void:
 	stage_details_lbl = Label.new()
 	stage_details_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stage_details_lbl.add_theme_font_size_override("font_size", 20)
+	stage_details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stage_details_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
 	stage_details_lbl.add_theme_color_override("font_color", Color(0.92, 0.96, 1.0))
 	stage_details_lbl.text = "Krio Lab"
 	st_vbox.add_child(stage_details_lbl)
+	mission_description = Label.new()
+	mission_description.name = "MissionDescription"
+	mission_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	mission_description.add_theme_font_size_override("font_size", 12)
+	mission_description.add_theme_color_override("font_color", Color(0.87, 0.92, 0.94))
+	st_vbox.add_child(mission_description)
 
 	# Zalecana moc
 	stage_pwr_lbl = Label.new()
 	stage_pwr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stage_pwr_lbl.add_theme_font_size_override("font_size", 15)
-	stage_pwr_lbl.add_theme_color_override("font_color", Color(0.72, 0.88, 1.0))
+	stage_pwr_lbl.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
 	stage_pwr_lbl.text = "Zalecana moc: 4 850"
 	st_vbox.add_child(stage_pwr_lbl)
 
 	# Odstęp
 	var r_sp := Control.new()
-	r_sp.custom_minimum_size = Vector2(0, 10)
+	r_sp.custom_minimum_size = Vector2(0, 2)
 	st_vbox.add_child(r_sp)
 
 	# Wiersz 3 nagród etapu: Kryształ, Zębatka, XP
 	stage_rewards_hbox = HBoxContainer.new()
 	stage_rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	stage_rewards_hbox.add_theme_constant_override("separation", 24)
+	stage_rewards_hbox.add_theme_constant_override("separation", 14)
 	st_vbox.add_child(stage_rewards_hbox)
 
 	var r_c := TextureRect.new()
@@ -616,7 +625,7 @@ func _build_base_tab_content() -> void:
 	# DUŻY ZŁOTY PRZYCISK „GRAJ ▶” (btn_play_gold_clean.png)
 	# --------------------------------------------------------------------------
 	play_big_btn = Button.new()
-	play_big_btn.custom_minimum_size = Vector2(348, 72)
+	play_big_btn.custom_minimum_size = Vector2(550, 100)
 	play_big_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var play_tex_st := StyleBoxTexture.new()
 	play_tex_st.texture = load("res://assets/ui/target_theme/btn_play_gold_clean.png")
@@ -634,10 +643,10 @@ func _build_base_tab_content() -> void:
 	var continue_btn := Button.new()
 	continue_btn.name = "ContinueCampaignButton"
 	continue_btn.text = "▶  KONTYNUUJ KAMPANIĘ"
-	continue_btn.custom_minimum_size = Vector2(300, 52)
+	continue_btn.custom_minimum_size = Vector2(480, 60)
 	continue_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	SurvivorVisualSystem.decorate_button(continue_btn, SurvivorVisualSystem.LIME, 52.0)
-	continue_btn.add_theme_font_size_override("font_size", 17)
+	SurvivorVisualSystem.decorate_button(continue_btn, SurvivorVisualSystem.LIME, 60.0)
+	continue_btn.add_theme_font_size_override("font_size", 19)
 	continue_btn.pressed.connect(func(): switch_hub_tab(3))
 	base_vbox.add_child(continue_btn)
 	# Preserve the approved golden PLAY artwork while making the disabled state clear.
@@ -646,6 +655,7 @@ func _build_base_tab_content() -> void:
 	var aux_h := HBoxContainer.new()
 	aux_h.alignment = BoxContainer.ALIGNMENT_CENTER
 	aux_h.add_theme_constant_override("separation", 12)
+	aux_h.visible = false # Practice and difficulty remain accessible in campaign
 	base_vbox.add_child(aux_h)
 
 	var opt_st := StyleBoxFlat.new()
@@ -704,7 +714,7 @@ func _build_base_tab_content() -> void:
 	# A compact roadmap fills the formerly empty lower half with real progress,
 	# without adding fake rewards or another store widget.
 	var progress_gap := Control.new()
-	progress_gap.custom_minimum_size = Vector2(0, 18)
+	progress_gap.custom_minimum_size = Vector2(0, 8)
 	base_vbox.add_child(progress_gap)
 	var progress_card := PanelContainer.new()
 	progress_card.name = "CampaignProgressCard"
@@ -717,7 +727,7 @@ func _build_base_tab_content() -> void:
 	progress_style.set_content_margin_all(12.0)
 	progress_card.add_theme_stylebox_override("panel", progress_style)
 	base_vbox.add_child(progress_card)
-	progress_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.LIME, true))
+	progress_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(SurvivorVisualSystem.LIME))
 	var progress_col := VBoxContainer.new()
 	progress_col.add_theme_constant_override("separation", 8)
 	progress_card.add_child(progress_col)
@@ -740,6 +750,7 @@ func _build_base_tab_content() -> void:
 	quick_card.name = "OperatorQuickActions"
 	quick_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, false))
 	quick_card.custom_minimum_size = Vector2(0, 100)
+	quick_card.visible = false # Remove duplicate links from home composition
 	base_vbox.add_child(quick_card)
 	var quick_content := VBoxContainer.new()
 	quick_content.add_theme_constant_override("separation", 8)
@@ -1098,19 +1109,19 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, size.x - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(520.0 if portrait else 580.0, available_width), 270.0 if portrait else 260.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), 320.0 if portrait else 330.0)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = not compact_hub
 		stage_preview.custom_minimum_size = Vector2(156, 205) if portrait else Vector2(175, 180)
 	if is_instance_valid(play_big_btn):
-		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
+		play_big_btn.custom_minimum_size = Vector2(minf(560.0 if portrait else 600.0, available_width), 92.0 if portrait else 100.0)
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (260.0 if compact_hub else 305.0) if portrait else 120.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (220.0 if compact_hub else 295.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 24 if portrait else 30)
+		stage_title_lbl.add_theme_font_size_override("font_size", 18 if compact_hub else (27 if portrait else 30))
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.add_theme_font_size_override("font_size", 15 if portrait else 20)
+		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (18 if portrait else 20))
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
 
@@ -1150,9 +1161,11 @@ func update_labels() -> void:
 		stage_title_lbl.text = "ETAP %03d" % StageDirector.current_stage
 	if is_instance_valid(stage_details_lbl):
 		stage_details_lbl.text = String(cfg.get("chapter_name", cfg.get("name", "Krio Lab")))
+	if is_instance_valid(mission_description):
+		mission_description.text = String(cfg.get("description", "Oczyść sektor i zabezpiecz cel misji."))
 	if is_instance_valid(stage_pwr_lbl):
 		var rec_pwr := 450 + StageDirector.current_stage * 140
-		stage_pwr_lbl.text = "Zalecana moc: %d" % rec_pwr
+		stage_pwr_lbl.text = "ZALECANA MOC  %d" % rec_pwr
 
 	if is_instance_valid(diff_btn):
 		diff_btn.text = "⚔ %s" % String(diff.get("name", "Ocalały")).to_upper()
