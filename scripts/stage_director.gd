@@ -152,9 +152,9 @@ const AMBIENCE_WAV_MAP := {
 }
 
 const DEFAULT_DAILY_MISSIONS := [
-	{"id": "kill_mutants", "title_pl": "Pokonaj 30 mutantów", "title_en": "Defeat 30 mutants", "title_de": "Besiege 30 Mutanten", "progress": 0, "target": 30, "claimed": false, "credits": 150, "gems": 15, "scrap": 3},
-	{"id": "complete_stage", "title_pl": "Ukończ 1 operację", "title_en": "Complete 1 operation", "title_de": "Schließe 1 Operation ab", "progress": 0, "target": 1, "claimed": false, "credits": 220, "gems": 25, "scrap": 5},
-	{"id": "upgrade_gear", "title_pl": "Ulepsz przedmiot RPG", "title_en": "Upgrade RPG gear", "title_de": "Verbessere RPG-Ausrüstung", "progress": 0, "target": 1, "claimed": false, "credits": 180, "gems": 20, "scrap": 4}
+	{"id": "kill_mutants", "title_pl": "Pokonaj 30 mutantów", "title_en": "Defeat 30 mutants", "title_de": "Besiege 30 Mutanten", "progress": 0, "target": 30, "claimed": false, "credits": 150, "gems": 0, "scrap": 5},
+	{"id": "complete_stage", "title_pl": "Ukończ 1 operację", "title_en": "Complete 1 operation", "title_de": "Schließe 1 Operation ab", "progress": 0, "target": 1, "claimed": false, "credits": 220, "gems": 0, "scrap": 8},
+	{"id": "upgrade_gear", "title_pl": "Ulepsz przedmiot RPG", "title_en": "Upgrade RPG gear", "title_de": "Verbessere RPG-Ausrüstung", "progress": 0, "target": 1, "claimed": false, "credits": 180, "gems": 0, "scrap": 6}
 ]
 
 const OBJECTIVE_NAMES_PL := {
@@ -294,13 +294,13 @@ var battle_pass_premium_unlocked: bool = false
 var vip_sandbox_active: bool = false
 
 const DAILY_REWARDS_TABLE := [
-	{"day": 1, "title": "Dzień 1", "credits": 120, "gems": 25, "scrap": 2, "chest": false},
+	{"day": 1, "title": "Dzień 1", "credits": 120, "gems": 0, "scrap": 4, "chest": false},
 	{"day": 2, "title": "Dzień 2", "credits": 160, "gems": 0, "scrap": 5, "chest": false},
-	{"day": 3, "title": "Dzień 3", "credits": 220, "gems": 35, "scrap": 4, "chest": false},
-	{"day": 4, "title": "Dzień 4", "credits": 180, "gems": 60, "scrap": 6, "chest": false},
-	{"day": 5, "title": "Dzień 5", "credits": 250, "gems": 40, "scrap": 8, "chest": true},
-	{"day": 6, "title": "Dzień 6", "credits": 320, "gems": 50, "scrap": 12, "chest": false},
-	{"day": 7, "title": "Dzień 7", "credits": 500, "gems": 120, "scrap": 20, "chest": true}
+	{"day": 3, "title": "Dzień 3", "credits": 220, "gems": 0, "scrap": 6, "chest": false},
+	{"day": 4, "title": "Dzień 4", "credits": 180, "gems": 0, "scrap": 8, "chest": false},
+	{"day": 5, "title": "Dzień 5", "credits": 250, "gems": 0, "scrap": 10, "chest": true},
+	{"day": 6, "title": "Dzień 6", "credits": 320, "gems": 0, "scrap": 14, "chest": false},
+	{"day": 7, "title": "Dzień 7", "credits": 500, "gems": 0, "scrap": 24, "chest": true}
 ]
 
 const HERO_CLASSES := {
@@ -773,7 +773,7 @@ func claim_daily_mission(mission_id: String) -> bool:
 				m["claimed"] = true
 				daily_missions[i] = m
 				credits += int(m.get("credits", 100))
-				dark_matter_gems += int(m.get("gems", 15))
+				dark_matter_gems += int(m.get("gems", 0))
 				scrap_materials += int(m.get("scrap", 3))
 				play_sfx("victory")
 				save_campaign_profile()
@@ -786,8 +786,8 @@ func claim_daily_free_shop_pack() -> bool:
 		return false
 	daily_free_pack_claimed = true
 	credits += 150
-	dark_matter_gems += 20
-	scrap_materials += 3
+	# The daily supply pack is free-to-play credits/materials, not paid gems.
+	scrap_materials += 5
 	play_sfx("victory")
 	save_campaign_profile()
 	return true
@@ -1062,6 +1062,29 @@ func spend_campaign_attempt() -> bool:
 const SINGLE_ATTEMPT_REFILL_GEMS := 18
 const FULL_ATTEMPTS_REFILL_GEMS := 60
 
+const SKIN_GEM_PRICES := {
+	"neon_hunter": 120,
+	"hazmat_trooper": 120,
+	"crimson_storm": 120,
+	"void_sniper": 150
+}
+
+func buy_skin_with_gems(skin_id: String) -> bool:
+	if not SKIN_GEM_PRICES.has(skin_id):
+		return false
+	if unlocked_skins.has(skin_id):
+		return false
+	var price := int(SKIN_GEM_PRICES[skin_id])
+	if dark_matter_gems < price:
+		return false
+	# Payment and ownership are changed together, then persisted.
+	dark_matter_gems -= price
+	unlocked_skins.append(skin_id)
+	selected_skin_id = skin_id
+	save_campaign_profile()
+	emit_signal("profile_data_changed")
+	return true
+
 func can_buy_single_attempt_refill() -> bool:
 	return attempts < 5 and dark_matter_gems >= SINGLE_ATTEMPT_REFILL_GEMS
 
@@ -1109,7 +1132,8 @@ func claim_daily_reward(day_num: int) -> Dictionary:
 			daily_claimed_days.append(day_num)
 			last_daily_calendar_claim_day = today
 			credits += int(r["credits"])
-			dark_matter_gems += int(r["gems"])
+			# Premium currency is not awarded by normal calendar login.
+			dark_matter_gems += 0
 			scrap_materials += int(r["scrap"])
 			var dropped_item := {}
 			if bool(r["chest"]):
