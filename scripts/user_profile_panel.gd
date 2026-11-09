@@ -1434,11 +1434,11 @@ func _build_tab_campaign_and_talents() -> Control:
 	c_vbox.add_child(reward_strip)
 	var reward_row := HBoxContainer.new()
 	reward_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	reward_row.add_theme_constant_override("separation", 6)
+	reward_row.add_theme_constant_override("separation", 4)
 	reward_strip.add_child(reward_row)
 	for reward_spec in [
-		{"id": "Credits", "icon": "res://addons/ms_balance/assets/ui_v2/icon_gold.png", "caption": "KREDYTY"},
-		{"id": "Scrap", "icon": "res://assets/environment/scrap_crate.png", "caption": "ZŁOM"},
+		{"id": "Credits", "icon": "res://assets/ui/target_theme/reward_credits_coin.svg", "caption": "KREDYTY"},
+		{"id": "Scrap", "icon": "res://assets/ui/target_theme/reward_cog.png", "caption": "ZŁOM"},
 		{"id": "Equipment", "icon": "res://assets/ui/target_theme/reward_xp.png", "caption": "RPG"}
 	]:
 		var reward_cell := VBoxContainer.new()
@@ -1448,7 +1448,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		var reward_icon := TextureRect.new()
 		reward_icon.name = "CampaignRewardIcon" + String(reward_spec["id"])
 		reward_icon.texture = load(String(reward_spec["icon"])) as Texture2D
-		reward_icon.custom_minimum_size = Vector2(46, 40)
+		reward_icon.custom_minimum_size = Vector2(38, 36)
 		reward_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		reward_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		reward_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
