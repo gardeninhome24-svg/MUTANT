@@ -1019,10 +1019,10 @@ func _build_settings_modal() -> void:
 
 	var net_btn := Button.new()
 	net_btn.custom_minimum_size = Vector2(0, 34)
-	net_btn.text = "📶 Tryb Sieci: ONLINE (Reklamy i Sklep aktywne)"
+	net_btn.text = "📶 Połączenie: włączone (funkcje testowe)"
 	net_btn.pressed.connect(func():
 		StageDirector.is_online_mode = not StageDirector.is_online_mode
-		net_btn.text = "📶 Tryb Sieci: ONLINE (Reklamy i Sklep aktywne)" if StageDirector.is_online_mode else "📴 Tryb Sieci: OFFLINE (Kampania działa, reklamy wyłączone)"
+		net_btn.text = "📶 Połączenie: włączone (funkcje testowe)" if StageDirector.is_online_mode else "📴 Połączenie: wyłączone (kampania offline)"
 	)
 	v.add_child(net_btn)
 
