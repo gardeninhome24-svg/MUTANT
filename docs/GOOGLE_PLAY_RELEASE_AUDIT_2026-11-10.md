@@ -26,6 +26,7 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 | Testowanie konta | Brak potwierdzenia typu i daty utworzenia konta wydawcy. | Dla nowych osobistych kont od 13.11.2023 zwykle wymagane 12 testerów opt-in bez przerwy przez 14 dni przed wnioskiem o Production. |
 | Native ABI / 16 KB | arm64-v8a w presetach włączone, ale brak weryfikacji bibliotek `.so` i 16 KB page size docelowego AAB. | Sprawdzić bibliotekę Godot i ewentualne SDK w finalnym AAB oraz instalację na urządzeniu z 16 KB page size. |
 | Materiały sklepu / prawa | Brak potwierdzenia pełnej listy licencji grafik, muzyki, fontów i nazwy gry. | Zinwentaryzować prawa i przygotować ikony, feature graphic, screenshoty zgodne z faktyczną wersją oraz opis produktu. |
+| Ikona aplikacji | W `project.godot` wskazany jest `assets/mutantsurvivor_ch01/icons/purple_crystal.png`, czyli ikona waluty, nie zatwierdzony znak aplikacji. | Przygotować i przetestować osobną ikonę gry oraz adaptacyjne ikonki Androida; nie używać przypadkowej grafiki kryształu jako brandingu Play. |
 
 ## P0 — stabilność samej gry
 - Test na fizycznych urządzeniach: 420×933, 720×1280, 20:9; Android 13–16, gesty systemowe, notch, joystick multitouch, rotacja.
