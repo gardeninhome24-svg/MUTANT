@@ -481,6 +481,20 @@ func _build_layered_arena(stage_num: int) -> void:
 		cracked_tiles = ["cracked_concrete", "concrete_fracture"]
 		grate_tiles = ["rusted_plate", "metal_grate"]
 		hazard_tiles = ["acid_pit_glow", "toxic_pool"]
+	elif biome_id == "abandoned_city":
+		# Ruined streets use fractured masonry and burnt paving, not the
+		# industrial-laboratory default tile palette.
+		base_tiles = ["broken_stone", "concrete_rubble", "scorched_floor"]
+		cracked_tiles = ["floor_cracks", "concrete_fracture", "cracked_concrete"]
+		grate_tiles = ["rusted_plate", "bolted_tile"]
+		hazard_tiles = ["scorched_floor", "warning_stripes"]
+	elif biome_id == "reactor":
+		# The final reactor chapters have a distinct high-contrast floor
+		# language without adding expensive runtime geometry.
+		base_tiles = ["reactor_tile", "cryo_tile", "bolted_tile"]
+		cracked_tiles = ["concrete_fracture", "floor_cracks"]
+		grate_tiles = ["metal_grate", "steel_grate"]
+		hazard_tiles = ["reactor_tile", "warning_stripes", "acid_pit_glow"]
 
 	var cols := 26
 	var rows := 22
