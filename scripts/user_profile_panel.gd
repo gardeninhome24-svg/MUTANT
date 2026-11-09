@@ -68,6 +68,8 @@ var store_category_filter: String = "all"
 var store_cat_btns: Dictionary = {}
 var store_cards_grid: GridContainer
 var sandbox_status_lbl: Label
+var store_purchase_dialog: ConfirmationDialog = null
+var pending_store_purchase: Dictionary = {}
 var free_daily_pack_btn: Button
 
 # --- TAB 4: CODZIENNE NAGRODY 7 DNI & ZADANIA DZIENNE ---
@@ -234,6 +236,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	color = Color(0.02, 0.04, 0.08, 0.0 if embedded_in_hub else 0.92)
 	_build_ui()
+	_setup_store_confirmation()
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
 	_apply_responsive_metrics()
@@ -1612,8 +1615,36 @@ func _refresh_store_tab_ui() -> void:
 			buy_btn.text = "NIEDOSTĘPNE — W PRZYGOTOWANIU"
 		buy_btn.disabled = not (can_buy_skin or can_refill)
 		var cap_prod: Dictionary = prod
-		buy_btn.pressed.connect(func(): _execute_player_shop_purchase(cap_prod))
+		buy_btn.pressed.connect(func(): _request_player_shop_purchase(cap_prod))
 		cv.add_child(buy_btn)
+
+func _setup_store_confirmation() -> void:
+	store_purchase_dialog = ConfirmationDialog.new()
+	store_purchase_dialog.title = "Potwierdź zakup"
+	store_purchase_dialog.ok_button_text = "KUPUJĘ"
+	store_purchase_dialog.cancel_button_text = "ANULUJ"
+	add_child(store_purchase_dialog)
+	store_purchase_dialog.confirmed.connect(_confirm_player_shop_purchase)
+
+func _request_player_shop_purchase(prod: Dictionary) -> void:
+	var skin_id := String(prod.get("skin_unlock", ""))
+	var price := int(StageDirector.SKIN_GEM_PRICES.get(skin_id, 0))
+	if String(prod.get("id", "")) == "attempts_refill_full":
+		price = StageDirector.FULL_ATTEMPTS_REFILL_GEMS
+	if price <= 0 or not is_instance_valid(store_purchase_dialog):
+		return
+	pending_store_purchase = prod.duplicate(true)
+	store_purchase_dialog.dialog_text = "Kupić %s za %d kryształów?\\nObecne saldo: %d kryształów." % [
+		String(prod.get("title", "przedmiot")), price, StageDirector.dark_matter_gems
+	]
+	store_purchase_dialog.popup_centered(Vector2i(440, 230))
+
+func _confirm_player_shop_purchase() -> void:
+	if pending_store_purchase.is_empty():
+		return
+	var product := pending_store_purchase.duplicate(true)
+	pending_store_purchase.clear()
+	_execute_player_shop_purchase(product)
 
 func _execute_player_shop_purchase(prod: Dictionary) -> void:
 	var product_id := String(prod.get("id", ""))
