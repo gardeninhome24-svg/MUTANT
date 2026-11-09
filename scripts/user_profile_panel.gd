@@ -1696,8 +1696,8 @@ func _refresh_store_tab_ui() -> void:
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 202.0)
-		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(accent, true))
+		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 226.0)
+		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.metal_panel(accent))
 		store_cards_grid.add_child(card)
 
 		var cv := VBoxContainer.new()
@@ -1729,7 +1729,7 @@ func _refresh_store_tab_ui() -> void:
 		var title_l := Label.new()
 		title_l.text = String(prod["title"])
 		title_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		title_l.add_theme_font_size_override("font_size", 14)
+		title_l.add_theme_font_size_override("font_size", 15)
 		title_l.add_theme_color_override("font_color", Color(0.98, 0.98, 1.0))
 		tv.add_child(title_l)
 
@@ -1741,7 +1741,7 @@ func _refresh_store_tab_ui() -> void:
 		tv.add_child(desc_l)
 
 		var buy_btn := Button.new()
-		buy_btn.custom_minimum_size = Vector2(0, 44)
+		buy_btn.custom_minimum_size = Vector2(0, 50)
 		buy_btn.add_theme_font_size_override("font_size", 12)
 		var gem_price := int(StageDirector.SKIN_GEM_PRICES.get(skin_unlock, 0))
 		var is_skin := not skin_unlock.is_empty() and gem_price > 0
