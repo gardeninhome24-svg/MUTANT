@@ -52,6 +52,12 @@ jobs:
       - name: Import project resources
         run: godot --headless --path . --editor --import --quit
 
+      - name: Pre-beta structural validation (campaign and scenes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/prebeta_validation.gd
+
       - name: Smoke test booting the main menu (headless)
         shell: bash
         run: |
