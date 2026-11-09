@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   phone-render:
-    name: Render 720x1280 menu and combat
+    name: Render 720x1280 and 420x933 real game screens
     runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.7.2
@@ -64,7 +64,27 @@ jobs:
             --out /tmp/mutantsurvivor-phone-shots \
             2>&1 | tee /tmp/mutantsurvivor-visual-render.log
           test -s /tmp/mutantsurvivor-phone-shots/01_menu_720x1280.png
-          test -s /tmp/mutantsurvivor-phone-shots/05_combat_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/05_shop_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/06_rewards_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/07_combat_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/08_combat_420x933.png
+          test -s /tmp/mutantsurvivor-phone-shots/09_shop_420x933.png
+          test -s /tmp/mutantsurvivor-phone-shots/10_equipment_420x933.png
+          # Validate the PNG header's real dimensions rather than trusting
+          # a file name or successful exit from Godot.
+          python3 - <<'PY'
+          import glob, struct
+          shots = glob.glob("/tmp/mutantsurvivor-phone-shots/*.png")
+          assert len(shots) == 10, f"Expected 10 actual rendered screenshots, got {len(shots)}"
+          for path in shots:
+              with open(path, "rb") as file:
+                  head = file.read(24)
+              assert head[:8] == b"\x89PNG\r\n\x1a\n", f"Not PNG: {path}"
+              width, height = struct.unpack(">II", head[16:24])
+              expected = (420, 933) if "420x933" in path else (720, 1280)
+              assert (width, height) == expected, f"{path}: {(width, height)} != {expected}"
+              print(f"Validated real PNG: {path} {width}x{height}")
+          PY
 
       - name: Upload actual rendered screenshots
         if: always()
