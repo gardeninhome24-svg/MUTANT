@@ -822,8 +822,11 @@ func update_labels() -> void:
 	if is_instance_valid(account_lvl_lbl):
 		account_lvl_lbl.text = "Lv:%d" % StageDirector.character_level
 	if is_instance_valid(account_xp_bar):
-		account_xp_bar.max_value = 100.0
-		account_xp_bar.value = 65.0
+		# StageDirector stores XP within the current account level.
+		var xp_needed := StageDirector.get_character_xp_needed(StageDirector.character_level)
+		account_xp_bar.max_value = float(maxi(1, xp_needed))
+		account_xp_bar.value = float(clampi(StageDirector.character_xp, 0, xp_needed))
+		account_xp_bar.tooltip_text = "XP: %d / %d" % [StageDirector.character_xp, xp_needed]
 	if is_instance_valid(credits_lbl):
 		credits_lbl.text = "%d" % StageDirector.credits
 	if is_instance_valid(gems_lbl):
