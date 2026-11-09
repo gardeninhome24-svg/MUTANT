@@ -52,6 +52,7 @@ var diff_btn: Button = null
 var play_big_btn: Button = null
 var campaign_progress_label: Label = null
 var campaign_progress_bar: ProgressBar = null
+var campaign_milestone_labels: Array[Label] = []
 var base_power_label: Label = null
 var practice_btn: Button = null
 var stage_prev_btn: Button = null
@@ -752,6 +753,28 @@ func _build_base_tab_content() -> void:
 	progress_fill.set_corner_radius_all(4)
 	campaign_progress_bar.add_theme_stylebox_override("fill", progress_fill)
 	progress_col.add_child(campaign_progress_bar)
+	# Release home roadmap: visible real stage milestones, not an empty plate.
+	var milestone_row := HBoxContainer.new()
+	milestone_row.name = "CampaignMilestones"
+	milestone_row.add_theme_constant_override("separation", 6)
+	progress_col.add_child(milestone_row)
+	for milestone in [1, 25, 50, 75, 100]:
+		var milestone_label := Label.new()
+		milestone_label.name = "Milestone_%03d" % milestone
+		milestone_label.text = "%03d" % milestone
+		milestone_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		milestone_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		milestone_label.add_theme_font_size_override("font_size", 13)
+		milestone_label.add_theme_color_override("font_color", SurvivorVisualSystem.MUTED)
+		milestone_row.add_child(milestone_label)
+		campaign_milestone_labels.append(milestone_label)
+	var progress_hint := Label.new()
+	progress_hint.name = "CampaignProgressHint"
+	progress_hint.text = "Pokonuj etapy, aby odblokować kolejne rozdziały"
+	progress_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	progress_hint.add_theme_font_size_override("font_size", 11)
+	progress_hint.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
+	progress_col.add_child(progress_hint)
 
 	# Real-player quick actions fill the former empty hub area.
 	var quick_card := PanelContainer.new()
@@ -1152,7 +1175,7 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(campaign_continue):
 		campaign_continue.custom_minimum_size = Vector2(minf(480.0, available_width), 50.0 if compact_hub else 60.0)
 		campaign_continue.add_theme_font_size_override("font_size", 13 if compact_hub else 19)
-
+	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
 		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 348.0) if portrait else 145.0)
@@ -1188,6 +1211,14 @@ func update_labels() -> void:
 		campaign_progress_label.text = "KAMPANIA  •  %d / 100 ETAPÓW" % finished
 	if is_instance_valid(campaign_progress_bar):
 		campaign_progress_bar.value = maxi(0, StageDirector.max_unlocked_stage - 1)
+	for milestone_index in range(campaign_milestone_labels.size()):
+		var milestone_label: Label = campaign_milestone_labels[milestone_index]
+		if not is_instance_valid(milestone_label):
+			continue
+		var required_stage: int = [1, 25, 50, 75, 100][milestone_index]
+		var unlocked: bool = StageDirector.max_unlocked_stage >= required_stage
+		milestone_label.add_theme_color_override("font_color", SurvivorVisualSystem.LIME if unlocked else SurvivorVisualSystem.MUTED)
+		milestone_label.text = ("◆ %03d" if unlocked else "◇ %03d") % required_stage
 	if is_instance_valid(base_power_label):
 		base_power_label.text = "MOC OPERATORA  %d     |     ODBLOKOWANO ETAP %03d" % [StageDirector.get_total_combat_power(), StageDirector.max_unlocked_stage]
 
