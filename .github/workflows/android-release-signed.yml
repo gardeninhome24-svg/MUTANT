@@ -60,6 +60,16 @@ jobs:
             exit 1
           fi
 
+      - name: Portrait HUD overlap and required art resource gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/visual_release_gate.gd 2>&1 | tee /tmp/visual-release-gate.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource|VISUAL GATE FAIL:|VISUAL GATE FAILED:)" /tmp/visual-release-gate.log; then
+            echo "::error::Visual resource or HUD geometry regression detected."
+            exit 1
+          fi
+
       - name: Mobile menu, campaign and inventory layout regression
         shell: bash
         run: |
