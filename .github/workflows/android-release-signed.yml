@@ -44,6 +44,16 @@ jobs:
             exit 1
           fi
 
+      - name: Smoke test combat scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --quit-after 120 res://scenes/main/main.tscn 2>&1 | tee /tmp/release-combat.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource)" /tmp/release-combat.log; then
+            echo "::error::Combat errors detected. Signed release blocked."
+            exit 1
+          fi
+
       - name: Sign and export release APK
         shell: bash
         env:
