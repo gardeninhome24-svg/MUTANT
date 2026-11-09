@@ -1295,11 +1295,9 @@ func _refresh_inventory_tab_ui() -> void:
 func _refresh_inventory_quick_actions() -> void:
 	if not is_instance_valid(inv_quick_info):
 		return
+	# A filtered-out item must not silently reappear as an actionable selection.
+	# Paperdoll taps select their equipped item explicitly in their callback.
 	var item: Dictionary = StageDirector.get_item_instance(selected_bag_instance_id)
-	var equipped_id: String = String(StageDirector.equipped_items.get(selected_inspect_slot_id, ""))
-	if item.is_empty() and not equipped_id.is_empty():
-		selected_bag_instance_id = equipped_id
-		item = StageDirector.get_item_instance(equipped_id)
 	var has_item: bool = not item.is_empty()
 	var slot: String = String(item.get("slot", selected_inspect_slot_id))
 	var is_equipped: bool = has_item and String(StageDirector.equipped_items.get(slot, "")) == selected_bag_instance_id
