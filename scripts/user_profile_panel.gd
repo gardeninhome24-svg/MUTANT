@@ -1269,6 +1269,52 @@ func _refresh_inventory_tab_ui() -> void:
 
 	_refresh_inventory_detail_panel()
 
+func _refresh_inventory_quick_actions() -> void:
+	if not is_instance_valid(inv_quick_info):
+		return
+	var item: Dictionary = StageDirector.get_item_instance(selected_bag_instance_id)
+	var equipped_id: String = String(StageDirector.equipped_items.get(selected_inspect_slot_id, ""))
+	if item.is_empty() and not equipped_id.is_empty():
+		selected_bag_instance_id = equipped_id
+		item = StageDirector.get_item_instance(equipped_id)
+	var has_item: bool = not item.is_empty()
+	var slot: String = String(item.get("slot", selected_inspect_slot_id))
+	var is_equipped: bool = has_item and String(StageDirector.equipped_items.get(slot, "")) == selected_bag_instance_id
+	inv_quick_info.text = String(item.get("name", "WYBIERZ ITEM")).left(20)
+	inv_quick_equip.disabled = not has_item or is_equipped
+	inv_quick_unequip.disabled = not is_equipped
+
+
+func _inventory_quick_equip_selected() -> void:
+	var item: Dictionary = StageDirector.get_item_instance(selected_bag_instance_id)
+	if item.is_empty():
+		return
+	var slot: String = String(item.get("slot", ""))
+	if slot.is_empty() or String(StageDirector.equipped_items.get(slot, "")) == selected_bag_instance_id:
+		return
+	StageDirector.equip_item(selected_bag_instance_id)
+	StageDirector.save_campaign_profile()
+	if is_instance_valid(player_ref):
+		player_ref.apply_class_and_talents(false)
+	refresh_ui()
+	emit_signal("profile_updated")
+
+
+func _inventory_quick_unequip_selected() -> void:
+	var item: Dictionary = StageDirector.get_item_instance(selected_bag_instance_id)
+	if item.is_empty():
+		return
+	var slot: String = String(item.get("slot", ""))
+	if String(StageDirector.equipped_items.get(slot, "")) != selected_bag_instance_id:
+		return
+	StageDirector.unequip_slot(slot)
+	StageDirector.save_campaign_profile()
+	if is_instance_valid(player_ref):
+		player_ref.apply_class_and_talents(false)
+	refresh_ui()
+	emit_signal("profile_updated")
+
+
 func _refresh_inventory_detail_panel() -> void:
 	if not is_instance_valid(inv_detail_box):
 		return
