@@ -28,7 +28,12 @@ jobs:
         run: |
           set -euo pipefail
           apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb xauth libgl1-mesa-dri libglx-mesa0 libegl1
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
+            xvfb xauth libgl1-mesa-dri libglx-mesa0 libegl1 \
+            libxcursor1 libxinerama1 libxi6 libxrandr2 libxrender1 libxfixes3 \
+            libfontconfig1 fontconfig libxkbcommon0 libwayland-cursor0
+          ldconfig
+          test -f /usr/lib/x86_64-linux-gnu/libXcursor.so.1 || ldconfig -p | grep -q libXcursor.so.1
           mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
           mkdir -p /tmp/mutantsurvivor-phone-shots
@@ -40,11 +45,14 @@ jobs:
         shell: bash
         env:
           LIBGL_ALWAYS_SOFTWARE: "1"
+          XDG_SESSION_TYPE: "x11"
+          WAYLAND_DISPLAY: ""
+          GDK_BACKEND: "x11"
         run: |
           set -euo pipefail
           xvfb-run -a -s "-screen 0 720x1280x24" \
-            godot --path . --rendering-method gl_compatibility \
-            --resolution 720x1280 \
+            godot --path . --display-driver x11 --rendering-method gl_compatibility \
+            --windowed --resolution 720x1280 \
             --script res://qa/capture_phone_layout.gd -- \
             --out /tmp/mutantsurvivor-phone-shots \
             2>&1 | tee /tmp/mutantsurvivor-visual-render.log
