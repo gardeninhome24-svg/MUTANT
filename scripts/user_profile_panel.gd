@@ -1918,8 +1918,9 @@ func _refresh_daily_and_bp_ui() -> void:
 		for r in StageDirector.DAILY_REWARDS_TABLE:
 			var d_num := int(r["day"])
 			var claimed := StageDirector.daily_claimed_days.has(d_num)
-			var box := _create_subpanel()
-			box.custom_minimum_size = Vector2(128, 108)
+			var box := _create_subpanel(SurvivorVisualSystem.GOLD if not claimed else SurvivorVisualSystem.LIME)
+			box.custom_minimum_size = Vector2(136, 146)
+			box.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD if not claimed else SurvivorVisualSystem.LIME, not claimed))
 			box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var v := VBoxContainer.new()
 			v.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -1929,14 +1930,16 @@ func _refresh_daily_and_bp_ui() -> void:
 			var dl := Label.new()
 			dl.text = "Dzień %d" % d_num
 			dl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			dl.add_theme_font_size_override("font_size", 12)
+			SurvivorVisualSystem.decorate_section(dl, SurvivorVisualSystem.GOLD, 15)
 			dl.add_theme_color_override("font_color", Color(1.0, 0.86, 0.25))
 			v.add_child(dl)
 
 			var rl := Label.new()
 			rl.text = "+%d Kr  •  +%d Złomu" % [int(r["credits"]), int(r["scrap"])]
 			rl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			rl.add_theme_font_size_override("font_size", 10)
+			rl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			rl.add_theme_font_size_override("font_size", 12)
+			rl.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
 			v.add_child(rl)
 
 			var cb := Button.new()
@@ -1944,8 +1947,9 @@ func _refresh_daily_and_bp_ui() -> void:
 			var claimable := not claimed and d_num == StageDirector.daily_login_day and StageDirector.last_daily_calendar_claim_day < today
 			cb.text = "ODEBRANO" if claimed else ("ODBIERZ" if claimable else "ZABLOKOWANE")
 			cb.disabled = not claimable
-			cb.custom_minimum_size = Vector2(96, 28)
-			cb.add_theme_font_size_override("font_size", 11)
+			cb.custom_minimum_size = Vector2(0, 46)
+			cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			SurvivorVisualSystem.decorate_button(cb, SurvivorVisualSystem.GOLD if claimable else SurvivorVisualSystem.MUTED, 46.0)
 			var day_cap: int = d_num
 			cb.pressed.connect(func():
 				StageDirector.claim_daily_reward(day_cap)
@@ -1969,8 +1973,8 @@ func _refresh_daily_and_bp_ui() -> void:
 			var prog := int(dm.get("progress", 0))
 			var target := int(dm.get("target", 1))
 			var claimed := bool(dm.get("claimed", false))
-			var row := HBoxContainer.new()
-			row.add_theme_constant_override("separation", 8)
+			var row := VBoxContainer.new()
+			row.add_theme_constant_override("separation", 6)
 			daily_missions_vbox.add_child(row)
 
 			var title_key := "title_" + StageDirector.lang
@@ -1980,12 +1984,21 @@ func _refresh_daily_and_bp_ui() -> void:
 			lbl.text = "• %s (%d/%d) — Nagroda: +%d Kr, +%d Złomu" % [
 				m_title, prog, target, int(dm.get("credits", 150)), int(dm.get("scrap", 3))
 			]
-			lbl.add_theme_font_size_override("font_size", 11)
+			lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			lbl.add_theme_font_size_override("font_size", 13)
+			lbl.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
 			row.add_child(lbl)
+			var mission_progress := ProgressBar.new()
+			mission_progress.custom_minimum_size = Vector2(0, 10)
+			mission_progress.max_value = maxf(1.0, float(target))
+			mission_progress.value = float(mini(prog, target))
+			mission_progress.show_percentage = false
+			row.add_child(mission_progress)
 
 			var mb := Button.new()
-			mb.custom_minimum_size = Vector2(120, 28)
-			mb.add_theme_font_size_override("font_size", 11)
+			mb.custom_minimum_size = Vector2(0, 44)
+			mb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			SurvivorVisualSystem.decorate_button(mb, SurvivorVisualSystem.LIME if prog >= target and not claimed else SurvivorVisualSystem.MUTED, 44.0)
 			mb.text = "✓ ODEBRANO" if claimed else ("ODBIERZ" if prog >= target else "W TOKU")
 			mb.disabled = claimed or (prog < target)
 			var cap_mid: String = m_id
