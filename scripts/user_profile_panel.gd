@@ -234,6 +234,21 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(205, 215)
+	for talent_id in talent_rows.keys():
+		var talent_ui: Dictionary = talent_rows[talent_id]
+		var upgrade: Button = talent_ui["btn"] as Button
+		var name_label: Label = talent_ui["name_lbl"] as Label
+		var talent_icon: TextureRect = talent_ui["icon"] as TextureRect
+		var talent_row: HBoxContainer = talent_ui["row_hbox"] as HBoxContainer
+		if is_instance_valid(upgrade):
+			upgrade.custom_minimum_size.x = 90.0 if narrow else 145.0
+			upgrade.add_theme_font_size_override("font_size", 10 if narrow else 12)
+		if is_instance_valid(name_label):
+			name_label.add_theme_font_size_override("font_size", 10 if narrow else 13)
+		if is_instance_valid(talent_icon):
+			talent_icon.custom_minimum_size = Vector2(40, 48) if narrow else Vector2(56, 56)
+		if is_instance_valid(talent_row):
+			talent_row.add_theme_constant_override("separation", 5 if narrow else 10)
 	var jump_shortcuts := find_child("StageJumpGrid", true, false) as GridContainer
 	if is_instance_valid(jump_shortcuts):
 		jump_shortcuts.columns = 3 if narrow else 5
@@ -1480,6 +1495,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 		var name_lbl := Label.new()
 		name_lbl.add_theme_font_size_override("font_size", 13)
+		name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		info_v.add_child(name_lbl)
 
 		var desc_lbl := Label.new()
@@ -1491,6 +1507,7 @@ func _build_tab_campaign_and_talents() -> Control:
 
 		var upg_btn := Button.new()
 		upg_btn.custom_minimum_size = Vector2(145, 36)
+		upg_btn.clip_text = true
 		upg_btn.add_theme_font_size_override("font_size", 12)
 		var b_cost: int = int(t_def["base_cost"])
 		upg_btn.pressed.connect(func(): _upgrade_talent(t_id, b_cost))
@@ -1500,6 +1517,8 @@ func _build_tab_campaign_and_talents() -> Control:
 		talent_rows[t_id] = {
 			"name_lbl": name_lbl,
 			"btn": upg_btn,
+			"icon": ic,
+			"row_hbox": row_hbox,
 			"base_cost": b_cost,
 			"title": String(t_def["name"])
 		}
@@ -1983,10 +2002,10 @@ func refresh_ui() -> void:
 		var u_btn: Button = row["btn"]
 		n_lbl.text = "%s (Poziom %d / 10)" % [String(row["title"]), lvl]
 		if lvl >= 10:
-			u_btn.text = "MAKS. POZIOM"
+			u_btn.text = "MAX" if narrow_portrait_ui else "MAKS. POZIOM"
 			u_btn.disabled = true
 		else:
-			u_btn.text = "ULEPSZ (-%d Kr)" % cost
+			u_btn.text = ("↑ %d Kr" if narrow_portrait_ui else "ULEPSZ (-%d Kr)") % cost
 			u_btn.disabled = StageDirector.credits < cost
 
 	var st_cfg := StageDirector.get_stage_config(StageDirector.current_stage)
