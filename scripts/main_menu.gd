@@ -115,7 +115,7 @@ func _build_commercial_hub_ui() -> void:
 	top_st.content_margin_right = 12
 	top_st.content_margin_top = 8
 	top_st.content_margin_bottom = 8
-	top_hub_panel.add_theme_stylebox_override("panel", top_st)
+	top_hub_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, true))
 	top_hub_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(top_hub_panel)
 
@@ -324,7 +324,7 @@ func _build_commercial_hub_ui() -> void:
 	nav_box_st.content_margin_right = 6
 	nav_box_st.content_margin_top = 4
 	nav_box_st.content_margin_bottom = 6
-	bottom_nav_panel.add_theme_stylebox_override("panel", nav_box_st)
+	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, true))
 	add_child(bottom_nav_panel)
 
 	var nav_hbox := HBoxContainer.new()
@@ -347,6 +347,8 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = true
+		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.LIME, 58.0)
+		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
 		btn_v.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -394,7 +396,7 @@ func _build_base_tab_content() -> void:
 	stage_card.custom_minimum_size = Vector2(380, 194)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
-	stage_card.add_theme_stylebox_override("panel", card_st)
+	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
 	base_vbox.add_child(stage_card)
 
 	var card_margin := MarginContainer.new()
@@ -499,11 +501,13 @@ func _build_base_tab_content() -> void:
 	play_big_btn.add_theme_stylebox_override("normal", play_tex_st)
 	play_big_btn.add_theme_stylebox_override("hover", play_tex_st)
 	play_big_btn.add_theme_stylebox_override("pressed", play_tex_st)
+	play_big_btn.add_theme_stylebox_override("disabled", SurvivorVisualSystem.button_style(SurvivorVisualSystem.GOLD, "disabled"))
 	play_big_btn.add_theme_font_size_override("font_size", 32)
 	play_big_btn.add_theme_color_override("font_color", Color(0.05, 0.05, 0.05, 1.0))
 	play_big_btn.text = ""
 	play_big_btn.pressed.connect(_on_play_pressed)
 	base_vbox.add_child(play_big_btn)
+	# Preserve the approved golden PLAY artwork while making the disabled state clear.
 
 	# Pomocniczy wiersz opcji (dyskretny, przezroczysty sci-fi bez czarnych prostokątów)
 	var aux_h := HBoxContainer.new()
@@ -577,6 +581,7 @@ func _build_base_tab_content() -> void:
 	progress_style.set_content_margin_all(12.0)
 	progress_card.add_theme_stylebox_override("panel", progress_style)
 	base_vbox.add_child(progress_card)
+	progress_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.LIME, true))
 	var progress_col := VBoxContainer.new()
 	progress_col.add_theme_constant_override("separation", 8)
 	progress_card.add_child(progress_col)
