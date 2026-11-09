@@ -985,6 +985,30 @@ func _build_tab_inventory_backpack() -> Control:
 			)
 			gear_column.add_child(tile)
 
+	# Metin-style quick actions work inside Inventory, without switching tabs.
+	var quick_row := HBoxContainer.new()
+	quick_row.name = "InventoryQuickActions"
+	quick_row.add_theme_constant_override("separation", 5)
+	loadout_col.add_child(quick_row)
+	inv_quick_info = Label.new()
+	inv_quick_info.name = "InventoryQuickSelection"
+	inv_quick_info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inv_quick_info.clip_text = true
+	inv_quick_info.add_theme_font_size_override("font_size", 12)
+	inv_quick_info.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
+	quick_row.add_child(inv_quick_info)
+	inv_quick_equip = Button.new()
+	inv_quick_equip.name = "InventoryQuickEquip"
+	inv_quick_equip.text = "ZAŁÓŻ"
+	SurvivorVisualSystem.decorate_metal_button(inv_quick_equip, SurvivorVisualSystem.LIME, 48.0)
+	inv_quick_equip.pressed.connect(_inventory_quick_equip_selected)
+	quick_row.add_child(inv_quick_equip)
+	inv_quick_unequip = Button.new()
+	inv_quick_unequip.name = "InventoryQuickUnequip"
+	inv_quick_unequip.text = "ZDEJMIJ"
+	SurvivorVisualSystem.decorate_metal_button(inv_quick_unequip, SurvivorVisualSystem.CYAN, 48.0)
+	inv_quick_unequip.pressed.connect(_inventory_quick_unequip_selected)
+	quick_row.add_child(inv_quick_unequip)
 	# The showcase uses equipped item data on every UI refresh; the initial
 	# common icons in the scene are merely loading placeholders.
 	# Belka materiałów do ulepszeń + otwieranie skrzyni
