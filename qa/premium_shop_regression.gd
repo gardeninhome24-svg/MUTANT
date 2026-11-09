@@ -31,6 +31,7 @@ func _run() -> void:
 	stage.dark_matter_gems = 0
 	stage.beta_test_gems_granted = false
 	stage.beta_test_gems_remaining = 0
+	stage.beta_test_skins_purchased = []
 	stage.unlocked_skins = ["default", "gold_veteran"]
 	stage.selected_skin_id = "default"
 	stage.daily_missions = []
@@ -66,11 +67,13 @@ func _run() -> void:
 	_check(stage.dark_matter_gems == 9880, "Spent balance persists after save/load")
 	_check(stage.beta_test_gems_granted, "Beta granted flag persists after save/load")
 	_check(stage.unlocked_skins.has("neon_hunter"), "Purchased skin persists after save/load")
+	_check(stage.beta_test_skins_purchased.has("neon_hunter"), "Skin purchase tracks test-funded origin")
 	_check(not stage._grant_beta_test_gems_once(), "Relogin cannot trigger another beta grant")
 	stage._revoke_unspent_beta_gems()
 	_check(stage.dark_matter_gems == 0, "Public-release cleanup removes only remaining beta gems")
 	_check(stage.beta_test_gems_remaining == 0, "Beta grant remainder clears after cleanup")
-	_check(stage.unlocked_skins.has("neon_hunter"), "Previously purchased cosmetics persist after beta wallet cleanup")
+	_check(not stage.unlocked_skins.has("neon_hunter"), "Test-funded skin is revoked on release cleanup")
+	_check(stage.selected_skin_id == "default", "Removed beta skin falls back to default")
 
 	stage.dark_matter_gems = 50
 	_check(not stage.buy_skin_with_gems("void_sniper"), "Insufficient premium balance rejected")
