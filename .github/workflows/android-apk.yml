@@ -64,6 +64,17 @@ jobs:
             exit 1
           fi
 
+      - name: Smoke test first combat stage (headless)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Start actual gameplay, not only the main menu.
+          godot --headless --path . --quit-after 120 res://scenes/main/main.tscn 2>&1 | tee /tmp/mutantsurvivor-combat.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource)" /tmp/mutantsurvivor-combat.log; then
+            echo "::error::Combat scene reported a script or resource error."
+            exit 1
+          fi
+
       - name: Export Android debug APK
         run: |
           mkdir -p build/android
