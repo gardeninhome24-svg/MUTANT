@@ -16,9 +16,9 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 
 | Obszar | Stan projektu | Wymaganie / następny krok |
 |---|---|---|
-| AAB | **BLOKER**: `export_presets.cfg` ma tylko APK, `gradle_build/use_gradle_build=false`, `gradle_build/export_format=0`. Podpisany workflow też eksportuje APK. | Zainstalować szablon Gradle Android w Godot 4.7.2; przygotować **release-signed AAB** i zweryfikować w Play Console. Nie zmieniać działającego debug APK, zanim AAB nie przejdzie niezależnego testu. |
-| API Android | **BLOKER**: CI instaluje `platforms;android-35`; brak jawnego `gradle_build/target_sdk=36`. | Ustawić target SDK 36 lub wyższy w osobnym wydaniowym presie i potwierdzić rzeczywisty target w AAB. Od 31 sierpnia 2026 nowe aplikacje wymagają API 36. |
-| Signing | Manualny release APK wymaga secrets, co jest dobrym rozwiązaniem. Brak potwierdzonego release-signed AAB i trwałego klucza upload. | Zweryfikować klucz, Play App Signing, numer wersji i instalację aktualizacji bez utraty zapisu. Nie publikować klucza w repo. |
+| AAB | **CZĘŚCIOWO NAPRAWIONE**: dodano izolowany preset `Android Google Play AAB` (Gradle, AAB, target 36). Nadal nie ma sprawdzonego, podpisanego pliku AAB; bazowy workflow do bety pozostaje APK. | Uruchomić **odrębny manualny** `.github/workflows/google-play-aab.yml` po wyłączeniu waluty beta i dodaniu podpisu, sprawdzić release-signed AAB w Play Console. Debug APK pozostaje niezależny. |
+| API Android | **CZĘŚCIOWO NAPRAWIONE**: nowy preset Play ma jawny `gradle_build/target_sdk="36"`, manualny pipeline instaluje Android SDK 36; nie sprawdzono wartości w faktycznie zbudowanym AAB. | Zweryfikować faktyczny target SDK w wygenerowanym AAB. Od 31 sierpnia 2026 nowe aplikacje wymagają API 36. |
+| Signing | Manualny release APK wymaga secrets, co jest dobrym rozwiązaniem. Dostępny manualny pipeline AAB z secrets; brak potwierdzenia udanego podpisanego eksportu i trwałego klucza upload. | Zweryfikować klucz, Play App Signing, numer wersji i instalację aktualizacji bez utraty zapisu. Nie publikować klucza w repo. |
 | Testowe kryształy | **BLOKER**: `StageDirector.BETA_TEST_GEMS_ENABLED = true` i jednorazowe 10 000 kryształów. | Wyłączyć w wersji produkcyjnej i przetestować migrację zapisów beta. |
 | Płatności cyfrowe | Pakiet 500 kryształów za realne pieniądze niedostępny; zakupy skórek używają lokalnego salda, nie Play Billing. | Google Play Billing oraz bezpieczna weryfikacja transakcji i zwrotów lub jawne wyłączenie płatnej oferty w publicznej wersji. Nie sprzedawać wartości przechowywanej tylko w lokalnym pliku. |
 | Polityka prywatności | W źródłach brak dowodu na publiczną stronę polityki prywatności, poprawne wypełnienie Data safety i link w grze. | Publiczny HTTPS URL, prawdziwy opis danych/SDK/reklam i widoczny link w grze; deklaracje w Play Console. Jeśli aplikacja oferuje zakładanie kont, także kanał ich usunięcia w aplikacji i przez stronę WWW. |
@@ -50,3 +50,10 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 - Google Play AAB publication: https://developer.android.com/studio/publish
 - Godot 4.7 Android export: https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html
 - Godot 4.7 Gradle build: https://docs.godotengine.org/en/4.7/tutorials/export/android_gradle_build.html
+
+## Wdrożenia repozytoryjne podczas audytu (10.11.2026)
+- Poprawiono wybór pustego slotu, synchronizację zaznaczenia plecaka i zabezpieczenie szybkich akcji przy zmianie filtra.
+- Dodano test regresji filtra bez pasujących przedmiotów do `qa/mobile_ui_regression.gd`.
+- Dodano `tools/google_play_preflight.py`: statyczny test typu NO-GO, który zatrzymuje release przy włączonych kryształach beta lub niegotowym AAB.
+- Dodano osobny preset `Android Google Play AAB` oraz manualny workflow `.github/workflows/google-play-aab.yml` — **nie zostały jeszcze zweryfikowane przez udany podpisany build AAB**.
+- Zwykły debug APK pozostaje na dotychczasowym presie i jest testowany osobno. Release do Play nie jest publikowany automatycznie.
