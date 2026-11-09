@@ -252,7 +252,7 @@ func _build_ui() -> void:
 	card_style.content_margin_right = 10
 	card_style.content_margin_top = 8
 	card_style.content_margin_bottom = 8
-	main_card.add_theme_stylebox_override("panel", card_style)
+	main_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, not embedded_in_hub))
 	add_child(main_card)
 
 	var root_vbox := VBoxContainer.new()
@@ -599,6 +599,7 @@ func _build_slot_widget(slot_id: String) -> Control:
 	card.add_theme_stylebox_override("normal", st)
 	card.add_theme_stylebox_override("hover", st)
 	card.add_theme_stylebox_override("pressed", st)
+	SurvivorVisualSystem.decorate_button(card, border_col, 98.0)
 
 	var v := VBoxContainer.new()
 	v.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -979,7 +980,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var is_sel := (selected_bag_instance_id == inst_id)
 
 		var cell := PanelContainer.new()
-		cell.custom_minimum_size = Vector2(124, 114) if StageDirector.is_portrait_mode() else Vector2(148, 108)
+		cell.custom_minimum_size = Vector2(138, 156) if StageDirector.is_portrait_mode() else Vector2(158, 148)
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cst := StyleBoxFlat.new()
 		cst.bg_color = Color(r_col.r * 0.16, r_col.g * 0.16, r_col.b * 0.18, 0.95)
@@ -996,7 +997,7 @@ func _refresh_inventory_tab_ui() -> void:
 		cst.content_margin_right = 6
 		cst.content_margin_top = 6
 		cst.content_margin_bottom = 6
-		cell.add_theme_stylebox_override("panel", cst)
+		SurvivorVisualSystem.decorate_inventory_card(cell, rar, is_sel)
 
 		var cv := VBoxContainer.new()
 		cv.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -1017,7 +1018,7 @@ func _refresh_inventory_tab_ui() -> void:
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(AssetRegistry.get_item_icon_path(it))
 		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ic.custom_minimum_size = Vector2(40, 36) if StageDirector.is_portrait_mode() else Vector2(48, 44)
+		ic.custom_minimum_size = Vector2(65, 64) if StageDirector.is_portrait_mode() else Vector2(72, 70)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		cv.add_child(ic)
@@ -1427,7 +1428,8 @@ func _build_tab_premium_store() -> Control:
 		var cid: String = String(sc["id"])
 		var cb := Button.new()
 		cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cb.custom_minimum_size = Vector2(0, 40)
+		cb.custom_minimum_size = Vector2(0, 48)
+		SurvivorVisualSystem.decorate_button(cb, SurvivorVisualSystem.CYAN, 48.0)
 		cb.add_theme_font_size_override("font_size", 12)
 		cb.text = String(sc["label"])
 		cb.pressed.connect(func():
@@ -1479,6 +1481,8 @@ func _refresh_store_tab_ui() -> void:
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.custom_minimum_size.y = 202.0
+		card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(accent, true))
 		store_cards_grid.add_child(card)
 
 		var cv := VBoxContainer.new()
@@ -1497,7 +1501,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var ic := TextureRect.new()
 		ic.texture = AssetRegistry.get_tex(String(prod["icon"]))
-		ic.custom_minimum_size = Vector2(54, 58)
+		ic.custom_minimum_size = Vector2(92, 94)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		top_h.add_child(ic)
@@ -1538,6 +1542,7 @@ func _refresh_store_tab_ui() -> void:
 		else:
 			buy_btn.text = "NIEDOSTĘPNE — W PRZYGOTOWANIU"
 		buy_btn.disabled = not (can_buy_skin or can_refill)
+		SurvivorVisualSystem.decorate_button(buy_btn, SurvivorVisualSystem.GOLD if not buy_btn.disabled else SurvivorVisualSystem.MUTED, 48.0)
 		var cap_prod: Dictionary = prod
 		buy_btn.pressed.connect(func(): _request_player_shop_purchase(cap_prod))
 		cv.add_child(buy_btn)
@@ -1683,22 +1688,7 @@ func _upgrade_talent(talent_id: String, base_cost: int) -> void:
 
 func _create_subpanel(border_col: Color = Color(0.20, 0.58, 0.82, 0.70)) -> PanelContainer:
 	var panel := PanelContainer.new()
-	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0.02, 0.06, 0.13, 0.76)
-	st.border_width_left = 1
-	st.border_width_top = 1
-	st.border_width_right = 1
-	st.border_width_bottom = 1
-	st.border_color = border_col
-	st.corner_radius_top_left = 12
-	st.corner_radius_top_right = 12
-	st.corner_radius_bottom_left = 12
-	st.corner_radius_bottom_right = 12
-	st.content_margin_left = 10
-	st.content_margin_right = 10
-	st.content_margin_top = 8
-	st.content_margin_bottom = 8
-	panel.add_theme_stylebox_override("panel", st)
+	panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(border_col, false))
 	return panel
 
 func refresh_ui() -> void:
