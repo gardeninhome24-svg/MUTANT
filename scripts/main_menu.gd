@@ -356,7 +356,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
-		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_metal_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -452,7 +452,7 @@ func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, d
 	action.set_meta("full_label", title)
 	action.custom_minimum_size = Vector2(76, 76)
 	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	SurvivorVisualSystem.decorate_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 76.0)
+	SurvivorVisualSystem.decorate_metal_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 76.0)
 	var action_content := VBoxContainer.new()
 	action_content.name = "SideActionContent"
 	action_content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -645,7 +645,7 @@ func _build_base_tab_content() -> void:
 	continue_btn.text = "▶  KONTYNUUJ KAMPANIĘ"
 	continue_btn.custom_minimum_size = Vector2(480, 60)
 	continue_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	SurvivorVisualSystem.decorate_button(continue_btn, SurvivorVisualSystem.LIME, 60.0)
+	SurvivorVisualSystem.decorate_metal_button(continue_btn, SurvivorVisualSystem.LIME, 60.0)
 	continue_btn.add_theme_font_size_override("font_size", 19)
 	continue_btn.pressed.connect(func(): switch_hub_tab(3))
 	base_vbox.add_child(continue_btn)
@@ -718,7 +718,7 @@ func _build_base_tab_content() -> void:
 	base_vbox.add_child(progress_gap)
 	var progress_card := PanelContainer.new()
 	progress_card.name = "CampaignProgressCard"
-	progress_card.custom_minimum_size = Vector2(0, 105)
+	progress_card.custom_minimum_size = Vector2(0, 144)
 	var progress_style := StyleBoxFlat.new()
 	progress_style.bg_color = Color(0.025, 0.055, 0.09, 0.92)
 	progress_style.border_color = Color(0.12, 0.56, 0.74, 0.76)
@@ -795,7 +795,7 @@ func switch_hub_tab(tab_id: int) -> void:
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
 		var active := (i == current_hub_tab)
-		SurvivorVisualSystem.decorate_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_metal_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
 		nb.modulate = Color.WHITE if active else Color(0.85, 0.89, 0.93, 0.92)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
@@ -1117,7 +1117,7 @@ func _apply_responsive_menu_layout() -> void:
 		play_big_btn.custom_minimum_size = Vector2(minf(560.0 if portrait else 600.0, available_width), 92.0 if portrait else 100.0)
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (220.0 if compact_hub else 295.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 348.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
 		stage_title_lbl.add_theme_font_size_override("font_size", 18 if compact_hub else (27 if portrait else 30))
 	if is_instance_valid(stage_details_lbl):
