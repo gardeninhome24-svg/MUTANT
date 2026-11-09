@@ -58,6 +58,10 @@ var stage_quick_buttons: Array[Button] = []
 
 # Dolny Pasek Nawigacji (5 zakładek)
 var bottom_nav_panel: PanelContainer = null
+var base_overlay: Control = null
+var base_logo: Label = null
+var base_left_actions: VBoxContainer = null
+var base_right_actions: VBoxContainer = null
 var nav_buttons: Array[Button] = []
 
 # Modale: Skrzynka Odbiorcza oraz Ustawienia
@@ -310,6 +314,7 @@ func _build_commercial_hub_ui() -> void:
 	user_profile_panel.profile_updated.connect(update_labels)
 	middle_root.add_child(user_profile_panel)
 	user_profile_panel.set_embedded_mode(true)
+	_build_base_overlays()
 
 	# --------------------------------------------------------------------------
 	# 3. DOLNY STAŁY PASEK NAWIGACJI (Baza | Postać | Ekwipunek | Kampania | Sklep)
@@ -325,7 +330,7 @@ func _build_commercial_hub_ui() -> void:
 	nav_box_st.content_margin_right = 6
 	nav_box_st.content_margin_top = 4
 	nav_box_st.content_margin_bottom = 6
-	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.CYAN, true))
+	bottom_nav_panel.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_NAV, SurvivorVisualSystem.CYAN, true))
 	add_child(bottom_nav_panel)
 
 	var nav_hbox := HBoxContainer.new()
@@ -348,7 +353,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
-		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
+		SurvivorVisualSystem.decorate_art_button(tab_btn, SurvivorVisualSystem.CYAN, 58.0)
 		# Bottom bar buttons are actual touch targets, not decorative art.
 
 		var btn_v := VBoxContainer.new()
@@ -382,6 +387,69 @@ func _build_commercial_hub_ui() -> void:
 		nav_hbox.add_child(tab_btn)
 		nav_buttons.append(tab_btn)
 
+# Production overlays use real clickable Godot controls, never a flattened UI image.
+# The illustration of the operator remains part of the clean background texture.
+func _build_base_overlays() -> void:
+	base_overlay = Control.new()
+	base_overlay.name = "BaseProductionOverlay"
+	base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	base_overlay.mouse_filter = Control.MOUSE_FILTER_PASS
+	middle_root.add_child(base_overlay)
+
+	base_logo = Label.new()
+	base_logo.name = "MutantSurvivorLogo"
+	base_logo.text = "MUTANT SURVIVOR"
+	base_logo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	base_logo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	base_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	base_logo.add_theme_font_size_override("font_size", 35)
+	base_logo.add_theme_color_override("font_color", SurvivorVisualSystem.LIME)
+	base_logo.add_theme_color_override("font_outline_color", Color(0.015, 0.025, 0.03))
+	base_logo.add_theme_constant_override("outline_size", 6)
+	base_overlay.add_child(base_logo)
+
+	base_left_actions = VBoxContainer.new()
+	base_left_actions.name = "BaseLeftActions"
+	base_left_actions.add_theme_constant_override("separation", 9)
+	base_overlay.add_child(base_left_actions)
+	base_right_actions = VBoxContainer.new()
+	base_right_actions.name = "BaseRightActions"
+	base_right_actions.add_theme_constant_override("separation", 9)
+	base_overlay.add_child(base_right_actions)
+
+	for item in [
+		{"title": "POSTAĆ", "path": "res://assets/ui/target_theme/nav_icon_postac.png", "tab": 1},
+		{"title": "EKWIPUNEK", "path": "res://assets/ui/target_theme/nav_icon_ekwipunek.png", "tab": 2},
+		{"title": "SKLEP", "path": "res://assets/ui/target_theme/nav_icon_sklep.png", "tab": 4}
+	]:
+		_add_base_action(base_left_actions, String(item["title"]), String(item["path"]), int(item["tab"]))
+	_add_base_action(base_right_actions, "NAGRODY", "res://assets/ms_beta_kit/ui/icons/reward_chest.png", 5)
+	_add_base_action(base_right_actions, "USTAWIENIA", "res://assets/ui/target_theme/icon_settings.png", -1)
+
+func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, destination: int) -> void:
+	var action := Button.new()
+	action.name = "Side" + title.capitalize()
+	action.text = title
+	action.set_meta("full_label", title)
+	action.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	action.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	action.expand_icon = true
+	action.custom_minimum_size = Vector2(110, 52)
+	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action.add_theme_font_size_override("font_size", 11)
+	if ResourceLoader.exists(icon_path):
+		action.icon = load(icon_path) as Texture2D
+	SurvivorVisualSystem.decorate_art_button(action, SurvivorVisualSystem.GOLD if destination == 5 else SurvivorVisualSystem.CYAN, 52.0)
+	action.pressed.connect(func():
+		StageDirector.play_sfx("ui_click")
+		if destination == -1:
+			if is_instance_valid(settings_modal):
+				settings_modal.visible = true
+		else:
+			switch_hub_tab(destination)
+	)
+	parent.add_child(action)
+
 func _build_base_tab_content() -> void:
 	# W układzie portretowym (9:16) postać i miasto stanowią integralne tło w górnej połowie.
 	# Przestrzeń w górnej części (spacer) pozwala podziwiać żołnierza na tle ruin.
@@ -397,7 +465,7 @@ func _build_base_tab_content() -> void:
 	stage_card.custom_minimum_size = Vector2(380, 194)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
-	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
+	stage_card.add_theme_stylebox_override("panel", SurvivorVisualSystem.artwork_panel(SurvivorVisualSystem.PANEL_STAGE, SurvivorVisualSystem.GOLD, true))
 	base_vbox.add_child(stage_card)
 
 	var card_margin := MarginContainer.new()
@@ -648,8 +716,8 @@ func switch_hub_tab(tab_id: int) -> void:
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
 		var active := (i == current_hub_tab)
-		nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, "hover" if active else "normal"))
-		nb.modulate = Color(1.0, 1.0, 1.0, 1.0) if active else Color(0.65, 0.75, 0.85, 0.65)
+		SurvivorVisualSystem.decorate_art_button(nb, SurvivorVisualSystem.GOLD if active else SurvivorVisualSystem.CYAN, 58.0)
+		nb.modulate = Color.WHITE if active else Color(0.85, 0.89, 0.93, 0.92)
 		if nb.get_child_count() > 0:
 			var v := nb.get_child(0) as VBoxContainer
 			if is_instance_valid(v) and v.get_child_count() >= 2:
@@ -657,6 +725,8 @@ func switch_hub_tab(tab_id: int) -> void:
 				if is_instance_valid(lbl):
 					lbl.add_theme_color_override("font_color", Color(0.35, 0.95, 1.0) if active else Color(0.65, 0.75, 0.85))
 
+	if is_instance_valid(base_overlay):
+		base_overlay.visible = current_hub_tab == 0
 	if current_hub_tab == 0:
 		base_scroll.visible = true
 		user_profile_panel.visible = false
@@ -914,6 +984,30 @@ func _apply_responsive_menu_layout() -> void:
 		middle_root.offset_top = 72.0 + safe_top
 		middle_root.offset_right = 0.0
 		middle_root.offset_bottom = -88.0 if portrait else -78.0
+
+	if is_instance_valid(base_overlay):
+		base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if is_instance_valid(base_logo):
+		base_logo.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		base_logo.offset_left = 65.0 if compact_hub else 120.0
+		base_logo.offset_right = -65.0 if compact_hub else -120.0
+		base_logo.offset_top = 4.0
+		base_logo.offset_bottom = 48.0 if compact_hub else 58.0
+		base_logo.add_theme_font_size_override("font_size", 20 if compact_hub else (32 if portrait else 38))
+	for actions in [base_left_actions, base_right_actions]:
+		if not is_instance_valid(actions):
+			continue
+		var left_side := actions == base_left_actions
+		actions.set_anchors_preset(Control.PRESET_TOP_LEFT if left_side else Control.PRESET_TOP_RIGHT)
+		actions.offset_left = 8.0 if left_side else (-56.0 if compact_hub else -124.0)
+		actions.offset_right = (56.0 if compact_hub else 124.0) if left_side else -8.0
+		actions.offset_top = 65.0
+		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (48 if compact_hub else 61)
+		for btn in actions.get_children():
+			if btn is Button:
+				btn.custom_minimum_size = Vector2(0, 44.0 if compact_hub else 52.0)
+				btn.text = "" if compact_hub else String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
+				btn.tooltip_text = String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
