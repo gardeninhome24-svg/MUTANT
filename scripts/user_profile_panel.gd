@@ -890,13 +890,17 @@ func _build_tab_inventory_backpack() -> Control:
 	chest_btn.custom_minimum_size = Vector2(180, 34)
 	chest_btn.add_theme_font_size_override("font_size", 12)
 	chest_btn.pressed.connect(func():
-		if StageDirector.credits >= 80:
-			StageDirector.credits -= 80
-			var dropped := StageDirector.roll_new_equipment_drop(StageDirector.current_stage)
-			if not dropped.is_empty():
-				selected_bag_instance_id = String(dropped.get("instance_id", ""))
-			refresh_ui()
-			emit_signal("profile_updated")
+		if StageDirector.credits < 80:
+			return
+		var dropped := StageDirector.roll_new_equipment_drop(StageDirector.current_stage)
+		if dropped.is_empty():
+			# The player must never lose credits for a failed loot roll.
+			return
+		StageDirector.credits -= 80
+		selected_bag_instance_id = String(dropped.get("instance_id", ""))
+		StageDirector.save_campaign_profile()
+		refresh_ui()
+		emit_signal("profile_updated")
 	)
 	top_h.add_child(chest_btn)
 	inv_chest_btn = chest_btn
