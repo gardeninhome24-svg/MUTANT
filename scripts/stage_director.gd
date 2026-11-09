@@ -43,6 +43,7 @@ var character_xp: int = 0
 var credits: int = 350
 var dark_matter_gems: int = 0
 var beta_test_gems_granted: bool = false
+var beta_test_gems_remaining: int = 0
 var scrap_materials: int = 12
 var cleared_stages: Dictionary = {} # stage_num (String) -> best_stars (int)
 var first_clears_v2: Dictionary = {} # mission_id (String) -> bool
@@ -533,11 +534,31 @@ func get_active_save_path() -> String:
 	return save_path_override if not save_path_override.is_empty() else DEFAULT_SAVE_PATH
 
 func _grant_beta_test_gems_once() -> bool:
-	if not BETA_TEST_GEMS_ENABLED or beta_test_gems_granted:
+	if not BETA_TEST_GEMS_ENABLED:
+		_revoke_unspent_beta_gems()
+		return false
+	if beta_test_gems_granted:
 		return false
 	dark_matter_gems += BETA_TEST_GEMS_AMOUNT
+	beta_test_gems_remaining += BETA_TEST_GEMS_AMOUNT
 	beta_test_gems_granted = true
 	save_campaign_profile()
+	return true
+
+func _revoke_unspent_beta_gems() -> void:
+	if beta_test_gems_remaining <= 0:
+		return
+	# Only unspent beta credits are revoked. A later real-money wallet is not
+	# affected; earned items are separately reviewed before public release.
+	dark_matter_gems = maxi(0, dark_matter_gems - beta_test_gems_remaining)
+	beta_test_gems_remaining = 0
+	save_campaign_profile()
+
+func spend_premium_gems(amount: int) -> bool:
+	if amount <= 0 or dark_matter_gems < amount:
+		return false
+	dark_matter_gems -= amount
+	beta_test_gems_remaining = maxi(0, beta_test_gems_remaining - mini(beta_test_gems_remaining, amount))
 	return true
 
 func _sync_active_class_to_dict() -> void:
@@ -611,6 +632,7 @@ func save_campaign_profile() -> void:
 		"credits": credits,
 		"dark_matter_gems": dark_matter_gems,
 		"beta_test_gems_granted": beta_test_gems_granted,
+		"beta_test_gems_remaining": beta_test_gems_remaining,
 		"scrap_materials": scrap_materials,
 		"cleared_stages": cleared_stages,
 		"first_clears_v2": first_clears_v2,
@@ -682,6 +704,7 @@ func load_campaign_profile() -> void:
 		# the one-time beta grant. The legacy 180 fallback only covers old saves.
 		dark_matter_gems = maxi(0, int(data.get("dark_matter_gems", 180)))
 		beta_test_gems_granted = bool(data.get("beta_test_gems_granted", false))
+		beta_test_gems_remaining = maxi(0, int(data.get("beta_test_gems_remaining", mini(dark_matter_gems, BETA_TEST_GEMS_AMOUNT) if beta_test_gems_granted else 0)))
 		scrap_materials = maxi(0, int(data.get("scrap_materials", 12)))
 		attempts = clampi(int(data.get("attempts", 5)), 0, 5)
 		next_attempt_at = int(data.get("next_attempt_at", 0))
@@ -866,7 +889,6 @@ const RARITY_TIERS := ["common", "rare", "epic", "legendary", "mythic"]
 func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
 	if cost_gems < 0 or dark_matter_gems < cost_gems:
 		return {}
-	dark_matter_gems -= cost_gems
 	pity_chest_counter += 1
 	var forced_r := ""
 	if pity_chest_counter >= 50:
@@ -875,8 +897,9 @@ func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
 	var item := roll_new_equipment_drop(max_unlocked_stage, forced_r)
 	if item.is_empty():
 		# Never charge currency for an empty loot table.
-		dark_matter_gems += cost_gems
 		pity_chest_counter = maxi(0, pity_chest_counter - 1)
+		return {}
+	if not spend_premium_gems(cost_gems):
 		return {}
 	if not forced_r.is_empty() or String(item.get("rarity", "")) in ["legendary", "mythic"]:
 		pity_chest_counter = 0
@@ -1079,7 +1102,8 @@ func buy_skin_with_gems(skin_id: String) -> bool:
 	if dark_matter_gems < price:
 		return false
 	# Payment and ownership are changed together, then persisted.
-	dark_matter_gems -= price
+	if not spend_premium_gems(price):
+		return false
 	unlocked_skins.append(skin_id)
 	selected_skin_id = skin_id
 	save_campaign_profile()
@@ -1092,7 +1116,8 @@ func can_buy_single_attempt_refill() -> bool:
 func buy_single_attempt_refill() -> bool:
 	if not can_buy_single_attempt_refill():
 		return false
-	dark_matter_gems -= SINGLE_ATTEMPT_REFILL_GEMS
+	if not spend_premium_gems(SINGLE_ATTEMPT_REFILL_GEMS):
+		return false
 	attempts = mini(5, attempts + 1)
 	if attempts >= 5:
 		next_attempt_at = 0
@@ -1106,7 +1131,8 @@ func can_buy_full_attempts_refill() -> bool:
 func buy_full_attempts_refill() -> bool:
 	if not can_buy_full_attempts_refill():
 		return false
-	dark_matter_gems -= FULL_ATTEMPTS_REFILL_GEMS
+	if not spend_premium_gems(FULL_ATTEMPTS_REFILL_GEMS):
+		return false
 	attempts = 5
 	next_attempt_at = 0
 	save_campaign_profile()
