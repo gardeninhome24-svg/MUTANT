@@ -43,6 +43,27 @@ commitów, kontroli kodu ani statusu workflow jako udanego playtestu.
 6. Zachowano wcześniejsze poprawki HUD, mobilnego ekwipunku, prawdziwego
    XP w menu i oddzielnego ręcznego podpisywania wydania.
 
+## Nowa regresja integracyjna (przed APK)
+W ramach kolejnego pakietu dodano `qa/gameplay_regression.gd`, wykonywany przez
+workflow debug i ręczny workflow release **przed** eksportem APK. Ten test
+uruchamia scenę walki w Godot headless i w izolowanym pliku `user://` sprawdza:
+- broń i hełm, założenie/zdejmowanie, ulepszenie i pobranie zasobów;
+- zapis/odczyt ekwipunku, poziomu ulepszenia i kredytów;
+- jednorazowy pakiet dzienny, blokadę drugiego odbioru, reset UTC i zapis;
+- brak nagród w trybie treningowym i po przegranej z zerową liczbą fal;
+- nagrodę pierwszego ukończenia, odblokowanie tylko następnego etapu i powtórkę;
+- pojawienie się mutanta i dokładnie jeden zaliczony kill;
+- minibossa fali 5, bossa fali 10 i blokadę zwycięstwa przed zabiciem bossa;
+- ekran zwycięstwa i ekran porażki.
+
+**Poprawiony błąd:** `MutantEnemy.die()` już naliczał zabitego mutanta
+do misji dziennej, a dopisane naliczenie w `main.gd` dublowało wynik.
+Pozostawiono pojedyncze naliczenie przy rzeczywistej śmierci przeciwnika.
+
+Nie oznaczać regresji jako zaliczonej, dopóki **najnowszy** workflow nie
+pokaże zielonego wyniku. Test Godot headless nie mierzy FPS Androida,
+multitouch na urządzeniu ani wyglądu grafiki.
+
 ## Co musi przejść przed zaproszeniem testerów (P0)
 
 - [ ] GitHub Actions na najnowszym commicie: import, `qa/prebeta_validation.gd`,
