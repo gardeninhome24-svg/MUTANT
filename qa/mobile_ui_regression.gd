@@ -92,8 +92,18 @@ func _run() -> void:
 		if is_instance_valid(nav):
 			_assert(nav.get_child_count() == 4, "Direction row contains only 4 controls")
 		if is_instance_valid(jumps):
-			_assert(jumps.columns == 5, "Five campaign shortcuts occupy their own grid")
-			_assert(jumps.get_child_count() == 5, "Five chapter shortcuts are present")
+			_assert(jumps.columns == 5, "Five stage shortcuts occupy their own grid")
+			_assert(jumps.get_child_count() == 5, "Five quick stage shortcuts remain")
+		var chapters: GridContainer = profile.find_child("CampaignChapterMap", true, false) as GridContainer
+		_assert(is_instance_valid(chapters), "Ten-chapter graphical campaign roadmap exists")
+		if is_instance_valid(chapters):
+			_assert(chapters.get_child_count() == 10, "Campaign roadmap contains all ten chapters")
+			var director = root.get_node_or_null("StageDirector")
+			if director != null:
+				for index in range(10):
+					var chapter_button: Button = chapters.get_child(index) as Button
+					var required_stage := index * 10 + 1
+					_assert(chapter_button.disabled == (required_stage > director.max_unlocked_stage), "Chapter %d enforces stage unlocks" % (index + 1))
 		var skins: Dictionary = profile.get("skin_buttons")
 		var stage_manager = root.get_node_or_null("StageDirector")
 		if stage_manager != null:
