@@ -1826,8 +1826,7 @@ func _on_revive_ad_pressed() -> void:
 func _on_revive_premium_pressed() -> void:
 	if run_result_state != "awaiting_revive" or has_used_revive:
 		return
-	if StageDirector.dark_matter_gems >= 30:
-		StageDirector.dark_matter_gems -= 30
+	if StageDirector.spend_premium_gems(30):
 		StageDirector.save_campaign_profile()
 		has_used_revive = true
 		run_result_state = "active"
@@ -1844,8 +1843,7 @@ func toggle_premium_shop() -> void:
 	get_tree().paused = premium_shop_panel.visible
 
 func _on_buy_energy_pack() -> void:
-	if StageDirector.dark_matter_gems >= 20:
-		StageDirector.dark_matter_gems -= 20
+	if StageDirector.spend_premium_gems(20):
 		StageDirector.credits += 150
 		StageDirector.save_campaign_profile()
 		update_currency_display()
