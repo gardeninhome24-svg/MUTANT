@@ -60,6 +60,16 @@ jobs:
             exit 1
           fi
 
+      - name: Mobile menu, campaign and inventory layout regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/mobile_ui_regression.gd 2>&1 | tee /tmp/mobile-ui-regression.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource|MOBILE UI FAIL:|MOBILE UI FAILED:)" /tmp/mobile-ui-regression.log; then
+            echo "::error::Mobile UI layout regression failed."
+            exit 1
+          fi
+
       - name: Gameplay regression (bosses, rewards, equipment, saves)
         shell: bash
         run: |
