@@ -54,7 +54,7 @@ func _run() -> void:
 	if is_instance_valid(production_overlay):
 		var logo: TextureRect = production_overlay.find_child("MutantSurvivorLogo", true, false) as TextureRect
 		_assert(is_instance_valid(logo) and logo.texture != null, "Real branded MutantSurvivor logo texture is loaded")
-		_assert(is_instance_valid(logo) and logo.texture.resource_path.ends_with("logo_production_vector.svg"), "Logo uses font-independent metal wordmark")
+		_assert(is_instance_valid(logo) and logo.texture.resource_path.ends_with("logo_reference_exact.png"), "Logo uses approved raster wordmark")
 		var logo_letters: HBoxContainer = production_overlay.find_child("BrandedLogoLetters", true, false) as HBoxContainer
 		_assert(is_instance_valid(logo_letters) and not logo_letters.visible, "Older duplicate logo lettering is hidden")
 		var left_actions: VBoxContainer = production_overlay.find_child("BaseLeftActions", true, false) as VBoxContainer
