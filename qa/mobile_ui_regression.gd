@@ -257,7 +257,7 @@ func _run() -> void:
 			_assert(pedestal.custom_minimum_size.x <= 166.0, "420px character display does not force a 280px pedestal")
 			_assert(is_instance_valid(pedestal.get_node_or_null("ArmoryBackdrop")), "Operator hangar art exists within character panel")
 		if is_instance_valid(inv_grid):
-			_assert(inv_grid.columns == 2, "420px backpack shows two touch-friendly columns")
+			_assert(inv_grid.columns == 4, "420px Metin backpack shows four touch-friendly columns")
 		if is_instance_valid(filter_grid):
 			_assert(filter_grid.columns == 2, "420px gear filters show two columns")
 		if is_instance_valid(store_cards):
@@ -266,7 +266,7 @@ func _run() -> void:
 			_assert(store_categories.columns == 2, "420px shop navigation wraps to two columns")
 		profile.call("_apply_responsive_metrics", 720.0)
 		if is_instance_valid(inv_grid):
-			_assert(inv_grid.columns == 4, "720px backpack returns to four columns")
+			_assert(inv_grid.columns == 5, "720px Metin backpack returns to five columns")
 		if is_instance_valid(store_cards):
 			_assert(store_cards.columns == 2, "720px shop returns to two columns")
 
