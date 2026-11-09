@@ -39,6 +39,7 @@ var weapon_icon_tex: TextureRect = null
 var weapon_name_lbl: Label = null
 
 var stage_card: PanelContainer = null
+var hero_spacer_control: Control = null
 var stage_title_lbl: Label = null
 var stage_details_lbl: Label = null
 var stage_pwr_lbl: Label = null
@@ -378,14 +379,15 @@ func _build_base_tab_content() -> void:
 	# W układzie portretowym (9:16) postać i miasto stanowią integralne tło w górnej połowie.
 	# Przestrzeń w górnej części (spacer) pozwala podziwiać żołnierza na tle ruin.
 	var hero_spacer := Control.new()
-	hero_spacer.custom_minimum_size = Vector2(0, 275)
+	hero_spacer.custom_minimum_size = Vector2(0, 220)
+	hero_spacer_control = hero_spacer
 	base_vbox.add_child(hero_spacer)
 
 	# --------------------------------------------------------------------------
 	# KARTA AKTUALNEGO ETAPU (Sci-Fi z obramowaniem cyjanowym card_stage_clean.png)
 	# --------------------------------------------------------------------------
 	stage_card = PanelContainer.new()
-	stage_card.custom_minimum_size = Vector2(500, 220)
+	stage_card.custom_minimum_size = Vector2(380, 194)
 	var card_st := StyleBoxTexture.new()
 	card_st.texture = load("res://assets/ui/target_theme/card_stage_clean.png")
 	stage_card.add_theme_stylebox_override("panel", card_st)
@@ -486,7 +488,7 @@ func _build_base_tab_content() -> void:
 	# DUŻY ZŁOTY PRZYCISK „GRAJ ▶” (btn_play_gold_clean.png)
 	# --------------------------------------------------------------------------
 	play_big_btn = Button.new()
-	play_big_btn.custom_minimum_size = Vector2(420, 88)
+	play_big_btn.custom_minimum_size = Vector2(348, 72)
 	play_big_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var play_tex_st := StyleBoxTexture.new()
 	play_tex_st.texture = load("res://assets/ui/target_theme/btn_play_gold_clean.png")
@@ -810,8 +812,22 @@ func _apply_responsive_menu_layout() -> void:
 		middle_root.offset_right = 0.0
 		middle_root.offset_bottom = -72.0 if portrait else -72.0
 
+	# Keep the main call to action and stage card inside the actual hub content
+	# on smaller devices; do not depend on the nominal 720px design viewport.
+	var available_width := maxf(280.0, size.x - (44.0 if portrait else 110.0))
+	if is_instance_valid(stage_card):
+		stage_card.custom_minimum_size = Vector2(minf(380.0 if portrait else 500.0, available_width), 184.0 if portrait else 220.0)
+	if is_instance_valid(play_big_btn):
+		play_big_btn.custom_minimum_size = Vector2(minf(348.0 if portrait else 420.0, available_width), 68.0 if portrait else 82.0)
+		play_big_btn.text = "GRAJ" if play_big_btn.get_theme_stylebox("normal") == null else ""
+	if is_instance_valid(hero_spacer_control):
+		hero_spacer_control.custom_minimum_size = Vector2(0, 172.0 if portrait else 100.0)
+	if is_instance_valid(stage_title_lbl):
+		stage_title_lbl.add_theme_font_size_override("font_size", 24 if portrait else 30)
+	if is_instance_valid(stage_details_lbl):
+		stage_details_lbl.add_theme_font_size_override("font_size", 15 if portrait else 20)
 	if is_instance_valid(orient_btn):
-		orient_btn.text = "📱 9:16" if portrait else "🖥 16:9"
+		orient_btn.text = "9:16" if portrait else "16:9"
 
 func update_labels() -> void:
 	StageDirector.refresh_attempts()
