@@ -77,3 +77,32 @@ Zielony GitHub Actions #56 oznacza wykonany pipeline, a nie certyfikację UI.
 - **Publiczna premiera**: NO-GO bez wizualnego QA, kompletności assets,
   testów urządzeń, stabilnego release Android, legalnej monetyzacji oraz
   wyeliminowania błędów krytycznych.
+
+
+## Aktualizacja audytu — automatyczne testy wizualne (9.11.2026)
+
+Dodano `qa/visual_release_gate.gd` i włączono do workflow debug oraz
+release. Po przygotowaniu nowego przebiegu CI sprawdza on:
+- wymagane pliki tekstur menu, joysticka, ognia, uniku i podstawowej postaci,
+  wraz z niezerowymi wymiarami obrazów;
+- faktycznie utworzoną scenę walki i jej kontrolki na domyślnym
+  pionowym rozmiarze 720×1280;
+- brak geometrycznego nakładania: statystyk i walut, statystyk i licznika
+  fal, celów i minimapy, celów i licznika fal, paska broni i umiejętności,
+  joysticka i paska broni, joysticka i uniku/strzału, uniku i strzału;
+- niezerowy rozmiar podstawowych elementów dotykowych.
+
+**Wynik nowego workflow należy jeszcze odczytać.** Nie ma tu screenshotów
+ani prawdziwego pomiaru na Androidzie. Nie uznawać za zaliczone
+przed zielonym wykonaniem `Portrait HUD overlap and required art resource gate`.
+
+### Pozostałe braki przed publicznym wydaniem
+- [ ] Wizualny rendering i zrzuty rzeczywistych scen 9:16, 20:9, 16:9
+      (Godot headless nie ocenia czytelności tekstur ani harmonii kolorów).
+- [ ] Faktyczne animacje 4 klas bohaterów, bossów i elit, uzupełnienie
+      metadanych brakujących assetów produkcyjnych.
+- [ ] Test sceny awansu i modalnych okien w trakcie walki — nie tylko start.
+- [ ] Pomiary 10 fali na Androidzie: FPS, pamięć, nagrzewanie i bateria.
+- [ ] Test aktualizacji wydaniowego APK z zachowaniem zapisu i certyfikatu.
+- [ ] Komplet licencji zasobów, sklep/płatności (jeśli mają być dostępne),
+      polityka prywatności i zasady dystrybucji.
