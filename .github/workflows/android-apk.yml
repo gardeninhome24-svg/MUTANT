@@ -132,7 +132,7 @@ jobs:
             echo ""
             echo "| QA stage | Result |"
             echo "|---|---|"
-            for entry in "Campaign 100 F2P:/tmp/campaign-100-f2p.log" "Gameplay bosses, rewards, equipment, saves:/tmp/gameplay-regression.log" "Menu startup:/tmp/mutantsurvivor-startup.log" "Combat startup:/tmp/mutantsurvivor-combat.log"; do
+            for entry in "Campaign 100 F2P:/tmp/campaign-100-f2p.log" "HUD and required art:/tmp/visual-release-gate.log" "Mobile navigation:/tmp/mobile-ui-regression.log" "Gameplay bosses, rewards, equipment, saves:/tmp/gameplay-regression.log" "Menu startup:/tmp/mutantsurvivor-startup.log" "Combat startup:/tmp/mutantsurvivor-combat.log"; do
               name="${entry%%:*}"
               log="${entry#*:}"
               if [ -s "$log" ]; then
@@ -153,6 +153,8 @@ jobs:
           path: |
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
+            /tmp/visual-release-gate.log
+            /tmp/mobile-ui-regression.log
             /tmp/mutantsurvivor-startup.log
             /tmp/mutantsurvivor-combat.log
           if-no-files-found: warn
