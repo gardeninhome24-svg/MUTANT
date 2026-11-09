@@ -1,0 +1,93 @@
+name: MutantSurvivor Google Play AAB (manual release gate)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-play-bundle:
+    name: Release-signed Android App Bundle — NO-GO until gate passes
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      ANDROID_HOME: /usr/lib/android-sdk
+      ANDROID_SDK_ROOT: /usr/lib/android-sdk
+    steps:
+      - name: Checkout project and LFS artwork
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Verify Godot and install Android 16 SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable" "$HOME/.config/godot"
+          cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          cp -a /root/.config/godot/. "$HOME/.config/godot/"
+          test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_source.zip"
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          godot --version
+
+      - name: Import game resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit
+
+      - name: Google Play strict release preflight (reject beta currency)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/google_play_preflight.py
+
+      - name: Verify gameplay, premium and Android UI
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/prebeta_validation.gd
+          for script in campaign_100_f2p mobile_ui_regression premium_shop_regression gameplay_regression visual_release_gate; do
+            echo "Running $script"
+            godot --headless --path . --script "res://qa/$script.gd" 2>&1 | tee "/tmp/$script.log"
+            if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|FAILED:|REGRESSION FAIL:|GATE FAIL:" "/tmp/$script.log"; then
+              echo "::error::$script failed"
+              exit 1
+            fi
+          done
+
+      - name: Sign and export Android Google Play AAB
+        shell: bash
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ENCODED_KEYSTORE" ] || [ -z "$RELEASE_KEY_ALIAS" ] || [ -z "$RELEASE_KEY_PASSWORD" ]; then
+            echo "::error::Missing permanent keystore or signing secrets. Never use a debug certificate for Play."
+            exit 1
+          fi
+          umask 077
+          KEYSTORE_FILE="$(mktemp /tmp/mutantsurvivor-play.XXXXXX.keystore)"
+          trap 'rm -f "$KEYSTORE_FILE"' EXIT
+          printf '%s' "$ENCODED_KEYSTORE" | base64 --decode > "$KEYSTORE_FILE"
+          test -s "$KEYSTORE_FILE"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$KEYSTORE_FILE"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_USER="$RELEASE_KEY_ALIAS"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$RELEASE_KEY_PASSWORD"
+          mkdir -p build/android
+          godot --headless --path . --install-android-build-template --export-release "Android Google Play AAB" build/android/MutantSurvivor-play.aab
+          test -s build/android/MutantSurvivor-play.aab
+          sha256sum build/android/MutantSurvivor-play.aab
+
+      - name: Keep signed bundle as private artifact only (never auto-publish)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-SIGNED-GOOGLE-PLAY-AAB
+          path: build/android/MutantSurvivor-play.aab
+          if-no-files-found: error
+          retention-days: 14
