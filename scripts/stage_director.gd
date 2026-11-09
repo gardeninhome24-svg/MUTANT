@@ -814,12 +814,10 @@ func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dict
 			if int(it.get("min_stage", 1)) <= clampi(stage_num, 1, 100):
 				candidates.append(it)
 	if candidates.is_empty():
+		# A rarity can be unavailable at an early stage. Fall back only to
+		# common items already unlocked, never to late-game templates.
 		for it in catalog.get("items", []):
-			if it is Dictionary and String(it.get("rarity", "")) == rarity:
-				candidates.append(it)
-	if candidates.is_empty():
-		for it in catalog.get("items", []):
-			if it is Dictionary and String(it.get("rarity", "")) == "common":
+			if it is Dictionary and String(it.get("rarity", "")) == "common" and int(it.get("min_stage", 1)) <= clampi(stage_num, 1, 100):
 				candidates.append(it)
 	if candidates.is_empty():
 		return {}
@@ -836,7 +834,7 @@ func roll_new_equipment_drop(stage_num: int, forced_rarity: String = "") -> Dict
 const RARITY_TIERS := ["common", "rare", "epic", "legendary", "mythic"]
 
 func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
-	if dark_matter_gems < cost_gems:
+	if cost_gems < 0 or dark_matter_gems < cost_gems:
 		return {}
 	dark_matter_gems -= cost_gems
 	pity_chest_counter += 1
@@ -845,6 +843,11 @@ func open_purchased_chest(cost_gems: int = 50) -> Dictionary:
 		forced_r = "legendary"
 		pity_chest_counter = 0
 	var item := roll_new_equipment_drop(max_unlocked_stage, forced_r)
+	if item.is_empty():
+		# Never charge currency for an empty loot table.
+		dark_matter_gems += cost_gems
+		pity_chest_counter = maxi(0, pity_chest_counter - 1)
+		return {}
 	if not forced_r.is_empty() or String(item.get("rarity", "")) in ["legendary", "mythic"]:
 		pity_chest_counter = 0
 	save_campaign_profile()
