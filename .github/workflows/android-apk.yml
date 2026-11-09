@@ -52,6 +52,18 @@ jobs:
       - name: Import project resources
         run: godot --headless --path . --editor --import --quit
 
+      - name: Smoke test booting the main menu (headless)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Export succeeds even if runtime scripts throw errors during menu setup.
+          # Boot the actual project for 30 frames and reject common runtime/parse failures.
+          godot --headless --path . --quit-after 30 2>&1 | tee /tmp/mutantsurvivor-startup.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\.|Invalid set index|Failed to load script|Failed loading resource)" /tmp/mutantsurvivor-startup.log; then
+            echo "::error::Godot startup reported a script or resource error."
+            exit 1
+          fi
+
       - name: Export Android debug APK
         run: |
           mkdir -p build/android
