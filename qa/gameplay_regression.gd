@@ -34,6 +34,7 @@ func _run() -> void:
 
 	_test_starter_gear()
 	_test_equipment_and_save()
+	_test_rarity_fusion_protection()
 	_test_rewards()
 	await _test_combat_and_bosses()
 	# Test files live only inside the CI runner, never inside an APK.
@@ -122,6 +123,31 @@ func _test_equipment_and_save() -> void:
 	stage.daily_free_pack_claimed = false
 	stage.load_campaign_profile()
 	_assert(stage.daily_free_pack_claimed, "Daily pack claim state survives save/load")
+
+func _test_rarity_fusion_protection() -> void:
+	# Rare gear begins at stage 7 and epic gear at 22. Fusion cannot
+	# downgrade a guaranteed outcome or destroy inputs at an early stage.
+	stage.inventory = [
+		{"instance_id": "fuse_a", "slot": "weapon", "rarity": "common", "name": "Fusion A", "base_power": 10.0, "level": 0, "affixes": []},
+		{"instance_id": "fuse_b", "slot": "helmet", "rarity": "common", "name": "Fusion B", "base_power": 10.0, "level": 0, "affixes": []},
+		{"instance_id": "fuse_c", "slot": "boots", "rarity": "common", "name": "Fusion C", "base_power": 10.0, "level": 0, "affixes": []}
+	]
+	stage.equipped_items = {"weapon": "fuse_a"}
+	stage.max_unlocked_stage = 1
+	var count_before: int = stage.inventory.size()
+	var forced_result: Dictionary = stage.roll_new_equipment_drop(1, "rare")
+	_assert(forced_result.is_empty(), "Forced rare drop unavailable at stage 1 never downgrades")
+	_assert(stage.inventory.size() == count_before, "Invalid forced rarity does not add wrong item")
+	var result: Dictionary = stage.fuse_equipment_triplet("fuse_a", "fuse_b", "fuse_c")
+	_assert(result.is_empty(), "Fusion cannot create an unavailable rare at stage 1")
+	_assert(stage.inventory.size() == count_before, "Failed fusion preserves all three components")
+	_assert(String(stage.equipped_items.get("weapon", "")) == "fuse_a", "Failed fusion preserves equipped item")
+	stage.max_unlocked_stage = 7
+	result = stage.fuse_equipment_triplet("fuse_a", "fuse_b", "fuse_c")
+	_assert(not result.is_empty(), "Three common items can fuse to rare at stage 7")
+	_assert(String(result.get("rarity", "")) == "rare", "Fusion gives exactly rare, never common")
+	_assert(stage.inventory.size() == 1, "Successful fusion replaces three inputs with one item")
+	_assert(not stage.equipped_items.has("weapon"), "Successful fusion unequips consumed item")
 
 func _test_rewards() -> void:
 	# Practice wins and losses must never grant persistent rewards.
