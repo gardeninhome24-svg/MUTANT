@@ -77,6 +77,7 @@ var daily_reset_lbl: Label
 var bp_label: Label
 var bp_bar: ProgressBar
 
+const BETA_SANDBOX_PURCHASES_ENABLED: bool = false # Closed beta: evaluate F2P progression without free test top-ups.
 const CLASS_ORDER := ["soldier", "engineer", "medic", "scout"]
 const SKIN_ORDER := ["default", "gold_veteran", "neon_hunter", "crimson_storm", "hazmat_trooper", "void_sniper"]
 const DIFF_ORDER := ["rekrut", "ocalaly", "weteran", "koszmar", "apokalipsa"]
@@ -1582,13 +1583,15 @@ func _refresh_store_tab_ui() -> void:
 		var buy_btn := Button.new()
 		buy_btn.custom_minimum_size = Vector2(0, 34)
 		buy_btn.add_theme_font_size_override("font_size", 11)
-		buy_btn.text = "✓ POSIADANE (ODBLOKOWANO)" if already_owned else "🛒 ODBIERZ: %s" % String(prod["price_label"])
-		buy_btn.disabled = already_owned
+		buy_btn.text = "✓ POSIADANE (ODBLOKOWANO)" if already_owned else ("NIEDOSTĘPNE W BECIE" if not BETA_SANDBOX_PURCHASES_ENABLED else "🛒 ODBIERZ: %s" % String(prod["price_label"]))
+		buy_btn.disabled = already_owned or not BETA_SANDBOX_PURCHASES_ENABLED
 		var cap_prod: Dictionary = prod
 		buy_btn.pressed.connect(func(): _execute_sandbox_purchase(cap_prod))
 		cv.add_child(buy_btn)
 
 func _execute_sandbox_purchase(prod: Dictionary) -> void:
+	if not BETA_SANDBOX_PURCHASES_ENABLED:
+		return
 	var p_id := String(prod["id"])
 	if bool(prod.get("once", false)) and bool(StageDirector.purchased_sandbox_packs.get(p_id, false)):
 		return
@@ -1720,7 +1723,7 @@ func _build_tab_daily_rewards() -> Control:
 	return vbox
 
 func _select_stage(s_num: int) -> void:
-	StageDirector.current_stage = clampi(s_num, 1, 100)
+	StageDirector.current_stage = clampi(s_num, 1, StageDirector.max_unlocked_stage)
 	StageDirector.save_campaign_profile()
 	refresh_ui()
 	emit_signal("profile_updated")
