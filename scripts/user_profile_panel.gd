@@ -1782,7 +1782,10 @@ func _refresh_store_tab_ui() -> void:
 		else:
 			buy_btn.text = "NIEDOSTĘPNE — W PRZYGOTOWANIU"
 		buy_btn.disabled = not (can_buy_skin or can_refill)
-		SurvivorVisualSystem.decorate_art_button(buy_btn, SurvivorVisualSystem.GOLD, 57.0) if not buy_btn.disabled else SurvivorVisualSystem.decorate_button(buy_btn, SurvivorVisualSystem.MUTED, 57.0)
+		if buy_btn.disabled:
+			SurvivorVisualSystem.decorate_button(buy_btn, SurvivorVisualSystem.MUTED, 57.0)
+		else:
+			SurvivorVisualSystem.decorate_art_button(buy_btn, SurvivorVisualSystem.GOLD, 57.0)
 		var cap_prod: Dictionary = prod
 		buy_btn.pressed.connect(func(): _request_player_shop_purchase(cap_prod))
 		cv.add_child(buy_btn)
