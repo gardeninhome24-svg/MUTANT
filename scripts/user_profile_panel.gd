@@ -233,7 +233,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(inv_grid):
 		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(stage_boss_preview):
-		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(205, 215)
+		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(250, 285)
 	for talent_id in talent_rows.keys():
 		var talent_ui: Dictionary = talent_rows[talent_id]
 		var upgrade: Button = talent_ui["btn"] as Button
@@ -256,7 +256,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(campaign_chapters):
 		campaign_chapters.columns = 2 if narrow else 5
 	if is_instance_valid(stage_info_lbl):
-		stage_info_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+		stage_info_lbl.add_theme_font_size_override("font_size", 11 if narrow else 17)
 
 	# The equipment presentation must fit the *physical* narrow viewport.
 	# The previous 225px operator and 80px columns forced horizontal overflow.
@@ -1350,7 +1350,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	vbox.add_theme_constant_override("separation", 10)
 
 	var camp_card := _create_subpanel(Color(0.25, 0.90, 1.0, 0.80))
-	camp_card.custom_minimum_size = Vector2(0, 370)
+	camp_card.custom_minimum_size = Vector2(0, 440)
 	vbox.add_child(camp_card)
 	var c_vbox := VBoxContainer.new()
 	c_vbox.add_theme_constant_override("separation", 8)
@@ -1358,8 +1358,10 @@ func _build_tab_campaign_and_talents() -> Control:
 
 	var c_title := Label.new()
 	c_title.text = "KAMPANIA 1–100"
-	c_title.add_theme_font_size_override("font_size", 24)
-	c_title.add_theme_color_override("font_color", Color(1.0, 0.86, 0.28))
+	c_title.add_theme_font_size_override("font_size", 32)
+	c_title.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
+	c_title.add_theme_color_override("font_outline_color", Color(0.0, 0.02, 0.02))
+	c_title.add_theme_constant_override("outline_size", 4)
 	c_vbox.add_child(c_title)
 
 	var mid_h := HBoxContainer.new()
@@ -1367,7 +1369,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	c_vbox.add_child(mid_h)
 
 	stage_boss_preview = TextureRect.new()
-	stage_boss_preview.custom_minimum_size = Vector2(205, 215)
+	stage_boss_preview.custom_minimum_size = Vector2(250, 285)
 	stage_boss_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stage_boss_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mid_h.add_child(stage_boss_preview)
@@ -1375,7 +1377,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	stage_info_lbl = Label.new()
 	stage_info_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stage_info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stage_info_lbl.add_theme_font_size_override("font_size", 15)
+	stage_info_lbl.add_theme_font_size_override("font_size", 17)
 	mid_h.add_child(stage_info_lbl)
 
 	# Use a compact directional row and a separate grid for chapter shortcuts.
@@ -1396,7 +1398,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_prev10.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_prev10.custom_minimum_size = Vector2(0, 34)
 	b_prev10.pressed.connect(func(): _select_stage(StageDirector.current_stage - 10))
-	SurvivorVisualSystem.decorate_button(b_prev10, SurvivorVisualSystem.CYAN, 46.0)
+	SurvivorVisualSystem.decorate_metal_button(b_prev10, SurvivorVisualSystem.CYAN, 52.0)
 	stage_nav.add_child(b_prev10)
 
 	var b_prev1 := Button.new()
@@ -1404,7 +1406,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_prev1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_prev1.custom_minimum_size = Vector2(0, 34)
 	b_prev1.pressed.connect(func(): _select_stage(StageDirector.current_stage - 1))
-	SurvivorVisualSystem.decorate_button(b_prev1, SurvivorVisualSystem.CYAN, 46.0)
+	SurvivorVisualSystem.decorate_metal_button(b_prev1, SurvivorVisualSystem.CYAN, 52.0)
 	stage_nav.add_child(b_prev1)
 
 	for s_jump in [1, 10, 30, 50, 100]:
@@ -1414,7 +1416,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		jb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		jb.custom_minimum_size = Vector2(0, 34)
 		jb.add_theme_font_size_override("font_size", 13)
-		SurvivorVisualSystem.decorate_button(jb, SurvivorVisualSystem.LIME, 46.0)
+		SurvivorVisualSystem.decorate_metal_button(jb, SurvivorVisualSystem.LIME, 52.0)
 		jb.pressed.connect(func(): _select_stage(target_s))
 		stage_jump_grid.add_child(jb)
 
@@ -1423,7 +1425,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_next1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_next1.custom_minimum_size = Vector2(0, 34)
 	b_next1.pressed.connect(func(): _select_stage(StageDirector.current_stage + 1))
-	SurvivorVisualSystem.decorate_button(b_next1, SurvivorVisualSystem.CYAN, 46.0)
+	SurvivorVisualSystem.decorate_metal_button(b_next1, SurvivorVisualSystem.CYAN, 52.0)
 	stage_nav.add_child(b_next1)
 
 	var b_next10 := Button.new()
@@ -1431,7 +1433,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	b_next10.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_next10.custom_minimum_size = Vector2(0, 34)
 	b_next10.pressed.connect(func(): _select_stage(StageDirector.current_stage + 10))
-	SurvivorVisualSystem.decorate_button(b_next10, SurvivorVisualSystem.CYAN, 46.0)
+	SurvivorVisualSystem.decorate_metal_button(b_next10, SurvivorVisualSystem.CYAN, 52.0)
 	stage_nav.add_child(b_next10)
 
 	# Ten chapter milestones make the 100-stage journey visible instead
@@ -1451,7 +1453,7 @@ func _build_tab_campaign_and_talents() -> Control:
 		var chapter_btn := Button.new()
 		chapter_btn.text = "%02d\n%03d–%03d" % [chapter_idx, chapter_start, chapter_start + 9]
 		chapter_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		SurvivorVisualSystem.decorate_button(chapter_btn, SurvivorVisualSystem.LIME, 68.0)
+		SurvivorVisualSystem.decorate_metal_button(chapter_btn, SurvivorVisualSystem.LIME, 68.0)
 		chapter_btn.pressed.connect(func(): _select_stage(chapter_start))
 		chapter_grid.add_child(chapter_btn)
 		chapter_map_buttons[chapter_idx] = chapter_btn
