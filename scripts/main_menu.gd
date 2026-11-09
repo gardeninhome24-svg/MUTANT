@@ -571,6 +571,7 @@ func _build_base_tab_content() -> void:
 	# Podtytuł biomu: Krio Lab
 	stage_details_lbl = Label.new()
 	stage_details_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stage_details_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stage_details_lbl.clip_text = true
 	stage_details_lbl.add_theme_font_size_override("font_size", 20)
 	stage_details_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
