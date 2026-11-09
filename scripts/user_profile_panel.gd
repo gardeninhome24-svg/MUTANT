@@ -1441,14 +1441,14 @@ func _build_tab_premium_store() -> Control:
 	banner.add_child(b_vbox)
 
 	var b_title := Label.new()
-	b_title.text = "🛒 ZBROJOWNIA I SKLEP ZAOPATRZENIA [TRYB TESTOWY SANDBOX — 0 PLN]"
+	b_title.text = "ZBROJOWNIA • SKLEP OPERATORA"
 	b_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	b_title.add_theme_font_size_override("font_size", 14)
 	b_title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.30))
 	b_vbox.add_child(b_title)
 
 	sandbox_status_lbl = Label.new()
-	sandbox_status_lbl.text = "Wszystkie transakcje działają w bezpiecznym środowisku testowym (Sandbox) bez pobierania prawdziwych pieniędzy. Pakiety jednorazowe i skiny posiadają blokadę duplikacji."
+	sandbox_status_lbl.text = "Skórki kupujesz za kryształy. Kredyty, złom i ekwipunek zdobywasz w rozgrywce. Zakup kryształów za pieniądze jest jeszcze wyłączony."
 	sandbox_status_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	sandbox_status_lbl.add_theme_font_size_override("font_size", 11)
 	sandbox_status_lbl.add_theme_color_override("font_color", Color(0.75, 0.92, 1.0))
@@ -1464,7 +1464,7 @@ func _build_tab_premium_store() -> Control:
 	free_daily_pack_btn.add_theme_font_size_override("font_size", 11)
 	free_daily_pack_btn.pressed.connect(func():
 		if StageDirector.claim_daily_free_shop_pack():
-			sandbox_status_lbl.text = "✓ Odebrano Darmowy Pakiet Dzienny (+150 Kredytów, +20 Kryształów, +3 Złomu)!"
+			sandbox_status_lbl.text = "Odebrano codzienne zaopatrzenie: +150 Kr i +5 Złomu."
 			refresh_ui()
 			emit_signal("profile_updated")
 	)
@@ -1523,7 +1523,7 @@ func _refresh_store_tab_ui() -> void:
 	if not is_instance_valid(store_cards_grid):
 		return
 	if is_instance_valid(free_daily_pack_btn):
-		free_daily_pack_btn.text = "✓ DARMOWY PAKIET DZIENNY ODEBRANY" if StageDirector.daily_free_pack_claimed else "🎁 ODBIERZ DARMOWY PAKIET DZIENNY (+150 Kr, +20 💎, +3 Złomu)"
+		free_daily_pack_btn.text = "✓ ZAOPATRZENIE ODEBRANE" if StageDirector.daily_free_pack_claimed else "ODBIERZ ZAOPATRZENIE: +150 Kr, +5 Złomu"
 		free_daily_pack_btn.disabled = StageDirector.daily_free_pack_claimed
 	for cid in store_cat_btns.keys():
 		var b: Button = store_cat_btns[cid]
@@ -1598,77 +1598,46 @@ func _refresh_store_tab_ui() -> void:
 		var buy_btn := Button.new()
 		buy_btn.custom_minimum_size = Vector2(0, 34)
 		buy_btn.add_theme_font_size_override("font_size", 11)
-		buy_btn.text = "✓ POSIADANE (ODBLOKOWANO)" if already_owned else ("NIEDOSTĘPNE W BECIE" if not BETA_SANDBOX_PURCHASES_ENABLED else "🛒 ODBIERZ: %s" % String(prod["price_label"]))
-		buy_btn.disabled = already_owned or not BETA_SANDBOX_PURCHASES_ENABLED
+		var gem_price := int(StageDirector.SKIN_GEM_PRICES.get(skin_unlock, 0))
+		var is_skin := not skin_unlock.is_empty() and gem_price > 0
+		var is_refill := p_id == "attempts_refill_full"
+		var can_refill := is_refill and StageDirector.can_buy_full_attempts_refill()
+		var can_buy_skin := is_skin and not already_owned and StageDirector.dark_matter_gems >= gem_price
+		if already_owned:
+			buy_btn.text = "POSIADANE"
+		elif is_skin:
+			buy_btn.text = "KUP ZA %d KRYSZTAŁÓW" % gem_price
+		elif is_refill:
+			buy_btn.text = "ODNÓW PRÓBY: %d KRYSZTAŁÓW" % StageDirector.FULL_ATTEMPTS_REFILL_GEMS
+		else:
+			buy_btn.text = "NIEDOSTĘPNE — W PRZYGOTOWANIU"
+		buy_btn.disabled = not (can_buy_skin or can_refill)
 		var cap_prod: Dictionary = prod
-		buy_btn.pressed.connect(func(): _execute_sandbox_purchase(cap_prod))
+		buy_btn.pressed.connect(func(): _execute_player_shop_purchase(cap_prod))
 		cv.add_child(buy_btn)
 
-func _execute_sandbox_purchase(prod: Dictionary) -> void:
-	if not BETA_SANDBOX_PURCHASES_ENABLED:
-		return
-	var p_id := String(prod["id"])
-	if bool(prod.get("once", false)) and bool(StageDirector.purchased_sandbox_packs.get(p_id, false)):
-		return
-
-	match p_id:
-		"special_commander_bundle":
-			StageDirector.purchased_sandbox_packs[p_id] = true
-			StageDirector.credits += 1500
-			StageDirector.scrap_materials += 30
-			var it := StageDirector.roll_new_equipment_drop(StageDirector.current_stage, "epic")
-			sandbox_status_lbl.text = "✓ [SANDBOX] Odebrano Zestaw Dowódcy (+1500 Kr, +30 Złomu oraz %s)!" % String(it.get("name", "Moduł Epicki"))
-		"battle_pass_s1":
-			StageDirector.purchased_sandbox_packs[p_id] = true
-			StageDirector.battle_pass_premium_unlocked = true
-			StageDirector.battle_pass_xp += 600
-			var leg := StageDirector.roll_new_equipment_drop(StageDirector.current_stage, "legendary")
-			sandbox_status_lbl.text = "✓ [SANDBOX] Odblokowano Przepustkę Sezon 1 oraz przedmiot Legendarny: %s!" % String(leg.get("name", "Artefakt"))
-		"vip_pass_a03":
-			StageDirector.purchased_sandbox_packs[p_id] = true
-			StageDirector.vip_sandbox_active = true
-			StageDirector.credits += 500
-			StageDirector.dark_matter_gems += 150
-			StageDirector.scrap_materials += 15
-			sandbox_status_lbl.text = "✓ [SANDBOX] Karta VIP Kompleksu A-03 aktywowana (+500 Kr, +150 Kryształów, +15 Złomu)!"
-		"starter_pack_01":
-			StageDirector.purchased_sandbox_packs[p_id] = true
-			StageDirector.credits += 3000
-			StageDirector.scrap_materials += 25
-			StageDirector.roll_new_equipment_drop(StageDirector.current_stage, "rare")
-			sandbox_status_lbl.text = "✓ [SANDBOX] Pakiet Startowy Ocalałego odebrany (+3000 Kr, +25 Złomu)!"
-		"skin_neon_hunter", "skin_hazmat_trooper", "skin_void_sniper", "skin_crimson_storm":
-			var s_unlock := String(prod.get("skin_unlock", "default"))
-			StageDirector.purchased_sandbox_packs[p_id] = true
-			if not StageDirector.unlocked_skins.has(s_unlock):
-				StageDirector.unlocked_skins.append(s_unlock)
-			StageDirector.selected_skin_id = s_unlock
+func _execute_player_shop_purchase(prod: Dictionary) -> void:
+	var product_id := String(prod.get("id", ""))
+	var skin_id := String(prod.get("skin_unlock", ""))
+	if StageDirector.SKIN_GEM_PRICES.has(skin_id):
+		if StageDirector.buy_skin_with_gems(skin_id):
+			sandbox_status_lbl.text = "Zakupiono skórkę: %s." % String(prod.get("title", skin_id))
 			if is_instance_valid(player_ref):
 				player_ref.apply_class_and_talents(false)
-			sandbox_status_lbl.text = "✓ [SANDBOX] Odblokowano i założono Skin HD: %s!" % String(prod["title"])
-		"gear_epic_crate":
-			StageDirector.scrap_materials += 5
-			var ep := StageDirector.roll_new_equipment_drop(StageDirector.current_stage, "epic")
-			sandbox_status_lbl.text = "✓ [SANDBOX] Wylosowano przedmiot Epicki: %s (+5 Złomu)!" % String(ep.get("name", "Moduł"))
-		"gear_mythic_crate":
-			StageDirector.scrap_materials += 12
-			var rar := "mythic" if randf() < 0.35 else "legendary"
-			var my := StageDirector.roll_new_equipment_drop(StageDirector.current_stage, rar)
-			sandbox_status_lbl.text = "✓ [SANDBOX] Wylosowano przedmiot %s: %s (+12 Złomu)!" % [String(StageDirector.RARITY_NAMES.get(rar, "Legendarna")), String(my.get("name", "Moduł"))]
-		"attempts_refill_full":
-			StageDirector.refill_attempts_sandbox()
-			sandbox_status_lbl.text = "✓ [SANDBOX] Przywrócono 5/5 Prób Kampanii!"
-		"crystals_pack_500":
-			StageDirector.dark_matter_gems += 500
-			sandbox_status_lbl.text = "✓ [SANDBOX] Dodano +500 Kryształów Ciemnej Materii!"
-
-	StageDirector.save_campaign_profile()
+		else:
+			sandbox_status_lbl.text = "Zakup niemożliwy: brak kryształów lub skórka już posiadana."
+	elif product_id == "attempts_refill_full":
+		if StageDirector.buy_full_attempts_refill():
+			sandbox_status_lbl.text = "Przywrócono 5 prób kampanii."
+		else:
+			sandbox_status_lbl.text = "Próby są pełne lub brakuje kryształów."
+	else:
+		# Real-money purchases must be verified by a future payment backend.
+		# No fake purchase, free grant, or direct balance modification.
+		return
 	refresh_ui()
 	emit_signal("profile_updated")
 
-# ==============================================================================
-# 5. CODZIENNE NAGRODY (7 DNI), ZADANIA DZIENNE & PRZEPUSTKA BITEWNA
-# ==============================================================================
 func _build_tab_daily_rewards() -> Control:
 	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1886,16 +1855,16 @@ func refresh_ui() -> void:
 	var haz_pl := StageDirector.translate_hazard(String(st_cfg.get("hazard", "acid_spots")))
 	var rew_v2: Dictionary = st_cfg.get("rewards_v2", {})
 	var r_cred := int(rew_v2.get("soft_credits", 100 + StageDirector.current_stage * 18)) if rew_v2.get("soft_credits") != null else (100 + StageDirector.current_stage * 18)
-	var r_scrap := 2 + int(StageDirector.current_stage / 10)
-	var r_gems := int(rew_v2.get("first_clear_premium_gems", 15)) if rew_v2.get("first_clear_premium_gems") != null else 15
+	var materials: Dictionary = rew_v2.get("materials", {}) if rew_v2.get("materials") is Dictionary else {}
+	var r_scrap := int(materials.get("scrap", 2 + int(StageDirector.current_stage / 10)))
 	stage_info_lbl.text = (
 		"ETAP %03d/100: %s (Rozdział %d — %s)\n" % [
 			StageDirector.current_stage, String(st_cfg.get("name", "Operacja")), int(st_cfg.get("chapter", 1)), String(st_cfg.get("chapter_name", "Pustkowia"))
 		] +
 		"• Dowódca NPC: %s  |  • Cel: %s\n" % [String(st_cfg.get("npc", "Mara")), obj_pl] +
 		"• Zagrożenie: %s  |  • %s\n" % [haz_pl, boss_name] +
-		"• Nagrody za ukończenie: +%d Kr, +%d Złomu, +%d Kryształów + Losowy Drop RPG" % [
-			r_cred, r_scrap, r_gems
+		"• Pierwsze ukończenie: +%d Kr, +%d Złomu i ekwipunek RPG" % [
+			r_cred, r_scrap
 		]
 	)
 
@@ -1977,8 +1946,8 @@ func _refresh_daily_and_bp_ui() -> void:
 			var m_title := String(dm.get(title_key, dm.get("title_pl", m_id)))
 			var lbl := Label.new()
 			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			lbl.text = "• %s (%d/%d) — Nagroda: +%d Kr, +%d 💎, +%d Złomu" % [
-				m_title, prog, target, int(dm.get("credits", 150)), int(dm.get("gems", 15)), int(dm.get("scrap", 3))
+			lbl.text = "• %s (%d/%d) — Nagroda: +%d Kr, +%d Złomu" % [
+				m_title, prog, target, int(dm.get("credits", 150)), int(dm.get("scrap", 3))
 			]
 			lbl.add_theme_font_size_override("font_size", 11)
 			row.add_child(lbl)
