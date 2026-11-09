@@ -271,15 +271,15 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	# The previous 225px operator and 80px columns forced horizontal overflow.
 	var equip_portrait := find_child("EquipmentOperatorPortrait", true, false) as TextureRect
 	if is_instance_valid(equip_portrait):
-		equip_portrait.custom_minimum_size = Vector2(135, 214) if narrow else Vector2(225, 300)
+		equip_portrait.custom_minimum_size = Vector2(135, 214) if narrow else Vector2(300, 410)
 	for col_name in ["EquipmentLeftSlots", "EquipmentRightSlots"]:
 		var gear_column := find_child(col_name, true, false) as VBoxContainer
 		if is_instance_valid(gear_column):
-			gear_column.custom_minimum_size = Vector2(58, 0) if narrow else Vector2(82, 0)
+			gear_column.custom_minimum_size = Vector2(58, 0) if narrow else Vector2(100, 0)
 			gear_column.add_theme_constant_override("separation", 4 if narrow else 10)
 			for tile in gear_column.get_children():
 				if tile is Button:
-					tile.custom_minimum_size = Vector2(56, 66) if narrow else Vector2(80, 80)
+					tile.custom_minimum_size = Vector2(56, 66) if narrow else Vector2(94, 104)
 	var welcome_art := find_child("WelcomePackageArtwork", true, false) as TextureRect
 	if is_instance_valid(welcome_art):
 		welcome_art.custom_minimum_size = Vector2(120, 122) if narrow else Vector2(235, 156)
@@ -949,7 +949,7 @@ func _build_tab_inventory_backpack() -> Control:
 			var operator_image := TextureRect.new()
 			operator_image.name = "EquipmentOperatorPortrait"
 			operator_image.texture = load("res://assets/player/hero_survivor.png")
-			operator_image.custom_minimum_size = Vector2(225, 300)
+			operator_image.custom_minimum_size = Vector2(300, 410)
 			operator_image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			operator_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			operator_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -957,7 +957,7 @@ func _build_tab_inventory_backpack() -> Control:
 			continue
 		var gear_column := VBoxContainer.new()
 		gear_column.name = "EquipmentLeftSlots" if side == 0 else "EquipmentRightSlots"
-		gear_column.custom_minimum_size = Vector2(82, 0)
+		gear_column.custom_minimum_size = Vector2(100, 0)
 		gear_column.alignment = BoxContainer.ALIGNMENT_CENTER
 		gear_column.add_theme_constant_override("separation", 10)
 		gear_row.add_child(gear_column)
@@ -968,8 +968,8 @@ func _build_tab_inventory_backpack() -> Control:
 			tile.icon = load("res://assets/items/%s_common.png" % slot_id) as Texture2D
 			tile.expand_icon = true
 			tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			tile.custom_minimum_size = Vector2(80, 80)
-			SurvivorVisualSystem.decorate_button(tile, SurvivorVisualSystem.CYAN, 80.0)
+			tile.custom_minimum_size = Vector2(94, 104)
+			SurvivorVisualSystem.decorate_metal_button(tile, SurvivorVisualSystem.CYAN, 104.0)
 			var slot_key: String = slot_id
 			tile.pressed.connect(func():
 				selected_inspect_slot_id = slot_key
