@@ -1603,7 +1603,7 @@ func _build_tab_daily_rewards() -> Control:
 	d_vbox.add_child(d_header_h)
 
 	var d_title := Label.new()
-	d_title.text = "📅 CODZIENNE NAGRODY LOGOWANIA (7 DNI)"
+	d_title.text = "7 DNI NAGRÓD POWITALNYCH"
 	d_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	d_title.add_theme_font_size_override("font_size", 14)
 	d_title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.32))
