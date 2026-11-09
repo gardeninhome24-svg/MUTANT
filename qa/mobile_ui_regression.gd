@@ -118,6 +118,10 @@ func _run() -> void:
 		if is_instance_valid(filter_grid):
 			_assert(filter_grid.columns <= 7, "Filters have a bounded column count")
 
+		var depot: PanelContainer = profile.find_child("StoreDepotBanner", true, false) as PanelContainer
+		_assert(is_instance_valid(depot), "Shop has its own production depot illustration")
+		if is_instance_valid(depot):
+			_assert(depot.custom_minimum_size.y >= 130.0, "Shop artwork retains usable preview height")
 		var store_categories: GridContainer = profile.get("store_categories_grid") as GridContainer
 		var store_cards: GridContainer = profile.get("store_cards_grid") as GridContainer
 		var confirmation: ConfirmationDialog = profile.get("store_purchase_dialog") as ConfirmationDialog
