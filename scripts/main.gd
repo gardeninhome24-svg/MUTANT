@@ -327,9 +327,9 @@ func _apply_responsive_hud_layout() -> void:
 		if npc_dialogue_panel:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			npc_dialogue_panel.offset_left = -220.0
-			npc_dialogue_panel.offset_top = 126.0 + safe_top
+			npc_dialogue_panel.offset_top = 225.0 + safe_top
 			npc_dialogue_panel.offset_right = 220.0
-			npc_dialogue_panel.offset_bottom = 205.0 + safe_top
+			npc_dialogue_panel.offset_bottom = 312.0 + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
@@ -412,7 +412,11 @@ func _style_combat_hud() -> void:
 
 func _on_joystick_dir(dir: Vector2) -> void:
 	if is_instance_valid(player):
-		player.external_move_dir = dir
+		# Ignore touches behind overlays that pause or replace combat input.
+		if upgrade_panel.visible or death_panel.visible or win_panel.visible or (is_instance_valid(user_profile_panel) and user_profile_panel.visible):
+			player.external_move_dir = Vector2.ZERO
+		else:
+			player.external_move_dir = dir
 
 func _configure_input_mode_hud() -> void:
 	# W trybie Pionowym 9:16 (Android/iOS) wirtualny joystick i przyciski dotykowe są zawsze aktywne!
@@ -1068,6 +1072,9 @@ func _on_player_xp_changed(curr: float, needed: float, lvl: int) -> void:
 	run_level_label.text = "POZ. %d / 100 (%d/%d XP)" % [lvl, int(curr), int(needed)]
 
 func _on_player_leveled_up(_lvl: int) -> void:
+	player.external_move_dir = Vector2.ZERO
+	if is_instance_valid(joystick):
+		joystick.cancel_touch()
 	get_tree().paused = true
 	upgrade_panel.visible = true
 	_populate_upgrade_cards()
@@ -1723,6 +1730,10 @@ func _refresh_weapon_loadout_bar() -> void:
 func toggle_user_profile_panel() -> void:
 	if not is_instance_valid(user_profile_panel):
 		return
+	if is_instance_valid(player):
+		player.external_move_dir = Vector2.ZERO
+	if is_instance_valid(joystick):
+		joystick.cancel_touch()
 	if user_profile_panel.visible:
 		user_profile_panel.close_panel()
 	else:
