@@ -30,6 +30,7 @@ func _run() -> void:
 
 	stage.dark_matter_gems = 0
 	stage.beta_test_gems_granted = false
+	stage.beta_test_gems_remaining = 0
 	stage.unlocked_skins = ["default", "gold_veteran"]
 	stage.selected_skin_id = "default"
 	stage.daily_missions = []
@@ -40,15 +41,16 @@ func _run() -> void:
 	stage.last_daily_calendar_claim_day = -1
 	stage.attempts = 5
 
-	_check(stage.BETA_TEST_GEMS_ENABLED, "Beta test currency flag enabled")
 	_check(stage._grant_beta_test_gems_once(), "First beta grant succeeds")
 	_check(stage.dark_matter_gems == 10000, "Beta grant adds exactly 10000 gems")
+	_check(stage.beta_test_gems_remaining == 10000, "Beta grant is tracked separately")
 	_check(not stage._grant_beta_test_gems_once(), "Second beta grant blocked")
 	_check(stage.dark_matter_gems == 10000, "Beta grant cannot be duplicated")
 
 	_check(not stage.buy_skin_with_gems("unknown_skin"), "Unknown skin cannot be bought")
 	_check(stage.buy_skin_with_gems("neon_hunter"), "Cosmetic skin purchase succeeds")
 	_check(stage.dark_matter_gems == 9880, "Skin purchase charges exactly 120 gems")
+	_check(stage.beta_test_gems_remaining == 9880, "Beta spending subtracts tracked grant")
 	_check(stage.unlocked_skins.has("neon_hunter"), "Purchased skin owned")
 	_check(stage.selected_skin_id == "neon_hunter", "Purchased skin equipped")
 	_check(not stage.buy_skin_with_gems("neon_hunter"), "Purchased skin cannot be charged twice")
@@ -65,6 +67,10 @@ func _run() -> void:
 	_check(stage.beta_test_gems_granted, "Beta granted flag persists after save/load")
 	_check(stage.unlocked_skins.has("neon_hunter"), "Purchased skin persists after save/load")
 	_check(not stage._grant_beta_test_gems_once(), "Relogin cannot trigger another beta grant")
+	stage._revoke_unspent_beta_gems()
+	_check(stage.dark_matter_gems == 0, "Public-release cleanup removes only remaining beta gems")
+	_check(stage.beta_test_gems_remaining == 0, "Beta grant remainder clears after cleanup")
+	_check(stage.unlocked_skins.has("neon_hunter"), "Previously purchased cosmetics persist after beta wallet cleanup")
 
 	stage.dark_matter_gems = 50
 	_check(not stage.buy_skin_with_gems("void_sniper"), "Insufficient premium balance rejected")
