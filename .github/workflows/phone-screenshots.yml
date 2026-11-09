@@ -7,6 +7,13 @@ on:
     paths:
       - "qa/capture_phone_layout.gd"
       - ".github/workflows/phone-screenshots.yml"
+      - "scripts/main.gd"
+      - "scripts/main_menu.gd"
+      - "scripts/user_profile_panel.gd"
+      - "scripts/stage_director.gd"
+      - "assets/ui/**"
+      - "scenes/main/main.tscn"
+      - "scenes/ui/main_menu.tscn"
 
 permissions:
   contents: read
