@@ -47,6 +47,8 @@ var stage_rewards_hbox: HBoxContainer = null
 var boss_preview_tex: TextureRect = null
 var diff_btn: Button = null
 var play_big_btn: Button = null
+var campaign_progress_label: Label = null
+var campaign_progress_bar: ProgressBar = null
 var practice_btn: Button = null
 var stage_prev_btn: Button = null
 var stage_next_btn: Button = null
@@ -560,6 +562,36 @@ func _build_base_tab_content() -> void:
 		sb.pressed.connect(func(): _jump_to_stage(target_stage))
 		stage_quick_buttons.append(sb)
 
+	# A compact roadmap fills the formerly empty lower half with real progress,
+	# without adding fake rewards or another store widget.
+	var progress_card := PanelContainer.new()
+	progress_card.name = "CampaignProgressCard"
+	progress_card.custom_minimum_size = Vector2(0, 84)
+	var progress_style := StyleBoxFlat.new()
+	progress_style.bg_color = Color(0.025, 0.055, 0.09, 0.92)
+	progress_style.border_color = Color(0.12, 0.56, 0.74, 0.76)
+	progress_style.set_border_width_all(1)
+	progress_style.set_corner_radius_all(10)
+	progress_style.set_content_margin_all(12.0)
+	progress_card.add_theme_stylebox_override("panel", progress_style)
+	base_vbox.add_child(progress_card)
+	var progress_col := VBoxContainer.new()
+	progress_col.add_theme_constant_override("separation", 8)
+	progress_card.add_child(progress_col)
+	campaign_progress_label = Label.new()
+	campaign_progress_label.add_theme_color_override("font_color", Color(0.8, 0.95, 1.0))
+	campaign_progress_label.add_theme_font_size_override("font_size", 14)
+	progress_col.add_child(campaign_progress_label)
+	campaign_progress_bar = ProgressBar.new()
+	campaign_progress_bar.custom_minimum_size = Vector2(0, 9)
+	campaign_progress_bar.max_value = 100
+	campaign_progress_bar.show_percentage = false
+	var progress_fill := StyleBoxFlat.new()
+	progress_fill.bg_color = Color(0.17, 0.84, 0.82)
+	progress_fill.set_corner_radius_all(4)
+	campaign_progress_bar.add_theme_stylebox_override("fill", progress_fill)
+	progress_col.add_child(campaign_progress_bar)
+
 	# Dolny odstęp aby treść nie chowała się pod paskiem nawigacji
 	var bot_sp := Control.new()
 	bot_sp.custom_minimum_size = Vector2(0, 120)
@@ -849,6 +881,11 @@ func update_labels() -> void:
 		gems_lbl.text = "%d" % StageDirector.dark_matter_gems
 	if is_instance_valid(attempts_lbl):
 		attempts_lbl.text = "%d/5" % StageDirector.attempts
+	if is_instance_valid(campaign_progress_label):
+		var finished := maxi(0, StageDirector.max_unlocked_stage - 1)
+		campaign_progress_label.text = "KAMPANIA  •  %d / 100 ETAPÓW" % finished
+	if is_instance_valid(campaign_progress_bar):
+		campaign_progress_bar.value = maxi(0, StageDirector.max_unlocked_stage - 1)
 
 	if is_instance_valid(inbox_status_lbl):
 		inbox_status_lbl.text = "Status zrzutu: ✓ ODEBRANO" if bool(StageDirector.inbox_claimed.get("welcome_drop", false)) else "Status zrzutu: 🎁 DO ODBIORU!"
