@@ -240,6 +240,8 @@ func _ready() -> void:
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
 	_apply_responsive_metrics()
+	if not get_viewport().size_changed.is_connected(_apply_responsive_metrics):
+		get_viewport().size_changed.connect(_apply_responsive_metrics)
 	refresh_ui()
 
 func _on_orientation_changed(_is_portrait: bool) -> void:
@@ -250,6 +252,7 @@ func _apply_responsive_metrics() -> void:
 	if not is_instance_valid(main_card):
 		return
 	var portrait := StageDirector.is_portrait_mode()
+	var narrow := portrait and get_viewport_rect().size.x < 600.0
 	main_card.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if embedded_in_hub:
 		main_card.offset_left = 8
@@ -283,13 +286,13 @@ func _apply_responsive_metrics() -> void:
 		inv_chest_btn.custom_minimum_size = Vector2(126, 34) if portrait else Vector2(180, 34)
 		inv_chest_btn.add_theme_font_size_override("font_size", 10 if portrait else 12)
 	if is_instance_valid(inv_slot_filters_grid):
-		inv_slot_filters_grid.columns = 4 if portrait else 7
+		inv_slot_filters_grid.columns = (2 if narrow else 4) if portrait else 7
 	if is_instance_valid(inv_grid):
-		inv_grid.columns = 4 if portrait else 6
+		inv_grid.columns = (2 if narrow else 4) if portrait else 6
 	if is_instance_valid(store_cards_grid):
-		store_cards_grid.columns = 2 if portrait else 3
+		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(daily_grid):
-		daily_grid.columns = 4 if portrait else 7
+		daily_grid.columns = (2 if narrow else 4) if portrait else 7
 
 func _build_ui() -> void:
 	tab_bg_tex = TextureRect.new()
@@ -1937,14 +1940,16 @@ func _refresh_daily_and_bp_ui() -> void:
 			v.add_child(dl)
 
 			var rl := Label.new()
-			rl.text = "+%d Kr | +%d 💎\n+%d Złomu" % [int(r["credits"]), int(r["gems"]), int(r["scrap"])]
+			rl.text = "+%d Kr  •  +%d Złomu" % [int(r["credits"]), int(r["scrap"])]
 			rl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			rl.add_theme_font_size_override("font_size", 10)
 			v.add_child(rl)
 
 			var cb := Button.new()
-			cb.text = "✓ ODEBRANO" if claimed else "ODBIERZ"
-			cb.disabled = claimed
+			var today := int(Time.get_unix_time_from_system() / 86400)
+			var claimable := not claimed and d_num == StageDirector.daily_login_day and StageDirector.last_daily_calendar_claim_day < today
+			cb.text = "ODEBRANO" if claimed else ("ODBIERZ" if claimable else "ZABLOKOWANE")
+			cb.disabled = not claimable
 			cb.custom_minimum_size = Vector2(96, 28)
 			cb.add_theme_font_size_override("font_size", 11)
 			var day_cap: int = d_num
