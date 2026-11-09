@@ -80,6 +80,16 @@ jobs:
             exit 1
           fi
 
+      - name: Premium beta bonus, shop and F2P reward regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/premium_shop_regression.gd 2>&1 | tee /tmp/premium-shop-regression.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|Invalid call\\.|Invalid set index|Failed to load script|Failed loading resource|PREMIUM QA FAIL:|PREMIUM QA FAILED:)" /tmp/premium-shop-regression.log; then
+            echo "::error::Premium economy or beta-wallet regression failed."
+            exit 1
+          fi
+
       - name: Gameplay regression (bosses, rewards, equipment, saves)
         shell: bash
         run: |
