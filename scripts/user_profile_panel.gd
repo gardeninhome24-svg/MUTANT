@@ -1423,6 +1423,22 @@ func _build_tab_premium_store() -> Control:
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 8)
 
+	# Dedicated depot illustration makes the store a recognizable location,
+	# while product descriptions remain on solid readable cards below.
+	var depot_frame := PanelContainer.new()
+	depot_frame.name = "StoreDepotBanner"
+	depot_frame.custom_minimum_size = Vector2(0, 130)
+	depot_frame.clip_contents = true
+	depot_frame.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD, true))
+	vbox.add_child(depot_frame)
+	var depot_image := TextureRect.new()
+	depot_image.texture = load("res://assets/ui/target_theme/bg_store_depot.png")
+	depot_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	depot_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	depot_image.modulate = Color(0.87, 0.91, 0.97, 0.92)
+	depot_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	depot_frame.add_child(depot_image)
+
 	var banner := _create_subpanel(Color(1.0, 0.80, 0.22, 0.90))
 	vbox.add_child(banner)
 	var b_vbox := VBoxContainer.new()
@@ -1457,6 +1473,7 @@ func _build_tab_premium_store() -> Control:
 			refresh_ui()
 			emit_signal("profile_updated")
 	)
+	SurvivorVisualSystem.decorate_button(free_daily_pack_btn, SurvivorVisualSystem.GOLD, 48.0)
 	top_actions_h.add_child(free_daily_pack_btn)
 
 	var odds_btn := Button.new()
@@ -1466,6 +1483,7 @@ func _build_tab_premium_store() -> Control:
 	odds_btn.pressed.connect(func():
 		sandbox_status_lbl.text = StageDirector.get_drop_probabilities_text()
 	)
+	SurvivorVisualSystem.decorate_button(odds_btn, SurvivorVisualSystem.CYAN, 48.0)
 	top_actions_h.add_child(odds_btn)
 
 	# Pasek 8 kategorii sklepu
