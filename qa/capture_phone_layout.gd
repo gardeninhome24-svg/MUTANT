@@ -138,10 +138,29 @@ func _capture() -> void:
 		quit(1)
 		return
 	compact_menu.call("switch_hub_tab", 2)
+	var phone_profile: Control = compact_menu.get("user_profile_panel") as Control
+	if is_instance_valid(phone_profile):
+		phone_profile.call("_apply_responsive_metrics", 420.0)
+	for i in range(3):
+		await process_frame
+	var loadout: Control = phone_profile.find_child("EquipmentLoadoutShowcase", true, false) as Control if is_instance_valid(phone_profile) else null
+	if is_instance_valid(loadout) and loadout.get_global_rect().end.x > 419.0:
+		printerr("PHONE SHOT ERROR: equipment loadout clipped horizontally at 420px: " + str(loadout.get_global_rect()))
+		quit(1)
+		return
 	if not await _shot("10_equipment_420x933.png"):
 		quit(1)
 		return
 	compact_menu.call("switch_hub_tab", 1)
+	if is_instance_valid(phone_profile):
+		phone_profile.call("_apply_responsive_metrics", 420.0)
+	for i in range(3):
+		await process_frame
+	var char_arena: Control = phone_profile.get("hero_arena_row") as Control if is_instance_valid(phone_profile) else null
+	if is_instance_valid(char_arena) and char_arena.get_global_rect().end.x > 419.0:
+		printerr("PHONE SHOT ERROR: character loadout clipped horizontally at 420px: " + str(char_arena.get_global_rect()))
+		quit(1)
+		return
 	if not await _shot("11_character_420x933.png"):
 		quit(1)
 		return
