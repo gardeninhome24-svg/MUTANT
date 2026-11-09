@@ -12,6 +12,7 @@ signal launch_stage_requested(practice_mode: bool)
 
 var player_ref: Player = null
 var embedded_in_hub: bool = false
+var narrow_portrait_ui: bool = false
 var current_tab: int = 0 # 0=Postać RPG, 1=Ekwipunek, 2=Kampania 1-100, 3=Sklep Premium, 4=Nagrody 7 Dni
 
 var tab_bg_tex: TextureRect = null
@@ -179,6 +180,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	# changes. An explicit test width exercises the same layout branch.
 	var available_width := test_width_override if test_width_override > 0.0 else get_viewport_rect().size.x
 	var narrow := portrait and available_width < 600.0
+	narrow_portrait_ui = narrow
 	main_card.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if embedded_in_hub:
 		main_card.offset_left = 8
@@ -207,6 +209,11 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
 		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
+	if is_instance_valid(commander_title_lbl):
+		commander_title_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+	if is_instance_valid(hero_power_lbl):
+		hero_power_lbl.add_theme_font_size_override("font_size", 11 if narrow else 15)
+		hero_power_lbl.text = ("⚔ %d" if narrow else "⚔ MOC BOJOWA: %d") % StageDirector.get_total_combat_power()
 	if is_instance_valid(hero_arena_row):
 		hero_arena_row.add_theme_constant_override("separation", 5 if narrow else 14)
 	if is_instance_valid(hero_pedestal):
@@ -429,14 +436,15 @@ func _build_tab_character_showcase() -> Control:
 	top_v.add_child(title_row)
 
 	commander_title_lbl = Label.new()
-	commander_title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	commander_title_lbl.autowrap_mode = TextServer.AUTOWRAP_OFF
+	commander_title_lbl.clip_text = true
 	commander_title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	commander_title_lbl.add_theme_font_size_override("font_size", 15)
 	commander_title_lbl.add_theme_color_override("font_color", Color(1.0, 0.92, 0.42))
 	title_row.add_child(commander_title_lbl)
 
 	hero_power_lbl = Label.new()
-	hero_power_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hero_power_lbl.autowrap_mode = TextServer.AUTOWRAP_OFF
 	hero_power_lbl.add_theme_font_size_override("font_size", 15)
 	hero_power_lbl.add_theme_color_override("font_color", Color(0.35, 1.0, 0.58))
 	title_row.add_child(hero_power_lbl)
@@ -1891,7 +1899,7 @@ func refresh_ui() -> void:
 		hero_weapon_badge_lbl.text = "%s +%d" % [String(w_item.get("name", "Karabin A-03")), int(w_item.get("level", 0))] if not w_item.is_empty() else "Brak broni"
 
 	commander_title_lbl.text = "%s — %s" % [String(cls_cfg["name"]), String(skin_cfg["name"])]
-	hero_power_lbl.text = "⚔ MOC BOJOWA: %d" % StageDirector.get_total_combat_power()
+	hero_power_lbl.text = ("⚔ %d" if narrow_portrait_ui else "⚔ MOC BOJOWA: %d") % StageDirector.get_total_combat_power()
 	class_bonus_lbl.text = String(cls_cfg["bonus_desc"])
 
 	var xp_req := StageDirector.get_character_xp_needed(StageDirector.character_level)
