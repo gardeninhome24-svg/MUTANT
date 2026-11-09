@@ -155,7 +155,7 @@ func _test_combat_and_bosses() -> void:
 	var enemies: Array[Node] = get_nodes_in_group("enemies")
 	_assert(not enemies.is_empty(), "Wave spawns a real mutant")
 	if not enemies.is_empty():
-		var mutant: MutantEnemy = enemies[0] as MutantEnemy
+		var mutant = enemies[0]
 		if is_instance_valid(mutant):
 			mutant.take_damage(mutant.max_health + 500.0)
 			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "One mutant death counts as exactly one daily kill")
@@ -164,18 +164,18 @@ func _test_combat_and_bosses() -> void:
 	_assert(int(battle.get("current_wave_num")) == 5, "Wave 5 can be started")
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 5 spawns a miniboss")
 	if is_instance_valid(battle.get("active_boss")):
-		_assert(String((battle.get("active_boss") as MutantEnemy).tier) == "miniboss", "Wave 5 enemy has miniboss tier")
+		_assert(String(battle.get("active_boss").tier) == "miniboss", "Wave 5 enemy has miniboss tier")
 	battle.call("start_wave", 1, 10)
 	_assert(int(battle.get("current_wave_num")) == 10, "Wave 10 can be started")
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 10 spawns a boss")
 	if is_instance_valid(battle.get("active_boss")):
-		_assert(String((battle.get("active_boss") as MutantEnemy).tier) == "boss", "Wave 10 enemy has boss tier")
+		_assert(String(battle.get("active_boss").tier) == "boss", "Wave 10 enemy has boss tier")
 	battle.set("primary_objective_done", true)
 	battle.set("wave_time_left", 0.0)
 	battle.set("boss_spawned_this_run", true)
 	battle.set("boss_killed_this_run", false)
 	_assert(not bool(battle.call("_can_claim_victory")), "Cannot win while the final boss lives")
-	var final_boss: MutantEnemy = battle.get("active_boss") as MutantEnemy
+	var final_boss = battle.get("active_boss")
 	if is_instance_valid(final_boss):
 		final_boss.take_damage(final_boss.max_health + 500.0)
 	_assert(bool(battle.get("boss_killed_this_run")), "Killing final boss updates victory requirement")
