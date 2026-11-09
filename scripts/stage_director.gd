@@ -1264,6 +1264,7 @@ func complete_stage_run(stage_num: int, victory: bool, waves_cleared: int) -> Di
 	var rewards_v2: Dictionary = cfg.get("rewards_v2", {}) if cfg.get("rewards_v2") is Dictionary else {}
 	var raw_sc = rewards_v2.get("soft_credits")
 	var raw_xp = rewards_v2.get("account_xp")
+	var materials_v2: Dictionary = rewards_v2.get("materials", {}) if rewards_v2.get("materials") is Dictionary else {}
 	var base_credits := float(raw_sc if (raw_sc is int or raw_sc is float) else (80 + 18 * stage_num)) * reward_mult
 	var base_char_xp := float(raw_xp if (raw_xp is int or raw_xp is float) else (35 + 8 * stage_num)) * reward_mult
 
@@ -1289,7 +1290,7 @@ func complete_stage_run(stage_num: int, victory: bool, waves_cleared: int) -> Di
 		var mult := 1.0 if is_first_clear else rep_mult
 		earned_credits = int(roundf(base_credits * mult))
 		earned_xp = int(roundf(base_char_xp * mult))
-		earned_scrap = 2 + int(stage_num / 10) if is_first_clear else 1
+		earned_scrap = maxi(0, int(materials_v2.get("scrap", 2 + int(stage_num / 10)))) if is_first_clear else 1
 		cleared_stages[stage_key] = 3
 		first_clears_v2[mission_id] = true
 		if is_class_first_clear:
