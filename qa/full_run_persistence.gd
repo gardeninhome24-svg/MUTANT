@@ -393,6 +393,23 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 2: defend the generator for 90 seconds, regardless of proximity.
+	stage.current_stage = 2
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "defend_node", "Stage 2 is a timed defense")
+	var defense_contract_seconds: float = float(battle.get("primary_objective_required_sec"))
+	_check(defense_contract_seconds >= 90.0, "Stage 2 respects 90-second defense contract")
+	battle.call("_advance_defense_objective", defense_contract_seconds - 1.0)
+	_check(not bool(battle.get("primary_objective_done")), "Defense cannot complete before timer expires")
+	battle.call("_advance_defense_objective", 1.0)
+	_check(bool(battle.get("primary_objective_done")), "Surviving full defense duration completes objective")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
