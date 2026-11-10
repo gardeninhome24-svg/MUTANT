@@ -113,36 +113,20 @@ jobs:
           test -s build/android/MutantSurvivor.apk
           ls -lh build/android/MutantSurvivor.apk
 
-      - name: Verify exported beta APK archive, signing and application ID
+      - name: Verify APK ZIP and signing before diagnostic upload
         shell: bash
         run: |
           set -euo pipefail
           python3 tools/beta_apk_preflight.py --self-test
           python3 tools/beta_apk_preflight.py build/android/MutantSurvivor.apk | tee /tmp/beta-apk-preflight.log
           APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
-          AAPT2="$ANDROID_HOME/build-tools/35.0.0/aapt2"
           test -x "$APKSIGNER"
-          test -x "$AAPT2"
           "$APKSIGNER" verify --verbose --print-certs build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
-          grep -q "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
-          # Legacy aapt cannot decode this manifest's android:required
-          # attribute and exits non-zero despite a valid, signed APK.
-          # AAPT2 is the maintained Android binary manifest reader.
-          "$AAPT2" dump packagename build/android/MutantSurvivor.apk | tee /tmp/apk-badging.log
-          grep -Fxq 'com.zielonadolina.mutantsurvivor' /tmp/apk-badging.log
+          grep -Fq "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
           sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
           cat build/android/MutantSurvivor.apk.sha256
-          {
-            echo ""
-            echo "### Beta APK artifact validation"
-            echo '~~~text'
-            cat /tmp/beta-apk-preflight.log
-            cat /tmp/apk-signature.log
-            cat build/android/MutantSurvivor.apk.sha256
-            echo '~~~'
-          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Store installable debug APK early (not QA-approved)
+      - name: Store signed diagnostic APK early (not QA-approved)
         uses: actions/upload-artifact@v4
         with:
           name: MutantSurvivor-Android-APK-UNVERIFIED-${{ github.run_number }}
@@ -152,15 +136,36 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Verify application ID with Android AAPT2
+        shell: bash
+        run: |
+          set -euo pipefail
+          AAPT2="$ANDROID_HOME/build-tools/35.0.0/aapt2"
+          test -x "$AAPT2"
+          # The legacy aapt parser fails on android:required in the compiled
+          # manifest. AAPT2 reads the current Android manifest format.
+          "$AAPT2" dump packagename build/android/MutantSurvivor.apk | tee /tmp/apk-badging.log
+          grep -Fxq 'com.zielonadolina.mutantsurvivor' /tmp/apk-badging.log
+          {
+            echo ""
+            echo "### Diagnostic APK validation"
+            echo '~~~text'
+            cat /tmp/beta-apk-preflight.log
+            cat /tmp/apk-signature.log
+            cat /tmp/apk-badging.log
+            cat build/android/MutantSurvivor.apk.sha256
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Explain APK status to testers
         shell: bash
         run: |
           {
-            echo "### Installable diagnostic APK is available"
-            echo "The UNVERIFIED APK artifact was exported and its package/signature verified."
-            echo "Gameplay QA continues after upload. A failed workflow means this APK"
-            echo "is **NOT beta approved**; use only for internal debugging."
-            echo "Only a green full job AND real handset testing may approve the private beta."
+            echo "### Signed debug APK artifact uploaded"
+            echo "The UNVERIFIED APK artifact passed ZIP/signature checks before upload."
+            echo "The application-ID check passed using AAPT2; gameplay QA follows."
+            echo "A failed workflow means this APK is **NOT beta approved**."
+            echo "Only a green full job and real-device testing may approve private beta."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Pre-beta structural validation (campaign and scenes)
