@@ -163,6 +163,17 @@ jobs:
           fi
           grep -q 'FULL RUN PASS:' /tmp/full-run-persistence.log
 
+      - name: All chapter boss finale integrations (10/10)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/chapter_boss_integration.gd 2>&1 | tee /tmp/chapter-boss-integration.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|CHAPTER BOSS FAIL:|CHAPTER BOSS FAILED:" /tmp/chapter-boss-integration.log; then
+            echo "::error::Chapter finale integration failed"
+            exit 1
+          fi
+          grep -q 'CHAPTER BOSS PASS:' /tmp/chapter-boss-integration.log
+
       - name: Smoke test booting the main menu (headless)
         shell: bash
         run: |
@@ -232,6 +243,7 @@ jobs:
             /tmp/google-play-preflight.log
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
+            /tmp/chapter-boss-integration.log
             /tmp/full-run-persistence.log
             /tmp/premium-shop-regression.log
             /tmp/visual-release-gate.log
