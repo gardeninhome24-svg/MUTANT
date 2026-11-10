@@ -93,6 +93,7 @@ func _ready() -> void:
 	_build_inbox_modal()
 	_build_settings_modal()
 	_polish_hub_visuals()
+	_apply_approved_menu_style()
 
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
@@ -146,6 +147,38 @@ func _polish_hub_visuals() -> void:
 		play_big_btn.focus_mode = Control.FOCUS_ALL
 		play_big_btn.mouse_entered.connect(func(): play_big_btn.modulate = Color(1.08, 1.05, 0.96))
 		play_big_btn.mouse_exited.connect(func(): play_big_btn.modulate = Color.WHITE)
+
+
+func _apply_approved_menu_style() -> void:
+	# Approved gameplay UI reference: live card/button controls, not a
+	# flattened screenshot or painted-in fake currency values.
+	if is_instance_valid(stage_card):
+		var card := StyleBoxFlat.new()
+		card.bg_color = Color(0.009, 0.035, 0.060, 0.98)
+		card.border_color = Color(0.17, 0.80, 0.96)
+		card.set_border_width_all(3)
+		card.set_corner_radius_all(14)
+		card.shadow_color = Color(0.0, 0.01, 0.03, 0.72)
+		card.shadow_size = 8
+		stage_card.add_theme_stylebox_override("panel", card)
+	if is_instance_valid(top_hub_panel):
+		var bar := StyleBoxFlat.new()
+		bar.bg_color = Color(0.012, 0.035, 0.059, 0.96)
+		bar.border_color = Color(0.22, 0.76, 1.0, 0.86)
+		bar.set_border_width_all(2)
+		bar.set_corner_radius_all(11)
+		top_hub_panel.add_theme_stylebox_override("panel", bar)
+	if is_instance_valid(bottom_nav_panel):
+		var bar := StyleBoxFlat.new()
+		bar.bg_color = Color(0.009, 0.030, 0.055, 0.97)
+		bar.border_color = Color(0.17, 0.76, 0.94, 0.90)
+		bar.set_border_width_all(2)
+		bar.set_corner_radius_all(10)
+		bottom_nav_panel.add_theme_stylebox_override("panel", bar)
+	if is_instance_valid(stage_title_lbl):
+		stage_title_lbl.add_theme_color_override("font_color", Color(0.98, 0.99, 1.0))
+	if is_instance_valid(stage_details_lbl):
+		stage_details_lbl.add_theme_color_override("font_color", Color(0.55, 0.97, 0.16))
 
 
 func _build_commercial_hub_ui() -> void:
@@ -384,7 +417,7 @@ func _build_commercial_hub_ui() -> void:
 	bottom_nav_panel.add_child(nav_hbox)
 
 	var nav_defs := [
-		{"id": 0, "name": "Baza", "icon": "res://assets/ui/target_theme/nav_clean_baza.svg"},
+		{"id": 0, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
 		{"id": 1, "name": "Postać", "icon": "res://assets/ui/target_theme/nav_clean_postac.svg"},
 		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg"},
 		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
@@ -583,6 +616,15 @@ func _build_base_tab_content() -> void:
 	stage_row.add_child(st_vbox)
 
 	# Górny wiersz karty: ◀ ETAP 030 ▶
+	var map_link := Button.new()
+	map_link.name = "OpenCampaignMap"
+	map_link.text = "KAMPANIA  •  MAPA 1–100"
+	map_link.flat = true
+	map_link.custom_minimum_size = Vector2(0, 40)
+	map_link.add_theme_font_size_override("font_size", 16)
+	map_link.add_theme_color_override("font_color", Color(1.0, 0.77, 0.28))
+	map_link.pressed.connect(func(): switch_hub_tab(3))
+	st_vbox.add_child(map_link)
 	var title_h := HBoxContainer.new()
 	title_h.name = "MissionTitleRow"
 	title_h.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -732,6 +774,7 @@ func _build_base_tab_content() -> void:
 	SurvivorVisualSystem.decorate_metal_button(continue_btn, SurvivorVisualSystem.LIME, 60.0)
 	continue_btn.add_theme_font_size_override("font_size", 19)
 	continue_btn.pressed.connect(func(): switch_hub_tab(3))
+	continue_btn.visible = false # Replaced by the mission card's real map link
 	base_vbox.add_child(continue_btn)
 	# Preserve the approved golden PLAY artwork while making the disabled state clear.
 
@@ -803,6 +846,7 @@ func _build_base_tab_content() -> void:
 	var progress_card := PanelContainer.new()
 	progress_card.name = "CampaignProgressCard"
 	progress_card.custom_minimum_size = Vector2(0, 144)
+	progress_card.visible = false # 100-stage detail belongs in the campaign screen
 	var progress_style := StyleBoxFlat.new()
 	progress_style.bg_color = Color(0.025, 0.055, 0.09, 0.92)
 	progress_style.border_color = Color(0.12, 0.56, 0.74, 0.76)
@@ -1208,6 +1252,10 @@ func _apply_responsive_menu_layout() -> void:
 		top_hub_panel.offset_right = -10.0 if portrait else -24.0
 		top_hub_panel.offset_bottom = 68.0 + safe_top
 
+	# Five routes remain registered; portrait shows four primary actions.
+	# The map remains accessible via OpenCampaignMap in the stage card.
+	if nav_buttons.size() >= 5:
+		nav_buttons[3].visible = not portrait
 	if is_instance_valid(inbox_btn):
 		inbox_btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		inbox_btn.offset_left = 22.0 if portrait else 28.0
@@ -1274,7 +1322,7 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, minf(size.x, get_viewport_rect().size.x) - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (300.0 if compact_hub else 320.0) if portrait else 330.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (348.0 if compact_hub else 385.0) if portrait else 330.0)
 	# Compress intrinsic child minimum widths before the 420px screenshot:
 	# a wide title/navigation row used to force the whole card to 480px.
 	if is_instance_valid(stage_card):
@@ -1304,7 +1352,7 @@ func _apply_responsive_menu_layout() -> void:
 		stage_preview.visible = true
 		stage_preview.custom_minimum_size = Vector2(96, 174) if compact_hub else (Vector2(156, 205) if portrait else Vector2(175, 180))
 	if is_instance_valid(play_big_btn):
-		play_big_btn.custom_minimum_size = Vector2(minf(560.0 if portrait else 600.0, available_width), 92.0 if portrait else 100.0)
+		play_big_btn.custom_minimum_size = Vector2(minf(630.0 if portrait else 600.0, available_width), 110.0 if portrait else 100.0)
 	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
 	if is_instance_valid(campaign_continue):
 		campaign_continue.custom_minimum_size = Vector2(minf(480.0, available_width), 50.0 if compact_hub else 60.0)
@@ -1312,11 +1360,11 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (210.0 if compact_hub else 395.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (255.0 if compact_hub else 435.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (31 if portrait else 33))
+		stage_title_lbl.add_theme_font_size_override("font_size", 19 if compact_hub else (34 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (23 if portrait else 25))
+		stage_details_lbl.add_theme_font_size_override("font_size", 14 if compact_hub else (22 if portrait else 25))
 		stage_details_lbl.custom_minimum_size.y = 22.0 if compact_hub else 36.0
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
