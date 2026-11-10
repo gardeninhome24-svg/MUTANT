@@ -64,9 +64,11 @@ func _run() -> void:
 					"Stage %d requires two named elites" % stage_num)
 			"destroy_target":
 				var targets: int = 0
-				for candidate in get_nodes_in_group("destructibles"):
-					if candidate is ExplosiveBarrel and candidate.has_meta("mission_target"):
-						targets += 1
+				var obstacle_layer: Node2D = combat.get("obstacles_layer") as Node2D
+				if is_instance_valid(obstacle_layer):
+					for candidate in obstacle_layer.get_children():
+						if candidate is ExplosiveBarrel and candidate.has_meta("mission_target"):
+							targets += 1
 				_check(targets == 2, "Stage %d spawns two real shootable incubators" % stage_num)
 			"repair_generator":
 				_check(int(combat.get("objective_steps_required")) == 2,
@@ -94,14 +96,20 @@ func _run() -> void:
 			combat.call("start_wave", stage_num, 5)
 			var required_id: String = "elite_ch%02d_stage07" % int(cfg.get("chapter", 1))
 			var count: int = 0
-			for enemy in get_nodes_in_group("enemies"):
-				if enemy is MutantEnemy and enemy.enemy_id == required_id and not enemy.is_dying:
-					count += 1
+			var characters: Node2D = combat.get("characters_layer") as Node2D
+			if is_instance_valid(characters):
+				for enemy in characters.get_children():
+					if enemy is MutantEnemy and enemy.enemy_id == required_id and not enemy.is_dying:
+						count += 1
 			_check(count == 2, "Stage %d spawns two contracted elites on wave five" % stage_num)
 
 		paused = false
 		combat.queue_free()
 		await process_frame
+		# Ensure previous combat nodes have actually left the scene tree.
+		# The next stage must not see stale actors or mission objects.
+		_check(not is_instance_valid(combat),
+			"Stage %d combat scene is disposed after QA" % stage_num)
 		if stage_num % 10 == 0:
 			print("MISSION SCENE PROGRESS: %d/100 stages checked" % stage_num)
 
