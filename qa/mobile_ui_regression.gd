@@ -194,6 +194,56 @@ func _run() -> void:
 			if is_instance_valid(action):
 				_assert(action.pressed.get_connections().size() > 0, action_name + " has a live handler")
 				_assert(action.custom_minimum_size.y >= 44.0, action_name + " meets touch target")
+		# Inventory v3: 30-cell paging with readable, touch-sized controls.
+		var previous_page: Button = profile.find_child("InventoryPagePrevious", true, false) as Button
+		var next_page: Button = profile.find_child("InventoryPageNext", true, false) as Button
+		var page_label: Label = profile.find_child("InventoryPageLabel", true, false) as Label
+		_assert(is_instance_valid(previous_page) and is_instance_valid(next_page), "Inventory has real previous/next page buttons")
+		_assert(is_instance_valid(page_label), "Inventory displays current page and page count")
+		for page_button in [previous_page, next_page]:
+			if is_instance_valid(page_button):
+				_assert(page_button.custom_minimum_size.y >= 44.0, "Inventory paging meets 44px touch target")
+				_assert(page_button.pressed.get_connections().size() > 0, "Inventory paging button is functional")
+		var detail_actions: GridContainer = profile.find_child("InventoryDetailActions", true, false) as GridContainer
+		_assert(is_instance_valid(detail_actions), "Inventory has usable action controls")
+		if is_instance_valid(detail_actions):
+			for action in detail_actions.get_children():
+				if action is Button:
+					_assert(action.custom_minimum_size.y >= 44.0, "Inventory detail action has a safe touch height")
+		# Exercise the page boundary with disposable copies of real equipment.
+		if stage_manager != null and is_instance_valid(bag) and not stage_manager.inventory.is_empty():
+			var original_inventory: Array = stage_manager.inventory.duplicate(true)
+			var selected_before: String = String(profile.get("selected_bag_instance_id"))
+			var original_page: int = int(profile.get("inventory_page"))
+			var original_filter: String = String(profile.get("filter_slot"))
+			var original_rarity: String = String(profile.get("filter_rarity"))
+			stage_manager.inventory = []
+			for slot_num in range(35):
+				var fake_item: Dictionary = original_inventory[0].duplicate(true)
+				fake_item["instance_id"] = "__qa_page_%02d" % slot_num
+				stage_manager.inventory.append(fake_item)
+			profile.set("filter_slot", "all")
+			profile.set("filter_rarity", "all")
+			profile.set("selected_bag_instance_id", "")
+			profile.set("inventory_page", 0)
+			profile.call("_refresh_inventory_tab_ui")
+			await process_frame
+			_assert(bag.get_child_count() == 30, "Page one renders exactly 30 slots, not all 35 items")
+			_assert(not next_page.disabled and previous_page.disabled, "First page can advance only")
+			profile.set("inventory_page", 1)
+			profile.set("selected_bag_instance_id", "")
+			profile.call("_refresh_inventory_tab_ui")
+			await process_frame
+			_assert(bag.get_child_count() == 30, "Last page displays 5 items plus 25 empty slots")
+			_assert(next_page.disabled and not previous_page.disabled, "Final page can navigate back only")
+			_assert(String(page_label.text).contains("2 / 2"), "Page label reflects actual item count")
+			stage_manager.inventory = original_inventory
+			profile.set("filter_slot", original_filter)
+			profile.set("filter_rarity", original_rarity)
+			profile.set("selected_bag_instance_id", selected_before)
+			profile.set("inventory_page", original_page)
+			profile.call("_refresh_inventory_tab_ui")
+			await process_frame
 		# Filtering to zero matches must clear stale selected items before any
 		# equip or unequip action; preserve the user's state after the test.
 		if is_instance_valid(bag):
