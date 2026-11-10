@@ -218,25 +218,25 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(hud_avatar):
 		hud_avatar.custom_minimum_size = Vector2(32, 32) if compact else Vector2(38, 38)
 	if is_instance_valid(stats_card):
-		stats_card.custom_minimum_size = Vector2(185, 46) if compact else Vector2(195, 46)
+		stats_card.custom_minimum_size = Vector2(195, 56) if compact else Vector2(275, 72)
 	if is_instance_valid(hp_bar):
-		hp_bar.custom_minimum_size = Vector2(95, 8) if compact else Vector2(110, 8)
+		hp_bar.custom_minimum_size = Vector2(110, 13) if compact else Vector2(165, 15)
 	if is_instance_valid(xp_bar):
-		xp_bar.custom_minimum_size = Vector2(95, 4) if compact else Vector2(110, 4)
+		xp_bar.custom_minimum_size = Vector2(110, 8) if compact else Vector2(165, 10)
 	if is_instance_valid(hp_label):
-		hp_label.add_theme_font_size_override("font_size", 10 if compact else 11)
+		hp_label.add_theme_font_size_override("font_size", 12 if compact else 15)
 	if is_instance_valid(run_level_label):
-		run_level_label.add_theme_font_size_override("font_size", 10 if compact else 11)
+		run_level_label.add_theme_font_size_override("font_size", 12 if compact else 16)
 	if is_instance_valid(wave_label):
-		wave_label.add_theme_font_size_override("font_size", 12 if compact else 12)
+		wave_label.add_theme_font_size_override("font_size", 16 if compact else 21)
 	if is_instance_valid(boss_label):
 		boss_label.add_theme_font_size_override("font_size", 11 if compact else 13)
 	if is_instance_valid(obj_header):
-		obj_header.add_theme_font_size_override("font_size", 10)
+		obj_header.add_theme_font_size_override("font_size", 13 if compact else 17)
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
-			mission_text.add_theme_font_size_override("font_size", 11 if compact else 12)
+			mission_text.add_theme_font_size_override("font_size", 12 if compact else 15)
 			mission_text.clip_text = true
 			mission_text.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if is_instance_valid(weapon_slots_hbox):
@@ -328,37 +328,37 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			stats_card.offset_left = 10.0
 			stats_card.offset_top = 8.0 + safe_top
 			stats_card.offset_right = 205.0
-			stats_card.offset_bottom = 54.0 + safe_top
+			stats_card.offset_bottom = (64.0 if compact else 85.0) + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 			currency_bar.offset_left = -395.0 if compact else -302.0
-			currency_bar.offset_top = (145.0 if compact else 8.0) + safe_top
+			currency_bar.offset_top = (165.0 if compact else 8.0) + safe_top
 			currency_bar.offset_right = -10.0
-			currency_bar.offset_bottom = (180.0 if compact else 38.0) + safe_top
+			currency_bar.offset_bottom = (198.0 if compact else 45.0) + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -115.0 if compact else -145.0
-			wave_progress_box.offset_top = (190.0 if compact else 60.0) + safe_top
+			wave_progress_box.offset_top = (210.0 if compact else 104.0) + safe_top
 			wave_progress_box.offset_right = 115.0 if compact else 145.0
-			wave_progress_box.offset_bottom = (230.0 if compact else 100.0) + safe_top
+			wave_progress_box.offset_bottom = (260.0 if compact else 165.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
-			objectives_panel.offset_top = 60.0 + safe_top
-			objectives_panel.offset_right = 202.0 if compact else 198.0
-			objectives_panel.offset_bottom = 138.0 + safe_top
+			objectives_panel.offset_top = (80.0 if compact else 180.0) + safe_top
+			objectives_panel.offset_right = 208.0 if compact else 278.0
+			objectives_panel.offset_bottom = (167.0 if compact else 330.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			radar_panel.offset_left = -98.0
-			radar_panel.offset_top = (60.0 if compact else 114.0) + safe_top
+			radar_panel.offset_left = -105.0 if compact else -160.0
+			radar_panel.offset_top = (70.0 if compact else 152.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (140.0 if compact else 202.0) + safe_top
+			radar_panel.offset_bottom = (162.0 if compact else 305.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-			bottom_weapons_panel.offset_left = 12.0
-			bottom_weapons_panel.offset_top = -128.0 if compact else -68.0
-			bottom_weapons_panel.offset_right = 260.0 if compact else 295.0
-			bottom_weapons_panel.offset_bottom = -78.0 if compact else -12.0
+			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(185.0, (view_width - 360.0) * 0.5)
+			bottom_weapons_panel.offset_top = -128.0 if compact else -110.0
+			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 115.0, (view_width + 360.0) * 0.5)
+			bottom_weapons_panel.offset_bottom = -78.0 if compact else -30.0
 		if powers_hbox:
 			powers_hbox.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 			powers_hbox.offset_left = -355.0 if not compact else -330.0
@@ -447,15 +447,15 @@ func _style_combat_hud() -> void:
 		if not is_instance_valid(panel):
 			continue
 		var style := StyleBoxFlat.new()
-		style.bg_color = Color(0.025, 0.045, 0.075, 0.78)
-		style.border_color = Color(0.19, 0.58, 0.67, 0.52)
-		style.set_border_width_all(1)
-		style.set_corner_radius_all(7)
-		style.set_content_margin_all(5.0)
+		style.bg_color = Color(0.009, 0.025, 0.048, 0.94)
+		style.border_color = Color(0.12, 0.80, 1.0, 0.91)
+		style.set_border_width_all(2)
+		style.set_corner_radius_all(10)
+		style.set_content_margin_all(7.0)
 		panel.add_theme_stylebox_override("panel", style)
 	if is_instance_valid(wave_label):
-		wave_label.add_theme_font_size_override("font_size", 12)
-		wave_label.add_theme_color_override("font_color", Color(0.98, 0.82, 0.45))
+		wave_label.add_theme_font_size_override("font_size", 21)
+		wave_label.add_theme_color_override("font_color", Color(0.98, 0.99, 1.0))
 		wave_label.add_theme_color_override("font_outline_color", Color(0.02, 0.04, 0.07))
 		wave_label.add_theme_constant_override("outline_size", 3)
 	if is_instance_valid(wave_timer_bar):
@@ -484,6 +484,25 @@ func _style_combat_hud() -> void:
 		if is_instance_valid(status_label):
 			status_label.add_theme_color_override("font_outline_color", Color(0.01, 0.03, 0.06, 0.92))
 			status_label.add_theme_constant_override("outline_size", 2)
+	if is_instance_valid(hp_bar):
+		var health_fill := StyleBoxFlat.new()
+		health_fill.bg_color = Color(0.14, 0.95, 0.38)
+		health_fill.set_corner_radius_all(5)
+		hp_bar.add_theme_stylebox_override("fill", health_fill)
+	if is_instance_valid(xp_bar):
+		var xp_fill := StyleBoxFlat.new()
+		xp_fill.bg_color = Color(0.08, 0.83, 1.0)
+		xp_fill.set_corner_radius_all(4)
+		xp_bar.add_theme_stylebox_override("fill", xp_fill)
+	if is_instance_valid(wave_progress_box):
+		var wave_box := get_node_or_null("HUD/HUDRoot/WaveProgressBox") as PanelContainer
+		if is_instance_valid(wave_box):
+			var wave_style := StyleBoxFlat.new()
+			wave_style.bg_color = Color(0.008, 0.024, 0.05, 0.90)
+			wave_style.border_color = Color(0.22, 0.80, 1.0, 0.90)
+			wave_style.set_border_width_all(2)
+			wave_style.set_corner_radius_all(9)
+			wave_box.add_theme_stylebox_override("panel", wave_style)
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
