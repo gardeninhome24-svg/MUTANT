@@ -342,6 +342,32 @@ jobs:
           if-no-files-found: warn
           retention-days: 21
 
+      # Opt-in rendered screenshots run under a real X11/Mesa renderer.
+      # Do not gate beta export on image capture until visual baselines have
+      # been reviewed; this diagnostic artifact is for visual inspection.
+      - name: Render actual Godot UI screenshots for visual inspection
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb libgl1-mesa-dri
+          xvfb-run -a godot --path . --rendering-driver opengl3 res://tools/visual_qa/capture_runner.tscn -- --scenario=all 2>&1 | tee /tmp/visual-qa-render.log
+          grep -Fq 'CAPTURES PASS: 4 real viewport PNGs saved' /tmp/visual-qa-render.log
+          test "$(find visual_qa/captures -maxdepth 1 -name '*_actual.png' -type f | wc -l)" -ge 4
+
+      - name: Save rendered Godot UI screenshot artifacts
+        if: ${{ always() && github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Visual-QA-${{ github.run_number }}
+          path: |
+            visual_qa/captures/*_actual.png
+            /tmp/visual-qa-render.log
+          if-no-files-found: warn
+          retention-days: 21
+
       - name: Store APK for private testing
         uses: actions/upload-artifact@v4
         with:
