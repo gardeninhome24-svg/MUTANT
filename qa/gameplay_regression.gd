@@ -230,6 +230,9 @@ func _test_combat_and_bosses() -> void:
 		if is_instance_valid(mutant):
 			mutant.take_damage(mutant.max_health + 500.0)
 			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "One mutant death counts as exactly one daily kill")
+			mutant.take_damage(100.0)
+			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "Dead mutant cannot grant a second kill")
+			_assert(mutant.current_health == 0.0, "Dead mutant health is clamped at zero")
 			_assert(int(battle.get("enemies_killed_in_run")) == 1, "Mutant death updates run kill counter")
 	battle.call("start_wave", 1, 5)
 	_assert(int(battle.get("current_wave_num")) == 5, "Wave 5 can be started")
@@ -241,6 +244,7 @@ func _test_combat_and_bosses() -> void:
 	_assert(is_instance_valid(battle.get("active_boss")), "Wave 10 spawns a boss")
 	if is_instance_valid(battle.get("active_boss")):
 		_assert(String(battle.get("active_boss").tier) == "boss", "Wave 10 enemy has boss tier")
+		_assert(battle.get("active_boss").special_cooldown > 0.0, "Boss special attack cooldown remains valid")
 	battle.set("primary_objective_done", true)
 	battle.set("wave_time_left", 0.0)
 	battle.set("boss_spawned_this_run", true)

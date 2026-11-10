@@ -59,11 +59,13 @@ func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elaps
 	visible = true
 	set_physics_process(true)
 	velocity = Vector2.ZERO
+	target = null
 	anim_timer = 0.0
 	special_timer = 2.0
 	ranged_spit_timer = 2.6
 	is_telegraphing = false
 	telegraph_elapsed = 0.0
+	telegraph_world_pos = Vector2.ZERO
 	boss_phase = 1
 
 	for child in get_children():
@@ -76,6 +78,7 @@ func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elaps
 
 	if sprite:
 		sprite.modulate = Color.WHITE
+		sprite.flip_h = false
 
 	setup_enemy_archetype(p_enemy_id, p_tier, stage_num, elapsed_sec)
 	queue_redraw()
@@ -85,6 +88,8 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 	tier = p_tier
 	current_stage_context = stage_num
 	boss_phase = 1
+	telegraph_radius = 120.0
+	special_cooldown = 5.5
 	if sprite:
 		var vis_info := AssetRegistry.apply_enemy_visual(sprite, enemy_id)
 		is_animated_sheet = bool(vis_info.get("is_animated", false))
@@ -134,7 +139,7 @@ func _draw() -> void:
 	# Telegrafowany obszar uderzenia na ziemi (0.95s przed wybuchem)
 	if is_telegraphing:
 		var local_t_pos := to_local(telegraph_world_pos)
-		var prog := clampf(telegraph_elapsed / telegraph_duration, 0.0, 1.0)
+		var prog := clampf(telegraph_elapsed / maxf(0.05, telegraph_duration), 0.0, 1.0)
 		draw_circle(local_t_pos, telegraph_radius, Color(0.95, 0.18, 0.12, 0.16 + 0.22 * prog))
 		draw_circle(local_t_pos, telegraph_radius * prog, Color(1.0, 0.42, 0.15, 0.28))
 		draw_arc(local_t_pos, telegraph_radius, 0.0, TAU, 44, Color(1.0, 0.25, 0.15, 0.92), 3.0, true)
@@ -150,7 +155,7 @@ func _draw() -> void:
 	draw_rect(Rect2(bar_pos, Vector2(bar_w * ratio, bar_h)), fill_col)
 
 func _physics_process(delta: float) -> void:
-	if is_dying or not is_instance_valid(target):
+	if is_dying or not is_instance_valid(target) or not is_inside_tree():
 		return
 
 	# Wielofazowość Bossa (Faza 2 poniżej 55% HP, Faza 3 poniżej 25% HP od etapu 50+)
@@ -178,6 +183,10 @@ func _physics_process(delta: float) -> void:
 	if tier == "boss" or tier == "miniboss":
 		if is_telegraphing:
 			telegraph_elapsed += delta
+			anim_timer += delta
+			if sprite and not attack_frames.is_empty():
+				sprite.texture = attack_frames[int(anim_timer * sheet_fps) % attack_frames.size()]
+				sprite.scale = base_scale
 			queue_redraw()
 			if telegraph_elapsed >= telegraph_duration:
 				_execute_telegraphed_slam()
@@ -186,6 +195,7 @@ func _physics_process(delta: float) -> void:
 			special_timer -= delta
 			if special_timer <= 0.0 and global_position.distance_to(target.global_position) < 420.0:
 				is_telegraphing = true
+				anim_timer = 0.0
 				telegraph_elapsed = 0.0
 				telegraph_world_pos = target.global_position
 				special_timer = special_cooldown
@@ -225,6 +235,8 @@ func _physics_process(delta: float) -> void:
 			collider.take_damage(damage * delta)
 
 func _execute_telegraphed_slam() -> void:
+	if is_dying or not is_telegraphing:
+		return
 	is_telegraphing = false
 	queue_redraw()
 	if is_instance_valid(target) and target.global_position.distance_to(telegraph_world_pos) <= telegraph_radius:
@@ -244,7 +256,9 @@ func _execute_telegraphed_slam() -> void:
 	tw.tween_callback(vfx.queue_free)
 
 func take_damage(amount: float) -> void:
-	current_health -= amount
+	if is_dying or amount <= 0.0:
+		return
+	current_health = maxf(0.0, current_health - amount)
 	queue_redraw()
 	emit_signal("enemy_damaged", self)
 
@@ -303,6 +317,9 @@ func die() -> void:
 	if is_dying:
 		return
 	is_dying = true
+	is_telegraphing = false
+	velocity = Vector2.ZERO
+	queue_redraw()
 	if not death_frames.is_empty() and sprite:
 		sprite.texture = death_frames[0]
 

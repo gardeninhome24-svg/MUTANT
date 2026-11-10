@@ -170,6 +170,8 @@ func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_
 	if not is_instance_valid(enemy):
 		return null
 
+	# New and recycled enemies must always use the current battle effects layer.
+	enemy.effects_layer = effects_layer
 	if not enemy.enemy_died.is_connected(_on_pooled_enemy_died):
 		enemy.enemy_died.connect(_on_pooled_enemy_died)
 
@@ -181,6 +183,7 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 	if not is_instance_valid(enemy):
 		return
 	active_enemies.erase(enemy)
+	enemy.velocity = Vector2.ZERO
 	var aid := enemy.enemy_id
 	if not enemy_pool.has(aid):
 		enemy_pool[aid] = []
