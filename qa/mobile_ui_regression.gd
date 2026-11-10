@@ -195,6 +195,8 @@ func _run() -> void:
 		if is_instance_valid(bag):
 			_assert(bag.columns == 5, "Full-size portrait has five columns of backpack slots")
 			_assert(bag.get_child_count() >= 30, "Inventory has at least 30 populated or empty grid cells")
+		var quick_equip: Button = profile.find_child("InventoryQuickEquip", true, false) as Button
+		var quick_unequip: Button = profile.find_child("InventoryQuickUnequip", true, false) as Button
 		var action_row: HBoxContainer = profile.find_child("InventoryQuickActions", true, false) as HBoxContainer
 		_assert(is_instance_valid(action_row), "Equip and unequip available in Inventory")
 		for action_name in ["InventoryQuickEquip", "InventoryQuickUnequip"]:
@@ -220,7 +222,7 @@ func _run() -> void:
 				if action is Button:
 					_assert(action.custom_minimum_size.y >= 44.0, "Inventory detail action has a safe touch height")
 		# Exercise the page boundary with disposable copies of real equipment.
-		if stage_manager != null and is_instance_valid(bag) and not stage_manager.inventory.is_empty():
+		if stage_manager != null and is_instance_valid(bag) and is_instance_valid(previous_page) and is_instance_valid(next_page) and is_instance_valid(page_label) and not stage_manager.inventory.is_empty():
 			var original_inventory: Array = stage_manager.inventory.duplicate(true)
 			var selected_before: String = String(profile.get("selected_bag_instance_id"))
 			var original_page: int = int(profile.get("inventory_page"))
@@ -238,6 +240,7 @@ func _run() -> void:
 			profile.call("_refresh_inventory_tab_ui")
 			await process_frame
 			_assert(bag.get_child_count() == 30, "Page one renders exactly 30 slots, not all 35 items")
+			_assert(page_label.text.contains("1 / 2"), "First page heading matches 35-item fixture")
 			_assert(not next_page.disabled and previous_page.disabled, "First page can advance only")
 			var page_one_selection: String = String(profile.get("selected_bag_instance_id"))
 			profile.set("inventory_page", 1)
@@ -245,6 +248,11 @@ func _run() -> void:
 			profile.call("_refresh_inventory_tab_ui")
 			await process_frame
 			_assert(bag.get_child_count() == 30, "Last page displays 5 items plus 25 empty slots")
+			var empty_slots: int = 0
+			for cell in bag.get_children():
+				if cell.name.begins_with("BackpackEmpty_"):
+					empty_slots += 1
+			_assert(empty_slots == 25, "Second page contains precisely 25 empty slots")
 			_assert(next_page.disabled and not previous_page.disabled, "Final page can navigate back only")
 			_assert(String(page_label.text).contains("2 / 2"), "Page label reflects actual item count")
 			_assert(not String(profile.get("selected_bag_instance_id")).is_empty() and String(profile.get("selected_bag_instance_id")) != page_one_selection, "Second page selects a different visible item regardless of sorting")
@@ -272,12 +280,23 @@ func _run() -> void:
 			profile.call("_refresh_inventory_tab_ui")
 			_assert(String(profile.get("selected_bag_instance_id")).is_empty(), "Empty filter clears selected backpack item")
 			_assert(is_instance_valid(empty_state) and empty_state.visible, "Empty filter gives visible feedback")
-			var quick_equip: Button = profile.find_child("InventoryQuickEquip", true, false) as Button
-			var quick_unequip: Button = profile.find_child("InventoryQuickUnequip", true, false) as Button
+			_assert(bag.get_child_count() == 30, "Empty filter renders 30 placeholder slots")
+			if is_instance_valid(previous_page) and is_instance_valid(next_page):
+				_assert(previous_page.disabled and next_page.disabled, "Empty filter disables paging")
 			_assert(is_instance_valid(quick_equip) and quick_equip.disabled, "Empty filter disables quick equip")
 			_assert(is_instance_valid(quick_unequip) and quick_unequip.disabled, "Empty filter disables quick unequip")
 			profile.set("filter_slot", prior_slot_filter)
 			profile.set("selected_bag_instance_id", prior_selected_id)
+			profile.call("_refresh_inventory_tab_ui")
+		if stage_manager != null and is_instance_valid(bag):
+			var saved_for_empty: Array = stage_manager.inventory.duplicate(true)
+			stage_manager.inventory = []
+			profile.set("filter_slot", "all")
+			profile.set("selected_bag_instance_id", "")
+			profile.call("_refresh_inventory_tab_ui")
+			_assert(is_instance_valid(empty_state) and empty_state.visible, "Empty backpack shows explanatory message")
+			_assert(String(profile.get("selected_bag_instance_id")).is_empty(), "Empty backpack has no selection")
+			stage_manager.inventory = saved_for_empty
 			profile.call("_refresh_inventory_tab_ui")
 		for slot_id in ["weapon", "chest", "boots", "helmet", "gloves", "amulet"]:
 			var paperdoll_slot: Button = profile.find_child("EquipSlot_" + slot_id, true, false) as Button

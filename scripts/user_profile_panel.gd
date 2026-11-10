@@ -1133,6 +1133,8 @@ func _build_tab_inventory_backpack() -> Control:
 		b.text = String(sf["label"])
 		b.pressed.connect(func():
 			filter_slot = sf_id
+			inventory_page = 0
+			selected_bag_instance_id = ""
 			refresh_ui()
 		)
 		inv_slot_filters_grid.add_child(b)
@@ -1151,6 +1153,8 @@ func _build_tab_inventory_backpack() -> Control:
 		var order := ["all", "rare", "epic", "legendary", "mythic"]
 		var idx := (order.find(filter_rarity) + 1) % order.size()
 		filter_rarity = order[idx]
+		inventory_page = 0
+		selected_bag_instance_id = ""
 		refresh_ui()
 	)
 	sort_hbox.add_child(inv_rarity_btn)
@@ -1195,6 +1199,7 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_page_previous = Button.new()
 	inv_page_previous.name = "InventoryPagePrevious"
 	inv_page_previous.text = "◀"
+	inv_page_previous.tooltip_text = "Poprzednia strona plecaka"
 	inv_page_previous.custom_minimum_size = Vector2(54, 48)
 	SurvivorVisualSystem.decorate_metal_button(inv_page_previous, SurvivorVisualSystem.CYAN, 48.0)
 	inv_page_previous.pressed.connect(func():
@@ -1213,6 +1218,7 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_page_next = Button.new()
 	inv_page_next.name = "InventoryPageNext"
 	inv_page_next.text = "▶"
+	inv_page_next.tooltip_text = "Następna strona plecaka"
 	inv_page_next.custom_minimum_size = Vector2(54, 48)
 	SurvivorVisualSystem.decorate_metal_button(inv_page_next, SurvivorVisualSystem.CYAN, 48.0)
 	inv_page_next.pressed.connect(func():
@@ -1405,6 +1411,7 @@ func _refresh_inventory_tab_ui() -> void:
 	for empty_index in range(maxi(0, INVENTORY_PAGE_SIZE - visible_items.size())):
 		var empty_slot := PanelContainer.new()
 		empty_slot.name = "BackpackEmpty_%02d" % empty_index
+		empty_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		empty_slot.custom_minimum_size = Vector2(76, 95) if narrow_portrait_ui else (Vector2(104, 120) if StageDirector.is_portrait_mode() else Vector2(100, 110))
 		var empty_style := StyleBoxFlat.new()
 		empty_style.bg_color = Color(0.025, 0.055, 0.065, 0.95)
@@ -1414,7 +1421,7 @@ func _refresh_inventory_tab_ui() -> void:
 		empty_slot.add_theme_stylebox_override("panel", empty_style)
 		inv_grid.add_child(empty_slot)
 	if is_instance_valid(inv_bag_heading):
-		inv_bag_heading.text = "PLECAK  %d PRZEDMIOTÓW  •  %d–%d" % [filtered.size(), page_start + 1 if not visible_items.is_empty() else 0, page_end]
+		inv_bag_heading.text = "PLECAK %d/%d  •  POZYCJE %d–%d" % [filtered.size(), StageDirector.inventory.size(), page_start + 1 if not visible_items.is_empty() else 0, page_end]
 	_refresh_inventory_quick_actions()
 	_refresh_inventory_detail_panel()
 
