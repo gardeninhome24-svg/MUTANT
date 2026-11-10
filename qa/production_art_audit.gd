@@ -65,7 +65,19 @@ func _run() -> void:
 		var item: Dictionary = AssetRegistry.ENEMY_ASSETS[key]
 		_check(String(item.get("texture_path", "")), "Enemy %s" % key)
 		if String(item.get("status", "")) == "HD_STATIC_RGBA":
-			static_references.append("Enemy %s: still a static reference sprite" % key)
+			# A static fallback in ENEMY_ASSETS does not imply gameplay is
+			# static: several mutants already use a complete animated folder.
+			var animated: bool = false
+			if AssetRegistry.MUTANT_ANIM_FOLDERS.has(String(key)):
+				var folder: String = String(AssetRegistry.MUTANT_ANIM_FOLDERS[key])
+				animated = true
+				for frame in range(1, 5):
+					animated = animated and ResourceLoader.exists("res://assets/enemies/%s/walk_%d.png" % [folder, frame], "Texture2D")
+					animated = animated and ResourceLoader.exists("res://assets/enemies/%s/attack_%d.png" % [folder, frame], "Texture2D")
+			elif AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS.has(String(key)):
+				animated = AssetRegistry.has_complete_chapter_boss_art(String(key))
+			if not animated:
+				static_references.append("Enemy %s: still a static reference sprite" % key)
 
 	for biome in AssetRegistry.BIOME_PALETTES.keys():
 		var palette: Dictionary = AssetRegistry.BIOME_PALETTES[biome]
