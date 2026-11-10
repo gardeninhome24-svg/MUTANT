@@ -45,7 +45,7 @@ extends Node2D
 
 # Panele modalne
 @onready var upgrade_panel: Control = $HUD/HUDRoot/UpgradePanel
-@onready var cards_container: HBoxContainer = $HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/CardsContainer
+@onready var cards_container: HBoxContainer = $HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll/CardsContainer
 @onready var reroll_btn: Button = $HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/RerollBtn
 @onready var death_panel: Control = $HUD/HUDRoot/DeathPanel
 @onready var win_panel: Control = $HUD/HUDRoot/WinPanel
@@ -284,6 +284,13 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	# Dopasowanie okien modalnych (UpgradePanel, WinPanel, DeathPanel) do szerokości 720px w pionie 9:16
 	if is_instance_valid(cards_container):
 		cards_container.add_theme_constant_override("separation", 10 if portrait else 20)
+	var upgrade_scroll := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll") as ScrollContainer
+	if is_instance_valid(upgrade_scroll):
+		upgrade_scroll.custom_minimum_size = Vector2(
+			minf(650.0, maxf(252.0, view_width - 36.0)) if portrait else 760.0,
+			274.0 if portrait else 344.0
+		)
+		upgrade_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
 	var up_vbox := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox") as VBoxContainer
 	if is_instance_valid(up_vbox):
 		up_vbox.add_theme_constant_override("separation", 10 if portrait else 20)
