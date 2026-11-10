@@ -79,8 +79,18 @@ func _run() -> void:
 		_assert(campaign_continue.pressed.get_connections().size() > 0, "Continue Campaign has real navigation callback")
 		_assert(campaign_continue.custom_minimum_size.y >= 44.0, "Continue Campaign is touch friendly")
 
+	# Approved portrait reference shows four PRIMARY buttons. The fifth
+	# internal campaign view is accessed through the functional mission link.
+	var approved_map_link: Button = menu.find_child("OpenCampaignMap", true, false) as Button
+	_assert(is_instance_valid(approved_map_link), "Home mission header links to the full 100-stage campaign")
+	if is_instance_valid(approved_map_link):
+		_assert(approved_map_link.pressed.get_connections().size() > 0, "Campaign map link has a real callback")
+	var decorative_progress: Control = menu.find_child("CampaignProgressCard", true, false) as Control
+	_assert(is_instance_valid(decorative_progress) and not decorative_progress.visible, "Old duplicate roadmap is hidden on approved home")
 	var navigation_buttons: Array = menu.get("nav_buttons")
-	_assert(navigation_buttons.size() == 5, "Five primary game tabs are present")
+	_assert(navigation_buttons.size() == 5, "All five functional game views remain registered")
+	if navigation_buttons.size() == 5:
+		_assert(not navigation_buttons[3].visible, "Portrait navigation shows four tabs, not five duplicate campaign buttons")
 	if navigation_buttons.size() == 5:
 		for tab in navigation_buttons:
 			var nav_button: Button = tab as Button
