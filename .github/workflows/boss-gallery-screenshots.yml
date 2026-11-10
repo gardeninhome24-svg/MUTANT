@@ -41,8 +41,16 @@ jobs:
         run: |
           set -euo pipefail
           apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb libgl1-mesa-dri
-          xvfb-run -a godot --path . --rendering-driver opengl3 res://tools/visual_qa/capture_runner.tscn -- --scenario=bosses 2>&1 | tee /tmp/boss-gallery-render.log
+          # godot-ci's lean container omits libXcursor.so.1, needed by
+          # Godot's X11 display server even when Xvfb is available.
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
+            xvfb xauth libxcursor1 libxi6 libxinerama1 libxrandr2 \
+            libxrender1 libxfixes3 libxext6 libx11-6 libwayland-cursor0 \
+            libgl1 libgl1-mesa-dri libfontconfig1 fonts-dejavu-core
+          ldconfig
+          ldconfig -p | grep -F 'libXcursor.so.1'
+          xvfb-run -a -s '-screen 0 1280x720x24' env LIBGL_ALWAYS_SOFTWARE=1 \
+            godot --path . --rendering-driver opengl3 res://tools/visual_qa/capture_runner.tscn -- --scenario=bosses 2>&1 | tee /tmp/boss-gallery-render.log
           if grep -E "SCRIPT ERROR:|Parse Error:|Failed to load script|Capture FAILED" /tmp/boss-gallery-render.log; then
             exit 1
           fi
