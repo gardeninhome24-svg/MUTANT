@@ -380,9 +380,18 @@ func _run() -> void:
 			_assert(store_cards.columns == 1, "420px shop uses a single product column")
 			var small_offer_art: TextureRect = profile.find_child("StoreProductArtwork", true, false) as TextureRect
 			if is_instance_valid(small_offer_art):
-				_assert(small_offer_art.custom_minimum_size.x <= 96.0, "420px shop art does not squeeze product text")
+				_assert(small_offer_art.custom_minimum_size.x <= 90.0, "420px shop art leaves room for legible product text")
+			var small_offer_title: Label = profile.find_child("StoreProductTitle", true, false) as Label
+			var small_offer_description: Label = profile.find_child("StoreProductDescription", true, false) as Label
+			if is_instance_valid(small_offer_title):
+				_assert(small_offer_title.get_theme_font_size("font_size") >= 14, "420px product titles use larger typography")
+			if is_instance_valid(small_offer_description):
+				_assert(small_offer_description.get_theme_font_size("font_size") >= 12, "420px product descriptions remain readable")
 		if is_instance_valid(store_categories):
 			_assert(store_categories.columns == 2, "420px shop navigation wraps to two columns")
+			for category_control in store_categories.get_children():
+				if category_control is Button:
+					_assert(category_control.custom_minimum_size.y >= 44.0, "420px shop category has a usable tap target")
 		profile.call("_apply_responsive_metrics", 720.0)
 		if is_instance_valid(inv_grid):
 			_assert(inv_grid.columns == 5, "720px Metin backpack returns to five columns")

@@ -224,7 +224,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	for i in range(tab_buttons.size()):
 		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
-		tab_buttons[i].add_theme_font_size_override("font_size", 10 if portrait else 12)
+		tab_buttons[i].add_theme_font_size_override("font_size", (11 if narrow else 10) if portrait else 12)
 	if is_instance_valid(commander_title_lbl):
 		commander_title_lbl.add_theme_font_size_override("font_size", 11 if narrow else 19)
 	if is_instance_valid(hero_power_lbl):
@@ -282,7 +282,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 			icon_node.custom_minimum_size = Vector2(32, 32) if narrow else Vector2(38, 36)
 		var value_node := find_child("CampaignRewardValue" + reward_kind, true, false) as Label
 		if is_instance_valid(value_node):
-			value_node.add_theme_font_size_override("font_size", 11 if narrow else 14)
+			value_node.add_theme_font_size_override("font_size", 12 if narrow else 14)
 	for talent_id in talent_rows.keys():
 		var talent_ui: Dictionary = talent_rows[talent_id]
 		var upgrade: Button = talent_ui["btn"] as Button
@@ -308,7 +308,7 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		stage_info_lbl.add_theme_font_size_override("font_size", 14 if narrow else 21)
 	for detail_label in [campaign_chapter_lbl, campaign_npc_lbl, campaign_goal_lbl, campaign_hazard_lbl, campaign_boss_lbl, campaign_reward_lbl]:
 		if is_instance_valid(detail_label):
-			detail_label.add_theme_font_size_override("font_size", 10 if narrow else (17 if detail_label == campaign_chapter_lbl else 14))
+			detail_label.add_theme_font_size_override("font_size", 11 if narrow else (17 if detail_label == campaign_chapter_lbl else 14))
 
 	# The equipment presentation must fit the *physical* narrow viewport.
 	# The previous 225px operator and 80px columns forced horizontal overflow.
@@ -325,34 +325,41 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 					tile.custom_minimum_size = Vector2(56, 66) if narrow else Vector2(94, 104)
 	var welcome_art := find_child("WelcomePackageArtwork", true, false) as TextureRect
 	if is_instance_valid(welcome_art):
-		welcome_art.custom_minimum_size = Vector2(120, 122) if narrow else Vector2(235, 156)
+		welcome_art.custom_minimum_size = Vector2(106, 112) if narrow else Vector2(235, 156)
 	var welcome_title := find_child("WelcomePackageTitle", true, false) as Label
 	if is_instance_valid(welcome_title):
 		welcome_title.add_theme_font_size_override("font_size", 16 if narrow else 24)
 	var welcome_panel := find_child("StoreDepotBanner", true, false) as PanelContainer
 	if is_instance_valid(welcome_panel):
-		welcome_panel.custom_minimum_size = Vector2(0, 145 if narrow else 186)
+		welcome_panel.custom_minimum_size = Vector2(0, 135 if narrow else 186)
 	var welcome_row := find_child("StoreWelcomeRow", true, false) as HBoxContainer
 	if is_instance_valid(welcome_row):
 		welcome_row.add_theme_constant_override("separation", 6 if narrow else 12)
 	var welcome_subtitle := find_child("StoreWelcomeSubtitle", true, false) as Label
 	if is_instance_valid(welcome_subtitle):
-		welcome_subtitle.add_theme_font_size_override("font_size", 11 if narrow else 13)
+		welcome_subtitle.add_theme_font_size_override("font_size", 12 if narrow else 13)
 	if is_instance_valid(free_daily_pack_btn):
-		free_daily_pack_btn.add_theme_font_size_override("font_size", 10 if narrow else 12)
+		free_daily_pack_btn.add_theme_font_size_override("font_size", 11 if narrow else 12)
+		free_daily_pack_btn.custom_minimum_size.y = 44.0
 	var product_arts: Array[Node] = find_children("StoreProductArtwork", "TextureRect", true, false)
 	for product_art in product_arts:
-		(product_art as TextureRect).custom_minimum_size = Vector2(96, 112) if narrow else Vector2(110, 130)
+		(product_art as TextureRect).custom_minimum_size = Vector2(90, 105) if narrow else Vector2(110, 130)
 	for product_title in find_children("StoreProductTitle", "Label", true, false):
-		(product_title as Label).add_theme_font_size_override("font_size", 13 if narrow else 16)
+		(product_title as Label).add_theme_font_size_override("font_size", 14 if narrow else 16)
 	for product_description in find_children("StoreProductDescription", "Label", true, false):
-		(product_description as Label).add_theme_font_size_override("font_size", 11 if narrow else 13)
+		(product_description as Label).add_theme_font_size_override("font_size", 12 if narrow else 13)
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(store_categories_grid):
 		store_categories_grid.columns = (2 if narrow else 4) if portrait else 4
+		for category_action in store_categories_grid.get_children():
+			if category_action is Button:
+				(category_action as Button).custom_minimum_size.y = 44.0 if narrow else 40.0
 	if is_instance_valid(daily_grid):
 		daily_grid.columns = (2 if narrow else 4) if portrait else 7
+		for reward_card in daily_grid.get_children():
+			if reward_card is Control:
+				(reward_card as Control).custom_minimum_size.y = maxf((reward_card as Control).custom_minimum_size.y, 150.0 if narrow else 140.0)
 
 func _build_ui() -> void:
 	tab_bg_tex = TextureRect.new()
