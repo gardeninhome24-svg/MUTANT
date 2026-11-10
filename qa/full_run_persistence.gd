@@ -194,7 +194,7 @@ func _execute() -> void:
 	_check(bool(battle.call("_can_claim_victory")), "Chapter boss kill allows the final wave to finish")
 	battle.call("_on_stage_victory")
 	_check(String(battle.get("run_result_state")) == "victory", "Chapter finale can reach victory state")
-	_check(int(stage.credits) == before_loss, "Practice boss clear does not mint credits")
+	_check(int(stage.credits) == credits_after_final_loss, "Practice boss clear does not mint credits beyond final-wave defeat settlement")
 	paused = false
 	battle.queue_free()
 	await process_frame
