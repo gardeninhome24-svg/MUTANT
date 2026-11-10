@@ -49,3 +49,14 @@ py -3 tools/boss_art_pack.py --zip ".\\MUTANT_Boss_05_10_Godot_Assets_v3.zip" --
 ```
 
 Nie używaj już starszego ZIP v2 do instalacji, ponieważ zawiera niezgodne rozmiary postaci w rozdziale 8. Zielony wynik CI bez nowych PNG oznacza, że działa kod oraz test awaryjnych grafik, a nie że wszystkie nowe klatki występują już w APK. Zgodność 97% nadal wymaga niezależnego porównania artystycznego i prawdziwych screenów.
+
+
+## Godot: prawdziwy podgląd klatek i informacja o fallbacku
+
+Workflow `MutantSurvivor Phone Resolution Screenshots` renderuje dodatkowo dwa zrzuty (17 i 18) na podstawie faktycznie zaimportowanych tekstur:
+- `17_bosses_05_07_720x1280.png`
+- `18_bosses_08_10_720x1280.png`
+
+Każdy boss pokazuje cztery stany: pierwszą i ostatnią klatkę ruchu, trzecią klatkę ataku i końcową klatkę śmierci. Obok jest status `NOWE PNG (kandydat)` albo `FALLBACK / stare PNG`. Plik `boss_art_status.txt` informuje, ile z sześciu nowych zestawów rzeczywiście załadował Godot.
+
+**Ważne:** ten test nie mierzy 97% zgodności wizualnej. Jest testem obrazu i integracji. Dopóki PNG nie zostaną dodane do repozytorium lub podane do środowiska testowego, zrzuty pokazują fallback i raport wskazuje `NEW_BOSS_PACKS_ACTIVE=0/6`.

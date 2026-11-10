@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "qa/capture_phone_layout.gd"
+      - "qa/capture_boss_gallery.gd"
       - ".github/workflows/phone-screenshots.yml"
       - "scripts/main.gd"
       - "scripts/main_menu.gd"
@@ -111,6 +112,31 @@ jobs:
           assert len(hashes) >= 13, "Screenshots are unexpectedly identical; scene switching or rendering may be broken"
           PY
 
+      - name: Render Godot boss walk, attack and death comparison (chapters 5–10)
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          XDG_SESSION_TYPE: "x11"
+          WAYLAND_DISPLAY: ""
+          GDK_BACKEND: "x11"
+        run: |
+          set -euo pipefail
+          xvfb-run -a -s "-screen 0 720x1280x24" \
+            godot --path . --display-driver x11 --rendering-method gl_compatibility \
+            --windowed --resolution 720x1280 \
+            --script res://qa/capture_boss_gallery.gd -- \
+            --out /tmp/mutantsurvivor-phone-shots \
+            2>&1 | tee /tmp/mutantsurvivor-boss-gallery.log
+          if grep -E "(SCRIPT ERROR:|Parse Error:|BOSS GALLERY ERROR:)" /tmp/mutantsurvivor-boss-gallery.log; then
+            echo "::error::Boss animation visual capture failed."
+            exit 1
+          fi
+          test -s /tmp/mutantsurvivor-phone-shots/17_bosses_05_07_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/18_bosses_08_10_720x1280.png
+          test -s /tmp/mutantsurvivor-phone-shots/boss_art_status.txt
+          grep -q 'NEW_BOSS_PACKS_ACTIVE=' /tmp/mutantsurvivor-phone-shots/boss_art_status.txt
+          cat /tmp/mutantsurvivor-phone-shots/boss_art_status.txt >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build a browser-viewable visual review gallery
         shell: bash
         run: |
@@ -153,6 +179,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MutantSurvivor-Phone-Render-Logs
-          path: /tmp/mutantsurvivor-visual-render.log
+          path: |
+            /tmp/mutantsurvivor-visual-render.log
+            /tmp/mutantsurvivor-boss-gallery.log
           if-no-files-found: warn
           retention-days: 14

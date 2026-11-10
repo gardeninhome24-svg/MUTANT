@@ -71,6 +71,8 @@ func _test_enemy_art_sequences() -> void:
 	_assert(AssetRegistry.get_candidate_boss_directory("boss_ch04").is_empty(), "Legacy boss art stays outside candidate installer")
 	_assert(not AssetRegistry.get_candidate_boss_directory("boss_ch05").is_empty(), "First candidate boss folder is discoverable")
 	_assert(AssetRegistry.get_candidate_boss_directory("boss_ch11").is_empty(), "Unknown chapter cannot load candidate art")
+	_assert(not AssetRegistry.has_complete_chapter_boss_art("boss_ch11"), "Invalid boss cannot claim the optional artwork")
+	_assert(AssetRegistry.get_campaign_boss_portrait("boss_ch11").is_empty(), "Unregistered boss cannot invent a portrait")
 	for chapter in range(5, 11):
 		var boss_id: String = "boss_ch%02d" % chapter
 		_assert(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS.has(boss_id), "Boss chapter %d has reliable fallback routing" % chapter)
