@@ -102,6 +102,21 @@ def create(project, output):
     with ZipFile(output,"w",ZIP_DEFLATED,compresslevel=6) as archive:
         for path,data in sorted(images.items()):
             archive.writestr(path,data)
+    # Render one contact sheet for human inspection; this also helps spot
+    # palette repetition and missing limbs before any Android install.
+    contact = Image.new("RGBA", (3*340, 2*392), (13, 17, 25, 255))
+    painter = ImageDraw.Draw(contact)
+    for chapter in range(5, 11):
+        column, row = (chapter-5)%3, (chapter-5)//3
+        x, y = column*340, row*392
+        portrait_data = images[f"assets/bosses/boss_ch{chapter:02d}/boss_portrait.png"]
+        with Image.open(BytesIO(portrait_data)) as png_source:
+            portrait = png_source.convert("RGBA")
+        contact.alpha_composite(portrait, (x+10,y+20))
+        painter.text((x+16,y+365), f"CHAPTER {chapter:02d} — ART CANDIDATE", fill=(205,221,236,255))
+    contact_path = output.with_name("boss_contact_sheet.png")
+    contact.save(contact_path)
+    print(f"BOSS CONTACT SHEET: {contact_path}")
     print(f"BOSS CANDIDATE GENERATED: {len(images)} PNGs in {output}")
     print("ART QUALITY: candidate derived from existing sprite poses; review before claiming final animation")
 
