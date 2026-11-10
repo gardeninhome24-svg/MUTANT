@@ -1,0 +1,63 @@
+name: MutantSurvivor Real Boss Gallery Screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/boss-gallery-screenshots.yml
+      - tools/visual_qa/capture_runner.gd
+      - scripts/asset_registry.gd
+      - assets/bosses/**
+
+concurrency:
+  group: mutant-boss-gallery-\${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  boss-gallery:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Import Godot PNGs and scene resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/boss-gallery-import.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Failed to load script|Compilation failed" /tmp/boss-gallery-import.log; then
+            exit 1
+          fi
+
+      - name: Render original Godot battle sprite textures under X11/Mesa
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb libgl1-mesa-dri
+          xvfb-run -a godot --path . --rendering-driver opengl3 res://tools/visual_qa/capture_runner.tscn -- --scenario=bosses 2>&1 | tee /tmp/boss-gallery-render.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Failed to load script|Capture FAILED" /tmp/boss-gallery-render.log; then
+            exit 1
+          fi
+          grep -Fq 'CAPTURES PASS: 2 real viewport PNGs saved' /tmp/boss-gallery-render.log
+          test -s visual_qa/captures/boss_gallery_phase1_anim_1_1280x720_actual.png
+          test -s visual_qa/captures/boss_gallery_phase2_attack_3_1280x720_actual.png
+
+      - name: Upload actual Godot artwork comparison screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Boss-Godot-Screenshots-\${{ github.run_number }}
+          path: |
+            visual_qa/captures/boss_gallery_*_actual.png
+            /tmp/boss-gallery-import.log
+            /tmp/boss-gallery-render.log
+          if-no-files-found: warn
+          retention-days: 30
