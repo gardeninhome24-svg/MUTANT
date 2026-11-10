@@ -247,6 +247,9 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inv_slot_filters_grid.columns = (2 if narrow else 4) if portrait else 7
 	if is_instance_valid(inv_grid):
 		inv_grid.columns = (4 if narrow else 5) if portrait else 8
+	var inventory_actions := find_child("InventoryDetailActions", true, false) as GridContainer
+	if is_instance_valid(inventory_actions):
+		inventory_actions.columns = 1 if narrow else 3
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(250, 285)
 	for talent_id in talent_rows.keys():
