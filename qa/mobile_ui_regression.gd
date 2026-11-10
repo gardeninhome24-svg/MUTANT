@@ -246,6 +246,8 @@ func _run() -> void:
 			_assert(bag.get_child_count() == 30, "Last page displays 5 items plus 25 empty slots")
 			_assert(next_page.disabled and not previous_page.disabled, "Final page can navigate back only")
 			_assert(String(page_label.text).contains("2 / 2"), "Page label reflects actual item count")
+			_assert(String(profile.get("selected_bag_instance_id")) == "__qa_page_30", "Second page selects its first visible item")
+			_assert(not previous_page.disabled and next_page.disabled, "Page boundaries remain enforced after refresh")
 			stage_manager.inventory = original_inventory
 			profile.set("filter_slot", original_filter)
 			profile.set("filter_rarity", original_rarity)

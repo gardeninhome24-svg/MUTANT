@@ -168,6 +168,64 @@ func _capture() -> void:
 	if not await _shot("10_equipment_420x933.png"):
 		quit(1)
 		return
+	# Real rendered paging proof with 35 disposable items. Capture the bag
+	# itself (scrolled into view), not just the decorative paperdoll above it.
+	if not is_instance_valid(phone_profile) or stage.inventory.is_empty():
+		printerr("PHONE SHOT ERROR: missing real inventory fixture for paging")
+		quit(1)
+		return
+	var original_items: Array = stage.inventory.duplicate(true)
+	var original_page: int = int(phone_profile.get("inventory_page"))
+	var original_slot_filter: String = String(phone_profile.get("filter_slot"))
+	var original_rarity_filter: String = String(phone_profile.get("filter_rarity"))
+	var original_selection: String = String(phone_profile.get("selected_bag_instance_id"))
+	var fixture_items: Array = []
+	for idx in range(35):
+		var item: Dictionary = original_items[0].duplicate(true)
+		item["instance_id"] = "__visual_qa_item_%02d" % idx
+		fixture_items.append(item)
+	stage.inventory = fixture_items
+	phone_profile.set("filter_slot", "all")
+	phone_profile.set("filter_rarity", "all")
+	phone_profile.set("selected_bag_instance_id", "")
+	var paging_grid: GridContainer = phone_profile.find_child("MetinBackpackGrid", true, false) as GridContainer
+	var paging_label: Label = phone_profile.find_child("InventoryPageLabel", true, false) as Label
+	var paging_prev: Button = phone_profile.find_child("InventoryPagePrevious", true, false) as Button
+	var paging_next: Button = phone_profile.find_child("InventoryPageNext", true, false) as Button
+	var inventory_scroll: ScrollContainer = phone_profile.find_child("ScrollContainer", true, false) as ScrollContainer
+	if not is_instance_valid(paging_grid) or not is_instance_valid(paging_label) or not is_instance_valid(inventory_scroll):
+		printerr("PHONE SHOT ERROR: inventory pagination render controls missing")
+		quit(1)
+		return
+	for page_num in range(2):
+		phone_profile.set("inventory_page", page_num)
+		phone_profile.set("selected_bag_instance_id", "")
+		phone_profile.call("_refresh_inventory_tab_ui")
+		for frame in range(4):
+			await process_frame
+		if paging_grid.get_child_count() != 30 or not paging_label.text.contains("%d / 2" % (page_num + 1)):
+			printerr("PHONE SHOT ERROR: wrong rendered inventory paging state")
+			quit(1)
+			return
+		if paging_prev.disabled != (page_num == 0) or paging_next.disabled != (page_num == 1):
+			printerr("PHONE SHOT ERROR: incorrect paging arrow state")
+			quit(1)
+			return
+		# Keep the page label and first rows of gear visible in the viewport.
+		inventory_scroll.scroll_vertical += maxi(0, int(paging_label.global_position.y - inventory_scroll.global_position.y - 60.0))
+		for frame in range(4):
+			await process_frame
+		var screenshot_name := "15_backpack_page1_420x933.png" if page_num == 0 else "16_backpack_page2_420x933.png"
+		if not await _shot(screenshot_name):
+			quit(1)
+			return
+	stage.inventory = original_items
+	phone_profile.set("filter_slot", original_slot_filter)
+	phone_profile.set("filter_rarity", original_rarity_filter)
+	phone_profile.set("selected_bag_instance_id", original_selection)
+	phone_profile.set("inventory_page", original_page)
+	phone_profile.call("_refresh_inventory_tab_ui")
+	inventory_scroll.scroll_vertical = 0
 	compact_menu.call("switch_hub_tab", 1)
 	if is_instance_valid(phone_profile):
 		phone_profile.call("_apply_responsive_metrics", 420.0)
