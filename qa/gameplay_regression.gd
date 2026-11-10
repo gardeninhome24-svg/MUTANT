@@ -242,6 +242,17 @@ func _test_equipment_and_save() -> void:
 	stage.credits = 0
 	stage.load_campaign_profile()
 	_assert(stage.credits == credits_safe, "Corrupted save recovers last valid campaign backup")
+	# Syntactically valid but incomplete JSON must also restore the backup.
+	var incomplete_file := FileAccess.open(stage.get_active_save_path(), FileAccess.WRITE)
+	_assert(incomplete_file != null, "Can stage incomplete campaign JSON")
+	if incomplete_file:
+		incomplete_file.store_string('{"credits": 1, "current_stage": 1}')
+		incomplete_file.close()
+	_assert(stage._parse_save_dictionary('{"credits": 1, "current_stage": 1}').is_empty(),
+		"Incomplete valid JSON is rejected as a campaign profile")
+	stage.credits = 0
+	stage.load_campaign_profile()
+	_assert(stage.credits == credits_safe, "Incomplete JSON restores verified backup rather than resetting credits")
 	_assert(not stage.get_item_instance("qa_weapon").is_empty(), "Backup restores equipment after corruption")
 	# Interrupted transactional writes: only .tmp remains valid and the
 	# primary is corrupt. Keep real player data untouched (qa override).
