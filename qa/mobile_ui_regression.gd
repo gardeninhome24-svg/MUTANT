@@ -61,6 +61,16 @@ func _run() -> void:
 		var right_actions: VBoxContainer = production_overlay.find_child("BaseRightActions", true, false) as VBoxContainer
 		_assert(is_instance_valid(left_actions) and left_actions.get_child_count() == 3, "Three left base actions exist")
 		_assert(is_instance_valid(right_actions) and right_actions.get_child_count() == 2, "Two right base actions exist")
+		if is_instance_valid(left_actions) and left_actions.get_child_count() == 3:
+			var approved_labels := ["POCZTA", "ZADANIA", "PRZEPUSTKA"]
+			for i in range(3):
+				var shortcut: Button = left_actions.get_child(i) as Button
+				_assert(is_instance_valid(shortcut) and String(shortcut.get_meta("full_label", "")) == approved_labels[i],
+					"Approved home left shortcut %d has correct live destination label" % i)
+				if is_instance_valid(shortcut):
+					_assert(shortcut.pressed.get_connections().size() >= 1,
+						"Approved shortcut %d remains clickable" % i)
+
 		for actions in [left_actions, right_actions]:
 			if is_instance_valid(actions):
 				for action in actions.get_children():
@@ -81,6 +91,8 @@ func _run() -> void:
 
 	# Approved portrait reference shows four PRIMARY buttons. The fifth
 	# internal campaign view is accessed through the functional mission link.
+	_assert(ResourceLoader.exists("res://assets/ui/approved/icon_daily_tasks.svg", "Texture2D"), "Tasks icon imports")
+	_assert(ResourceLoader.exists("res://assets/ui/approved/icon_battle_pass.svg", "Texture2D"), "Pass icon imports")
 	var approved_map_link: Button = menu.find_child("OpenCampaignMap", true, false) as Button
 	_assert(is_instance_valid(approved_map_link), "Home mission header links to the full 100-stage campaign")
 	if is_instance_valid(approved_map_link):
