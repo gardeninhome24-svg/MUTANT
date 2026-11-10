@@ -226,6 +226,9 @@ jobs:
         with:
           name: MutantSurvivor-QA-failure-logs
           path: |
+            /tmp/beta-apk-preflight.log
+            /tmp/apk-signature.log
+            /tmp/apk-badging.log
             /tmp/google-play-preflight.log
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
@@ -245,11 +248,38 @@ jobs:
           test -s build/android/MutantSurvivor.apk
           ls -lh build/android/MutantSurvivor.apk
 
+      - name: Verify exported beta APK archive, signing and application ID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/beta_apk_preflight.py --self-test
+          python3 tools/beta_apk_preflight.py build/android/MutantSurvivor.apk | tee /tmp/beta-apk-preflight.log
+          APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          AAPT="$ANDROID_HOME/build-tools/35.0.0/aapt"
+          test -x "$APKSIGNER"
+          test -x "$AAPT"
+          "$APKSIGNER" verify --verbose build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
+          "$AAPT" dump badging build/android/MutantSurvivor.apk > /tmp/apk-badging.log
+          grep -E "^package: name='com\\.zielonadolina\\.mutantsurvivor' " /tmp/apk-badging.log
+          sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
+          cat build/android/MutantSurvivor.apk.sha256
+          {
+            echo ""
+            echo "### Beta APK artifact validation"
+            echo '~~~text'
+            cat /tmp/beta-apk-preflight.log
+            cat /tmp/apk-signature.log
+            cat build/android/MutantSurvivor.apk.sha256
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Store APK for private testing
         uses: actions/upload-artifact@v4
         with:
           name: MutantSurvivor-Android-APK
-          path: build/android/MutantSurvivor.apk
+          path: |
+            build/android/MutantSurvivor.apk
+            build/android/MutantSurvivor.apk.sha256
           if-no-files-found: error
           retention-days: 14
 
