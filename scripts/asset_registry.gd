@@ -70,12 +70,25 @@ const NPC_PORTRAITS := {
 }
 
 const EQUIPMENT_SLOT_ICONS := {
-	"weapon": CH01_ROOT + "weapons/weapon_1.png",
-	"helmet": CH01_ROOT + "icons/drone_cpu.png",
-	"chest": CH01_ROOT + "icons/skill_shield.png",
-	"gloves": CH01_ROOT + "icons/skill_crit.png",
-	"boots": CH01_ROOT + "icons/energy_cell.png",
-	"amulet": CH01_ROOT + "icons/dna_tablet.png"
+	"weapon": "res://assets/ui/gear_slot/weapon.svg",
+	"helmet": "res://assets/ui/gear_slot/helmet.svg",
+	"chest": "res://assets/ui/gear_slot/chest.svg",
+	"gloves": "res://assets/ui/gear_slot/gloves.svg",
+	"boots": "res://assets/ui/gear_slot/boots.svg",
+	"amulet": "res://assets/ui/gear_slot/amulet.svg"
+}
+
+const BOSS_CAMPAIGN_PORTRAITS := {
+	"boss_ch01": "res://assets/ui/boss_campaign/boss_ch01.svg",
+	"boss_ch02": "res://assets/ui/boss_campaign/boss_ch02.svg",
+	"boss_ch03": "res://assets/ui/boss_campaign/boss_ch03.svg",
+	"boss_ch04": "res://assets/ui/boss_campaign/boss_ch04.svg",
+	"boss_ch05": "res://assets/ui/boss_campaign/boss_ch05.svg",
+	"boss_ch06": "res://assets/ui/boss_campaign/boss_ch06.svg",
+	"boss_ch07": "res://assets/ui/boss_campaign/boss_ch07.svg",
+	"boss_ch08": "res://assets/ui/boss_campaign/boss_ch08.svg",
+	"boss_ch09": "res://assets/ui/boss_campaign/boss_ch09.svg",
+	"boss_ch10": "res://assets/ui/boss_campaign/boss_ch10.svg"
 }
 
 const SKIN_SPRITES := {

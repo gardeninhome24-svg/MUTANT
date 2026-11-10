@@ -19,6 +19,10 @@ func _check(path: String, label: String) -> void:
 func _run() -> void:
 	await process_frame
 	_check("res://assets/ui/target_theme/icon_mutant_survivor.svg", "Branded project icon")
+	for item_id in AssetRegistry.EQUIPMENT_SLOT_ICONS:
+		_check(String(AssetRegistry.EQUIPMENT_SLOT_ICONS[item_id]), "Gear placeholder " + String(item_id))
+	for boss_id in AssetRegistry.BOSS_CAMPAIGN_PORTRAITS:
+		_check(String(AssetRegistry.BOSS_CAMPAIGN_PORTRAITS[boss_id]), "Boss campaign emblem " + String(boss_id))
 	for key in AssetRegistry.CHARACTER_ASSETS.keys():
 		var item: Dictionary = AssetRegistry.CHARACTER_ASSETS[key]
 		_check(String(item.get("fallback_path", "")), "Operator %s" % key)

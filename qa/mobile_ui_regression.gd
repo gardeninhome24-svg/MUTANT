@@ -145,7 +145,7 @@ func _run() -> void:
 				_assert(settings_card.custom_minimum_size.x <= 396.0, "420px settings panel fits with side margins")
 				var settings_title: Label = settings_card.find_child("SettingsTitle", true, false) as Label
 				_assert(is_instance_valid(settings_title) and settings_title.get_theme_font_size("font_size") <= 13, "420px settings heading is compact")
-				var volume_rows := settings_card.find_children("SettingsVolumeRow", "HBoxContainer", true, false)
+				var volume_rows := settings_card.find_children("SettingsVolumeRow*", "HBoxContainer", true, false)
 				_assert(volume_rows.size() == 3, "Settings has all three audio sliders")
 				for volume_row in volume_rows:
 					var volume_label := volume_row.find_child("SettingsVolumeLabel", false, false) as Label
