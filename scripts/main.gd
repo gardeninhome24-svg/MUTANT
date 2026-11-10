@@ -1055,11 +1055,16 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 	# MutantEnemy.die() already records each kill exactly once.
 	_update_objectives_ui()
 	if enemy == active_boss:
-		if current_wave_num >= max_waves_in_stage:
+		# A wave-five elite is displayed in the boss HUD, but must never
+		# complete the final chapter boss objective or victory gate.
+		var final_boss_defeated: bool = (enemy.tier == "boss"
+			and boss_spawned_this_run
+			and current_wave_num >= max_waves_in_stage)
+		if final_boss_defeated:
 			boss_killed_this_run = true
 		active_boss = null
 		boss_box.visible = false
-		if primary_objective_type == "defeat_boss":
+		if final_boss_defeated and primary_objective_type == "defeat_boss":
 			primary_objective_done = true
 		_update_objectives_ui()
 
