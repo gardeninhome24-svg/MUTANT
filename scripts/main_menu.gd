@@ -160,7 +160,19 @@ func _apply_approved_menu_style() -> void:
 		card.set_corner_radius_all(14)
 		card.shadow_color = Color(0.0, 0.01, 0.03, 0.72)
 		card.shadow_size = 8
-		stage_card.add_theme_stylebox_override("panel", card)
+		var approved_frame_path := "res://assets/ui/approved/mission_card_frame.svg"
+		if ResourceLoader.exists(approved_frame_path, "Texture2D"):
+			var frame := StyleBoxTexture.new()
+			frame.texture = load(approved_frame_path) as Texture2D
+			# Preserve the bevelled corners and hazard detail when the mission
+			# card is resized from 420 to 720px portrait and to landscape.
+			frame.texture_margin_left = 62.0
+			frame.texture_margin_right = 62.0
+			frame.texture_margin_top = 42.0
+			frame.texture_margin_bottom = 42.0
+			stage_card.add_theme_stylebox_override("panel", frame)
+		else:
+			stage_card.add_theme_stylebox_override("panel", card)
 	if is_instance_valid(top_hub_panel):
 		var bar := StyleBoxFlat.new()
 		bar.bg_color = Color(0.012, 0.035, 0.059, 0.96)
