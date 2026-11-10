@@ -78,11 +78,16 @@ func _test_enemy_art_sequences() -> void:
 		_assert(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS.has(boss_id), "Boss chapter %d has reliable fallback routing" % chapter)
 		var test_sprite := Sprite2D.new()
 		var data: Dictionary = AssetRegistry.apply_enemy_visual(test_sprite, boss_id)
-		_assert(data.get("walk_frames", []).size() == 4, "Boss %d has four valid walk frames" % chapter)
-		_assert(data.get("attack_frames", []).size() == 4, "Boss %d has four valid attack frames" % chapter)
-		_assert(data.get("death_frames", []).size() == 2, "Boss %d has two valid death frames" % chapter)
+		var candidate_installed: bool = AssetRegistry.has_complete_chapter_boss_art(boss_id)
+		var expected_walk: int = 4 if candidate_installed else 0
+		var expected_death: int = 2 if candidate_installed else 0
+		_assert(data.get("walk_frames", []).size() == expected_walk, "Boss %d uses complete movement frames or safe still" % chapter)
+		_assert(data.get("attack_frames", []).size() == expected_walk, "Boss %d never uses fragmented fallback attacks" % chapter)
+		_assert(data.get("death_frames", []).size() == expected_death, "Boss %d never uses fragmented fallback deaths" % chapter)
 		_assert(test_sprite.texture != null, "Boss %d has a drawable texture" % chapter)
-		var expected_status: String = "BOSS_ART_CANDIDATE" if AssetRegistry.has_complete_chapter_boss_art(boss_id) else "HD_BOSS_V2"
+		_assert(float(data.get("base_scale", Vector2.ONE).x) > 0.30 and float(data.get("base_scale", Vector2.ONE).x) < 1.5, "Boss %d has sane normalized visual size" % chapter)
+		_assert(bool(data.get("is_animated", true)) == candidate_installed, "Boss %d accurately reports whether motion is animated" % chapter)
+		var expected_status: String = "BOSS_ART_CANDIDATE" if candidate_installed else "BOSS_STATIC_SAFE"
 		_assert(String(data.get("status", "")) == expected_status, "Boss %d tracks candidate or fallback art accurately" % chapter)
 		var portrait: String = AssetRegistry.get_campaign_boss_portrait(boss_id)
 		_assert(ResourceLoader.exists(portrait, "Texture2D"), "Boss %d has a loadable campaign portrait" % chapter)

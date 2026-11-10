@@ -445,18 +445,22 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 		var candidate_ready: bool = has_complete_chapter_boss_art(enemy_id)
 		var folder: String = String(BOSS_ANIM_FOLDERS.get(enemy_id, BOSS_CHAPTER_FALLBACK_KITS.get(enemy_id, "boss_goliat")))
 		var root_path: String = get_candidate_boss_directory(enemy_id) if candidate_ready else "res://assets/bosses/" + folder + "/"
-		for idx in range(1, 5):
-			var w: Texture2D = get_tex(root_path + "phase1_anim_%d.png" % idx)
-			var a: Texture2D = get_tex(root_path + "phase2_attack_%d.png" % idx)
-			if w != null: walk_frames.append(w)
-			if a != null: attack_frames.append(a)
-		for idx in range(1, 3):
-			var d: Texture2D = get_tex(root_path + "death_%d.png" % idx)
-			if d != null: death_frames.append(d)
+		# Audit proved legacy animation PNGs are fragmented slices of larger
+		# portraits; do not animate broken body parts during gameplay.
+		# Optional 11-frame chapter packs restore animation when fully imported.
+		if candidate_ready:
+			for idx in range(1, 5):
+				var w: Texture2D = get_tex(root_path + "phase1_anim_%d.png" % idx)
+				var a: Texture2D = get_tex(root_path + "phase2_attack_%d.png" % idx)
+				if w != null: walk_frames.append(w)
+				if a != null: attack_frames.append(a)
+			for idx in range(1, 3):
+				var d: Texture2D = get_tex(root_path + "death_%d.png" % idx)
+				if d != null: death_frames.append(d)
 		spec = {
 			"texture_path": root_path + "boss_portrait.png",
-			"scale": Vector2(0.88, 0.88),
-			"status": "BOSS_ART_CANDIDATE" if candidate_ready else "HD_BOSS_V2"
+			"scale": Vector2(1.0, 1.0),
+			"status": "BOSS_ART_CANDIDATE" if candidate_ready else "BOSS_STATIC_SAFE"
 		}
 	else:
 		var mutant_id: String = enemy_id
@@ -482,6 +486,12 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	sprite.vframes = 1
 	sprite.texture = walk_frames[0] if not walk_frames.is_empty() else tex
 	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
+	if tex != null and (BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)):
+		# A 70px-wide broken legacy frame and a 256px candidate must not be
+		# drawn with the same scale. Normalize full silhouettes to 155px.
+		var visual_extent: float = float(maxi(tex.get_width(), tex.get_height()))
+		var normalized_scale: float = 155.0 / maxf(1.0, visual_extent)
+		sprite.scale = Vector2(normalized_scale, normalized_scale)
 	return {
 		"is_animated": (walk_frames.size() > 0),
 		"fps": 8.0,

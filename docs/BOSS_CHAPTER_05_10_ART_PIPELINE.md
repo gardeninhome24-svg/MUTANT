@@ -63,3 +63,8 @@ Każdy boss pokazuje cztery stany: pierwszą i ostatnią klatkę ruchu, trzecią
 
 
 Podgląd bossów zawiera też **portret źródłowy obok klatek animacji**, aby wykryć sytuacje, gdy animacje są błędnie wycięte z atlasu, a portret jest poprawny. Zielony import pliku nie oznacza, że klatka zawiera pojedynczą postać.
+
+
+## Audyt źródeł po rzeczywistym renderze Godota
+
+Wyrenderowane screenshoty i wyeksportowane z Godota oryginalne pliki pokazały, że stare `phase1_anim_*.png` i `phase2_attack_*.png` zawierają **ucięte fragmenty**, nie kompletne postacie. Do czasu przygotowania prawidłowych klatek, fallback wyświetla pełny `boss_portrait.png` jako statyczną postać, z zachowaniem mechaniki walki i efektów. Rejestr oznacza to jako `BOSS_STATIC_SAFE`, a nie jako pełną animację. Statyczne portrety są skalowane do maksymalnego rozmiaru 155 pikseli w świecie gry. Rozdziały 5–10 przełączą się na pełne klatki wyłącznie przy kompletnym zestawie PNG. **Nadal trzeba przetestować wygląd na urządzeniu**, a zgodność 97% pozostaje niepotwierdzona.

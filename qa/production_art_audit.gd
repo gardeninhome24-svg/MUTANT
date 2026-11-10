@@ -54,6 +54,7 @@ func _run() -> void:
 				_check(root_path + "death_%d.png" % frame, boss_id + " death")
 		else:
 			static_references.append(boss_id + ": generated character art not installed; stable HD fallback active")
+	static_references.append("Legacy chapter 1–4 boss motion PNGs are fragmented: static full-portrait safety mode active")
 	for boss_folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		for idx in range(1, 5):
 			_check("res://assets/bosses/%s/phase1_anim_%d.png" % [boss_folder, idx], "%s movement %d" % [boss_folder, idx])

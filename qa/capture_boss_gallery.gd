@@ -44,7 +44,7 @@ func _boss_row(chapter: int) -> PanelContainer:
 	var attacks: Array = info.get("attack_frames", [])
 	var deaths: Array = info.get("death_frames", [])
 	var candidate: bool = AssetRegistry.has_complete_chapter_boss_art(boss_id)
-	var status: String = "NOWE PNG (kandydat)" if candidate else "FALLBACK / stare PNG"
+	var status: String = "NOWE PNG (kandydat)" if candidate else "PORTRET / statyczny (klatki uszkodzone)"
 	var source_dir: String = AssetRegistry.get_candidate_boss_directory(boss_id) if candidate else "res://assets/bosses/" + String(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS[boss_id]) + "/"
 	var fallback_portrait: Texture2D = AssetRegistry.get_tex(source_dir + "boss_portrait.png")
 	# Export three representative source families for offline pixel-level audit.
@@ -78,14 +78,18 @@ func _boss_row(chapter: int) -> PanelContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 5)
 	stack.add_child(row)
-	if walk.size() != 4 or attacks.size() != 4 or deaths.size() != 2:
-		printerr("BOSS GALLERY ERROR: incomplete frames " + boss_id)
-		row.add_child(_build_label("BRAK KOMPLETU KLATEK", 19, Color.RED))
+	row.add_child(_image_column(fallback_portrait, "Pelna sylwetka"))
+	if candidate:
+		if walk.size() != 4 or attacks.size() != 4 or deaths.size() != 2:
+			printerr("BOSS GALLERY ERROR: new boss art incomplete " + boss_id)
+		else:
+			row.add_child(_image_column(walk[0], "Ruch 1"))
+			row.add_child(_image_column(attacks[2], "Atak 3"))
+			row.add_child(_image_column(deaths[1], "Smierc 2"))
 	else:
-		row.add_child(_image_column(fallback_portrait, "Portret"))
-		row.add_child(_image_column(walk[0], "Ruch 1"))
-		row.add_child(_image_column(attacks[2], "Atak 3"))
-		row.add_child(_image_column(deaths[1], "Smierc 2"))
+		row.add_child(_image_column(null, "RUCH: brak"))
+		row.add_child(_image_column(null, "ATAK: brak"))
+		row.add_child(_image_column(null, "SMIERC: brak"))
 	sprite.free()
 	return panel
 
@@ -137,7 +141,8 @@ func _capture() -> void:
 		report.store_line("boss_ch%02d: %s, portrait=%s movement=%d attack=%d death=%d" % [
 			item["chapter"], item["status"], str(item["portrait"]), item["walk"], item["attack"], item["death"]])
 	report.store_line("NEW_BOSS_PACKS_ACTIVE=%d/6" % candidates)
-	report.store_line("NOTE: Godot render / Xvfb, not physical phone or 97%% style verification.")
+	report.store_line("NOTE: legacy animation frames were found to contain severed silhouettes and are intentionally disabled.")
+	report.store_line("NOTE: Godot render / Xvfb, not physical phone or 97% style verification.")
 	report.close()
 	print("BOSS GALLERY RESULT: new art %d/6, fallback %d/6" % [candidates, 6-candidates])
 	quit()
