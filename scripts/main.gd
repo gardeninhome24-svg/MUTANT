@@ -239,7 +239,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(npc_speaker_lbl):
 		npc_speaker_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	if is_instance_valid(npc_text_lbl):
-		npc_text_lbl.add_theme_font_size_override("font_size", 13 if compact else 13)
+		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
