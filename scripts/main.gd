@@ -886,8 +886,11 @@ func _update_wave_banner() -> void:
 	var compact_text := _is_compact_portrait_hud(get_viewport_rect().size.x)
 	if current_wave_num == 5:
 		wave_label.text = ("FALA 5/10 • ELITA %02d:%02d" if compact_text else "FALA 5/10 — ELITA! • %02d:%02d") % [mins, secs]
-	elif current_wave_num == 10:
-		wave_label.text = ("FALA 10/10 • BOSS %02d:%02d" if compact_text else "FALA 10/10 — BOSS! • %02d:%02d") % [mins, secs]
+	elif current_wave_num == max_waves_in_stage:
+		if _stage_requires_final_boss():
+			wave_label.text = ("FALA %d/%d • BOSS %02d:%02d" if compact_text else "FALA %d/%d — BOSS! • %02d:%02d") % [current_wave_num, max_waves_in_stage, mins, secs]
+		else:
+			wave_label.text = ("FALA %d/%d • FINAŁ %02d:%02d" if compact_text else "FALA %d/%d — OSTATNIA FALA • %02d:%02d") % [current_wave_num, max_waves_in_stage, mins, secs]
 	else:
 		wave_label.text = ("FALA %d/%d • %02d:%02d" if compact_text else "FALA %d / %d • %02d:%02d") % [current_wave_num, max_waves_in_stage, mins, secs]
 
