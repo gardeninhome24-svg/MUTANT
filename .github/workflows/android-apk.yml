@@ -75,7 +75,7 @@ jobs:
           install_android_component "platforms;android-35" "$ANDROID_HOME/platforms/android-35/android.jar" "$ANDROID_HOME/platforms/android-35"
           install_android_component "build-tools;35.0.0" "$ANDROID_HOME/build-tools/35.0.0/apksigner" "$ANDROID_HOME/build-tools/35.0.0"
           test -x "$ANDROID_HOME/build-tools/35.0.0/apksigner"
-          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt2"
           godot --version
 
       - name: Import project resources and fail on GDScript compilation errors
@@ -120,13 +120,16 @@ jobs:
           python3 tools/beta_apk_preflight.py --self-test
           python3 tools/beta_apk_preflight.py build/android/MutantSurvivor.apk | tee /tmp/beta-apk-preflight.log
           APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
-          AAPT="$ANDROID_HOME/build-tools/35.0.0/aapt"
+          AAPT2="$ANDROID_HOME/build-tools/35.0.0/aapt2"
           test -x "$APKSIGNER"
-          test -x "$AAPT"
+          test -x "$AAPT2"
           "$APKSIGNER" verify --verbose --print-certs build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
           grep -q "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
-          "$AAPT" dump badging build/android/MutantSurvivor.apk > /tmp/apk-badging.log
-          grep -E "^package: name='com\\.zielonadolina\\.mutantsurvivor' " /tmp/apk-badging.log
+          # Legacy aapt cannot decode this manifest's android:required
+          # attribute and exits non-zero despite a valid, signed APK.
+          # AAPT2 is the maintained Android binary manifest reader.
+          "$AAPT2" dump packagename build/android/MutantSurvivor.apk | tee /tmp/apk-badging.log
+          grep -Fxq 'com.zielonadolina.mutantsurvivor' /tmp/apk-badging.log
           sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
           cat build/android/MutantSurvivor.apk.sha256
           {
