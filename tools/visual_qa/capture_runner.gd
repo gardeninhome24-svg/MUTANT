@@ -181,6 +181,21 @@ func _save_viewport_png(sub: SubViewport, file_stem: String) -> void:
 		push_error("[Visual QA] Failed to get viewport image for %s" % file_stem)
 		return
 
+	# A successful PNG write alone is not evidence of a rendered frame.
+	# Detect single-color/empty off-screen captures (common with a dummy
+	# renderer) before claiming visual QA produced usable screenshots.
+	var colors: Dictionary = {}
+	for sample_y in range(1, 12):
+		for sample_x in range(1, 12):
+			var pixel_x: int = mini(img.get_width() - 1, int(float(img.get_width()) * float(sample_x) / 12.0))
+			var pixel_y: int = mini(img.get_height() - 1, int(float(img.get_height()) * float(sample_y) / 12.0))
+			var pixel_color: Color = img.get_pixel(pixel_x, pixel_y)
+			colors[pixel_color.to_html()] = true
+	if colors.size() < 4:
+		failed_captures += 1
+		push_error("[Visual QA] Refusing near-blank frame %s (%d sampled colors)" % [file_stem, colors.size()])
+		return
+
 	var out_dir := ProjectSettings.globalize_path(CAPTURES_DIR)
 	DirAccess.make_dir_recursive_absolute(out_dir)
 	var full_path := out_dir.path_join(file_stem + ".png")
