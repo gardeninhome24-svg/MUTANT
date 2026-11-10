@@ -93,6 +93,8 @@ func _run() -> void:
 	# internal campaign view is accessed through the functional mission link.
 	_assert(ResourceLoader.exists("res://assets/ui/approved/icon_daily_tasks.svg", "Texture2D"), "Tasks icon imports")
 	_assert(ResourceLoader.exists("res://assets/ui/approved/icon_battle_pass.svg", "Texture2D"), "Pass icon imports")
+	_assert(ResourceLoader.exists("res://assets/ui/approved/upgrade_card_frame.svg", "Texture2D"),
+		"Approved premium upgrade-card bezel imports")
 	var approved_map_link: Button = menu.find_child("OpenCampaignMap", true, false) as Button
 	_assert(is_instance_valid(approved_map_link), "Home mission header links to the full 100-stage campaign")
 	if is_instance_valid(approved_map_link):
