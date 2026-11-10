@@ -88,6 +88,78 @@ jobs:
             exit 1
           fi
 
+      - name: Install Python for private APK release report
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3
+          python3 --version
+
+      - name: Verify boss pack import tooling and unbundled asset safeguards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/boss_art_pack.py tools/boss_art_geometry.py tools/google_play_preflight.py tools/beta_apk_preflight.py
+          python3 tools/boss_art_geometry.py --self-test
+          python3 tools/boss_art_pack.py --self-test
+          # The optional 66 PNGs are supplied separately; CI must not confuse
+          # fallback rendering with validation of the unbundled generated art.
+
+      - name: Export Android debug APK
+        run: |
+          mkdir -p build/android
+          godot --headless --path . --export-debug "Android" build/android/MutantSurvivor.apk
+          test -s build/android/MutantSurvivor.apk
+          ls -lh build/android/MutantSurvivor.apk
+
+      - name: Verify exported beta APK archive, signing and application ID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/beta_apk_preflight.py --self-test
+          python3 tools/beta_apk_preflight.py build/android/MutantSurvivor.apk | tee /tmp/beta-apk-preflight.log
+          APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          AAPT="$ANDROID_HOME/build-tools/35.0.0/aapt"
+          test -x "$APKSIGNER"
+          test -x "$AAPT"
+          "$APKSIGNER" verify --verbose --print-certs build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
+          grep -q "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
+          "$AAPT" dump badging build/android/MutantSurvivor.apk > /tmp/apk-badging.log
+          grep -E "^package: name='com\\.zielonadolina\\.mutantsurvivor' " /tmp/apk-badging.log
+          sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
+          cat build/android/MutantSurvivor.apk.sha256
+          {
+            echo ""
+            echo "### Beta APK artifact validation"
+            echo '~~~text'
+            cat /tmp/beta-apk-preflight.log
+            cat /tmp/apk-signature.log
+            cat build/android/MutantSurvivor.apk.sha256
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Store installable debug APK early (not QA-approved)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Android-APK-UNVERIFIED-${{ github.run_number }}
+          path: |
+            build/android/MutantSurvivor.apk
+            build/android/MutantSurvivor.apk.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Explain APK status to testers
+        shell: bash
+        run: |
+          {
+            echo "### Installable diagnostic APK is available"
+            echo "The UNVERIFIED APK artifact was exported and its package/signature verified."
+            echo "Gameplay QA continues after upload. A failed workflow means this APK"
+            echo "is **NOT beta approved**; use only for internal debugging."
+            echo "Only a green full job AND real handset testing may approve the private beta."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Pre-beta structural validation (campaign and scenes)
         shell: bash
         run: |
@@ -171,24 +243,6 @@ jobs:
             exit 1
           fi
           grep -Fq 'GAMEPLAY REGRESSION PASS:' /tmp/gameplay-regression.log
-
-      - name: Install Python for private APK release report
-        shell: bash
-        run: |
-          set -euo pipefail
-          apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3
-          python3 --version
-
-      - name: Verify boss pack import tooling and unbundled asset safeguards
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m py_compile tools/boss_art_pack.py tools/boss_art_geometry.py tools/google_play_preflight.py tools/beta_apk_preflight.py
-          python3 tools/boss_art_geometry.py --self-test
-          python3 tools/boss_art_pack.py --self-test
-          # The optional 66 PNGs are supplied separately; CI must not confuse
-          # fallback rendering with validation of the unbundled generated art.
 
       - name: Report Google Play release blockers (informational for private APK only)
         shell: bash
@@ -287,39 +341,6 @@ jobs:
             /tmp/mutantsurvivor-combat.log
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Export Android debug APK
-        run: |
-          mkdir -p build/android
-          godot --headless --path . --export-debug "Android" build/android/MutantSurvivor.apk
-          test -s build/android/MutantSurvivor.apk
-          ls -lh build/android/MutantSurvivor.apk
-
-      - name: Verify exported beta APK archive, signing and application ID
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 tools/beta_apk_preflight.py --self-test
-          python3 tools/beta_apk_preflight.py build/android/MutantSurvivor.apk | tee /tmp/beta-apk-preflight.log
-          APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
-          AAPT="$ANDROID_HOME/build-tools/35.0.0/aapt"
-          test -x "$APKSIGNER"
-          test -x "$AAPT"
-          "$APKSIGNER" verify --verbose --print-certs build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
-          grep -q "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
-          "$AAPT" dump badging build/android/MutantSurvivor.apk > /tmp/apk-badging.log
-          grep -E "^package: name='com\\.zielonadolina\\.mutantsurvivor' " /tmp/apk-badging.log
-          sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
-          cat build/android/MutantSurvivor.apk.sha256
-          {
-            echo ""
-            echo "### Beta APK artifact validation"
-            echo '~~~text'
-            cat /tmp/beta-apk-preflight.log
-            cat /tmp/apk-signature.log
-            cat build/android/MutantSurvivor.apk.sha256
-            echo '~~~'
-          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish QA results in workflow summary
         if: always()
@@ -422,16 +443,6 @@ jobs:
             /tmp/visual-qa-render.log
           if-no-files-found: warn
           retention-days: 21
-
-      - name: Store APK for private testing
-        uses: actions/upload-artifact@v4
-        with:
-          name: MutantSurvivor-Android-APK
-          path: |
-            build/android/MutantSurvivor.apk
-            build/android/MutantSurvivor.apk.sha256
-          if-no-files-found: error
-          retention-days: 14
 
       # Publishing is opt-in: builds from ordinary pushes are NOT exposed to testers.
       - name: Publish APK to private itch.io beta (manual opt-in only)
