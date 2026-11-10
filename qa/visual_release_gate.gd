@@ -88,6 +88,7 @@ func _run() -> void:
 		var wave_style: StyleBox = wave_frame.get_theme_stylebox("panel")
 		_check(wave_style is StyleBoxTexture, "Live wave panel uses nine-slice artwork")
 		_check(wave_frame.size.y <= 118.0, "Wave artwork does not expand to a giant blank rectangle")
+		_check(wave_frame.size.x <= 390.0, "Wave artwork does not spread across the entire mobile HUD")
 	for node_name in ["objectives_panel", "radar_panel", "bottom_weapons_panel"]:
 		var rendered_panel: PanelContainer = combat.get(node_name) as PanelContainer
 		_check(is_instance_valid(rendered_panel) and rendered_panel.get_theme_stylebox("panel") is StyleBoxTexture,
@@ -122,7 +123,7 @@ func _run() -> void:
 	if is_instance_valid(wave):
 		_check(absf(wave.offset_top - (210.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
 	if is_instance_valid(radar):
-		_check(absf(radar.offset_top - (70.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
+		_check(absf(radar.offset_top - (75.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
 	if is_instance_valid(currencies):
 		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
 	if is_instance_valid(currencies) and is_instance_valid(wave):
@@ -138,9 +139,9 @@ func _run() -> void:
 	if is_instance_valid(hp) and is_instance_valid(xp):
 		_check(hp.custom_minimum_size.x == 110.0 and xp.custom_minimum_size.x == 110.0, "420px HP and XP bars fit compact stat card")
 	if is_instance_valid(wave_title):
-		_check(wave_title.get_theme_font_size("font_size") == 16, "420px wave label is readable without truncation")
+		_check(wave_title.get_theme_font_size("font_size") == 18, "420px wave label is readable without truncation")
 	if is_instance_valid(objectives_title):
-		_check(objectives_title.get_theme_font_size("font_size") == 13, "420px objectives header has legible text")
+		_check(objectives_title.get_theme_font_size("font_size") == 14, "420px objectives header has legible text")
 		_check(objectives_title.text.begins_with("CELE • ETAP"), "420px objective title avoids clipped decoration")
 	if is_instance_valid(weapon_row):
 		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")
