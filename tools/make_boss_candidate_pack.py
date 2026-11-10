@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Produce 66 reviewable boss sprites derived from existing MUTANT boss art.
 
-This is a visual CANDIDATE, not artist-approved frame-by-frame production art.
+This uses complete HD boss silhouettes with transform animation; it is an ART CANDIDATE, not hand-animated production art.
 Requires Pillow. Never changes existing source images.
 """
 import argparse
@@ -10,13 +10,15 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
+# Use the complete production reference silhouettes, not the fragmented
+# legacy boss animation PNGs (those contain isolated body parts).
 CHAPTERS = {
-    5: ("boss_lewiatan", (76, 222, 90)),
-    6: ("boss_matka_roju", (180, 226, 48)),
-    7: ("boss_goliat", (242, 103, 78)),
-    8: ("boss_goliat", (184, 78, 238)),
-    9: ("boss_lewiatan", (70, 208, 255)),
-    10: ("boss_matka_roju", (254, 116, 193)),
+    5: ("hive_mother_reference.png", (76, 222, 90)),
+    6: ("hive_mother_reference.png", (180, 226, 48)),
+    7: ("behemoth_boss_reference.png", (242, 103, 78)),
+    8: ("behemoth_boss_reference.png", (184, 78, 238)),
+    9: ("architect_zero_boss.png", (70, 208, 255)),
+    10: ("architect_zero_boss.png", (254, 116, 193)),
 }
 ACTIONS = (("phase1_anim", 4), ("phase2_attack", 4), ("death", 2))
 
@@ -48,7 +50,7 @@ def recolor(image, tint, amount):
 
 def make_frame(root, chapter, action, index, portrait=False):
     source_name, tint = CHAPTERS[chapter]
-    path = root / "assets" / "bosses" / source_name / f"{action}_{index}.png"
+    path = root / "assets" / "mutantsurvivor_ch01" / "bosses" / source_name
     if not path.is_file():
         raise FileNotFoundError(f"Source boss animation missing: {path}")
     with Image.open(path) as src:
@@ -56,7 +58,7 @@ def make_frame(root, chapter, action, index, portrait=False):
     box = image.getchannel("A").getbbox()
     if not box:
         raise ValueError(f"Empty alpha on {path}")
-    image = recolor(image.crop(box), tint, 0.17 + 0.04*(chapter % 3))
+    image = recolor(image.crop(box), tint, 0.26 + 0.05*(chapter % 3))
     canvas_size = (320, 360) if portrait else (256, 256)
     max_size = (248, 298) if portrait else (208, 205)
     scale = min(max_size[0]/image.width, max_size[1]/image.height)
