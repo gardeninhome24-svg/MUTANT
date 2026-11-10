@@ -270,7 +270,8 @@ jobs:
           AAPT="$ANDROID_HOME/build-tools/35.0.0/aapt"
           test -x "$APKSIGNER"
           test -x "$AAPT"
-          "$APKSIGNER" verify --verbose build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
+          "$APKSIGNER" verify --verbose --print-certs build/android/MutantSurvivor.apk | tee /tmp/apk-signature.log
+          grep -q "Signer #1 certificate SHA-256 digest:" /tmp/apk-signature.log
           "$AAPT" dump badging build/android/MutantSurvivor.apk > /tmp/apk-badging.log
           grep -E "^package: name='com\\.zielonadolina\\.mutantsurvivor' " /tmp/apk-badging.log
           sha256sum build/android/MutantSurvivor.apk > build/android/MutantSurvivor.apk.sha256
