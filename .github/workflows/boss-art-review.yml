@@ -1,0 +1,48 @@
+name: MutantSurvivor Boss 5-10 Art Candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  boss-art-review:
+    name: Generate 66 boss frames and validate candidate pack
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout licensed in-project boss art
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install image processing dependency
+        run: |
+          python3 -m pip install --user "Pillow>=10,<13"
+          python3 -c "from PIL import Image; print('Pillow loaded:', Image.__version__)"
+
+      - name: Generate all 66 chapter 5-10 boss images
+        run: |
+          set -euo pipefail
+          python3 tools/make_boss_candidate_pack.py --project . --out build/MutantSurvivor-BossArt-Candidate-05-10.zip
+          python3 tools/boss_art_pack.py --zip build/MutantSurvivor-BossArt-Candidate-05-10.zip
+          python3 tools/boss_art_geometry.py --zip build/MutantSurvivor-BossArt-Candidate-05-10.zip --report build/boss-geometry.json
+          unzip -Z1 build/MutantSurvivor-BossArt-Candidate-05-10.zip | tee build/boss-contents.txt
+          test "$(wc -l < build/boss-contents.txt)" -eq 66
+          sha256sum build/MutantSurvivor-BossArt-Candidate-05-10.zip | tee build/boss-sha256.txt
+
+      - name: Export candidate artwork for human visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BossArt-Ch05-Ch10-REVIEW-\${{ github.run_number }}
+          path: |
+            build/MutantSurvivor-BossArt-Candidate-05-10.zip
+            build/boss-geometry.json
+            build/boss-contents.txt
+            build/boss-sha256.txt
+          if-no-files-found: warn
+          retention-days: 30
+
+      # Never automatically publish generated art as final Google Play assets:
+      # color shifts/pose reuse are candidates until animation is reviewed.
