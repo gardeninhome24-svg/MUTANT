@@ -196,9 +196,10 @@ func _apply_approved_profile_style() -> void:
 		shell.set_corner_radius_all(12)
 		shell.set_content_margin_all(10)
 		main_card.add_theme_stylebox_override("panel", shell)
+		main_card.mouse_filter = Control.MOUSE_FILTER_PASS
 	if is_instance_valid(tab_bg_tex):
 		# Leave the approved scenic illustration visible as a subdued layer.
-		tab_bg_tex.modulate = Color(0.60, 0.76, 0.84, 0.40)
+		tab_bg_tex.modulate = Color(0.73, 0.87, 0.91, 0.62)
 	for section in [find_child("CampaignMainCard", true, false), find_child("StoreDepotBanner", true, false)]:
 		if section is PanelContainer:
 			var frame := StyleBoxFlat.new()
@@ -249,29 +250,29 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 
 	if is_instance_valid(profile_title_lbl):
 		profile_title_lbl.text = "POSTAĆ / EKWIPUNEK" if portrait else "CENTRUM DOWODZENIA RPG"
-		profile_title_lbl.add_theme_font_size_override("font_size", 13 if portrait else 17)
+		profile_title_lbl.add_theme_font_size_override("font_size", (14 if narrow else 20) if portrait else 20)
 	if is_instance_valid(profile_orient_btn):
 		profile_orient_btn.text = "9:16" if portrait else "16:9"
 		profile_orient_btn.custom_minimum_size = Vector2(54, 34) if portrait else Vector2(118, 34)
 	for i in range(tab_buttons.size()):
 		var short_titles := ["POSTAĆ", "PLECAK", "MAPA", "SKLEP", "NAGRODY"]
 		tab_buttons[i].text = short_titles[i] if portrait else ["POSTAĆ RPG", "EKWIPUNEK", "KAMPANIA", "SKLEP", "NAGRODY"][i]
-		tab_buttons[i].add_theme_font_size_override("font_size", (11 if narrow else 10) if portrait else 12)
+		tab_buttons[i].add_theme_font_size_override("font_size", (11 if narrow else 15) if portrait else 14)
 	if is_instance_valid(commander_title_lbl):
-		commander_title_lbl.add_theme_font_size_override("font_size", 11 if narrow else 19)
+		commander_title_lbl.add_theme_font_size_override("font_size", 13 if narrow else 22)
 	if is_instance_valid(hero_power_lbl):
-		hero_power_lbl.add_theme_font_size_override("font_size", 11 if narrow else 18)
+		hero_power_lbl.add_theme_font_size_override("font_size", 13 if narrow else 21)
 		hero_power_lbl.text = ("⚔ %d" if narrow else "⚔ MOC BOJOWA: %d") % StageDirector.get_total_combat_power()
 	if is_instance_valid(hero_arena_row):
 		hero_arena_row.add_theme_constant_override("separation", 5 if narrow else 14)
 	if is_instance_valid(hero_pedestal):
-		hero_pedestal.custom_minimum_size = Vector2(166, 304) if narrow else Vector2(350, 480)
+		hero_pedestal.custom_minimum_size = Vector2(166, 304) if narrow else Vector2(355, 500)
 	if is_instance_valid(hero_center_tex):
-		hero_center_tex.custom_minimum_size = Vector2(146, 265) if narrow else Vector2(320, 425)
+		hero_center_tex.custom_minimum_size = Vector2(146, 265) if narrow else Vector2(338, 450)
 	for flank in [left_slots_vbox, right_slots_vbox]:
 		if is_instance_valid(flank):
-			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(112, 0)
-			flank.add_theme_constant_override("separation", 4 if narrow else 10)
+			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(120, 0)
+			flank.add_theme_constant_override("separation", 5 if narrow else 12)
 	# Compact primary item actions to avoid colliding with illustrated borders
 	# at 420px, while keeping real 48px finger targets.
 	var quick_row := find_child("InventoryQuickActions", true, false) as HBoxContainer
@@ -298,37 +299,37 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		stage_boss_preview.custom_minimum_size = Vector2(92, 112) if narrow else Vector2(250, 285)
 	var campaign_main := find_child("CampaignMainCard", true, false) as PanelContainer
 	if is_instance_valid(campaign_main):
-		campaign_main.custom_minimum_size.y = 365.0 if narrow else 440.0
+		campaign_main.custom_minimum_size.y = 390.0 if narrow else 490.0
 	var campaign_title := find_child("CampaignMainTitle", true, false) as Label
 	if is_instance_valid(campaign_title):
-		campaign_title.add_theme_font_size_override("font_size", 25 if narrow else 32)
+		campaign_title.add_theme_font_size_override("font_size", 26 if narrow else 37)
 	var campaign_art_row := find_child("CampaignHeroRow", true, false) as HBoxContainer
 	if is_instance_valid(campaign_art_row):
 		campaign_art_row.add_theme_constant_override("separation", 7 if narrow else 12)
 	var campaign_details := find_child("CampaignMissionDetails", true, false) as VBoxContainer
 	if is_instance_valid(campaign_details):
-		campaign_details.add_theme_constant_override("separation", 4 if narrow else 7)
+		campaign_details.add_theme_constant_override("separation", 5 if narrow else 10)
 	# The four campaign navigation actions must remain finger-sized at 420px.
 	var campaign_nav := find_child("StageDirectionRow", true, false) as HBoxContainer
 	if is_instance_valid(campaign_nav):
 		campaign_nav.add_theme_constant_override("separation", 3 if narrow else 6)
 		for nav_action in campaign_nav.get_children():
 			if nav_action is Button:
-				(nav_action as Button).custom_minimum_size.y = 46.0
+				(nav_action as Button).custom_minimum_size.y = 52.0
 				(nav_action as Button).add_theme_font_size_override("font_size", 12 if narrow else 13)
 	var chapter_shortcuts := find_child("StageJumpGrid", true, false) as GridContainer
 	if is_instance_valid(chapter_shortcuts):
 		for shortcut in chapter_shortcuts.get_children():
 			if shortcut is Button:
-				(shortcut as Button).custom_minimum_size.y = 44.0
+				(shortcut as Button).custom_minimum_size.y = 50.0
 				(shortcut as Button).add_theme_font_size_override("font_size", 12 if narrow else 13)
 	for reward_kind in ["Credits", "Scrap", "Equipment"]:
 		var icon_node := find_child("CampaignRewardIcon" + reward_kind, true, false) as TextureRect
 		if is_instance_valid(icon_node):
-			icon_node.custom_minimum_size = Vector2(29, 29) if narrow else Vector2(38, 36)
+			icon_node.custom_minimum_size = Vector2(29, 29) if narrow else Vector2(45, 44)
 		var value_node := find_child("CampaignRewardValue" + reward_kind, true, false) as Label
 		if is_instance_valid(value_node):
-			value_node.add_theme_font_size_override("font_size", 13 if narrow else 14)
+			value_node.add_theme_font_size_override("font_size", 14 if narrow else 17)
 	for talent_id in talent_rows.keys():
 		var talent_ui: Dictionary = talent_rows[talent_id]
 		var upgrade: Button = talent_ui["btn"] as Button
