@@ -5,6 +5,8 @@ class_name ExplosiveBarrel
 @export var blast_damage: float = 160.0
 @export var blast_radius: float = 185.0
 
+signal exploded(barrel: ExplosiveBarrel)
+
 var current_health: float = 24.0
 var is_exploded: bool = false
 
@@ -32,6 +34,7 @@ func explode() -> void:
 	if is_exploded:
 		return
 	is_exploded = true
+	exploded.emit(self)
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
 	var radius_sq := blast_radius * blast_radius
