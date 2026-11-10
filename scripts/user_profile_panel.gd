@@ -1477,18 +1477,23 @@ func _refresh_inventory_detail_panel() -> void:
 	sub_l.add_theme_color_override("font_color", Color(0.86, 0.95, 1.0))
 	col_left.add_child(sub_l)
 
-	var act_hbox := HBoxContainer.new()
-	act_hbox.add_theme_constant_override("separation", 8)
+	# On narrow phones three long buttons overflow; use one full-width
+	# touch target per action instead of shrinking labels below readability.
+	var act_hbox := GridContainer.new()
+	act_hbox.name = "InventoryDetailActions"
+	act_hbox.columns = 1 if narrow_portrait_ui else 3
+	act_hbox.add_theme_constant_override("h_separation", 8)
+	act_hbox.add_theme_constant_override("v_separation", 6)
 	root_v.add_child(act_hbox)
 
 	var cap_inst: String = selected_bag_instance_id
 	var cap_slot: String = slot_id
 
 	var b_eq := Button.new()
-	b_eq.text = "✓ ZAŁOŻONO" if is_eq else "📥 ZAŁÓŻ DO SLOTU"
+	b_eq.text = ("ZAŁOŻONO" if is_eq else "ZAŁÓŻ") if narrow_portrait_ui else ("✓ ZAŁOŻONO" if is_eq else "📥 ZAŁÓŻ DO SLOTU")
 	b_eq.disabled = is_eq
 	b_eq.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	b_eq.custom_minimum_size = Vector2(0, 36)
+	b_eq.custom_minimum_size = Vector2(0, 46)
 	b_eq.add_theme_font_size_override("font_size", 12)
 	b_eq.pressed.connect(func():
 		StageDirector.equip_item(cap_inst)
@@ -1500,10 +1505,10 @@ func _refresh_inventory_detail_panel() -> void:
 	act_hbox.add_child(b_eq)
 
 	var b_up := Button.new()
-	b_up.text = "⬆ ULEPSZ +1 (-%d Kr, -%d Złom)" % [cost_c, cost_s] if lvl < 10 else "MAKS. POZIOM (+10)"
+	b_up.text = ("ULEPSZ +1" if lvl < 10 else "MAX +10") if narrow_portrait_ui else ("⬆ ULEPSZ +1 (-%d Kr, -%d Złom)" % [cost_c, cost_s] if lvl < 10 else "MAKS. POZIOM (+10)")
 	b_up.disabled = (lvl >= 10) or (StageDirector.credits < cost_c) or (StageDirector.scrap_materials < cost_s)
 	b_up.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	b_up.custom_minimum_size = Vector2(0, 36)
+	b_up.custom_minimum_size = Vector2(0, 46)
 	b_up.add_theme_font_size_override("font_size", 12)
 	b_up.pressed.connect(func():
 		if StageDirector.upgrade_item_by_instance(cap_inst):
@@ -1515,10 +1520,10 @@ func _refresh_inventory_detail_panel() -> void:
 	act_hbox.add_child(b_up)
 
 	var b_un := Button.new()
-	b_un.text = "📤 ZDEJMIJ"
+	b_un.text = "ZDEJMIJ" if narrow_portrait_ui else "📤 ZDEJMIJ"
 	b_un.disabled = not is_eq
 	b_un.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	b_un.custom_minimum_size = Vector2(0, 36)
+	b_un.custom_minimum_size = Vector2(0, 46)
 	b_un.add_theme_font_size_override("font_size", 12)
 	b_un.pressed.connect(func():
 		StageDirector.unequip_slot(cap_slot)
