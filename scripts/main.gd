@@ -925,13 +925,24 @@ func _process(delta: float) -> void:
 	if not primary_objective_done and primary_objective_type != "defeat_boss" and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if primary_objective_type == "defend_node":
+			# Cap effective attackers so high spawn density cannot erase a
+			# 300-HP objective almost instantly. Dead/pooled enemies do not attack.
+			var attackers: int = 0
 			for e in get_tree().get_nodes_in_group("enemies"):
-				if e is Node2D and is_instance_valid(e) and (e as Node2D).global_position.distance_to(primary_objective_area.global_position) <= 95.0:
-					primary_objective_hp = maxf(0.0, primary_objective_hp - 12.0 * delta)
-					_update_objectives_ui()
-					if primary_objective_hp <= 0.0:
-						_on_player_died()
-						return
+				if not (e is MutantEnemy) or not is_instance_valid(e):
+					continue
+				if e.is_dying or e.current_health <= 0.0:
+					continue
+				if e.global_position.distance_to(primary_objective_area.global_position) <= 95.0:
+					attackers += 1
+					if attackers >= 3:
+						break
+			if attackers > 0:
+				primary_objective_hp = maxf(0.0, primary_objective_hp - 7.5 * float(attackers) * delta)
+				_update_objectives_ui()
+				if primary_objective_hp <= 0.0:
+					_on_player_died()
+					return
 		if dist_to_obj <= 115.0:
 			primary_objective_progress = minf(primary_objective_required_sec, primary_objective_progress + delta)
 			if primary_objective_type == "escort":
