@@ -1,3 +1,2 @@
-ART CANDIDATE ONLY — 66 images generated from existing MUTANT reference silhouettes.
-Rigid pose transformations and palette variants are NOT artist-approved keyframe animation.
-Do not remove this marker or publish to Google Play until manually reviewed and replaced if needed.
+ART CANDIDATE ONLY — boss 1-10, minibosses, toxic soldier and larva animations generated from existing art.
+These animations include rigid pose transforms and recolors; artist approval is still REQUIRED before Google Play.
