@@ -89,7 +89,7 @@ func _run() -> void:
 	_assert(is_instance_valid(decorative_progress) and not decorative_progress.visible, "Old duplicate roadmap is hidden on approved home")
 	var navigation_buttons: Array = menu.get("nav_buttons")
 	_assert(navigation_buttons.size() == 5, "All five functional game views remain registered")
-	if navigation_buttons.size() == 5:
+	if navigation_buttons.size() == 5 and StageDirector.is_portrait_mode():
 		_assert(not navigation_buttons[3].visible, "Portrait navigation shows four tabs, not five duplicate campaign buttons")
 	if navigation_buttons.size() == 5:
 		for tab in navigation_buttons:
