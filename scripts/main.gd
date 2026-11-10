@@ -106,6 +106,8 @@ var primary_objective_ring: Sprite2D = null
 var primary_objective_bar: ProgressBar = null
 var data_cores_collected: int = 0
 var data_cores_total: int = 3
+var objective_elites_defeated: int = 0
+var objective_elites_required: int = 2
 var enemies_killed_in_run: int = 0
 var solid_obstacle_positions: Array[Vector2] = []
 
@@ -567,6 +569,14 @@ func _build_layered_arena(stage_num: int) -> void:
 
 	# 2. Warstwa Dekoracji i Celów Misji (zgodnie z objective_scene_contracts.json)
 	primary_objective_type = String(cfg.get("scene_type", "activate_terminal"))
+	# Campaign v2 defines the actual target, not a generic terminal hold.
+	var story_objectives: Array = cfg.get("objectives_v2", [])
+	for story_obj in story_objectives:
+		if story_obj is Dictionary:
+			if String(story_obj.get("type", "")) == "collect_item":
+				data_cores_total = mini(3, maxi(1, int(story_obj.get("count", 3))))
+			elif String(story_obj.get("type", "")) == "clear_elites":
+				objective_elites_required = maxi(1, int(story_obj.get("count", 2)))
 	_spawn_primary_mission_target(beacon_world_pos, primary_objective_type)
 	_spawn_data_cores_and_medkits()
 	_spawn_lamp_posts()
@@ -735,6 +745,8 @@ func _spawn_data_cores_and_medkits() -> void:
 			if body is Player:
 				data_cores_collected = mini(data_cores_total, data_cores_collected + 1)
 				player.add_xp(30.0)
+				if primary_objective_type == "collect_item" and data_cores_collected >= data_cores_total:
+					_complete_primary_objective()
 				_update_objectives_ui()
 				core.queue_free()
 		)
@@ -789,6 +801,7 @@ func start_stage(stage_num: int) -> void:
 	primary_objective_hp = 300.0
 	primary_objective_max_hp = 300.0
 	data_cores_collected = 0
+	objective_elites_defeated = 0
 	enemies_killed_in_run = 0
 	has_used_revive = false
 	run_result_state = "active"
@@ -865,6 +878,11 @@ func start_wave(stage_num: int, wave_num: int) -> void:
 
 	if current_wave_num == 5:
 		_show_npc_dialogue_from_stage(stage_cfg, "progress_dialogue")
+		if primary_objective_type == "clear_elites":
+			# Make the two mandatory elite kills actually available on stage 7 of each chapter.
+			var scripted_elite_id := "elite_ch%02d_stage07" % int(stage_cfg.get("chapter", 1))
+			for elite_idx in range(objective_elites_required):
+				spawn_special_enemy(scripted_elite_id, "miniboss", "⚠ ELITA %d/%d ⚠" % [elite_idx + 1, objective_elites_required])
 		var elite_id := String(stage_cfg.get("elite_id", ""))
 		if not elite_id.is_empty():
 			spawn_special_enemy(elite_id, "miniboss", "⚠ ELITA FALI 5: %s ⚠" % elite_id.to_upper())
@@ -900,7 +918,11 @@ func _update_objectives_ui() -> void:
 	var c3 := "☑" if (current_wave_num >= max_waves_in_stage and wave_time_left <= 0.0) else "☐"
 	var obj_pl := StageDirector.translate_objective(primary_objective_type)
 	var pct := 100 if primary_objective_done else int(roundf(clampf(primary_objective_progress / maxf(0.1, primary_objective_required_sec), 0.0, 1.0) * 100.0))
-	if primary_objective_type == "defeat_boss":
+	if primary_objective_type == "collect_item":
+		obj1_label.text = "%s DNA %d/%d" % [c1, data_cores_collected, data_cores_total]
+	elif primary_objective_type == "clear_elites":
+		obj1_label.text = "%s Elity %d/%d" % [c1, objective_elites_defeated, objective_elites_required]
+	elif primary_objective_type == "defeat_boss":
 		obj1_label.text = "%s Boss (%d/1)" % [c1, 1 if primary_objective_done else 0] if StageDirector.is_portrait_mode() else "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
 	elif primary_objective_type == "defend_node":
 		obj1_label.text = "%s Obrona %d%% (HP %d)" % [c1, pct, int(primary_objective_hp)] if StageDirector.is_portrait_mode() else "%s %s (%d%% | HP: %d/%d)" % [c1, obj_pl, pct, int(primary_objective_hp), int(primary_objective_max_hp)]
@@ -922,7 +944,7 @@ func _process(delta: float) -> void:
 	_update_active_power_buttons()
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and primary_objective_type != "defeat_boss" and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not primary_objective_type in ["defeat_boss", "collect_item", "clear_elites"] and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if primary_objective_type == "defend_node":
 			# Cap effective attackers so high spawn density cannot erase a
@@ -952,13 +974,7 @@ func _process(delta: float) -> void:
 			if is_instance_valid(primary_objective_bar):
 				primary_objective_bar.value = primary_objective_progress
 			if primary_objective_progress >= primary_objective_required_sec:
-				primary_objective_done = true
-				player.add_xp(65.0)
-				if radar:
-					radar.show_beacon = false
-				if is_instance_valid(primary_objective_ring):
-					primary_objective_ring.modulate = Color(0.3, 1.0, 0.5, 0.78)
-			_update_objectives_ui()
+				_complete_primary_objective()
 
 	# Zagrożenia środowiskowe biomu (acid_spots, cryo_vent, sewer_gas, falling_debris, radiation_pulse)
 	hazard_timer += delta
@@ -996,6 +1012,19 @@ func _process(delta: float) -> void:
 			var enemies_count := get_tree().get_nodes_in_group("enemies").size()
 			if enemies_count < max_active:
 				spawn_wave_enemy()
+
+func _complete_primary_objective() -> void:
+	if primary_objective_done or run_result_state != "active":
+		return
+	primary_objective_done = true
+	if is_instance_valid(player):
+		player.add_xp(65.0)
+	if radar:
+		radar.show_beacon = false
+	if is_instance_valid(primary_objective_ring):
+		primary_objective_ring.modulate = Color(0.3, 1.0, 0.5, 0.78)
+	_update_objectives_ui()
+
 
 func _get_wave_enemy_archetype() -> String:
 	var pool := ["biegacz", "zracy_pelzacz", "zdziczaly", "zarazony", "plujacy_kwasem", "lowca", "skrzydlaty", "czerw"]
@@ -1065,6 +1094,11 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 	enemies_killed_in_run += 1
 	# MutantEnemy.die() already records each kill exactly once.
 	_update_objectives_ui()
+	if primary_objective_type == "clear_elites" and enemy.tier in ["elite", "miniboss"]:
+		objective_elites_defeated = mini(objective_elites_required, objective_elites_defeated + 1)
+		if objective_elites_defeated >= objective_elites_required:
+			_complete_primary_objective()
+		_update_objectives_ui()
 	if enemy == active_boss:
 		# A wave-five elite is displayed in the boss HUD, but must never
 		# complete the final chapter boss objective or victory gate.
