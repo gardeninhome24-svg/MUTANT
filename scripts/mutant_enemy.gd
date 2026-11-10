@@ -162,9 +162,9 @@ func _draw() -> void:
 	if tier == "normal" and current_health >= max_health:
 		return
 	# Pasek HP nad głową wroga (styl z referencji target_gameplay_visual.png)
-	var bar_w := 52.0 if tier == "normal" else (78.0 if tier != "boss" else 110.0)
-	var bar_h := 6.0 if tier == "normal" else 8.0
-	var y_off := -72.0 if tier == "normal" else (-96.0 if tier != "boss" else -118.0)
+	var bar_w := 68.0 if tier == "normal" else (102.0 if tier != "boss" else 156.0)
+	var bar_h := 8.0 if tier == "normal" else 11.0
+	var y_off := -91.0 if tier == "normal" else (-124.0 if tier != "boss" else -165.0)
 	var bar_pos := Vector2(-bar_w * 0.5, y_off)
 	draw_rect(Rect2(bar_pos - Vector2(1, 1), Vector2(bar_w + 2, bar_h + 2)), Color(0.05, 0.06, 0.08, 0.92))
 	var ratio := clampf(current_health / maxf(1.0, max_health), 0.0, 1.0)
