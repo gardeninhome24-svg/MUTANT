@@ -59,7 +59,7 @@ def self_test() -> None:
             out.writestr("classes.dex", payload)
             out.writestr("lib/arm64-v8a/libgodot_android.so", b"native")
         assert inspect(apk)["arm64_libraries"] == 1
-        with ZipFile(apk, "w", ZIP_DEFLATED) as out:
+        with ZipFile(apk, "w", ZIP_STORED) as out:
             out.writestr("AndroidManifest.xml", payload)
             out.writestr("classes.dex", b"dex")
         try:
