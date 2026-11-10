@@ -51,7 +51,17 @@ else:
     passed.append("Beta test premium grants explicitly disabled")
 
 project = (ROOT / "project.godot").read_text(encoding="utf-8")
-icon_match = re.search(r'(?m)^config/icon\s*=\s*"res://([^"]+)"\s*
+icon_match = re.search(r'(?m)^config/icon\s*=\s*"res://([^"]+)"\s*$', project)
+if not icon_match:
+    block("Launcher icon", "Missing config/icon asset path in project.godot")
+else:
+    icon_path = icon_match.group(1)
+    if icon_path.endswith("purple_crystal.png") or "currency" in icon_path.lower():
+        block("Launcher icon", "Currency icon used as app icon; replace with branded launcher art")
+    elif not (ROOT / icon_path).is_file():
+        block("Launcher icon", "Configured launcher icon does not exist: " + icon_path)
+    else:
+        passed.append("Branded launcher icon path configured (manual adaptive icon check still required)")
 
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
