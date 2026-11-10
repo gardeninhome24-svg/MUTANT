@@ -11,6 +11,12 @@ on:
         required: false
         default: false
 
+# Continuous pushes should not launch dozens of parallel 1+ GB SDK downloads.
+# Keep a separate slot for intentional manual builds and cancel stale push runs.
+concurrency:
+  group: mutant-android-apk-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
+
 permissions:
   contents: read
 
