@@ -1932,7 +1932,11 @@ func _on_revive_premium_pressed() -> void:
 
 func toggle_premium_shop() -> void:
 	premium_shop_panel.visible = not premium_shop_panel.visible
-	get_tree().paused = premium_shop_panel.visible
+	# Closing the shop must not resume gameplay while the player is
+	# still dead, viewing victory rewards or selecting an upgrade.
+	get_tree().paused = (premium_shop_panel.visible
+		or run_result_state != "active"
+		or upgrade_panel.visible)
 
 func _on_buy_energy_pack() -> void:
 	if StageDirector.spend_premium_gems(20):
