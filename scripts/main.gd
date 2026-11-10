@@ -1922,6 +1922,7 @@ func _on_revive_premium_pressed() -> void:
 		StageDirector.save_campaign_profile()
 		has_used_revive = true
 		run_result_state = "active"
+		premium_shop_panel.visible = false
 		death_panel.visible = false
 		if is_instance_valid(defeat_overlay_inst): defeat_overlay_inst.visible = false
 		get_tree().paused = false
