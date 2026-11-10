@@ -289,11 +289,11 @@ func _execute() -> void:
 	battle.set_process(false)
 	_check(String(battle.get("primary_objective_type")) == "clear_elites", "Stage 7 uses elite-kill objective")
 	battle.call("start_wave", 7, 5)
-	var mandatory_elites: Array[MutantEnemy] = []
+	var mandatory_elites: Array[Node] = []
 	var stage7_characters: Node2D = battle.get("characters_layer") as Node2D
 	if is_instance_valid(stage7_characters):
 		for enemy in stage7_characters.get_children():
-			if is_instance_valid(enemy) and enemy is MutantEnemy:
+			if is_instance_valid(enemy) and enemy is CharacterBody2D:
 				if enemy.tier == "miniboss" and enemy.enemy_id == "elite_ch01_stage07":
 					mandatory_elites.append(enemy)
 	_check(mandatory_elites.size() == 2, "Stage 7 spawns two mandatory chapter elites")
@@ -388,11 +388,11 @@ func _execute() -> void:
 	battle.set_process(false)
 	_check(String(battle.get("primary_objective_type")) == "destroy_target", "Stage 4 is a destruction mission")
 	_check(int(battle.get("objective_steps_required")) == 2, "Stage 4 requires two destroyed incubators")
-	var mission_targets: Array[ExplosiveBarrel] = []
+	var mission_targets: Array[Node] = []
 	var stage4_obstacles: Node2D = battle.get("obstacles_layer") as Node2D
 	if is_instance_valid(stage4_obstacles):
 		for candidate in stage4_obstacles.get_children():
-			if candidate is ExplosiveBarrel and candidate.has_meta("mission_target"):
+			if candidate is Node2D and candidate.has_meta("mission_target"):
 				mission_targets.append(candidate)
 	_check(mission_targets.size() == 2, "Stage 4 spawns two shootable incubators")
 	if mission_targets.size() == 2:
@@ -407,7 +407,7 @@ func _execute() -> void:
 			root.add_child(foreign_arena)
 			var barrel_scene: PackedScene = load("res://scenes/environment/explosive_barrel.tscn") as PackedScene
 			if is_instance_valid(barrel_scene):
-				var foreign_target: ExplosiveBarrel = barrel_scene.instantiate() as ExplosiveBarrel
+				var foreign_target: Node2D = barrel_scene.instantiate() as Node2D
 				foreign_target.set_meta("mission_target", true)
 				foreign_arena.add_child(foreign_target)
 				foreign_target.global_position = mission_shooter.global_position + Vector2(1, 0)
