@@ -2489,7 +2489,9 @@ func refresh_ui() -> void:
 	var boss_name := "Fala 10: Natarcie Elity"
 	if not boss_id.is_empty():
 		var b_spec: Dictionary = AssetRegistry.ENEMY_ASSETS.get(boss_id, AssetRegistry.ENEMY_ASSETS["boss_ch01"])
-		boss_tex_path = String(AssetRegistry.BOSS_CAMPAIGN_PORTRAITS.get(boss_id, b_spec.get("texture_path", boss_tex_path)))
+		boss_tex_path = AssetRegistry.get_campaign_boss_portrait(boss_id)
+		if boss_tex_path.is_empty():
+			boss_tex_path = String(b_spec.get("texture_path", boss_tex_path))
 		boss_name = "Boss Fali 10: %s" % String(b_spec.get("display_name", boss_id))
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.texture = AssetRegistry.get_tex(boss_tex_path)

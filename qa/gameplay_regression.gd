@@ -67,6 +67,21 @@ func _test_enemy_art_sequences() -> void:
 		_assert(AssetRegistry.get_tex("res://assets/enemies/%s/attack_4.png" % folder) != null, "Mutant attack visuals load: " + String(enemy_id))
 	for folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		_assert(AssetRegistry.get_tex("res://assets/bosses/%s/death_2.png" % folder) != null, "Boss death sprite loads: " + folder)
+	_assert(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS.size() == 6, "Six late chapter bosses have dedicated art slots")
+	for chapter in range(5, 11):
+		var boss_id: String = "boss_ch%02d" % chapter
+		_assert(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS.has(boss_id), "Boss chapter %d has reliable fallback routing" % chapter)
+		var test_sprite := Sprite2D.new()
+		var data: Dictionary = AssetRegistry.apply_enemy_visual(test_sprite, boss_id)
+		_assert(data.get("walk_frames", []).size() == 4, "Boss %d has four valid walk frames" % chapter)
+		_assert(data.get("attack_frames", []).size() == 4, "Boss %d has four valid attack frames" % chapter)
+		_assert(data.get("death_frames", []).size() == 2, "Boss %d has two valid death frames" % chapter)
+		_assert(test_sprite.texture != null, "Boss %d has a drawable texture" % chapter)
+		var expected_status: String = "BOSS_ART_CANDIDATE" if AssetRegistry.has_complete_chapter_boss_art(boss_id) else "HD_BOSS_V2"
+		_assert(String(data.get("status", "")) == expected_status, "Boss %d tracks candidate or fallback art accurately" % chapter)
+		var portrait: String = AssetRegistry.get_campaign_boss_portrait(boss_id)
+		_assert(ResourceLoader.exists(portrait, "Texture2D"), "Boss %d has a loadable campaign portrait" % chapter)
+		test_sprite.free()
 
 
 func _test_projectile_and_pickup_safety() -> void:

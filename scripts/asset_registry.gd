@@ -396,6 +396,42 @@ const BOSS_ANIM_FOLDERS := {
 	"boss_ch02": "boss_goliat", "miniboss_ch01": "boss_goliat", "boss_goliat": "boss_goliat",
 	"boss_ch03": "boss_lewiatan", "boss_ch04": "boss_lewiatan", "boss_lewiatan": "boss_lewiatan"
 }
+# Six distinct generated concepts are distributed as an optional verified art pack.
+# Until its PNG files have been copied and imported, use existing HD boss frames.
+const BOSS_CHAPTER_FALLBACK_KITS := {
+	"boss_ch05": "boss_lewiatan",
+	"boss_ch06": "boss_matka_roju",
+	"boss_ch07": "boss_goliat",
+	"boss_ch08": "boss_goliat",
+	"boss_ch09": "boss_lewiatan",
+	"boss_ch10": "boss_matka_roju"
+}
+
+static func get_candidate_boss_directory(boss_id: String) -> String:
+	if not BOSS_CHAPTER_FALLBACK_KITS.has(boss_id):
+		return ""
+	return "res://assets/bosses/" + boss_id + "/"
+
+static func has_complete_chapter_boss_art(boss_id: String) -> bool:
+	var root_path: String = get_candidate_boss_directory(boss_id)
+	if root_path.is_empty():
+		return false
+	if not ResourceLoader.exists(root_path + "boss_portrait.png", "Texture2D"):
+		return false
+	for frame in range(1, 5):
+		if not ResourceLoader.exists(root_path + "phase1_anim_%d.png" % frame, "Texture2D"):
+			return false
+		if not ResourceLoader.exists(root_path + "phase2_attack_%d.png" % frame, "Texture2D"):
+			return false
+	for frame in range(1, 3):
+		if not ResourceLoader.exists(root_path + "death_%d.png" % frame, "Texture2D"):
+			return false
+	return true
+
+static func get_campaign_boss_portrait(boss_id: String) -> String:
+	if has_complete_chapter_boss_art(boss_id):
+		return get_candidate_boss_directory(boss_id) + "boss_portrait.png"
+	return String(BOSS_CAMPAIGN_PORTRAITS.get(boss_id, ""))
 
 static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary:
 	var spec: Dictionary = {}
@@ -403,9 +439,12 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	var attack_frames: Array[Texture2D] = []
 	var death_frames: Array[Texture2D] = []
 
-	# Production 4-frame loops shared with the game's actual enemy sprite renderer.
-	if BOSS_ANIM_FOLDERS.has(enemy_id):
-		var root_path := "res://assets/bosses/" + String(BOSS_ANIM_FOLDERS[enemy_id]) + "/"
+	# Complete optional boss folders override the legacy sprite families.
+	# A missing/partially copied chapter pack MUST NOT crash the game.
+	if BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id):
+		var candidate_ready: bool = has_complete_chapter_boss_art(enemy_id)
+		var folder: String = String(BOSS_ANIM_FOLDERS.get(enemy_id, BOSS_CHAPTER_FALLBACK_KITS.get(enemy_id, "boss_goliat")))
+		var root_path: String = get_candidate_boss_directory(enemy_id) if candidate_ready else "res://assets/bosses/" + folder + "/"
 		for idx in range(1, 5):
 			var w: Texture2D = get_tex(root_path + "phase1_anim_%d.png" % idx)
 			var a: Texture2D = get_tex(root_path + "phase2_attack_%d.png" % idx)
@@ -414,7 +453,11 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 		for idx in range(1, 3):
 			var d: Texture2D = get_tex(root_path + "death_%d.png" % idx)
 			if d != null: death_frames.append(d)
-		spec = {"texture_path": root_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
+		spec = {
+			"texture_path": root_path + "boss_portrait.png",
+			"scale": Vector2(0.88, 0.88),
+			"status": "BOSS_ART_CANDIDATE" if candidate_ready else "HD_BOSS_V2"
+		}
 	else:
 		var mutant_id: String = enemy_id
 		var aliases := {"stalker":"biegacz","spitter":"plujacy_kwasem","leaper":"lowca","viral":"zarazony","tank":"zdziczaly","boomer":"wybuchowy","pancerny":"zracy_pelzacz","beetle":"zracy_pelzacz","gargoyle":"skrzydlaty"}

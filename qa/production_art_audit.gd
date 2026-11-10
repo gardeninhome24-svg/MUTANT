@@ -42,6 +42,18 @@ func _run() -> void:
 		for idx in range(1, 5):
 			_check("res://assets/enemies/%s/walk_%d.png" % [folder, idx], "%s walking %d" % [enemy_id, idx])
 			_check("res://assets/enemies/%s/attack_%d.png" % [folder, idx], "%s attacking %d" % [enemy_id, idx])
+	for chapter in range(5, 11):
+		var boss_id: String = "boss_ch%02d" % chapter
+		if AssetRegistry.has_complete_chapter_boss_art(boss_id):
+			var root_path: String = AssetRegistry.get_candidate_boss_directory(boss_id)
+			_check(root_path + "boss_portrait.png", boss_id + " portrait")
+			for frame in range(1, 5):
+				_check(root_path + "phase1_anim_%d.png" % frame, boss_id + " walk")
+				_check(root_path + "phase2_attack_%d.png" % frame, boss_id + " attack")
+			for frame in range(1, 3):
+				_check(root_path + "death_%d.png" % frame, boss_id + " death")
+		else:
+			static_references.append(boss_id + ": generated character art not installed; stable HD fallback active")
 	for boss_folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		for idx in range(1, 5):
 			_check("res://assets/bosses/%s/phase1_anim_%d.png" % [boss_folder, idx], "%s movement %d" % [boss_folder, idx])
