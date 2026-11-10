@@ -197,70 +197,6 @@ jobs:
             exit 1
           fi
 
-      - name: Publish QA results in workflow summary
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          {
-            echo "## MUTANT — beta QA at commit $GITHUB_SHA"
-            echo ""
-            echo "| Test | Verified result in log |"
-            echo "|---|---|"
-            for entry in \
-              "100-stage campaign:/tmp/campaign-100-f2p.log:F2P PASS:" \
-              "Boss finale integration:/tmp/chapter-boss-integration.log:CHAPTER BOSS PASS:" \
-              "Full-run save and rewards:/tmp/full-run-persistence.log:FULL RUN PASS:" \
-              "Visual geometry:/tmp/visual-release-gate.log:VISUAL GATE PASS:"; do
-              name="${entry%%:*}"
-              rest="${entry#*:}"
-              log="${rest%%:*}"
-              marker="${rest#*:}"
-              if [ ! -s "$log" ]; then
-                echo "| $name | NOT EXECUTED / NO LOG |"
-              elif grep -Fq "$marker" "$log"; then
-                echo "| $name | PASS marker found (see corresponding step) |"
-              else
-                echo "| $name | NO PASS MARKER — review step |"
-              fi
-            done
-            echo ""
-            echo "A PASS marker is only a supporting log signal; the GitHub job conclusion is authoritative."
-            echo "APK ZIP, signer and package checks run after this step and may still fail."
-            echo "Physical-device QA and screenshot review remain mandatory."
-            echo ""
-            echo "### Errors"
-            echo '~~~text'
-            for log in /tmp/campaign-100-f2p.log /tmp/chapter-boss-integration.log /tmp/full-run-persistence.log /tmp/visual-release-gate.log /tmp/mobile-ui-regression.log /tmp/gameplay-regression.log /tmp/premium-shop-regression.log; do
-              if [ -s "$log" ]; then
-                grep -E -i "SCRIPT ERROR:|Parse Error:|Invalid call|Failed to load script|FAIL:|FAILED:|ERROR:" "$log" | tail -n 20 || true
-              fi
-            done
-            echo '~~~'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Archive QA logs for every beta build
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: MutantSurvivor-QA-logs-${{ github.run_number }}
-          path: |
-            /tmp/campaign-100-f2p.log
-            /tmp/chapter-boss-integration.log
-            /tmp/full-run-persistence.log
-            /tmp/premium-shop-regression.log
-            /tmp/gameplay-regression.log
-            /tmp/visual-release-gate.log
-            /tmp/mobile-ui-regression.log
-            /tmp/google-play-preflight.log
-            /tmp/mutantsurvivor-startup.log
-            /tmp/mutantsurvivor-combat.log
-            /tmp/beta-apk-preflight.log
-            /tmp/apk-signature.log
-            /tmp/apk-badging.log
-          if-no-files-found: warn
-          retention-days: 21
-
       - name: Preserve headless QA logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -315,6 +251,71 @@ jobs:
             cat build/android/MutantSurvivor.apk.sha256
             echo '~~~'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish QA results in workflow summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "## MUTANT — beta QA at commit $GITHUB_SHA"
+            echo ""
+            echo "| Test | Verified result in log |"
+            echo "|---|---|"
+            for entry in \
+              "100-stage campaign:/tmp/campaign-100-f2p.log:F2P PASS:" \
+              "Boss finale integration:/tmp/chapter-boss-integration.log:CHAPTER BOSS PASS:" \
+              "Full-run save and rewards:/tmp/full-run-persistence.log:FULL RUN PASS:" \
+              "Visual geometry:/tmp/visual-release-gate.log:VISUAL GATE PASS:" \
+              "APK structure:/tmp/beta-apk-preflight.log:STRUCTURE PASS"; do
+              name="${entry%%:*}"
+              rest="${entry#*:}"
+              log="${rest%%:*}"
+              marker="${rest#*:}"
+              if [ ! -s "$log" ]; then
+                echo "| $name | NOT EXECUTED / NO LOG |"
+              elif grep -Fq "$marker" "$log"; then
+                echo "| $name | PASS marker found (see corresponding step) |"
+              else
+                echo "| $name | NO PASS MARKER — review step |"
+              fi
+            done
+            echo ""
+            echo "A PASS marker is only a supporting log signal; the GitHub job conclusion is authoritative."
+            echo "APK ZIP, signature and package checks are reflected in the Android job result."
+            echo "Physical-device QA and screenshot review remain mandatory."
+            echo ""
+            echo "### Errors"
+            echo '~~~text'
+            for log in /tmp/campaign-100-f2p.log /tmp/chapter-boss-integration.log /tmp/full-run-persistence.log /tmp/visual-release-gate.log /tmp/mobile-ui-regression.log /tmp/gameplay-regression.log /tmp/premium-shop-regression.log; do
+              if [ -s "$log" ]; then
+                grep -E -i "SCRIPT ERROR:|Parse Error:|Invalid call|Failed to load script|FAIL:|FAILED:|ERROR:" "$log" | tail -n 20 || true
+              fi
+            done
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Archive QA logs for every beta build
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-QA-logs-${{ github.run_number }}
+          path: |
+            /tmp/campaign-100-f2p.log
+            /tmp/chapter-boss-integration.log
+            /tmp/full-run-persistence.log
+            /tmp/premium-shop-regression.log
+            /tmp/gameplay-regression.log
+            /tmp/visual-release-gate.log
+            /tmp/mobile-ui-regression.log
+            /tmp/google-play-preflight.log
+            /tmp/mutantsurvivor-startup.log
+            /tmp/mutantsurvivor-combat.log
+            /tmp/beta-apk-preflight.log
+            /tmp/apk-signature.log
+            /tmp/apk-badging.log
+          if-no-files-found: warn
+          retention-days: 21
 
       - name: Store APK for private testing
         uses: actions/upload-artifact@v4
