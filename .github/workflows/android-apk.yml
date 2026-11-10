@@ -44,9 +44,32 @@ jobs:
           java -version
           test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_debug.apk"
           test -f /root/debug.keystore
-          # Match Android build tools to current target SDK instead of the image's older 33.0.2.
+          # Android SDK mirrors occasionally return truncated/corrupt ZIPs.
+          # Install each component separately, remove broken partial downloads
+          # and retry. sdkmanager alone can report a warning without tools
+          # actually being present, so validate executable files afterwards.
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          install_android_component() {
+            local package="$1"
+            local expected="$2"
+            local partial="$3"
+            for attempt in 1 2 3 4; do
+              echo "Installing $package (attempt $attempt/4)"
+              if sdkmanager --sdk_root="$ANDROID_HOME" "$package" && test -e "$expected"; then
+                echo "$package installed and verified"
+                return 0
+              fi
+              echo "::warning::Android SDK package $package failed or was incomplete (attempt $attempt)"
+              rm -rf "$ANDROID_HOME/.temp" "$partial"
+              sleep $((attempt * 5))
+            done
+            echo "::error::Unable to install valid Android SDK package $package after four attempts"
+            return 1
+          }
+          install_android_component "platforms;android-35" "$ANDROID_HOME/platforms/android-35/android.jar" "$ANDROID_HOME/platforms/android-35"
+          install_android_component "build-tools;35.0.0" "$ANDROID_HOME/build-tools/35.0.0/apksigner" "$ANDROID_HOME/build-tools/35.0.0"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt"
           godot --version
 
       - name: Import project resources
