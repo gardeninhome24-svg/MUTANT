@@ -2159,7 +2159,9 @@ func _on_player_died() -> void:
 	if is_instance_valid(joystick):
 		joystick.cancel_touch()
 	get_tree().paused = true
-	death_panel.visible = true
+	# The modular defeat screen replaces the legacy DeathPanel. Keeping both
+	# visible overlays two full-screen cards and blocks portrait touch input.
+	death_panel.visible = not is_instance_valid(defeat_overlay_inst)
 
 	if is_instance_valid(defeat_overlay_inst):
 		var cfg_data := {
@@ -2171,15 +2173,11 @@ func _on_player_died() -> void:
 				"Etap %03d: Ulepsz wyposażenie lub spróbuj innej strategii." % current_stage_num),
 			"already_revived": has_used_revive,
 			"gems": StageDirector.dark_matter_gems,
+			"revive_cost": 30,
+			"attempts": StageDirector.attempts,
 			"ad_available": false
 		}
 		defeat_overlay_inst.call("configure", cfg_data)
-		var bdrop := defeat_overlay_inst.get_node_or_null("Backdrop") as TextureRect
-		if is_instance_valid(bdrop):
-			if StageDirector.is_portrait_mode():
-				bdrop.texture = load("res://addons/ms_balance/assets/defeat_background_portrait.png")
-			else:
-				bdrop.texture = load("res://addons/ms_balance/assets/defeat_background_landscape.png")
 		defeat_overlay_inst.visible = true
 
 func _on_revive_ad_pressed() -> void:
