@@ -45,10 +45,48 @@ else:
         block("AAB / target SDK", "Need a release Android Gradle preset with AAB export_format=1 and target_sdk>=36")
 
 director = (ROOT / "scripts" / "stage_director.gd").read_text(encoding="utf-8")
-if re.search(r"const\s+BETA_TEST_GEMS_ENABLED\s*:\s*bool\s*=\s*true", director):
-    block("Test currency", "10,000 beta gems are enabled; disable for public release")
+if not re.search(r"(?m)^const\s+BETA_TEST_GEMS_ENABLED\s*:\s*bool\s*=\s*false\s*$", director):
+    block("Test currency", "Release requires explicit BETA_TEST_GEMS_ENABLED = false")
 else:
-    passed.append("No unconditional beta-gem flag detected")
+    passed.append("Beta test premium grants explicitly disabled")
+
+project = (ROOT / "project.godot").read_text(encoding="utf-8")
+icon_match = re.search(r'(?m)^config/icon\s*=\s*"res://([^"]+)"\s*
+
+workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
+if not workflow.exists():
+    block("Release AAB pipeline", "No separate signed Google Play AAB workflow found")
+else:
+    workflow_text = workflow.read_text(encoding="utf-8")
+    if "--export-release" not in workflow_text or "Android Google Play AAB" not in workflow_text or ".aab" not in workflow_text:
+        block("Signed AAB", "Google Play workflow does not export the signed Android Google Play AAB preset")
+    else:
+        passed.append("Isolated signed AAB workflow configured; credentials and output still need verification")
+
+print("MutantSurvivor — Google Play static preflight")
+for detail in passed:
+    print("PASS:", detail)
+for topic, detail in issues:
+    print("BLOCK:", topic, "-", detail)
+print("MANUAL: privacy-policy HTTPS URL in app and Play Console; Data safety, IARC")
+print("MANUAL: billing / refunds if monetized, version codes, Play App Signing")
+print("MANUAL: 16 KB native page size, real Android performance / gestures / save migration")
+print("MANUAL: developer-account closed testing eligibility (12 testers / 14 days if applicable)")
+if issues:
+    print("RESULT: NO-GO; %d technical blockers" % len(issues))
+    raise SystemExit(1)
+print("RESULT: STATIC CHECKS PASSED — still requires human and device approval")
+, project)
+if not icon_match:
+    block("Launcher icon", "Missing config/icon asset path in project.godot")
+else:
+    icon_path = icon_match.group(1)
+    if icon_path.endswith("purple_crystal.png") or "currency" in icon_path.lower():
+        block("Launcher icon", "Currency icon used as app icon; replace with branded launcher art")
+    elif not (ROOT / icon_path).is_file():
+        block("Launcher icon", "Configured launcher icon does not exist: " + icon_path)
+    else:
+        passed.append("Branded launcher icon path configured (manual adaptive icon check still required)")
 
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
