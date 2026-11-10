@@ -153,9 +153,15 @@ func _run() -> void:
 		_assert(is_instance_valid(jumps), "Campaign chapter shortcut grid exists")
 		if is_instance_valid(nav):
 			_assert(nav.get_child_count() == 4, "Direction row contains only 4 controls")
+			for nav_control in nav.get_children():
+				if nav_control is Button:
+					_assert((nav_control as Button).custom_minimum_size.y >= 44.0, "Campaign navigation meets touch target")
 		if is_instance_valid(jumps):
 			_assert(jumps.columns == 5, "Five stage shortcuts occupy their own grid")
 			_assert(jumps.get_child_count() == 5, "Five quick stage shortcuts remain")
+			for stage_shortcut in jumps.get_children():
+				if stage_shortcut is Button:
+					_assert((stage_shortcut as Button).custom_minimum_size.y >= 44.0, "Stage shortcut meets touch target")
 		var campaign_reward_strip: PanelContainer = profile.find_child("CampaignRewardStrip", true, false) as PanelContainer
 		_assert(is_instance_valid(campaign_reward_strip), "Campaign displays illustrated reward strip")
 		if is_instance_valid(campaign_reward_strip):
@@ -296,6 +302,13 @@ func _run() -> void:
 			_assert(store_categories.get_child_count() == 4, "Shop has four clear customer categories")
 		if is_instance_valid(store_cards):
 			_assert(store_cards.get_child_count() == 6, "Shop only shows six curated player-facing offers")
+			for offer in store_cards.get_children():
+				var offer_art: TextureRect = offer.find_child("StoreProductArtwork", true, false) as TextureRect
+				var offer_title: Label = offer.find_child("StoreProductTitle", true, false) as Label
+				var offer_purchase: Button = offer.find_child("StoreProductPurchase", true, false) as Button
+				_assert(is_instance_valid(offer_art) and offer_art.texture != null, "Shop offer uses real item art")
+				_assert(is_instance_valid(offer_title) and not offer_title.text.is_empty(), "Shop offer has visible title")
+				_assert(is_instance_valid(offer_purchase) and offer_purchase.custom_minimum_size.y >= 44.0, "Shop offer purchase action meets touch target")
 
 		# Repeated profile refreshes must replace, not accumulate, live cards.
 		# Godot queue_free() is deferred: child count must be correct immediately,
@@ -329,6 +342,9 @@ func _run() -> void:
 			_assert(filter_grid.columns == 2, "420px gear filters show two columns")
 		if is_instance_valid(store_cards):
 			_assert(store_cards.columns == 1, "420px shop uses a single product column")
+			var small_offer_art: TextureRect = profile.find_child("StoreProductArtwork", true, false) as TextureRect
+			if is_instance_valid(small_offer_art):
+				_assert(small_offer_art.custom_minimum_size.x <= 96.0, "420px shop art does not squeeze product text")
 		if is_instance_valid(store_categories):
 			_assert(store_categories.columns == 2, "420px shop navigation wraps to two columns")
 		profile.call("_apply_responsive_metrics", 720.0)
