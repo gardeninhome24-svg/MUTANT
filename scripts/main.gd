@@ -333,15 +333,15 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 			currency_bar.offset_left = -395.0 if compact else -302.0
-			currency_bar.offset_top = (165.0 if compact else 8.0) + safe_top
+			currency_bar.offset_top = (193.0 if compact else 8.0) + safe_top
 			currency_bar.offset_right = -10.0
-			currency_bar.offset_bottom = (198.0 if compact else 45.0) + safe_top
+			currency_bar.offset_bottom = (227.0 if compact else 45.0) + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -115.0 if compact else -145.0
-			wave_progress_box.offset_top = (210.0 if compact else 104.0) + safe_top
+			wave_progress_box.offset_top = (242.0 if compact else 104.0) + safe_top
 			wave_progress_box.offset_right = 115.0 if compact else 145.0
-			wave_progress_box.offset_bottom = (260.0 if compact else 165.0) + safe_top
+			wave_progress_box.offset_bottom = (292.0 if compact else 165.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
