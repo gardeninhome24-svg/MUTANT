@@ -1078,7 +1078,9 @@ func _on_orientation_changed(_is_portrait: bool) -> void:
 func _apply_responsive_menu_layout() -> void:
 	var portrait := StageDirector.is_portrait_mode()
 	var safe_top := StageDirector.get_safe_top_margin()
-	var compact_hub := portrait and get_viewport_rect().size.x < 600.0
+	# Use the smaller of actual viewport and resized root canvas. The 420px
+	# QA path resizes the Control while Godot can keep a 720px root viewport.
+	var compact_hub := portrait and minf(size.x, get_viewport_rect().size.x) < 600.0
 
 	# On phones around 420px, the normal 720px header cannot physically
 	# contain the portrait, three wallets and settings at full desktop scale.

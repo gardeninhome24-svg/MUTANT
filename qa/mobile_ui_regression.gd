@@ -138,6 +138,9 @@ func _run() -> void:
 		menu.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		menu.size = Vector2(test_width, test_width * 16.0 / 9.0)
 		menu.call("_apply_responsive_menu_layout")
+		if test_width == 420.0:
+			_assert(hero.custom_minimum_size.y <= 220.0, "420px Base switches to compact hero spacing")
+			_assert(card.custom_minimum_size.y <= 310.0, "420px Base keeps compact mission card")
 		var limit := maxf(180.0, test_width - 44.0)
 		if is_instance_valid(card):
 			_assert(card.custom_minimum_size.x <= limit + 0.01, "Stage card fits %dpx mobile width" % int(test_width))
@@ -250,6 +253,13 @@ func _run() -> void:
 			profile.set("inventory_page", original_page)
 			profile.call("_refresh_inventory_tab_ui")
 			await process_frame
+		# Repeated inventory refresh is synchronous: never retain old active cells.
+		if is_instance_valid(bag):
+			for repeat_index in range(3):
+				profile.call("_refresh_inventory_tab_ui")
+				_assert(bag.get_child_count() == 30, "Inventory refresh keeps exactly 30 live slots")
+		var empty_state: Label = profile.find_child("InventoryEmptyState", true, false) as Label
+		_assert(is_instance_valid(empty_state), "Inventory has an accessible empty-filter message")
 		# Filtering to zero matches must clear stale selected items before any
 		# equip or unequip action; preserve the user's state after the test.
 		if is_instance_valid(bag):
@@ -258,6 +268,7 @@ func _run() -> void:
 			profile.set("filter_slot", "__qa_no_such_slot__")
 			profile.call("_refresh_inventory_tab_ui")
 			_assert(String(profile.get("selected_bag_instance_id")).is_empty(), "Empty filter clears selected backpack item")
+			_assert(is_instance_valid(empty_state) and empty_state.visible, "Empty filter gives visible feedback")
 			var quick_equip: Button = profile.find_child("InventoryQuickEquip", true, false) as Button
 			var quick_unequip: Button = profile.find_child("InventoryQuickUnequip", true, false) as Button
 			_assert(is_instance_valid(quick_equip) and quick_equip.disabled, "Empty filter disables quick equip")

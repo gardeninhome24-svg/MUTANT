@@ -61,6 +61,7 @@ var inv_quick_info: Label = null
 var inv_quick_equip: Button = null
 var inv_quick_unequip: Button = null
 var inv_bag_heading: Label = null
+var inv_empty_state: Label = null
 const INVENTORY_PAGE_SIZE: int = 30
 var inventory_page: int = 0
 var inv_page_previous: Button = null
@@ -1164,6 +1165,15 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_bag_heading.name = "InventoryBagHeading"
 	SurvivorVisualSystem.decorate_section(inv_bag_heading, SurvivorVisualSystem.GOLD, 16)
 	bag_content.add_child(inv_bag_heading)
+	inv_empty_state = Label.new()
+	inv_empty_state.name = "InventoryEmptyState"
+	inv_empty_state.text = "Brak przedmiotów dla wybranych filtrów."
+	inv_empty_state.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	inv_empty_state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	inv_empty_state.add_theme_font_size_override("font_size", 13)
+	inv_empty_state.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
+	inv_empty_state.visible = false
+	bag_content.add_child(inv_empty_state)
 	# Fixed 30-cell pages prevent unbounded scrolling after long loot sessions.
 	var page_row := HBoxContainer.new()
 	page_row.name = "InventoryPagination"
@@ -1231,7 +1241,10 @@ func _refresh_inventory_tab_ui() -> void:
 	var sort_names := {"power": "Moc Bojowa ↓", "level": "Poziom Ulepszenia ↓", "rarity": "Rzadkość ↓"}
 	inv_sort_btn.text = "⇅ Sortowanie: %s" % String(sort_names.get(sort_mode, "Moc Bojowa ↓"))
 
+	# queue_free() alone leaves old children until the next frame; detach
+	# immediately so repeated refreshes never duplicate touch surfaces.
 	for c in inv_grid.get_children():
+		inv_grid.remove_child(c)
 		c.queue_free()
 
 	var min_rar_rank: int = int(StageDirector.RARITY_ORDER.get(filter_rarity, 0))
@@ -1288,6 +1301,9 @@ func _refresh_inventory_tab_ui() -> void:
 		inv_page_next.disabled = inventory_page >= page_count - 1
 	if is_instance_valid(inv_page_label):
 		inv_page_label.text = "STRONA %d / %d" % [inventory_page + 1, page_count]
+	if is_instance_valid(inv_empty_state):
+		inv_empty_state.visible = filtered.is_empty()
+		inv_empty_state.text = "Plecak jest pusty. Zdobądź sprzęt w kampanii." if StageDirector.inventory.is_empty() else "Brak przedmiotów dla wybranych filtrów."
 
 	for it in visible_items:
 		var inst_id := String(it.get("instance_id", ""))
@@ -1438,6 +1454,7 @@ func _refresh_inventory_detail_panel() -> void:
 	if not is_instance_valid(inv_detail_box):
 		return
 	for c in inv_detail_box.get_children():
+		inv_detail_box.remove_child(c)
 		c.queue_free()
 
 	var item := StageDirector.get_item_instance(selected_bag_instance_id)
