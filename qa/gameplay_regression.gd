@@ -380,6 +380,7 @@ func _test_combat_and_bosses() -> void:
 	_assert(battle.get("wave_director") != null, "Wave director initialized")
 	_assert(is_instance_valid(battle.get("player")), "Player initialized in battle")
 	_assert(int(battle.get("current_wave_num")) == 1, "Battle starts at wave 1")
+	_assert(bool(battle.call("_stage_requires_final_boss")), "Tutorial stage one intentionally contains a boss")
 	# Stop automatic time progression while exercising deterministic wave transitions.
 	battle.set_process(false)
 	var kills_before: int = _get_daily_progress("kill_mutants")

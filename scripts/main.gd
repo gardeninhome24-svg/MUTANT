@@ -1056,13 +1056,18 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 			primary_objective_done = true
 		_update_objectives_ui()
 
+func _stage_requires_final_boss() -> bool:
+	# Chapter finales have a configured boss; stage one is the tutorial
+	# exception. Ordinary 90-stage missions must not be locked by a missing boss.
+	return current_stage_num == 1 or not String(StageDirector.get_stage_config(current_stage_num).get("boss_id", "")).is_empty()
+
 func _can_claim_victory() -> bool:
 	return (run_result_state == "active"
 		and current_wave_num >= max_waves_in_stage
 		and wave_time_left <= 0.0
 		and primary_objective_done
-		and boss_spawned_this_run
-		and boss_killed_this_run
+		and ((not _stage_requires_final_boss() and not boss_spawned_this_run)
+			or (boss_spawned_this_run and boss_killed_this_run))
 		and is_instance_valid(player) and player.current_health > 0.0)
 
 func on_wave_completed() -> void:

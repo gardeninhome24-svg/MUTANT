@@ -72,18 +72,14 @@ func _execute() -> void:
 	battle.call("start_wave", 2, 10)
 	_check(int(battle.get("current_wave_num")) == 10, "Final wave ten enters actual combat")
 	var boss: Node = battle.get("active_boss")
-	_check(is_instance_valid(boss), "The stage two boss actually spawns")
-	_check(bool(battle.get("boss_spawned_this_run")), "Boss spawn is registered")
-	battle.set("primary_objective_done", true)
+	_check(not is_instance_valid(boss), "Stage two is an ordinary mission without a chapter boss")
+	_check(not bool(battle.get("boss_spawned_this_run")), "Nonfinal chapter stage does not spawn a chapter boss")
+	_check(not bool(battle.call("_stage_requires_final_boss")), "Stage two campaign data does not require a boss")
+	battle.set("primary_objective_done", false)
 	battle.set("wave_time_left", 0.0)
-	_check(not bool(battle.call("_can_claim_victory")), "Alive boss prevents a stage win")
-	battle.set("boss_spawned_this_run", false)
-	_check(not bool(battle.call("_can_claim_victory")), "Missing boss registration prevents a win")
-	battle.set("boss_spawned_this_run", true)
-	if is_instance_valid(boss):
-		boss.take_damage(boss.max_health + 1000.0)
-	_check(bool(battle.get("boss_killed_this_run")), "Final boss death registered")
-	_check(bool(battle.call("_can_claim_victory")), "Boss and objective completion allow victory")
+	_check(not bool(battle.call("_can_claim_victory")), "Incomplete mission objective still blocks victory")
+	battle.set("primary_objective_done", true)
+	_check(bool(battle.call("_can_claim_victory")), "Nonboss mission can finish after wave ten and objective completion")
 	battle.call("_on_stage_victory")
 	_check(String(battle.get("run_result_state")) == "victory", "Victory state is terminal")
 	_check(int(stage.max_unlocked_stage) == 3, "Stage 2 unlocks stage 3 only")
@@ -135,6 +131,38 @@ func _execute() -> void:
 	_check(int(stage.max_unlocked_stage) == 3, "Failed next stage never unlocks stage four")
 	battle.call("_on_revive_premium_pressed")
 	_check(String(battle.get("run_result_state")) == "failure_final", "Finished failure cannot be revived for gems")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
+	# Chapter 1 finale is a REAL boss encounter, unlike ordinary stage 2.
+	# Practice ensures this separately tests combat without awarding currency.
+	stage.current_stage = 10
+	stage.max_unlocked_stage = 10
+	stage.is_practice_mode = true
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	battle.call("start_wave", 10, 10)
+	var chapter_boss: Node = battle.get("active_boss")
+	_check(bool(battle.call("_stage_requires_final_boss")), "Chapter 1 finale requires a real boss")
+	_check(is_instance_valid(chapter_boss), "Stage ten actually spawns boss_ch01")
+	_check(bool(battle.get("boss_spawned_this_run")), "Chapter finale boss spawn is registered")
+	battle.set("primary_objective_done", true)
+	battle.set("wave_time_left", 0.0)
+	_check(not bool(battle.call("_can_claim_victory")), "Chapter boss must be defeated before victory")
+	battle.set("boss_spawned_this_run", false)
+	_check(not bool(battle.call("_can_claim_victory")), "Required chapter boss cannot be bypassed")
+	battle.set("boss_spawned_this_run", true)
+	if is_instance_valid(chapter_boss):
+		_check(String(chapter_boss.enemy_id) == "boss_ch01", "Actual chapter one boss matches mission")
+		chapter_boss.take_damage(chapter_boss.max_health + 1000.0)
+	_check(bool(battle.get("boss_killed_this_run")), "Chapter boss death updates victory gate")
+	_check(bool(battle.call("_can_claim_victory")), "Chapter boss kill allows the final wave to finish")
+	battle.call("_on_stage_victory")
+	_check(String(battle.get("run_result_state")) == "victory", "Chapter finale can reach victory state")
+	_check(int(stage.credits) == before_loss, "Practice boss clear does not mint credits")
 	paused = false
 	battle.queue_free()
 	await process_frame

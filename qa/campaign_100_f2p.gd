@@ -30,6 +30,16 @@ func _run() -> void:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 	_check(stage.stages_data.size() == 100, "100 base stage definitions loaded at runtime")
+	var configured_bosses: int = 0
+	for stage_number in range(1, 101):
+		var stage_cfg: Dictionary = stage.get_stage_config(stage_number)
+		var expected_boss: bool = stage_number % 10 == 0
+		var has_boss: bool = not String(stage_cfg.get("boss_id", "")).is_empty()
+		_check(has_boss == expected_boss, "Boss appears exactly on each chapter finale %03d" % stage_number)
+		_check(int(stage_cfg.get("waves", 0)) == 10, "Stage %03d has ten waves" % stage_number)
+		if has_boss:
+			configured_bosses += 1
+	_check(configured_bosses == 10, "All ten chapter final boss configurations are present")
 	_check(stage.v2_missions.size() == 100, "100 runtime campaign missions loaded")
 	_check(stage.v2_contracts.size() == 100, "100 objective contracts loaded")
 
