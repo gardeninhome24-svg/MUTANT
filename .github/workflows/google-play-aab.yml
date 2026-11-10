@@ -80,6 +80,17 @@ jobs:
           fi
           grep -q 'FULL RUN PASS:' /tmp/full-run-persistence.log
 
+      - name: All chapter boss finale integrations (10/10)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/chapter_boss_integration.gd 2>&1 | tee /tmp/chapter-boss-integration.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|CHAPTER BOSS FAIL:|CHAPTER BOSS FAILED:" /tmp/chapter-boss-integration.log; then
+            echo "::error::Chapter finale integration failed"
+            exit 1
+          fi
+          grep -q 'CHAPTER BOSS PASS:' /tmp/chapter-boss-integration.log
+
       - name: Sign and export Android Google Play AAB
         shell: bash
         env:
