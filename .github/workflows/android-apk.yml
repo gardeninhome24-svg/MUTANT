@@ -324,6 +324,9 @@ jobs:
           name: MutantSurvivor-QA-logs-${{ github.run_number }}
           path: |
             /tmp/campaign-100-f2p.log
+            /tmp/mission-scene-100.log
+            /tmp/prebeta-validation.log
+            /tmp/production-art-audit.log
             /tmp/chapter-boss-integration.log
             /tmp/full-run-persistence.log
             /tmp/premium-shop-regression.log
