@@ -48,11 +48,21 @@ const XP_SHARD_SCENE = preload("res://scenes/environment/xp_shard.tscn")
 const TOXIC_SPLASH_TEX = preload("res://assets/mutantsurvivor_ch01/vfx/toxic_splash.png")
 const IMPACT_BURST_TEX = preload("res://assets/mutantsurvivor_ch01/vfx/impact_burst.png")
 
+# Pooled enemies and simultaneous Visual QA arenas must not acquire a
+# hero from a different SubViewport. All battle actors live in CharactersLayer.
+func _find_player_in_own_arena() -> Node2D:
+	var layer: Node = get_parent()
+	if layer == null:
+		return null
+	var hero: Node = layer.get_node_or_null("Player")
+	if hero is Node2D and is_instance_valid(hero):
+		return hero
+	return null
+
+
 func _ready() -> void:
 	add_to_group("enemies")
-	var players := get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		target = players[0]
+	target = _find_player_in_own_arena()
 	setup_enemy_archetype(enemy_id, tier, 1, 0.0)
 
 func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elapsed_sec: float, spawn_pos: Vector2) -> void:
@@ -77,9 +87,7 @@ func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elaps
 		if child is CollisionShape2D:
 			child.set_deferred("disabled", false)
 
-	var players := get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		target = players[0]
+	target = _find_player_in_own_arena()
 
 	if sprite:
 		sprite.modulate = Color.WHITE
