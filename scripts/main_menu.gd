@@ -1251,38 +1251,38 @@ func _apply_responsive_menu_layout() -> void:
 	# On phones around 420px, the normal 720px header cannot physically
 	# contain the portrait, three wallets and settings at full desktop scale.
 	if is_instance_valid(top_hub_content):
-		top_hub_content.add_theme_constant_override("separation", 3 if compact_hub else 12)
+		top_hub_content.add_theme_constant_override("separation", 5 if compact_hub else 15)
 		for row_child in top_hub_content.get_children():
 			if row_child is HBoxContainer:
 				row_child.add_theme_constant_override("separation", 3 if compact_hub else 8)
 				for element in row_child.get_children():
 					if element is TextureRect:
-						element.custom_minimum_size = Vector2(17, 17) if compact_hub else Vector2(24, 24)
+						element.custom_minimum_size = Vector2(17, 17) if compact_hub else Vector2(31, 31)
 					elif element is Label:
-						element.add_theme_font_size_override("font_size", 11 if compact_hub else 15)
+						element.add_theme_font_size_override("font_size", 11 if compact_hub else 21)
 	if is_instance_valid(avatar_tex):
-		avatar_tex.custom_minimum_size = Vector2(30, 30) if compact_hub else Vector2(46, 46)
+		avatar_tex.custom_minimum_size = Vector2(32, 32) if compact_hub else Vector2(60, 60)
 	if is_instance_valid(account_xp_bar):
-		account_xp_bar.custom_minimum_size = Vector2(40, 6) if compact_hub else Vector2(72, 6)
+		account_xp_bar.custom_minimum_size = Vector2(48, 7) if compact_hub else Vector2(106, 10)
 	if is_instance_valid(account_lvl_lbl):
-		account_lvl_lbl.add_theme_font_size_override("font_size", 11 if compact_hub else 14)
+		account_lvl_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else 21)
 	if is_instance_valid(settings_btn):
-		settings_btn.custom_minimum_size = Vector2(28, 30) if compact_hub else Vector2(36, 36)
+		settings_btn.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(50, 50)
 	for nav_btn in nav_buttons:
 		var nav_content := nav_btn.get_child(0) as VBoxContainer
 		if is_instance_valid(nav_content):
 			for nav_child in nav_content.get_children():
 				if nav_child is TextureRect:
-					nav_child.custom_minimum_size = Vector2(22, 24) if compact_hub else Vector2(34, 35)
+					nav_child.custom_minimum_size = Vector2(26, 28) if compact_hub else Vector2(47, 51)
 				elif nav_child is Label:
-					nav_child.add_theme_font_size_override("font_size", 9 if compact_hub else 13)
+					nav_child.add_theme_font_size_override("font_size", 10 if compact_hub else 17)
 
 	if is_instance_valid(top_hub_panel):
 		top_hub_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
 		top_hub_panel.offset_left = 10.0 if portrait else 24.0
 		top_hub_panel.offset_top = 8.0 + safe_top
 		top_hub_panel.offset_right = -10.0 if portrait else -24.0
-		top_hub_panel.offset_bottom = 68.0 + safe_top
+		top_hub_panel.offset_bottom = (68.0 if compact_hub else 90.0) + safe_top
 
 	# Five routes remain registered; portrait shows four primary actions.
 	# The map remains accessible via OpenCampaignMap in the stage card.
@@ -1301,14 +1301,14 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(bottom_nav_panel):
 		bottom_nav_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 		bottom_nav_panel.offset_left = 12.0 if portrait else 28.0
-		bottom_nav_panel.offset_top = (-78.0 if compact_hub else -94.0) if portrait else -82.0
+		bottom_nav_panel.offset_top = (-78.0 if compact_hub else -114.0) if portrait else -82.0
 		bottom_nav_panel.offset_right = -12.0 if portrait else -28.0
 		bottom_nav_panel.offset_bottom = -10.0 if portrait else -4.0
 
 	if is_instance_valid(middle_root):
 		middle_root.set_anchors_preset(Control.PRESET_FULL_RECT)
 		middle_root.offset_left = 0.0
-		middle_root.offset_top = 72.0 + safe_top
+		middle_root.offset_top = (72.0 if compact_hub else 95.0) + safe_top
 		middle_root.offset_right = 0.0
 		middle_root.offset_bottom = (-84.0 if compact_hub else -100.0) if portrait else -88.0
 
@@ -1335,13 +1335,13 @@ func _apply_responsive_menu_layout() -> void:
 			continue
 		var left_side: bool = side_index == 0
 		actions.set_anchors_preset(Control.PRESET_TOP_LEFT if left_side else Control.PRESET_TOP_RIGHT)
-		actions.offset_left = 8.0 if left_side else (-62.0 if compact_hub else -86.0)
-		actions.offset_right = (62.0 if compact_hub else 86.0) if left_side else -8.0
+		actions.offset_left = 8.0 if left_side else (-62.0 if compact_hub else -94.0)
+		actions.offset_right = (62.0 if compact_hub else 94.0) if left_side else -8.0
 		actions.offset_top = 65.0
-		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (66 if compact_hub else 85)
+		actions.offset_bottom = 65.0 + (3 if left_side else 2) * (69 if compact_hub else 109)
 		for btn in actions.get_children():
 			if btn is Button:
-				btn.custom_minimum_size = Vector2(0, 66.0 if compact_hub else 76.0)
+				btn.custom_minimum_size = Vector2(0, 66.0 if compact_hub else 96.0)
 				btn.text = ""
 				btn.tooltip_text = String(btn.get_meta("full_label", btn.name.trim_prefix("Side").to_upper()))
 				var action_content := btn.get_node_or_null("SideActionContent") as VBoxContainer
@@ -1349,15 +1349,15 @@ func _apply_responsive_menu_layout() -> void:
 					var caption := action_content.get_node_or_null("SideActionCaption") as Label
 					var icon_rect := action_content.get_node_or_null("SideActionIcon") as TextureRect
 					if is_instance_valid(caption):
-						caption.add_theme_font_size_override("font_size", 8 if compact_hub else 10)
+						caption.add_theme_font_size_override("font_size", 9 if compact_hub else 14)
 					if is_instance_valid(icon_rect):
-						icon_rect.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(38, 40)
+						icon_rect.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(51, 53)
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, minf(size.x, get_viewport_rect().size.x) - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (348.0 if compact_hub else 385.0) if portrait else 330.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (348.0 if compact_hub else 405.0) if portrait else 330.0)
 	# Compress intrinsic child minimum widths before the 420px screenshot:
 	# a wide title/navigation row used to force the whole card to 480px.
 	if is_instance_valid(stage_card):
@@ -1382,12 +1382,12 @@ func _apply_responsive_menu_layout() -> void:
 				if reward_icon is TextureRect:
 					reward_icon.custom_minimum_size = Vector2(27, 28) if compact_hub else Vector2(46, 42)
 	if is_instance_valid(mission_description):
-		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 14)
+		mission_description.add_theme_font_size_override("font_size", 11 if compact_hub else 17)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = true
-		stage_preview.custom_minimum_size = Vector2(96, 174) if compact_hub else (Vector2(156, 205) if portrait else Vector2(175, 180))
+		stage_preview.custom_minimum_size = Vector2(96, 174) if compact_hub else (Vector2(175, 235) if portrait else Vector2(175, 180))
 	if is_instance_valid(play_big_btn):
-		play_big_btn.custom_minimum_size = Vector2(minf(630.0 if portrait else 600.0, available_width), 110.0 if portrait else 100.0)
+		play_big_btn.custom_minimum_size = Vector2(minf(630.0 if portrait else 600.0, available_width), 118.0 if portrait else 100.0)
 	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
 	if is_instance_valid(campaign_continue):
 		campaign_continue.custom_minimum_size = Vector2(minf(480.0, available_width), 50.0 if compact_hub else 60.0)
@@ -1395,11 +1395,11 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (255.0 if compact_hub else 435.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (255.0 if compact_hub else 405.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 19 if compact_hub else (34 if portrait else 33))
+		stage_title_lbl.add_theme_font_size_override("font_size", 21 if compact_hub else (37 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.add_theme_font_size_override("font_size", 14 if compact_hub else (22 if portrait else 25))
+		stage_details_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (25 if portrait else 25))
 		stage_details_lbl.custom_minimum_size.y = 22.0 if compact_hub else 36.0
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
