@@ -54,6 +54,21 @@ func _run() -> void:
 				_check(root_path + "death_%d.png" % frame, boss_id + " death")
 		else:
 			static_references.append(boss_id + ": generated character art not installed; stable HD fallback active")
+	# Candidate animation folders are real PNG resources but are not proof
+	# of polished movement. Validate their contents without calling them final.
+	var candidate_boss_folders: Array[String] = [
+		"boss_ch01", "boss_ch02", "boss_ch03", "boss_ch04",
+		"miniboss_ch01", "matka_roju"
+	]
+	for candidate_id in candidate_boss_folders:
+		if AssetRegistry.has_complete_chapter_boss_art(candidate_id):
+			var candidate_root: String = AssetRegistry.get_candidate_boss_directory(candidate_id)
+			_check(candidate_root + "boss_portrait.png", candidate_id + " portrait")
+			for frame in range(1, 5):
+				_check(candidate_root + "phase1_anim_%d.png" % frame, candidate_id + " walk")
+				_check(candidate_root + "phase2_attack_%d.png" % frame, candidate_id + " attack")
+			for frame in range(1, 3):
+				_check(candidate_root + "death_%d.png" % frame, candidate_id + " death")
 	var legacy_bosses_ready: bool = true
 	for chapter in range(1, 5):
 		legacy_bosses_ready = legacy_bosses_ready and AssetRegistry.has_complete_chapter_boss_art("boss_ch%02d" % chapter)
@@ -89,6 +104,8 @@ func _run() -> void:
 			_check("res://assets/mutantsurvivor_ch01/tiles/%s.png" % String(tile), "%s floor %s" % [biome, tile])
 
 	print("PRODUCTION ART AUDIT: %d renderable paths checked, %d absent assets, %d static art/animation blockers" % [checks, missing.size(), static_references.size()])
+	if FileAccess.file_exists("res://assets/bosses/ART_CANDIDATE.txt"):
+		print("ART CANDIDATE NOT FINAL: 166 generated/recolored actor PNGs are installed; manual frame-by-frame visual QA and original animation polish are still REQUIRED.")
 	for issue in static_references:
 		print("ART NOT FINAL: " + issue)
 	if missing.is_empty():
