@@ -250,6 +250,60 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 3: real DNA pickups, rather than holding the generic terminal,
+	# are the only way to complete the primary collection objective.
+	stage.is_practice_mode = true
+	stage.current_stage = 3
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "collect_item", "Stage 3 requires collecting DNA")
+	_check(not bool(battle.get("primary_objective_done")), "Stage 3 starts with collection incomplete")
+	var expected_core_positions: Array[Vector2] = [
+		Vector2(-380, 120), Vector2(290, -110), Vector2(-120, -290)
+	]
+	var pickup_area_count: int = 0
+	var pickup_layer: Node2D = battle.get("decorations_layer") as Node2D
+	var pickup_player: Node2D = battle.get("player") as Node2D
+	for child in pickup_layer.get_children():
+		if child is Area2D:
+			for core_pos in expected_core_positions:
+				if child.position.distance_to(core_pos) < 0.1:
+					pickup_area_count += 1
+					child.body_entered.emit(pickup_player)
+					break
+	_check(pickup_area_count == 3, "Stage 3 spawns three collectable DNA samples")
+	_check(int(battle.get("data_cores_collected")) == 3, "Stage 3 DNA pickups increment collection count")
+	_check(bool(battle.get("primary_objective_done")), "Stage 3 finishes collection objective after three pickups")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
+	# Stage 7: two real chapter elites must die; merely visiting the
+	# generic objective marker must not finish the elite clearance.
+	stage.current_stage = 7
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "clear_elites", "Stage 7 uses elite-kill objective")
+	battle.call("start_wave", 7, 5)
+	var mandatory_elites: Array[Node] = []
+	for enemy in get_nodes_in_group("enemies"):
+		if is_instance_valid(enemy) and enemy is MutantEnemy:
+			if enemy.tier == "miniboss" and enemy.enemy_id == "elite_ch01_stage07":
+				mandatory_elites.append(enemy)
+	_check(mandatory_elites.size() == 2, "Stage 7 spawns two mandatory chapter elites")
+	if mandatory_elites.size() == 2:
+		mandatory_elites[0].take_damage(float(mandatory_elites[0].max_health) + 1000000.0)
+		_check(not bool(battle.get("primary_objective_done")), "One elite kill cannot finish stage 7 objective")
+		mandatory_elites[1].take_damage(float(mandatory_elites[1].max_health) + 1000000.0)
+		_check(bool(battle.get("primary_objective_done")), "Two elite kills finish stage 7 objective")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
