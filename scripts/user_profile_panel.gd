@@ -1127,13 +1127,6 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_bag_heading.name = "InventoryBagHeading"
 	SurvivorVisualSystem.decorate_section(inv_bag_heading, SurvivorVisualSystem.GOLD, 16)
 	bag_content.add_child(inv_bag_heading)
-	inv_grid = GridContainer.new()
-	inv_grid.name = "MetinBackpackGrid"
-	inv_grid.columns = 5 if StageDirector.is_portrait_mode() else 8
-	inv_grid.add_theme_constant_override("h_separation", 8)
-	inv_grid.add_theme_constant_override("v_separation", 8)
-	bag_content.add_child(inv_grid)
-
 	# Fixed 30-cell pages prevent unbounded scrolling after long loot sessions.
 	var page_row := HBoxContainer.new()
 	page_row.name = "InventoryPagination"
@@ -1169,6 +1162,13 @@ func _build_tab_inventory_backpack() -> Control:
 		_refresh_inventory_tab_ui()
 	)
 	page_row.add_child(inv_page_next)
+
+	inv_grid = GridContainer.new()
+	inv_grid.name = "MetinBackpackGrid"
+	inv_grid.columns = 5 if StageDirector.is_portrait_mode() else 8
+	inv_grid.add_theme_constant_override("h_separation", 8)
+	inv_grid.add_theme_constant_override("v_separation", 8)
+	bag_content.add_child(inv_grid)
 
 	# Panel szczegółów wybranego przedmiotu i porównania ze założonym
 	inv_detail_box = _create_subpanel(Color(0.28, 0.96, 0.65, 0.85))
