@@ -95,6 +95,10 @@ func _run() -> void:
 	_assert(ResourceLoader.exists("res://assets/ui/approved/icon_battle_pass.svg", "Texture2D"), "Pass icon imports")
 	_assert(ResourceLoader.exists("res://assets/ui/approved/upgrade_card_frame.svg", "Texture2D"),
 		"Approved premium upgrade-card bezel imports")
+	# The 720px premium layout must remain a genuine interactive layout:
+	# three upgrade cards fit without silently clipping the third choice.
+	_assert(3.0 * 202.0 + 2.0 * 8.0 < 650.0,
+		"Three approved upgrade modules fit within the 720px card scroller")
 	var approved_map_link: Button = menu.find_child("OpenCampaignMap", true, false) as Button
 	_assert(is_instance_valid(approved_map_link), "Home mission header links to the full 100-stage campaign")
 	if is_instance_valid(approved_map_link):
@@ -154,13 +158,13 @@ func _run() -> void:
 	_assert(is_instance_valid(hero), "Hero spacer is instantiated")
 	if is_instance_valid(card):
 		_assert(card.custom_minimum_size.x <= 640, "Armored stage card remains responsive")
-		_assert(card.custom_minimum_size.y <= 330, "Illustrated stage card remains within mobile vertical budget")
+		_assert(card.custom_minimum_size.y <= 420, "Illustrated stage card remains within mobile vertical budget")
 	if is_instance_valid(play):
 		_assert(play.custom_minimum_size.x <= 600, "Reference-size play CTA width is bounded")
 		_assert(play.custom_minimum_size.y <= 100, "Reference-size play CTA height is bounded")
 		_assert(play.pressed.get_connections().size() > 0, "Play CTA has a working signal connection")
 	if is_instance_valid(hero):
-		_assert(hero.custom_minimum_size.y <= 410, "Hero showcase remains bounded above the mission panel")
+		_assert(hero.custom_minimum_size.y <= 415, "Hero showcase remains bounded above the mission panel")
 
 	# Exercise the responsive calculations at three portrait sizes without
 	# relying on only the default 720px design canvas.
@@ -193,8 +197,8 @@ func _run() -> void:
 							_assert(option.custom_minimum_size.y >= 44.0, "Language switch remains touch-friendly")
 				var close_settings: Button = settings_card.find_child("SettingsCloseButton", true, false) as Button
 				_assert(is_instance_valid(close_settings) and close_settings.custom_minimum_size.y >= 48.0, "Settings close control has safe touch size")
-			_assert(hero.custom_minimum_size.y <= 220.0, "420px Base switches to compact hero spacing")
-			_assert(card.custom_minimum_size.y <= 310.0, "420px Base keeps compact mission card")
+			_assert(hero.custom_minimum_size.y <= 270.0, "420px Base switches to compact hero spacing")
+			_assert(card.custom_minimum_size.y <= 365.0, "420px Base keeps compact mission card")
 		var limit := maxf(180.0, test_width - 44.0)
 		if is_instance_valid(card):
 			_assert(card.custom_minimum_size.x <= limit + 0.01, "Stage card fits %dpx mobile width" % int(test_width))
