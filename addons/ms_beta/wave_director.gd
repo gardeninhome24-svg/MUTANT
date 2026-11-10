@@ -34,6 +34,9 @@ const HORDE_TARGETS_HIGH   := [22, 32, 44, 56, 68, 78, 88, 98, 108, 80]
 const MAX_POOLED_PER_ARCHETYPE: int = 24
 const MIN_SPAWN_DELTA: float = 0.0
 const MAX_SPAWN_DELTA: float = 0.25
+const ALL_ARCHETYPES := ["biegacz", "zracy_pelzacz", "zdziczaly", "zarazony", "plujacy_kwasem", "lowca", "skrzydlaty", "czerw"]
+const EARLY_ARCHETYPES := ["biegacz", "zracy_pelzacz", "zarazony"]
+const LATE_ARCHETYPES := ["lowca", "skrzydlaty", "plujacy_kwasem", "zdziczaly", "zarazony"]
 
 signal wave_changed(wave_num: int, time_left: float, max_waves: int)
 signal wave_completed(wave_num: int)
@@ -104,7 +107,7 @@ func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: flo
 	# Dynamic spawn interval: faster when below cap
 	var deficit := target_cap - current_count
 	if deficit <= 0:
-		spawn_timer = minf(spawn_timer, 0.25)
+		spawn_timer = 0.0
 		return
 
 	var interval := 0.25 if deficit > 16 else (0.45 if deficit > 6 else 0.75)
@@ -136,23 +139,22 @@ func _update_adaptive_performance(delta: float) -> void:
 
 func _prune_active_enemies() -> void:
 	# Reverse in-place pruning avoids allocating a fresh typed array every frame.
+	if active_enemies.is_empty():
+		return
 	for index in range(active_enemies.size() - 1, -1, -1):
 		var e: MutantEnemy = active_enemies[index]
 		if not is_instance_valid(e) or e.is_dying or not e.is_inside_tree() or not e.visible:
 			active_enemies.remove_at(index)
 
 func _get_wave_archetype(stage_num: int, wave_num: int) -> String:
-	var pool := ["biegacz", "zracy_pelzacz", "zdziczaly", "zarazony", "plujacy_kwasem", "lowca", "skrzydlaty", "czerw"]
 	if stage_num <= 3 and wave_num <= 2:
-		var early := ["biegacz", "zracy_pelzacz", "zarazony"]
-		return early[randi() % early.size()]
+		return EARLY_ARCHETYPES[randi() % EARLY_ARCHETYPES.size()]
 	if wave_num >= 8:
-		var late := ["lowca", "skrzydlaty", "plujacy_kwasem", "zdziczaly", "zarazony"]
-		return late[randi() % late.size()]
-	return pool[randi() % pool.size()]
+		return LATE_ARCHETYPES[randi() % LATE_ARCHETYPES.size()]
+	return ALL_ARCHETYPES[randi() % ALL_ARCHETYPES.size()]
 
 func _spawn_horde_pack(count: int, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
-	if not is_instance_valid(player) or not player.is_inside_tree() or not is_instance_valid(characters_layer) or count <= 0:
+	if not is_instance_valid(player) or not player.is_inside_tree() or not is_instance_valid(characters_layer) or not characters_layer.is_inside_tree() or count <= 0:
 		return
 	var center := player.global_position
 	var cluster_angle := randf() * TAU
@@ -167,6 +169,15 @@ func _spawn_horde_pack(count: int, player: Node2D, stage_num: int, elapsed_sec: 
 		var spawn_pos := cluster_origin + offset
 		spawn_pos.x = clampf(spawn_pos.x, -1140.0, 1140.0)
 		spawn_pos.y = clampf(spawn_pos.y, -880.0, 880.0)
+		# Clamping near arena walls must not spawn an enemy atop the hero.
+		if spawn_pos.distance_to(center) < 180.0:
+			var away := (spawn_pos - center).normalized()
+			if away.is_zero_approx():
+				away = Vector2.RIGHT
+			var candidate_pos := center + away * 180.0
+			candidate_pos.x = clampf(candidate_pos.x, -1140.0, 1140.0)
+			candidate_pos.y = clampf(candidate_pos.y, -880.0, 880.0)
+			spawn_pos = candidate_pos
 		_spawn_single_enemy(arc, spawn_pos, stage_num, elapsed_sec)
 
 func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_sec: float) -> MutantEnemy:
@@ -177,7 +188,7 @@ func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_
 	if enemy_pool.has(arch_id):
 		while not enemy_pool[arch_id].is_empty():
 			var candidate: MutantEnemy = enemy_pool[arch_id].pop_back()
-			if is_instance_valid(candidate) and candidate.is_inside_tree() and not candidate.is_queued_for_deletion():
+			if is_instance_valid(candidate) and candidate.is_inside_tree() and not candidate.is_queued_for_deletion() and candidate.is_dying:
 				enemy = candidate
 				break
 	if is_instance_valid(enemy):
@@ -214,7 +225,7 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 	if not is_instance_valid(enemy):
 		return
 	active_enemies.erase(enemy)
-	if enemy.is_queued_for_deletion():
+	if enemy.is_queued_for_deletion() or not enemy.is_dying:
 		return
 	enemy.velocity = Vector2.ZERO
 	var aid := enemy.enemy_id

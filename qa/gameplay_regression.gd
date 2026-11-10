@@ -56,10 +56,13 @@ func _test_horde_performance_limits() -> void:
 	_assert(director.get_max_active_for_wave(1) == 14, "Low performance wave one respects low cap")
 	director.set_performance_profile(2)
 	_assert(director.get_max_active_for_wave(1) == 22, "High performance wave one retains high cap")
+	_assert(director.get_max_active_for_wave(999) == 80, "Wave indexes above ten retain final-wave high cap")
 	director.adaptive_density_enabled = true
 	director.dynamic_cap_multiplier = 0.55
 	director.set_performance_profile(0)
 	_assert(director.get_max_active_for_wave(1) <= 14, "Adaptive low mode never exceeds base low-end cap")
+	_assert(director._get_wave_archetype(1, 1) in director.EARLY_ARCHETYPES, "Beginner stages use early mutant roster")
+	_assert(director._get_wave_archetype(50, 9) in director.LATE_ARCHETYPES, "Late waves use their intended mutant roster")
 	director.start_wave(1, -30.0)
 	_assert(int(director._last_wave_second) == 0, "Wave cache initializes even with zero duration")
 	_assert(int(director.current_wave) == 1, "Wave remains valid after negative duration")
@@ -91,6 +94,7 @@ func _test_horde_performance_limits() -> void:
 		director.process_wave(0.05, dummy_player, 1, 0.0)
 	_assert(int(signal_counts["wave"]) == 1, "Sub-second updates do not redraw wave text")
 	_assert(int(signal_counts["density"]) == 1, "Unchanged enemy density emits once")
+	_assert(director.active_enemies.is_empty(), "No enemies spawn without a battle scene registry")
 	director.process_wave(1.0, dummy_player, 1, 1.0)
 	_assert(int(signal_counts["wave"]) == 2, "Wave counter updates when countdown second changes")
 	director.recycle_all_enemies()
