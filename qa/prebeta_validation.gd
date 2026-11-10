@@ -93,5 +93,6 @@ func _validate_runtime_campaign() -> void:
 			"Final boss assignment matches chapter finale rule on stage %d" % number)
 		_check((objective_type == "defeat_boss") == is_finale,
 			"Boss objective agrees with chapter finale on stage %d" % number)
-		var unlock: int = int(cfg.get("mandatory_stage_unlock", -1))
-		_check(unlock == mini(number + 1, 101), "Stage %d unlock progression contract" % number)
+		var next_stage: Variant = cfg.get("mandatory_stage_unlock", null)
+		_check(next_stage == null if number == 100 else int(next_stage) == number + 1,
+			"Stage %d unlock progression contract" % number)
