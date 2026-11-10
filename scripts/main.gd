@@ -1581,7 +1581,8 @@ func _setup_extended_hud_and_profile() -> void:
 			start_stage(current_stage_num)
 	)
 	user_profile_panel.panel_closed.connect(func():
-		if not upgrade_panel.visible and not death_panel.visible and not win_panel.visible:
+		# Any remaining overlay or terminal run state owns the pause.
+		if run_result_state == "active" and not upgrade_panel.visible and not death_panel.visible and not win_panel.visible and not premium_shop_panel.visible:
 			get_tree().paused = false
 	)
 	hud_root.add_child(user_profile_panel)
