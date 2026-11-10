@@ -144,8 +144,11 @@ func _draw() -> void:
 		var prog := clampf(telegraph_elapsed / maxf(0.05, telegraph_duration), 0.0, 1.0)
 		draw_circle(local_t_pos, telegraph_radius, Color(0.95, 0.18, 0.12, 0.16 + 0.22 * prog))
 		draw_circle(local_t_pos, telegraph_radius * prog, Color(1.0, 0.42, 0.15, 0.28))
-		draw_arc(local_t_pos, telegraph_radius, 0.0, TAU, 44, Color(1.0, 0.25, 0.15, 0.92), 3.0, true)
+		draw_arc(local_t_pos, telegraph_radius, 0.0, TAU, 44, Color(1.0, 0.25, 0.15, 0.92), 3.0 + 1.5 * prog, true)
 
+	# Hide full-health normal mob bars; priority enemies keep their HP visible.
+	if tier == "normal" and current_health >= max_health:
+		return
 	# Pasek HP nad głową wroga (styl z referencji target_gameplay_visual.png)
 	var bar_w := 52.0 if tier == "normal" else (78.0 if tier != "boss" else 110.0)
 	var bar_h := 6.0 if tier == "normal" else 8.0
@@ -153,7 +156,7 @@ func _draw() -> void:
 	var bar_pos := Vector2(-bar_w * 0.5, y_off)
 	draw_rect(Rect2(bar_pos - Vector2(1, 1), Vector2(bar_w + 2, bar_h + 2)), Color(0.05, 0.06, 0.08, 0.92))
 	var ratio := clampf(current_health / maxf(1.0, max_health), 0.0, 1.0)
-	var fill_col := Color(0.92, 0.20, 0.18, 0.96) if tier != "boss" else Color(0.95, 0.18, 0.45, 0.98)
+	var fill_col := Color(0.92, 0.20, 0.18, 0.96) if tier != "boss" else (Color(1.0, 0.40, 0.20, 0.98) if boss_phase >= 2 else Color(0.95, 0.18, 0.45, 0.98))
 	draw_rect(Rect2(bar_pos, Vector2(bar_w * ratio, bar_h)), fill_col)
 
 func _physics_process(delta: float) -> void:
@@ -166,11 +169,13 @@ func _physics_process(delta: float) -> void:
 		var hp_pct := current_health / maxf(1.0, max_health)
 		if boss_phase == 1 and hp_pct <= 0.55 and current_stage_context >= 11:
 			boss_phase = 2
+			queue_redraw()
 			move_speed *= 1.18
 			special_cooldown = 3.8
 			_fire_radial_acid_burst(4)
 		elif boss_phase == 2 and hp_pct <= 0.25 and current_stage_context >= 50:
 			boss_phase = 3
+			queue_redraw()
 			move_speed *= 1.15
 			special_cooldown = 3.0
 			_fire_radial_acid_burst(6)
@@ -252,7 +257,9 @@ func _execute_telegraphed_slam() -> void:
 	vfx.material = PowerEffects.get_additive_mat()
 	vfx.global_position = telegraph_world_pos
 	vfx.scale = Vector2(1.4, 1.4) if tier == "boss" else Vector2(1.0, 1.0)
-	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
+	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) and effects_layer.is_inside_tree() else get_parent()
+	if not is_instance_valid(parent_layer) or not parent_layer.is_inside_tree():
+		return
 	parent_layer.add_child(vfx)
 	var tw := vfx.create_tween()
 	tw.tween_property(vfx, "modulate:a", 0.0, 0.55)
@@ -265,7 +272,11 @@ func take_damage(amount: float) -> void:
 	queue_redraw()
 	emit_signal("enemy_damaged", self)
 
-	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
+	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) and effects_layer.is_inside_tree() else get_parent()
+	if not is_instance_valid(parent_layer) or not parent_layer.is_inside_tree():
+		if current_health <= 0.0:
+			die()
+		return
 	var dmg_lbl := DamageNumber.new()
 	parent_layer.add_child(dmg_lbl)
 	dmg_lbl.setup(amount, amount > 45.0, global_position + Vector2(0, -36))
@@ -291,22 +302,26 @@ func take_damage(amount: float) -> void:
 		die()
 
 func _fire_acid_glob(target_pos: Vector2) -> void:
-	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
-	if not is_instance_valid(parent_layer):
+	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) and effects_layer.is_inside_tree() else get_parent()
+	if not is_instance_valid(parent_layer) or not parent_layer.is_inside_tree():
 		return
+	# Projectile ownership does not change if the enemy is recycled.
+	var intended_target: Node2D = target
+	var projectile_damage: float = damage * 0.85
+	var origin: Vector2 = global_position
 	var glob := Sprite2D.new()
 	glob.texture = TOXIC_SPLASH_TEX
 	glob.material = PowerEffects.get_additive_mat()
-	glob.global_position = global_position + Vector2(0, -24)
+	glob.global_position = origin + Vector2(0, -24)
 	glob.scale = Vector2(0.38, 0.38)
 	glob.modulate = Color(0.45, 1.0, 0.25, 0.92)
 	parent_layer.add_child(glob)
 	var tw := glob.create_tween()
 	tw.tween_property(glob, "global_position", target_pos, 0.55)
 	tw.tween_callback(func():
-		if is_instance_valid(target) and target.global_position.distance_to(target_pos) <= 58.0:
-			if target.has_method("take_damage"):
-				target.take_damage(damage * 0.85)
+		if is_instance_valid(intended_target) and intended_target.is_inside_tree() and intended_target.global_position.distance_to(target_pos) <= 58.0:
+			if intended_target.has_method("take_damage"):
+				intended_target.take_damage(projectile_damage)
 		glob.scale = Vector2(0.85, 0.85)
 	)
 	tw.tween_property(glob, "modulate:a", 0.0, 0.25)

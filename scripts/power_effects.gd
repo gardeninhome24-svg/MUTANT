@@ -123,7 +123,7 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 	if is_instance_valid(gren):
 		gren.queue_free()
 
-	if not is_instance_valid(layer):
+	if not is_instance_valid(layer) or not layer.is_inside_tree():
 		return
 
 	# Zadaj obrażenia obszarowe wrogom w promieniu eksplozji
@@ -218,7 +218,7 @@ static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damag
 
 		await layer.get_tree().process_frame
 
-	if is_instance_valid(vortex):
+	if is_instance_valid(vortex) and is_instance_valid(core) and is_instance_valid(layer) and layer.is_inside_tree():
 		var tw_out := layer.create_tween()
 		tw_out.set_parallel(true)
 		tw_out.tween_property(vortex, "scale", Vector2(2.6, 2.6), 0.22)
