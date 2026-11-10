@@ -47,6 +47,18 @@ func _boss_row(chapter: int) -> PanelContainer:
 	var status: String = "NOWE PNG (kandydat)" if candidate else "FALLBACK / stare PNG"
 	var source_dir: String = AssetRegistry.get_candidate_boss_directory(boss_id) if candidate else "res://assets/bosses/" + String(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS[boss_id]) + "/"
 	var fallback_portrait: Texture2D = AssetRegistry.get_tex(source_dir + "boss_portrait.png")
+	# Export three representative source families for offline pixel-level audit.
+	# This is QA evidence, not art that is added to the shipped APK.
+	if chapter in [5, 6, 7]:
+		var source_dump: String = output_dir.path_join("raw_boss_sources")
+		DirAccess.make_dir_recursive_absolute(source_dump)
+		for file_name in ["boss_portrait.png", "phase1_anim_1.png", "phase2_attack_3.png"]:
+			var original: Texture2D = AssetRegistry.get_tex(source_dir + file_name)
+			if original != null:
+				var image_data: Image = original.get_image()
+				if image_data != null and not image_data.is_empty():
+					image_data.save_png(source_dump.path_join("boss_ch%02d_%s" % [chapter, file_name]))
+
 	rows.append({"chapter": chapter, "candidate": candidate, "status": status,
 		"walk": walk.size(), "attack": attacks.size(), "death": deaths.size(),
 		"portrait": fallback_portrait != null})
