@@ -1,0 +1,102 @@
+name: MutantSurvivor Legacy Animation Candidates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/make_legacy_art_candidates.py
+      - .github/workflows/legacy-art-review.yml
+
+concurrency:
+  group: mutant-legacy-art-\${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Validate and install 100 remaining legacy animation PNG candidates
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install Pillow in isolated environment
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install "Pillow>=10,<13"
+
+      - name: Generate 100 candidate PNGs and validate all silhouettes
+        shell: bash
+        run: |
+          set -euo pipefail
+          .venv/bin/python tools/make_legacy_art_candidates.py --project . --out build/legacy_art_candidates.zip
+          .venv/bin/python - <<'PY'
+          import sys
+          from zipfile import ZipFile
+          from io import BytesIO
+          from PIL import Image
+          sys.path.insert(0, "tools")
+          from boss_art_pack import inspect_png
+          from boss_art_geometry import alpha_bounds
+          with ZipFile("build/legacy_art_candidates.zip") as z:
+              files=[p for p in z.namelist() if p.endswith(".png")]
+              assert len(files)==100, f"Expected 100 candidate PNGs; found {len(files)}"
+              for p in files:
+                  raw=z.read(p)
+                  if p.startswith("assets/bosses/"):
+                      inspect_png(raw,p)
+                      bounds=alpha_bounds(raw,p)
+                      assert bounds["feet"]>=0.88, f"Unanchored boss: {p}"
+                  else:
+                      with Image.open(BytesIO(raw)) as img:
+                          img.load()
+                          assert img.mode=="RGBA" and img.width>=32 and img.height>=32,p
+                          assert img.getchannel("A").getbbox() is not None,p
+              print("LEGACY ART QA PASS: 100 PNGs, six boss animation folders, larva and toxic soldier")
+          PY
+          sha256sum build/legacy_art_candidates.zip > build/legacy-art-sha256.txt
+
+      - name: Install validated candidate assets into MUTANT
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          .venv/bin/python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          with ZipFile("build/legacy_art_candidates.zip") as pack:
+              for name in pack.namelist():
+                  if not name.startswith(("assets/bosses/","assets/characters/toxic_soldier/","assets/enemies/mutant_worm/")) or not name.endswith(".png") or ".." in name:
+                      raise RuntimeError("Unexpected sprite path: "+name)
+                  dest=Path(name)
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  dest.write_bytes(pack.read(name))
+          PY
+          printf '%s\n' \
+            'ART CANDIDATE ONLY — boss 1-10, minibosses, toxic soldier and larva animations generated from existing art.' \
+            'These animations include rigid pose transforms and recolors; artist approval is still REQUIRED before Google Play.' \
+            > assets/bosses/ART_CANDIDATE.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/bosses/boss_ch0{1,2,3,4}/ assets/bosses/miniboss_ch01/ assets/bosses/matka_roju/ assets/bosses/ART_CANDIDATE.txt
+          git add assets/characters/toxic_soldier/ assets/enemies/mutant_worm/
+          if ! git diff --cached --quiet; then
+            git commit -m "art: install 100 candidate animation PNGs for legacy actors"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Save assets for manual visual inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-LegacyArt-REVIEW-\${{ github.run_number }}
+          path: |
+            build/legacy_art_candidates.zip
+            build/legacy-art-sha256.txt
+          if-no-files-found: warn
+          retention-days: 30
