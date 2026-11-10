@@ -629,7 +629,25 @@ func _parse_save_dictionary(raw: String) -> Dictionary:
 	if parser.parse(raw) != OK:
 		return {}
 	var data: Variant = parser.data
-	return data if data is Dictionary else {}
+	if not (data is Dictionary):
+		return {}
+	# JSON can be syntactically valid yet lack the actual profile. Do not
+	# accept a partial transaction such as {"credits": 1} and erase progress.
+	if not data.has("current_stage") or not data.has("max_unlocked_stage"):
+		return {}
+	if not (data["current_stage"] is int or data["current_stage"] is float):
+		return {}
+	if not (data["max_unlocked_stage"] is int or data["max_unlocked_stage"] is float):
+		return {}
+	if int(data["current_stage"]) < 1 or int(data["max_unlocked_stage"]) < 1:
+		return {}
+	if data.has("inventory") and not (data["inventory"] is Array):
+		return {}
+	if data.has("equipped_items") and not (data["equipped_items"] is Dictionary):
+		return {}
+	if data.has("credits") and not (data["credits"] is int or data["credits"] is float):
+		return {}
+	return data
 
 func _write_verified_save(path: String, serialized: String) -> bool:
 	var file := FileAccess.open(path, FileAccess.WRITE)
