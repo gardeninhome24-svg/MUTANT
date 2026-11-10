@@ -70,6 +70,39 @@ func _run() -> void:
 		larva.queue_free()
 		await process_frame
 
+	# Two simultaneous arenas: an enemy must lock onto its own local
+	# Player node, never a first player found in a global group.
+	if enemy_scene != null:
+		var arena_a: Node2D = Node2D.new()
+		var arena_b: Node2D = Node2D.new()
+		root.add_child(arena_a)
+		root.add_child(arena_b)
+		var layer_a: Node2D = Node2D.new()
+		var layer_b: Node2D = Node2D.new()
+		layer_a.name = "CharactersLayer"
+		layer_b.name = "CharactersLayer"
+		arena_a.add_child(layer_a)
+		arena_b.add_child(layer_b)
+		var hero_a: Node2D = Node2D.new()
+		var hero_b: Node2D = Node2D.new()
+		hero_a.name = "Player"
+		hero_b.name = "Player"
+		layer_a.add_child(hero_a)
+		layer_b.add_child(hero_b)
+		var actor_a: Node = enemy_scene.instantiate()
+		var actor_b: Node = enemy_scene.instantiate()
+		layer_a.add_child(actor_a)
+		layer_b.add_child(actor_b)
+		actor_a.set_physics_process(false)
+		actor_b.set_physics_process(false)
+		_check(actor_a.get("target") == hero_a, "Arena A enemy targets its own hero")
+		_check(actor_b.get("target") == hero_b, "Arena B enemy targets its own hero")
+		actor_b.call("reset_for_respawn", "czerw", "normal", 1, 0.0, Vector2.ZERO)
+		_check(actor_b.get("target") == hero_b, "Pooled enemy retains local hero after respawn")
+		arena_a.queue_free()
+		arena_b.queue_free()
+		await process_frame
+
 	for action in AssetRegistry.PLAYER_ANIMATION_COUNTS:
 		var count: int = int(AssetRegistry.PLAYER_ANIMATION_COUNTS[action])
 		for idx in range(1, count + 1):
