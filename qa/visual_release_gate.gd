@@ -113,11 +113,15 @@ func _run() -> void:
 	if is_instance_valid(hp) and is_instance_valid(xp):
 		_check(hp.custom_minimum_size.x == 95.0 and xp.custom_minimum_size.x == 95.0, "420px HP and XP bars fit compact stat card")
 	if is_instance_valid(wave_title):
-		_check(wave_title.get_theme_font_size("font_size") <= 11, "420px wave label typography is compact")
+		_check(wave_title.get_theme_font_size("font_size") == 12, "420px wave label is readable without truncation")
 	if is_instance_valid(objectives_title):
-		_check(objectives_title.get_theme_font_size("font_size") <= 9, "420px objectives header stays readable")
+		_check(objectives_title.get_theme_font_size("font_size") == 10, "420px objectives header has legible text")
+		_check(objectives_title.text.begins_with("CELE • ETAP"), "420px objective title avoids clipped decoration")
 	if is_instance_valid(weapon_row):
 		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")
+	var radio_text: Label = combat.get("npc_text_lbl") as Label
+	if is_instance_valid(radio_text):
+		_check(radio_text.get_theme_font_size("font_size") == 14, "420px radio message uses readable font")
 	if is_instance_valid(weapons) and is_instance_valid(powers):
 		_check(weapons.offset_bottom <= powers.offset_top - 2.0, "Narrow portrait weapon and power bars occupy separate rows")
 	if is_instance_valid(joystick) and is_instance_valid(weapons):

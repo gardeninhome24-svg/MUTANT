@@ -110,6 +110,11 @@ func _capture() -> void:
 			printerr("PHONE SHOT ERROR: phone wallet and wave counter overlap")
 			quit(1)
 			return
+	var phone_missions: Control = combat.get("objectives_panel") as Control
+	if is_instance_valid(phone_missions) and phone_missions.get_global_rect().intersects(wave.get_global_rect()):
+		printerr("PHONE SHOT ERROR: objectives intersect wave countdown at 420px")
+		quit(1)
+		return
 	var phone_hp: ProgressBar = combat.get("hp_bar") as ProgressBar
 	var phone_xp: ProgressBar = combat.get("xp_bar") as ProgressBar
 	if not is_instance_valid(phone_hp) or not is_instance_valid(phone_xp):

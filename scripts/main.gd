@@ -126,6 +126,7 @@ var npc_portrait_rect: TextureRect = null
 var npc_speaker_lbl: Label = null
 var npc_text_lbl: Label = null
 var npc_hide_timer: float = 0.0
+var _last_wave_banner_second: int = -1
 var npc_dialogue_history: Array[String] = []
 var npc_journal_modal: ColorRect = null
 var npc_journal_lbl: Label = null
@@ -220,18 +221,25 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(run_level_label):
 		run_level_label.add_theme_font_size_override("font_size", 10 if compact else 11)
 	if is_instance_valid(wave_label):
-		wave_label.add_theme_font_size_override("font_size", 11 if compact else 12)
+		wave_label.add_theme_font_size_override("font_size", 12 if compact else 12)
 	if is_instance_valid(boss_label):
-		boss_label.add_theme_font_size_override("font_size", 10 if compact else 13)
+		boss_label.add_theme_font_size_override("font_size", 11 if compact else 13)
 	if is_instance_valid(obj_header):
-		obj_header.add_theme_font_size_override("font_size", 9 if compact else 10)
+		obj_header.add_theme_font_size_override("font_size", 10)
+		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
-			mission_text.add_theme_font_size_override("font_size", 10 if compact else 11)
+			mission_text.add_theme_font_size_override("font_size", 11)
 	if is_instance_valid(weapon_slots_hbox):
 		weapon_slots_hbox.add_theme_constant_override("separation", 3 if compact else 6)
 	if is_instance_valid(radar_panel):
 		radar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if is_instance_valid(npc_portrait_rect):
+		npc_portrait_rect.custom_minimum_size = Vector2(38, 46) if compact else Vector2(42, 48)
+	if is_instance_valid(npc_speaker_lbl):
+		npc_speaker_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
+	if is_instance_valid(npc_text_lbl):
+		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
@@ -321,7 +329,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
 			objectives_panel.offset_top = 60.0 + safe_top
-			objectives_panel.offset_right = 188.0 if compact else 198.0
+			objectives_panel.offset_right = 202.0 if compact else 198.0
 			objectives_panel.offset_bottom = 138.0 + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
@@ -840,8 +848,9 @@ func start_wave(stage_num: int, wave_num: int) -> void:
 		String(diff_cfg.get("name", "Ocalały"))
 	]
 	char_level_label.text = "Konto Lv.%d" % StageDirector.character_level
-	obj_header.text = "◆ CELE MISJI (ETAP %03d)" % current_stage_num
+	obj_header.text = ("CELE • ETAP %03d" if _is_compact_portrait_hud(get_viewport_rect().size.x) else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 
+	_last_wave_banner_second = maxi(0, int(ceil(wave_time_left)))
 	_update_wave_banner()
 	_update_objectives_ui()
 
@@ -869,14 +878,16 @@ func start_wave(stage_num: int, wave_num: int) -> void:
 			spawn_special_enemy("boss_ch01", "boss", "☠ BOSS ETAPU: MATKA ROJU A-03 ☠")
 
 func _update_wave_banner() -> void:
-	var mins := int(wave_time_left / 60.0)
-	var secs := int(wave_time_left) % 60
+	var display_time := maxi(0, int(ceil(wave_time_left)))
+	var mins := int(display_time / 60)
+	var secs := display_time % 60
+	var compact_text := _is_compact_portrait_hud(get_viewport_rect().size.x)
 	if current_wave_num == 5:
-		wave_label.text = "FALA 5/10 — ELITA! • %02d:%02d" % [mins, secs]
+		wave_label.text = ("FALA 5/10 • ELITA %02d:%02d" if compact_text else "FALA 5/10 — ELITA! • %02d:%02d") % [mins, secs]
 	elif current_wave_num == 10:
-		wave_label.text = "FALA 10/10 — BOSS! • %02d:%02d" % [mins, secs]
+		wave_label.text = ("FALA 10/10 • BOSS %02d:%02d" if compact_text else "FALA 10/10 — BOSS! • %02d:%02d") % [mins, secs]
 	else:
-		wave_label.text = "FALA %d / %d • %02d:%02d" % [current_wave_num, max_waves_in_stage, mins, secs]
+		wave_label.text = ("FALA %d/%d • %02d:%02d" if compact_text else "FALA %d / %d • %02d:%02d") % [current_wave_num, max_waves_in_stage, mins, secs]
 
 func _update_objectives_ui() -> void:
 	var c1 := "☑" if primary_objective_done else "☐"
@@ -897,9 +908,12 @@ func _process(delta: float) -> void:
 	if run_result_state != "active":
 		return
 	total_run_elapsed += delta
-	wave_time_left -= delta
-	wave_timer_bar.value = maxf(0.0, wave_time_left)
-	_update_wave_banner()
+	wave_time_left = maxf(0.0, wave_time_left - delta)
+	wave_timer_bar.value = wave_time_left
+	var displayed_second := int(ceil(wave_time_left))
+	if displayed_second != _last_wave_banner_second:
+		_last_wave_banner_second = displayed_second
+		_update_wave_banner()
 	_update_active_power_buttons()
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
