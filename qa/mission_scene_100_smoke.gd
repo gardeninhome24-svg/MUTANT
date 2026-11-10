@@ -27,9 +27,9 @@ func _run() -> void:
 		return
 	stage.get_script().set("save_path_override", QA_SAVE_PATH)
 	stage.is_practice_mode = true
-	# Loading a combat PackedScene as a top-level const runs before the
-	# SceneTree autoload registry is initialized with --script; the dependent
-	# Player/Enemy scripts then fail to resolve the StageDirector singleton.
+	# Avoid referring to custom global class names in this QA script: the
+	# test itself otherwise compiles MutantEnemy/ExplosiveBarrel and Player
+	# before the StageDirector autoload registration is ready.
 	var combat_scene: PackedScene = load(COMBAT_SCENE_PATH) as PackedScene
 	_check(combat_scene != null, "Combat scene loads after StageDirector initialization")
 	if combat_scene == null:
@@ -48,6 +48,15 @@ func _run() -> void:
 		root.add_child(combat)
 		combat.set_process(false)
 		await process_frame
+		# A broken player script aborts _ready() before objective creation.
+		# Stop at the FIRST broken stage rather than hiding the root cause
+		# behind hundreds of unrelated Nil-property errors.
+		if not is_instance_valid(combat.get("player")) or not is_instance_valid(combat.get("primary_objective_area")):
+			_check(false, "Stage %d failed to initialize player or objective; aborting remaining stages" % stage_num)
+			paused = false
+			combat.queue_free()
+			await process_frame
+			break
 
 		var scene_type: String = String(cfg.get("scene_type", ""))
 		_check(int(combat.get("current_stage_num")) == stage_num,
@@ -76,7 +85,7 @@ func _run() -> void:
 				var obstacle_layer: Node2D = combat.get("obstacles_layer") as Node2D
 				if is_instance_valid(obstacle_layer):
 					for candidate in obstacle_layer.get_children():
-						if candidate is ExplosiveBarrel and candidate.has_meta("mission_target"):
+						if candidate is Node2D and candidate.has_meta("mission_target"):
 							targets += 1
 				_check(targets == 2, "Stage %d spawns two real shootable incubators" % stage_num)
 			"repair_generator":
@@ -108,7 +117,7 @@ func _run() -> void:
 			var characters: Node2D = combat.get("characters_layer") as Node2D
 			if is_instance_valid(characters):
 				for enemy in characters.get_children():
-					if enemy is MutantEnemy and enemy.enemy_id == required_id and not enemy.is_dying:
+					if enemy is CharacterBody2D and enemy.get("enemy_id") == required_id and not bool(enemy.get("is_dying")):
 						count += 1
 			_check(count == 2, "Stage %d spawns two contracted elites on wave five" % stage_num)
 
