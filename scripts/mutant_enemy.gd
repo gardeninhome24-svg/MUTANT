@@ -95,7 +95,7 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 	if sprite:
 		var vis_info := AssetRegistry.apply_enemy_visual(sprite, enemy_id)
 		is_animated_sheet = bool(vis_info.get("is_animated", false))
-		sheet_fps = float(vis_info.get("fps", 9.0))
+		sheet_fps = maxf(1.0, float(vis_info.get("fps", 9.0)))
 		asset_status = String(vis_info.get("status", "HD_MUTANT_V2"))
 		base_scale = vis_info.get("base_scale", Vector2(0.56, 0.56))
 		walk_frames.clear()
@@ -115,7 +115,7 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 		move_speed = float(scaled["speed"])
 		xp_value = float(scaled["xp_reward"])
 		var bracket := StageDirector.get_stage_bracket_info(stage_num)
-		telegraph_duration = float(bracket.get("telegraph_sec", 0.95))
+		telegraph_duration = maxf(0.20, float(bracket.get("telegraph_sec", 0.95)))
 	current_health = max_health
 	if tier == "boss":
 		telegraph_radius = 135.0
@@ -161,12 +161,12 @@ func _draw() -> void:
 
 func _physics_process(delta: float) -> void:
 	impact_fx_cooldown = maxf(0.0, impact_fx_cooldown - delta)
-	if is_dying or not is_instance_valid(target) or not is_inside_tree():
+	if is_dying or not is_instance_valid(target) or not target.is_inside_tree() or not is_inside_tree():
 		return
 
 	# Wielofazowość Bossa (Faza 2 poniżej 55% HP, Faza 3 poniżej 25% HP od etapu 50+)
 	if tier == "boss":
-		var hp_pct := current_health / maxf(1.0, max_health)
+		var hp_pct := clampf(current_health / maxf(1.0, max_health), 0.0, 1.0)
 		if boss_phase == 1 and hp_pct <= 0.55 and current_stage_context >= 11:
 			boss_phase = 2
 			queue_redraw()
@@ -247,7 +247,7 @@ func _execute_telegraphed_slam() -> void:
 		return
 	is_telegraphing = false
 	queue_redraw()
-	if is_instance_valid(target) and target.global_position.distance_to(telegraph_world_pos) <= telegraph_radius:
+	if is_instance_valid(target) and target.is_inside_tree() and target.global_position.distance_squared_to(telegraph_world_pos) <= telegraph_radius * telegraph_radius:
 		if target.has_method("take_damage"):
 			target.take_damage(damage * 1.65)
 
@@ -328,6 +328,7 @@ func _fire_acid_glob(target_pos: Vector2) -> void:
 	tw.tween_callback(glob.queue_free)
 
 func _fire_radial_acid_burst(count: int) -> void:
+	count = clampi(count, 0, 12)
 	for i in range(count):
 		var ang := (TAU / float(maxi(1, count))) * float(i)
 		var dest := global_position + Vector2(cos(ang), sin(ang)) * 210.0
@@ -354,7 +355,7 @@ func die() -> void:
 
 	# Animacja śmierci wroga (rozbłysk toksyczny)
 	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
-	if is_instance_valid(parent_layer):
+	if is_instance_valid(parent_layer) and parent_layer.is_inside_tree():
 		var death_fx := Sprite2D.new()
 		death_fx.texture = TOXIC_SPLASH_TEX
 		death_fx.material = PowerEffects.get_additive_mat()

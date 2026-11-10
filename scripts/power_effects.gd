@@ -25,7 +25,8 @@ static func spawn_chain_lightning(layer: Node, chain_points: PackedVector2Array)
 
 	var add_mat := get_additive_mat()
 
-	for idx in range(chain_points.size() - 1):
+	# Long chains should not saturate mobile GPUs with dozens of line nodes.
+	for idx in range(mini(chain_points.size() - 1, 12)):
 		var p_start := chain_points[idx]
 		var p_end := chain_points[idx + 1]
 
@@ -42,11 +43,11 @@ static func spawn_chain_lightning(layer: Node, chain_points: PackedVector2Array)
 		core_line.material = add_mat
 
 		var steps := 6
+		var perp := (p_end - p_start).normalized().orthogonal()
 		for s in range(steps + 1):
 			var t := float(s) / float(steps)
 			var pt := p_start.lerp(p_end, t)
 			if s > 0 and s < steps:
-				var perp := (p_end - p_start).normalized().orthogonal()
 				pt += perp * randf_range(-18.0, 18.0)
 			glow_line.add_point(pt)
 			core_line.add_point(pt)
@@ -127,10 +128,11 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 		return
 
 	# Zadaj obrażenia obszarowe wrogom w promieniu eksplozji
+	var blast_radius_sq := blast_radius * blast_radius
 	var enemies := layer.get_tree().get_nodes_in_group("enemies")
 	for e in enemies:
 		var enemy := e as MutantEnemy
-		if is_instance_valid(enemy) and not enemy.is_dying and enemy.visible and enemy.global_position.distance_to(target_pos) <= blast_radius:
+		if is_instance_valid(enemy) and not enemy.is_dying and enemy.visible and enemy.global_position.distance_squared_to(target_pos) <= blast_radius_sq:
 			enemy.take_damage(blast_damage)
 
 	var add_mat := get_additive_mat()
@@ -191,6 +193,8 @@ static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damag
 
 	var elapsed := 0.0
 	var dmg_accum := 0.0
+	var pull_radius_sq := pull_radius * pull_radius
+	var damage_radius_sq := pull_radius_sq * 0.7225
 	while elapsed < duration and is_instance_valid(vortex) and is_instance_valid(core) and is_instance_valid(layer) and layer.is_inside_tree():
 		var dt := layer.get_process_delta_time()
 		elapsed += dt
@@ -208,12 +212,12 @@ static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damag
 		for e in enemies:
 			var enemy := e as MutantEnemy
 			if is_instance_valid(enemy) and not enemy.is_dying and enemy.visible:
-				var dist := enemy.global_position.distance_to(world_pos)
-				if dist <= pull_radius and dist > 18.0:
+				var dist_sq := enemy.global_position.distance_squared_to(world_pos)
+				if dist_sq <= pull_radius_sq and dist_sq > 324.0:
 					var pull_dir := (world_pos - enemy.global_position).normalized()
 					var pull_strength := 155.0 if enemy.tier != "boss" else 45.0
 					enemy.global_position += pull_dir * pull_strength * dt
-				if do_tick and dist <= pull_radius * 0.85:
+				if do_tick and dist_sq <= damage_radius_sq:
 					enemy.take_damage(tick_damage)
 
 		await layer.get_tree().process_frame

@@ -309,6 +309,8 @@ func _test_combat_and_bosses() -> void:
 		_assert(battle.get("active_boss").special_cooldown > 0.0, "Boss special attack cooldown remains valid")
 		_assert(int(battle.get("active_boss").boss_phase) == 1, "Boss starts in phase one")
 		_assert(battle.get("active_boss").max_health > 0.0, "Boss HP has a valid scale")
+		_assert(battle.get("active_boss").sheet_fps >= 1.0, "Boss animation frame rate is always valid")
+		_assert(battle.get("active_boss").telegraph_duration >= 0.20, "Boss warning provides enough time for mobile controls")
 	battle.set("primary_objective_done", true)
 	battle.set("wave_time_left", 0.0)
 	battle.set("boss_spawned_this_run", true)
