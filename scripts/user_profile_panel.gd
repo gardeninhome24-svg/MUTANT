@@ -61,6 +61,11 @@ var inv_quick_info: Label = null
 var inv_quick_equip: Button = null
 var inv_quick_unequip: Button = null
 var inv_bag_heading: Label = null
+const INVENTORY_PAGE_SIZE: int = 30
+var inventory_page: int = 0
+var inv_page_previous: Button = null
+var inv_page_next: Button = null
+var inv_page_label: Label = null
 var selected_bag_instance_id: String = ""
 
 # --- TAB 2: KAMPANIA 1-100 & TALENTY ---
@@ -1129,6 +1134,42 @@ func _build_tab_inventory_backpack() -> Control:
 	inv_grid.add_theme_constant_override("v_separation", 8)
 	bag_content.add_child(inv_grid)
 
+	# Fixed 30-cell pages prevent unbounded scrolling after long loot sessions.
+	var page_row := HBoxContainer.new()
+	page_row.name = "InventoryPagination"
+	page_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	page_row.add_theme_constant_override("separation", 8)
+	bag_content.add_child(page_row)
+	inv_page_previous = Button.new()
+	inv_page_previous.name = "InventoryPagePrevious"
+	inv_page_previous.text = "◀"
+	inv_page_previous.custom_minimum_size = Vector2(54, 48)
+	SurvivorVisualSystem.decorate_metal_button(inv_page_previous, SurvivorVisualSystem.CYAN, 48.0)
+	inv_page_previous.pressed.connect(func():
+		inventory_page = maxi(0, inventory_page - 1)
+		selected_bag_instance_id = ""
+		_refresh_inventory_tab_ui()
+	)
+	page_row.add_child(inv_page_previous)
+	inv_page_label = Label.new()
+	inv_page_label.name = "InventoryPageLabel"
+	inv_page_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inv_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	inv_page_label.add_theme_font_size_override("font_size", 13)
+	inv_page_label.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
+	page_row.add_child(inv_page_label)
+	inv_page_next = Button.new()
+	inv_page_next.name = "InventoryPageNext"
+	inv_page_next.text = "▶"
+	inv_page_next.custom_minimum_size = Vector2(54, 48)
+	SurvivorVisualSystem.decorate_metal_button(inv_page_next, SurvivorVisualSystem.CYAN, 48.0)
+	inv_page_next.pressed.connect(func():
+		inventory_page += 1
+		selected_bag_instance_id = ""
+		_refresh_inventory_tab_ui()
+	)
+	page_row.add_child(inv_page_next)
+
 	# Panel szczegółów wybranego przedmiotu i porównania ze założonym
 	inv_detail_box = _create_subpanel(Color(0.28, 0.96, 0.65, 0.85))
 	vbox.add_child(inv_detail_box)
@@ -1184,18 +1225,34 @@ func _refresh_inventory_tab_ui() -> void:
 		return StageDirector.get_item_effective_power(a) > StageDirector.get_item_effective_power(b)
 	)
 
-	# Never allow quick actions to operate on a hidden item after filter changes.
-	var selection_visible := false
-	for visible_item in filtered:
-		if String(visible_item.get("instance_id", "")) == selected_bag_instance_id:
-			selection_visible = true
+	# Keep the current item selected when sorting or filtering, and display
+	# its page. Changing pages explicitly clears selection in the button handler.
+	var page_count: int = maxi(1, ceili(float(filtered.size()) / float(INVENTORY_PAGE_SIZE)))
+	inventory_page = clampi(inventory_page, 0, page_count - 1)
+	var selected_index: int = -1
+	for index in range(filtered.size()):
+		if String(filtered[index].get("instance_id", "")) == selected_bag_instance_id:
+			selected_index = index
 			break
-	if not selection_visible:
-		selected_bag_instance_id = String(filtered[0].get("instance_id", "")) if not filtered.is_empty() else ""
-		if not selected_bag_instance_id.is_empty():
-			selected_inspect_slot_id = String(filtered[0].get("slot", "weapon"))
+	if selected_index >= 0:
+		inventory_page = int(selected_index / INVENTORY_PAGE_SIZE)
+	var page_start: int = inventory_page * INVENTORY_PAGE_SIZE
+	var page_end: int = mini(filtered.size(), page_start + INVENTORY_PAGE_SIZE)
+	var visible_items: Array[Dictionary] = []
+	for index in range(page_start, page_end):
+		visible_items.append(filtered[index])
+	if selected_index < 0:
+		selected_bag_instance_id = String(visible_items[0].get("instance_id", "")) if not visible_items.is_empty() else ""
+		if not visible_items.is_empty():
+			selected_inspect_slot_id = String(visible_items[0].get("slot", "weapon"))
+	if is_instance_valid(inv_page_previous):
+		inv_page_previous.disabled = inventory_page == 0
+	if is_instance_valid(inv_page_next):
+		inv_page_next.disabled = inventory_page >= page_count - 1
+	if is_instance_valid(inv_page_label):
+		inv_page_label.text = "STRONA %d / %d" % [inventory_page + 1, page_count]
 
-	for it in filtered:
+	for it in visible_items:
 		var inst_id := String(it.get("instance_id", ""))
 		var slot := String(it.get("slot", "weapon"))
 		var rar := String(it.get("rarity", "common"))
@@ -1279,8 +1336,8 @@ func _refresh_inventory_tab_ui() -> void:
 		cell.add_child(click_b)
 		inv_grid.add_child(cell)
 
-	# Always display a Metin-style 30-cell bag; never hide items beyond 30.
-	for empty_index in range(maxi(0, 30 - filtered.size())):
+	# Keep a consistent 30-slot grid on each page, even when filtered.
+	for empty_index in range(maxi(0, INVENTORY_PAGE_SIZE - visible_items.size())):
 		var empty_slot := PanelContainer.new()
 		empty_slot.name = "BackpackEmpty_%02d" % empty_index
 		empty_slot.custom_minimum_size = Vector2(76, 95) if narrow_portrait_ui else (Vector2(104, 120) if StageDirector.is_portrait_mode() else Vector2(100, 110))
@@ -1292,7 +1349,7 @@ func _refresh_inventory_tab_ui() -> void:
 		empty_slot.add_theme_stylebox_override("panel", empty_style)
 		inv_grid.add_child(empty_slot)
 	if is_instance_valid(inv_bag_heading):
-		inv_bag_heading.text = "PLECAK  %d / %d" % [filtered.size(), maxi(30, filtered.size())]
+		inv_bag_heading.text = "PLECAK  %d PRZEDMIOTÓW  •  %d–%d" % [filtered.size(), page_start + 1 if not visible_items.is_empty() else 0, page_end]
 	_refresh_inventory_quick_actions()
 	_refresh_inventory_detail_panel()
 
