@@ -300,12 +300,12 @@ func _execute() -> void:
 	battle.call("spawn_special_enemy", "miniboss_ch01", "miniboss", "QA unrelated elite")
 	var unrelated_elite: Node = battle.get("active_boss")
 	if is_instance_valid(unrelated_elite):
-		unrelated_elite.take_damage(float(unrelated_elite.get("max_health")) + 1000000.0)
+		unrelated_elite.call("take_damage", float(unrelated_elite.get("max_health")) + 1000000.0)
 	_check(int(battle.get("objective_elites_defeated")) == 0, "Unrelated miniboss cannot satisfy chapter-seven elite contract")
 	if mandatory_elites.size() == 2:
-		mandatory_elites[0].take_damage(float(mandatory_elites[0].max_health) + 1000000.0)
+		mandatory_elites[0].call("take_damage", float(mandatory_elites[0].get("max_health")) + 1000000.0)
 		_check(not bool(battle.get("primary_objective_done")), "One elite kill cannot finish stage 7 objective")
-		mandatory_elites[1].take_damage(float(mandatory_elites[1].max_health) + 1000000.0)
+		mandatory_elites[1].call("take_damage", float(mandatory_elites[1].get("max_health")) + 1000000.0)
 		_check(bool(battle.get("primary_objective_done")), "Two elite kills finish stage 7 objective")
 	paused = false
 	battle.queue_free()
@@ -398,7 +398,7 @@ func _execute() -> void:
 	if mission_targets.size() == 2:
 		var mission_shooter: Node2D = battle.get("player") as Node2D
 		if is_instance_valid(mission_shooter):
-			mission_shooter.global_position = mission_targets[0].global_position + Vector2(90, 0)
+			mission_shooter.global_position = (mission_targets[0] as Node2D).global_position + Vector2(90, 0)
 			_check(mission_shooter.call("find_primary_fire_target") == mission_targets[0],
 				"Close mission incubator is selectable by mobile auto-aim")
 			# Simulate a second arena with a closer objective. Mobile auto-fire
@@ -414,10 +414,10 @@ func _execute() -> void:
 				_check(mission_shooter.call("find_primary_fire_target") == mission_targets[0],
 					"Mobile auto-aim ignores closer incubator from another arena")
 			foreign_arena.queue_free()
-		mission_targets[0].take_damage(mission_targets[0].max_health + 1.0)
+		mission_targets[0].call("take_damage", float(mission_targets[0].get("max_health")) + 1.0)
 		_check(int(battle.get("objective_steps_done")) == 1, "First incubator destruction counts once")
 		_check(not bool(battle.get("primary_objective_done")), "One destroyed incubator cannot finish stage 4")
-		mission_targets[1].take_damage(mission_targets[1].max_health + 1.0)
+		mission_targets[1].call("take_damage", float(mission_targets[1].get("max_health")) + 1.0)
 		_check(int(battle.get("objective_steps_done")) == 2, "Second incubator destruction counts")
 		_check(bool(battle.get("primary_objective_done")), "Two destroyed incubators complete the objective")
 	paused = false
