@@ -8,6 +8,8 @@ class_name VibroSaw
 var player_ref: Node2D = null
 var current_angle: float = 0.0
 var spin_angle: float = 0.0
+var target_hit_cooldown: Dictionary = {}
+const HIT_INTERVAL: float = 0.28
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -17,8 +19,13 @@ func _ready() -> void:
 		sprite.material = PowerEffects.get_additive_mat()
 
 func _physics_process(delta: float) -> void:
-	if not is_instance_valid(player_ref):
+	if not is_instance_valid(player_ref) or not player_ref.is_inside_tree():
+		queue_free()
 		return
+	for enemy_id in target_hit_cooldown.keys():
+		target_hit_cooldown[enemy_id] = float(target_hit_cooldown[enemy_id]) - delta
+		if target_hit_cooldown[enemy_id] <= 0.0:
+			target_hit_cooldown.erase(enemy_id)
 	current_angle += orbit_speed * delta
 	spin_angle += 16.0 * delta
 	var offset := Vector2(cos(current_angle), sin(current_angle)) * orbit_radius
@@ -26,6 +33,7 @@ func _physics_process(delta: float) -> void:
 	if sprite:
 		sprite.rotation = spin_angle
 	queue_redraw()
+	_physics_overlap_damage()
 
 func _draw() -> void:
 	# Wirujące ostrza plazmowe i smuga cięcia
@@ -38,5 +46,19 @@ func _draw() -> void:
 		draw_line(p1, p2, Color(0.4, 0.98, 1.0, 0.92), 2.5, true)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is MutantEnemy:
-		body.take_damage(damage)
+	_apply_saw_hit(body)
+
+
+func _physics_overlap_damage() -> void:
+	for body in get_overlapping_bodies():
+		_apply_saw_hit(body)
+
+
+func _apply_saw_hit(body: Node2D) -> void:
+	if not (body is MutantEnemy) or body.is_dying or not body.visible:
+		return
+	var key := body.get_instance_id()
+	if target_hit_cooldown.has(key):
+		return
+	target_hit_cooldown[key] = HIT_INTERVAL
+	body.take_damage(damage)

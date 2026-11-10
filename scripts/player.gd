@@ -402,26 +402,27 @@ func _clamp_to_arena() -> void:
 func find_nearest_enemy() -> Node2D:
 	var enemies := get_tree().get_nodes_in_group("enemies")
 	var nearest_enemy: Node2D = null
-	var min_dist := 720.0
+	var nearest_distance_sq := 720.0 * 720.0
 
 	for enemy in enemies:
-		if not is_instance_valid(enemy):
+		if not (enemy is MutantEnemy) or enemy.is_dying or not enemy.visible or not enemy.is_inside_tree():
 			continue
-		var dist := global_position.distance_to(enemy.global_position)
-		if dist < min_dist:
-			min_dist = dist
+		var distance_sq := global_position.distance_squared_to(enemy.global_position)
+		if distance_sq < nearest_distance_sq:
+			nearest_distance_sq = distance_sq
 			nearest_enemy = enemy
 
 	return nearest_enemy
 
 func shoot_at_enemy(target: Node2D) -> void:
+	if not is_instance_valid(target) or not target.is_inside_tree():
+		return
 	var bolt := PLASMA_BOLT_SCENE.instantiate()
 	var dir := (target.global_position - shoot_point.global_position).normalized()
 	if dir.x != 0.0:
 		sprite.flip_h = dir.x < 0.0
 		shoot_point.position.x = -28.0 if sprite.flip_h else 28.0
 
-	bolt.global_position = shoot_point.global_position
 	bolt.direction = dir
 
 	var is_crit := randf() < crit_chance
@@ -431,6 +432,7 @@ func shoot_at_enemy(target: Node2D) -> void:
 
 	var container: Node = projectiles_layer if is_instance_valid(projectiles_layer) else get_parent()
 	container.add_child(bolt)
+	bolt.global_position = shoot_point.global_position
 
 	if muzzle_flash:
 		muzzle_flash.visible = true

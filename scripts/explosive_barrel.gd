@@ -17,7 +17,7 @@ func _ready() -> void:
 	current_health = max_health
 
 func take_damage(amount: float) -> void:
-	if is_exploded:
+	if is_exploded or amount <= 0.0:
 		return
 	current_health -= amount
 
@@ -29,11 +29,15 @@ func take_damage(amount: float) -> void:
 		explode()
 
 func explode() -> void:
+	if is_exploded:
+		return
 	is_exploded = true
-	var enemies := get_tree().get_nodes_in_group("enemies")
-	for e in enemies:
-		if is_instance_valid(e) and global_position.distance_to(e.global_position) <= blast_radius:
-			e.take_damage(blast_damage)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+	var radius_sq := blast_radius * blast_radius
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy is MutantEnemy and not enemy.is_dying and enemy.visible and global_position.distance_squared_to(enemy.global_position) <= radius_sq:
+			enemy.take_damage(blast_damage)
 
 	sprite.texture = EXPLOSION_TEX
 	sprite.material = PowerEffects.get_additive_mat()

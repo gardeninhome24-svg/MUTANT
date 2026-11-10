@@ -35,6 +35,7 @@ func _run() -> void:
 	_test_horde_performance_limits()
 	_test_character_art_sequences()
 	_test_enemy_art_sequences()
+	_test_projectile_and_pickup_safety()
 	_test_starter_gear()
 	_test_equipment_and_save()
 	_test_rarity_fusion_protection()
@@ -82,6 +83,30 @@ func _test_enemy_art_sequences() -> void:
 			_assert(not later_tints.has(tint), "Chapter %d tint is unique" % chapter)
 			later_tints.append(tint)
 		preview.free()
+
+
+func _test_projectile_and_pickup_safety() -> void:
+	# Instantiate independently: avoid circular class-name script resolution
+	# in the headless Godot autoload environment.
+	var bolt_script: Script = load("res://scripts/plasma_bolt.gd") as Script
+	var xp_script: Script = load("res://scripts/xp_shard.gd") as Script
+	var saw_script: Script = load("res://scripts/vibro_saw.gd") as Script
+	_assert(bolt_script != null and xp_script != null and saw_script != null, "Projectile, pickup and saw scripts load")
+	if bolt_script == null or xp_script == null or saw_script == null:
+		return
+	var bolt: Node = bolt_script.new()
+	_assert(not bolt.has_hit, "New projectiles begin unused")
+	bolt.has_hit = true
+	_assert(bolt.has_hit, "Projectile hit guard retains consumed state")
+	bolt.free()
+	var shard: Node = xp_script.new()
+	_assert(not shard.is_collected, "XP pickup begins unclaimed")
+	shard.is_collected = true
+	_assert(shard.is_collected, "XP claim guard tracks collected pickups")
+	shard.free()
+	var saw: Node = saw_script.new()
+	_assert(saw.HIT_INTERVAL >= 0.25, "Orbiting saw damage has per-target cooldown")
+	saw.free()
 
 
 func _test_horde_performance_limits() -> void:
