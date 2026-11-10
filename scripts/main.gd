@@ -1061,7 +1061,8 @@ func _can_claim_victory() -> bool:
 		and current_wave_num >= max_waves_in_stage
 		and wave_time_left <= 0.0
 		and primary_objective_done
-		and (not boss_spawned_this_run or boss_killed_this_run)
+		and boss_spawned_this_run
+		and boss_killed_this_run
 		and is_instance_valid(player) and player.current_health > 0.0)
 
 func on_wave_completed() -> void:
@@ -1071,7 +1072,8 @@ func on_wave_completed() -> void:
 		if _can_claim_victory():
 			_on_stage_victory()
 		else:
-			# Do not auto-win when boss or main objective remains unfinished.
+			# Keep the final wave active while the boss or objective remains.
+			# Missing boss data never grants an automatic stage victory.
 			wave_time_left = 1.0
 		return
 	current_wave_num += 1

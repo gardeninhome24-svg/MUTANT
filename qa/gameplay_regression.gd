@@ -417,6 +417,12 @@ func _test_combat_and_bosses() -> void:
 	battle.set("boss_spawned_this_run", true)
 	battle.set("boss_killed_this_run", false)
 	_assert(not bool(battle.call("_can_claim_victory")), "Cannot win while the final boss lives")
+	battle.set("boss_spawned_this_run", false)
+	battle.set("boss_killed_this_run", false)
+	_assert(not bool(battle.call("_can_claim_victory")), "Missing final boss can never be bypassed")
+	battle.call("_on_stage_victory")
+	_assert(String(battle.get("run_result_state")) == "active", "No reward transition without spawned boss")
+	battle.set("boss_spawned_this_run", true)
 	var final_boss = battle.get("active_boss")
 	if is_instance_valid(final_boss):
 		final_boss.take_damage(final_boss.max_health + 500.0)
@@ -426,6 +432,9 @@ func _test_combat_and_bosses() -> void:
 	battle.call("_on_stage_victory")
 	_assert(String(battle.get("run_result_state")) == "victory", "Victory transitions into victory state")
 	_assert((battle.get("win_panel") as Control).visible, "Victory panel becomes visible")
+	battle.call("_on_stage_victory")
+	_assert(String(battle.get("run_result_state")) == "victory", "Repeated victory callback cannot restart stage completion")
+	_assert(not bool(battle.call("_can_claim_victory")), "Victory becomes terminal immediately")
 	paused = false
 	battle.queue_free()
 	await process_frame
@@ -438,6 +447,14 @@ func _test_combat_and_bosses() -> void:
 	battle.call("_on_player_died")
 	_assert(String(battle.get("run_result_state")) == "awaiting_revive", "Defeat transitions into revive state")
 	_assert((battle.get("death_panel") as Control).visible, "Defeat panel becomes visible")
+	battle.call("_on_player_died")
+	_assert(String(battle.get("run_result_state")) == "awaiting_revive", "Repeated player death cannot finalize run prematurely")
+	battle.call("_finalize_failure_once")
+	_assert(String(battle.get("run_result_state")) == "failure_final", "Abandoning revive finalizes defeat exactly once")
+	battle.call("_finalize_failure_once")
+	_assert(String(battle.get("run_result_state")) == "failure_final", "Repeated failure callback cannot reopen rewards")
+	battle.call("_on_player_died")
+	_assert(String(battle.get("run_result_state")) == "failure_final", "Dead run cannot re-enter revive state")
 	paused = false
 	battle.queue_free()
 	await process_frame
@@ -460,6 +477,9 @@ func _test_combat_and_bosses() -> void:
 	battle.set("primary_objective_done", true)
 	battle.set("wave_time_left", 0.0)
 	_assert(not bool(battle.call("_can_claim_victory")), "Stage 100 cannot win before final boss defeat")
+	battle.set("boss_spawned_this_run", false)
+	battle.set("boss_killed_this_run", false)
+	_assert(not bool(battle.call("_can_claim_victory")), "Stage 100 cannot skip an unspawned Architekt Zero")
 	paused = false
 	battle.queue_free()
 	await process_frame
