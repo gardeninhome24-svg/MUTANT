@@ -201,35 +201,65 @@ jobs:
         if: always()
         shell: bash
         run: |
+          set -euo pipefail
           {
-            echo "## MutantSurvivor — pre-beta automated tests"
+            echo "## MUTANT — beta QA at commit $GITHUB_SHA"
             echo ""
-            echo "Commit: \`$GITHUB_SHA\`"
-            echo ""
-            echo "| QA stage | Result |"
+            echo "| Test | Verified result in log |"
             echo "|---|---|"
-            for entry in "Campaign 100 F2P:/tmp/campaign-100-f2p.log" "HUD and required art:/tmp/visual-release-gate.log" "Mobile navigation:/tmp/mobile-ui-regression.log" "Premium shop and wallet:/tmp/premium-shop-regression.log" "Gameplay bosses, rewards, equipment, saves:/tmp/gameplay-regression.log" "Real boss victory/save loop:/tmp/full-run-persistence.log" "Menu startup:/tmp/mutantsurvivor-startup.log" "Combat startup:/tmp/mutantsurvivor-combat.log"; do
+            for entry in \
+              "100-stage campaign:/tmp/campaign-100-f2p.log:F2P PASS:" \
+              "Boss finale integration:/tmp/chapter-boss-integration.log:CHAPTER BOSS PASS:" \
+              "Full-run save and rewards:/tmp/full-run-persistence.log:FULL RUN PASS:" \
+              "Visual geometry:/tmp/visual-release-gate.log:VISUAL GATE PASS:"; do
               name="${entry%%:*}"
-              log="${entry#*:}"
-              if [ -s "$log" ]; then
-                echo "| $name | Log available |"
+              rest="${entry#*:}"
+              log="${rest%%:*}"
+              marker="${rest#*:}"
+              if [ ! -s "$log" ]; then
+                echo "| $name | NOT EXECUTED / NO LOG |"
+              elif grep -Fq "$marker" "$log"; then
+                echo "| $name | PASS marker found (see corresponding step) |"
               else
-                echo "| $name | Not executed or no log |"
+                echo "| $name | NO PASS MARKER — review step |"
               fi
             done
             echo ""
-            echo "### Critical errors from the current run"
+            echo "A PASS marker is only a supporting log signal; the GitHub job conclusion is authoritative."
+            echo "APK ZIP, signer and package checks run after this step and may still fail."
+            echo "Physical-device QA and screenshot review remain mandatory."
             echo ""
+            echo "### Errors"
             echo '~~~text'
-            for log in /tmp/campaign-100-f2p.log /tmp/visual-release-gate.log /tmp/mobile-ui-regression.log /tmp/premium-shop-regression.log /tmp/gameplay-regression.log /tmp/full-run-persistence.log /tmp/mutantsurvivor-startup.log /tmp/mutantsurvivor-combat.log; do
+            for log in /tmp/campaign-100-f2p.log /tmp/chapter-boss-integration.log /tmp/full-run-persistence.log /tmp/visual-release-gate.log /tmp/mobile-ui-regression.log /tmp/gameplay-regression.log /tmp/premium-shop-regression.log; do
               if [ -s "$log" ]; then
-                grep -E -i "SCRIPT ERROR:|Parse Error:|Invalid call|Failed to load script|FAIL:|FAILED:|ERROR:|Assertion failed" "$log" | tail -n 35 || true
+                grep -E -i "SCRIPT ERROR:|Parse Error:|Invalid call|Failed to load script|FAIL:|FAILED:|ERROR:" "$log" | tail -n 20 || true
               fi
             done
             echo '~~~'
-            echo ""
-            echo "Actual test status is shown by each job step (green/red), not by log existence. Android device QA is still required."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Archive QA logs for every beta build
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-QA-logs-${{ github.run_number }}
+          path: |
+            /tmp/campaign-100-f2p.log
+            /tmp/chapter-boss-integration.log
+            /tmp/full-run-persistence.log
+            /tmp/premium-shop-regression.log
+            /tmp/gameplay-regression.log
+            /tmp/visual-release-gate.log
+            /tmp/mobile-ui-regression.log
+            /tmp/google-play-preflight.log
+            /tmp/mutantsurvivor-startup.log
+            /tmp/mutantsurvivor-combat.log
+            /tmp/beta-apk-preflight.log
+            /tmp/apk-signature.log
+            /tmp/apk-badging.log
+          if-no-files-found: warn
+          retention-days: 21
 
       - name: Preserve headless QA logs on failure
         if: failure()
