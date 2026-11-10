@@ -4,7 +4,7 @@ extends SceneTree
 # for every campaign mission (not a simulated ten-wave player playthrough).
 # Each run is disposable and uses its own QA-only save path.
 const QA_SAVE_PATH := "user://qa_mission_scene_100_smoke.json"
-const COMBAT_SCENE := preload("res://scenes/main/main.tscn")
+const COMBAT_SCENE_PATH := "res://scenes/main/main.tscn"
 
 var checks: int = 0
 var failures: Array[String] = []
@@ -27,12 +27,21 @@ func _run() -> void:
 		return
 	stage.get_script().set("save_path_override", QA_SAVE_PATH)
 	stage.is_practice_mode = true
+	# Loading a combat PackedScene as a top-level const runs before the
+	# SceneTree autoload registry is initialized with --script; the dependent
+	# Player/Enemy scripts then fail to resolve the StageDirector singleton.
+	var combat_scene: PackedScene = load(COMBAT_SCENE_PATH) as PackedScene
+	_check(combat_scene != null, "Combat scene loads after StageDirector initialization")
+	if combat_scene == null:
+		stage.get_script().set("save_path_override", "")
+		_done()
+		return
 
 	for stage_num in range(1, 101):
 		var cfg: Dictionary = stage.get_stage_config(stage_num)
 		stage.current_stage = stage_num
 		stage.max_unlocked_stage = stage_num
-		var combat: Node = COMBAT_SCENE.instantiate()
+		var combat: Node = combat_scene.instantiate()
 		_check(combat != null, "Combat scene instantiates stage %d" % stage_num)
 		if combat == null:
 			continue
