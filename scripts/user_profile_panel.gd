@@ -301,6 +301,21 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	var welcome_panel := find_child("StoreDepotBanner", true, false) as PanelContainer
 	if is_instance_valid(welcome_panel):
 		welcome_panel.custom_minimum_size = Vector2(0, 145 if narrow else 186)
+	var welcome_row := find_child("StoreWelcomeRow", true, false) as HBoxContainer
+	if is_instance_valid(welcome_row):
+		welcome_row.add_theme_constant_override("separation", 6 if narrow else 12)
+	var welcome_subtitle := find_child("StoreWelcomeSubtitle", true, false) as Label
+	if is_instance_valid(welcome_subtitle):
+		welcome_subtitle.add_theme_font_size_override("font_size", 11 if narrow else 13)
+	if is_instance_valid(free_daily_pack_btn):
+		free_daily_pack_btn.add_theme_font_size_override("font_size", 10 if narrow else 12)
+	var product_arts: Array[Node] = find_children("StoreProductArtwork", "TextureRect", true, false)
+	for product_art in product_arts:
+		(product_art as TextureRect).custom_minimum_size = Vector2(96, 112) if narrow else Vector2(110, 130)
+	for product_title in find_children("StoreProductTitle", "Label", true, false):
+		(product_title as Label).add_theme_font_size_override("font_size", 13 if narrow else 16)
+	for product_description in find_children("StoreProductDescription", "Label", true, false):
+		(product_description as Label).add_theme_font_size_override("font_size", 11 if narrow else 13)
 	if is_instance_valid(store_cards_grid):
 		store_cards_grid.columns = (1 if narrow else 2) if portrait else 3
 	if is_instance_valid(store_categories_grid):
