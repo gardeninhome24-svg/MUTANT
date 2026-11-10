@@ -11,7 +11,7 @@ on:
       - assets/bosses/**
 
 concurrency:
-  group: mutant-boss-gallery-\${{ github.ref }}
+  group: mutant-boss-gallery-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -54,7 +54,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MutantSurvivor-Boss-Godot-Screenshots-\${{ github.run_number }}
+          name: MutantSurvivor-Boss-Godot-Screenshots-${{ github.run_number }}
           path: |
             visual_qa/captures/boss_gallery_*_actual.png
             /tmp/boss-gallery-import.log
