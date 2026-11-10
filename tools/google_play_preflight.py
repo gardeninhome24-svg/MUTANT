@@ -131,6 +131,7 @@ else:
 # Reuse the same PNG contract as the standalone boss importer. File existence
 # alone cannot establish that a release contains valid and distinct animation art.
 from boss_art_pack import FRAMES, CHAPTERS, inspect_png
+from boss_art_geometry import alpha_bounds
 
 boss_total = 0
 missing_boss_frames: list[str] = []
@@ -151,6 +152,10 @@ for chapter in CHAPTERS:
             if len(data) < 150:
                 raise ValueError("empty or truncated PNG")
             digests.append(inspect_png(data, name))
+            if name != "boss_portrait.png":
+                shape = alpha_bounds(data, relative)
+                if shape["feet"] < 0.88:
+                    raise ValueError("actor feet do not reach the lower frame anchor")
         except (OSError, ValueError) as error:
             invalid_boss_frames.append(f"{relative} ({error})")
             complete = False
