@@ -40,6 +40,17 @@ func _run() -> void:
         root.add_child(combat)
         await process_frame
         combat.set_process(false)
+        # Every chapter finale has a wave-five elite. Killing that elite
+        # must not satisfy the separate boss objective on wave ten.
+        combat.call("start_wave", stage_num, 5)
+        var midwave_elite: Node = combat.get("active_boss")
+        _check(is_instance_valid(midwave_elite), "Stage %d spawns wave-five elite" % stage_num)
+        if is_instance_valid(midwave_elite):
+            midwave_elite.take_damage(float(midwave_elite.get("max_health")) + 1000000.0)
+            _check(not bool(combat.get("boss_killed_this_run")),
+                "Stage %d elite death cannot count as chapter boss kill" % stage_num)
+            _check(not bool(combat.get("primary_objective_done")),
+                "Stage %d elite death cannot finish boss objective" % stage_num)
         combat.call("start_wave", stage_num, 10)
         var boss: Node = combat.get("active_boss")
         _check(bool(combat.call("_stage_requires_final_boss")), "Stage %d requires boss" % stage_num)
