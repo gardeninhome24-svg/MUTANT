@@ -364,7 +364,11 @@ func _execute() -> void:
 		escort_player.global_position = escort_origin
 		battle.call("_process", 0.25)
 		_check(not bool(battle.get("primary_objective_done")), "Escort cannot complete after a stationary quarter-second")
-		for step in range(12):
+		# Escort starts about 464px from extraction; twelve half-second
+		# steps at 75px/s cover only 450px and falsely fail this gate.
+		for step in range(18):
+			if bool(battle.get("primary_objective_done")):
+				break
 			escort_player.global_position = escort_area.global_position
 			battle.call("_process", 0.5)
 		_check(escort_area.global_position.distance_to(escort_origin) > 350.0, "Escort unit travels across the arena")
