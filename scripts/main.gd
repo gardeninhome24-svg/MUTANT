@@ -239,7 +239,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(npc_speaker_lbl):
 		npc_speaker_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	if is_instance_valid(npc_text_lbl):
-		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
+		npc_text_lbl.add_theme_font_size_override("font_size", 13 if compact else 13)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
@@ -372,7 +372,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			npc_dialogue_panel.offset_left = -maxf(90.0, view_width * 0.5 - 12.0) if compact else -220.0
 			npc_dialogue_panel.offset_top = (248.0 if compact else 226.0) + safe_top
 			npc_dialogue_panel.offset_right = maxf(90.0, view_width * 0.5 - 12.0) if compact else 220.0
-			npc_dialogue_panel.offset_bottom = (365.0 if compact else 355.0) + safe_top
+			npc_dialogue_panel.offset_bottom = (410.0 if compact else 355.0) + safe_top
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
@@ -819,11 +819,13 @@ func show_npc_comms(speaker: String, text: String) -> void:
 	var preview := text.strip_edges()
 	if preview.to_lower().begins_with(speaker.to_lower() + ":"):
 		preview = preview.substr(speaker.length() + 1).strip_edges()
-	if preview.length() > 105:
-		preview = preview.substr(0, 102).strip_edges() + "…"
+	# Keep the complete mission briefing visible: mobile HUD wraps over several lines.
+	# Use a generous bounded preview only for unusually long external dialogue.
+	if preview.length() > 260:
+		preview = preview.substr(0, 257).strip_edges() + "…"
 	npc_text_lbl.text = preview
 	npc_dialogue_panel.visible = true
-	npc_hide_timer = 3.8
+	npc_hide_timer = clampf(4.0 + float(preview.length()) / 42.0, 5.0, 10.0)
 	var log_entry := "[Etap %03d | Fala %d] %s: %s" % [current_stage_num, current_wave_num, speaker.to_upper(), text]
 	if not npc_dialogue_history.has(log_entry):
 		npc_dialogue_history.append(log_entry)

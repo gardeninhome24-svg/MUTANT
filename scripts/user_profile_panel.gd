@@ -14,6 +14,7 @@ var player_ref: Player = null
 var embedded_in_hub: bool = false
 var narrow_portrait_ui: bool = false
 var current_tab: int = 0 # 0=Postać RPG, 1=Ekwipunek, 2=Kampania 1-100, 3=Sklep Premium, 4=Nagrody 7 Dni
+var campaign_chapters_expanded: bool = false
 
 var tab_bg_tex: TextureRect = null
 var main_card: PanelContainer
@@ -263,26 +264,40 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	if is_instance_valid(inventory_actions):
 		inventory_actions.columns = 1 if narrow else 3
 	if is_instance_valid(stage_boss_preview):
-		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(250, 285)
+		stage_boss_preview.custom_minimum_size = Vector2(92, 112) if narrow else Vector2(250, 285)
+	var campaign_main := find_child("CampaignMainCard", true, false) as PanelContainer
+	if is_instance_valid(campaign_main):
+		campaign_main.custom_minimum_size.y = 365.0 if narrow else 440.0
+	var campaign_title := find_child("CampaignMainTitle", true, false) as Label
+	if is_instance_valid(campaign_title):
+		campaign_title.add_theme_font_size_override("font_size", 25 if narrow else 32)
+	var campaign_art_row := find_child("CampaignHeroRow", true, false) as HBoxContainer
+	if is_instance_valid(campaign_art_row):
+		campaign_art_row.add_theme_constant_override("separation", 7 if narrow else 12)
+	var campaign_details := find_child("CampaignMissionDetails", true, false) as VBoxContainer
+	if is_instance_valid(campaign_details):
+		campaign_details.add_theme_constant_override("separation", 4 if narrow else 7)
 	# The four campaign navigation actions must remain finger-sized at 420px.
 	var campaign_nav := find_child("StageDirectionRow", true, false) as HBoxContainer
 	if is_instance_valid(campaign_nav):
 		campaign_nav.add_theme_constant_override("separation", 3 if narrow else 6)
 		for nav_action in campaign_nav.get_children():
 			if nav_action is Button:
-				(nav_action as Button).custom_minimum_size.y = 48.0
+				(nav_action as Button).custom_minimum_size.y = 46.0
+				(nav_action as Button).add_theme_font_size_override("font_size", 12 if narrow else 13)
 	var chapter_shortcuts := find_child("StageJumpGrid", true, false) as GridContainer
 	if is_instance_valid(chapter_shortcuts):
 		for shortcut in chapter_shortcuts.get_children():
 			if shortcut is Button:
-				(shortcut as Button).custom_minimum_size.y = 48.0
+				(shortcut as Button).custom_minimum_size.y = 44.0
+				(shortcut as Button).add_theme_font_size_override("font_size", 12 if narrow else 13)
 	for reward_kind in ["Credits", "Scrap", "Equipment"]:
 		var icon_node := find_child("CampaignRewardIcon" + reward_kind, true, false) as TextureRect
 		if is_instance_valid(icon_node):
-			icon_node.custom_minimum_size = Vector2(32, 32) if narrow else Vector2(38, 36)
+			icon_node.custom_minimum_size = Vector2(29, 29) if narrow else Vector2(38, 36)
 		var value_node := find_child("CampaignRewardValue" + reward_kind, true, false) as Label
 		if is_instance_valid(value_node):
-			value_node.add_theme_font_size_override("font_size", 12 if narrow else 14)
+			value_node.add_theme_font_size_override("font_size", 13 if narrow else 14)
 	for talent_id in talent_rows.keys():
 		var talent_ui: Dictionary = talent_rows[talent_id]
 		var upgrade: Button = talent_ui["btn"] as Button
@@ -304,11 +319,17 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 	var campaign_chapters := find_child("CampaignChapterMap", true, false) as GridContainer
 	if is_instance_valid(campaign_chapters):
 		campaign_chapters.columns = 2 if narrow else 5
+		campaign_chapters.visible = not narrow or campaign_chapters_expanded
+	var chapter_toggle := find_child("CampaignChapterToggle", true, false) as Button
+	if is_instance_valid(chapter_toggle):
+		chapter_toggle.visible = narrow
+		chapter_toggle.text = "UKRYJ MAPĘ ROZDZIAŁÓW ▲" if campaign_chapters_expanded else "POKAŻ MAPĘ 10 ROZDZIAŁÓW ▼"
+		chapter_toggle.custom_minimum_size.y = 44.0
 	if is_instance_valid(stage_info_lbl):
-		stage_info_lbl.add_theme_font_size_override("font_size", 14 if narrow else 21)
+		stage_info_lbl.add_theme_font_size_override("font_size", 16 if narrow else 21)
 	for detail_label in [campaign_chapter_lbl, campaign_npc_lbl, campaign_goal_lbl, campaign_hazard_lbl, campaign_boss_lbl, campaign_reward_lbl]:
 		if is_instance_valid(detail_label):
-			detail_label.add_theme_font_size_override("font_size", 11 if narrow else (17 if detail_label == campaign_chapter_lbl else 14))
+			detail_label.add_theme_font_size_override("font_size", 12 if narrow else (17 if detail_label == campaign_chapter_lbl else 14))
 
 	# The equipment presentation must fit the *physical* narrow viewport.
 	# The previous 225px operator and 80px columns forced horizontal overflow.
@@ -357,9 +378,19 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 				(category_action as Button).custom_minimum_size.y = 44.0 if narrow else 40.0
 	if is_instance_valid(daily_grid):
 		daily_grid.columns = (2 if narrow else 4) if portrait else 7
+		daily_grid.add_theme_constant_override("h_separation", 6 if narrow else 8)
+		daily_grid.add_theme_constant_override("v_separation", 6 if narrow else 8)
 		for reward_card in daily_grid.get_children():
 			if reward_card is Control:
-				(reward_card as Control).custom_minimum_size.y = maxf((reward_card as Control).custom_minimum_size.y, 150.0 if narrow else 140.0)
+				(reward_card as Control).custom_minimum_size.y = 124.0 if narrow else 140.0
+	var reward_header := find_child("DailyRewardsHeading", true, false) as Label
+	if is_instance_valid(reward_header):
+		reward_header.text = "NAGRODY • 7 DNI" if narrow else "7 DNI NAGRÓD POWITALNYCH"
+		reward_header.add_theme_font_size_override("font_size", 14)
+	var mission_heading := find_child("DailyMissionHeading", true, false) as Label
+	if is_instance_valid(mission_heading):
+		mission_heading.text = "ZADANIA DZIENNE • 24H" if narrow else "📋 ZADANIA DZIENNE DOWÓDZTWA (ODNAWIANE CO 24H)"
+		mission_heading.add_theme_font_size_override("font_size", 13)
 
 func _build_ui() -> void:
 	tab_bg_tex = TextureRect.new()
@@ -1623,6 +1654,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	vbox.add_theme_constant_override("separation", 10)
 
 	var camp_card := _create_subpanel(Color(0.25, 0.90, 1.0, 0.80))
+	camp_card.name = "CampaignMainCard"
 	camp_card.custom_minimum_size = Vector2(0, 440)
 	vbox.add_child(camp_card)
 	var c_vbox := VBoxContainer.new()
@@ -1630,6 +1662,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	camp_card.add_child(c_vbox)
 
 	var c_title := Label.new()
+	c_title.name = "CampaignMainTitle"
 	c_title.text = "KAMPANIA 1–100"
 	c_title.add_theme_font_size_override("font_size", 32)
 	c_title.add_theme_color_override("font_color", SurvivorVisualSystem.GOLD)
@@ -1638,6 +1671,7 @@ func _build_tab_campaign_and_talents() -> Control:
 	c_vbox.add_child(c_title)
 
 	var mid_h := HBoxContainer.new()
+	mid_h.name = "CampaignHeroRow"
 	mid_h.add_theme_constant_override("separation", 12)
 	c_vbox.add_child(mid_h)
 
@@ -1776,6 +1810,17 @@ func _build_tab_campaign_and_talents() -> Control:
 	chapter_heading.text = "MAPA KAMPANII  •  10 ROZDZIAŁÓW"
 	SurvivorVisualSystem.decorate_section(chapter_heading, SurvivorVisualSystem.LIME, 16)
 	c_vbox.add_child(chapter_heading)
+	var chapter_toggle := Button.new()
+	chapter_toggle.name = "CampaignChapterToggle"
+	chapter_toggle.text = "POKAŻ MAPĘ 10 ROZDZIAŁÓW ▼"
+	chapter_toggle.custom_minimum_size = Vector2(0, 44)
+	chapter_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	SurvivorVisualSystem.decorate_button(chapter_toggle, SurvivorVisualSystem.LIME, 44.0)
+	chapter_toggle.pressed.connect(func():
+		campaign_chapters_expanded = not campaign_chapters_expanded
+		_apply_responsive_metrics()
+	)
+	c_vbox.add_child(chapter_toggle)
 	var chapter_grid := GridContainer.new()
 	chapter_grid.name = "CampaignChapterMap"
 	chapter_grid.columns = 5
@@ -2233,6 +2278,7 @@ func _build_tab_daily_rewards() -> Control:
 	d_vbox.add_child(d_header_h)
 
 	var d_title := Label.new()
+	d_title.name = "DailyRewardsHeading"
 	d_title.text = "7 DNI NAGRÓD POWITALNYCH"
 	d_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	d_title.add_theme_font_size_override("font_size", 14)
@@ -2258,6 +2304,7 @@ func _build_tab_daily_rewards() -> Control:
 	missions_card.add_child(m_vbox)
 
 	var m_title := Label.new()
+	m_title.name = "DailyMissionHeading"
 	m_title.text = "📋 ZADANIA DZIENNE DOWÓDZTWA (ODNAWIANE CO 24H)"
 	m_title.add_theme_font_size_override("font_size", 13)
 	m_title.add_theme_color_override("font_color", Color(0.38, 1.0, 0.68))
@@ -2491,7 +2538,7 @@ func _refresh_daily_and_bp_ui() -> void:
 			var d_num := int(r["day"])
 			var claimed := StageDirector.daily_claimed_days.has(d_num)
 			var box := _create_subpanel(SurvivorVisualSystem.GOLD if not claimed else SurvivorVisualSystem.LIME)
-			box.custom_minimum_size = Vector2(136, 146)
+			box.custom_minimum_size = Vector2(124, 124) if narrow_portrait_ui else Vector2(136, 140)
 			box.add_theme_stylebox_override("panel", SurvivorVisualSystem.panel(SurvivorVisualSystem.GOLD if not claimed else SurvivorVisualSystem.LIME, not claimed))
 			box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var v := VBoxContainer.new()
@@ -2502,7 +2549,7 @@ func _refresh_daily_and_bp_ui() -> void:
 			var dl := Label.new()
 			dl.text = "Dzień %d" % d_num
 			dl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			SurvivorVisualSystem.decorate_section(dl, SurvivorVisualSystem.GOLD, 15)
+			SurvivorVisualSystem.decorate_section(dl, SurvivorVisualSystem.GOLD, 14 if narrow_portrait_ui else 15)
 			dl.add_theme_color_override("font_color", Color(1.0, 0.86, 0.25))
 			v.add_child(dl)
 
@@ -2510,7 +2557,7 @@ func _refresh_daily_and_bp_ui() -> void:
 			rl.text = "+%d Kr  •  +%d Złomu" % [int(r["credits"]), int(r["scrap"])]
 			rl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			rl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			rl.add_theme_font_size_override("font_size", 12)
+			rl.add_theme_font_size_override("font_size", 11 if narrow_portrait_ui else 12)
 			rl.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
 			v.add_child(rl)
 
@@ -2519,7 +2566,7 @@ func _refresh_daily_and_bp_ui() -> void:
 			var claimable := not claimed and d_num == StageDirector.daily_login_day and StageDirector.last_daily_calendar_claim_day < today
 			cb.text = "ODEBRANO" if claimed else ("ODBIERZ" if claimable else "ZABLOKOWANE")
 			cb.disabled = not claimable
-			cb.custom_minimum_size = Vector2(0, 46)
+			cb.custom_minimum_size = Vector2(0, 44)
 			cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			SurvivorVisualSystem.decorate_button(cb, SurvivorVisualSystem.GOLD if claimable else SurvivorVisualSystem.MUTED, 46.0)
 			var day_cap: int = d_num

@@ -339,7 +339,7 @@ func _run() -> void:
 		if is_instance_valid(rewards_grid):
 			_assert(rewards_grid.get_child_count() == 7, "All seven daily rewards have real cards")
 			for reward_panel in rewards_grid.get_children():
-				_assert(reward_panel.custom_minimum_size.y >= 140.0, "Daily reward card has readable mobile height")
+				_assert(reward_panel.custom_minimum_size.y >= 120.0, "Daily reward card stays usable in compact portrait layout")
 				var claim_buttons := reward_panel.find_children("*", "Button", true, false)
 				_assert(claim_buttons.size() == 1, "Each daily reward has exactly one claim action")
 				if not claim_buttons.is_empty():
@@ -388,6 +388,19 @@ func _run() -> void:
 		if stage_manager_narrow != null:
 			stage_manager_narrow.orientation_mode = "portrait"
 		profile.call("_apply_responsive_metrics", 420.0)
+		var map_expander: Button = profile.find_child("CampaignChapterToggle", true, false) as Button
+		var chapter_map: GridContainer = profile.find_child("CampaignChapterMap", true, false) as GridContainer
+		_assert(is_instance_valid(map_expander) and map_expander.visible, "420px campaign exposes chapter map toggle")
+		_assert(is_instance_valid(chapter_map) and not chapter_map.visible, "420px campaign initially collapses long map")
+		if is_instance_valid(map_expander) and is_instance_valid(chapter_map):
+			map_expander.pressed.emit()
+			_assert(chapter_map.visible, "Chapter map expands on tap")
+			map_expander.pressed.emit()
+			_assert(not chapter_map.visible, "Chapter map collapses on second tap")
+		if is_instance_valid(rewards_grid):
+			_assert(rewards_grid.columns == 2, "Compact rewards retain two usable columns")
+			for reward_panel in rewards_grid.get_children():
+				_assert(reward_panel.custom_minimum_size.y <= 124.0, "Compact reward cards do not waste vertical space")
 		var pedestal: PanelContainer = profile.get("hero_pedestal") as PanelContainer
 		_assert(is_instance_valid(pedestal), "Character showcase has a real illustrated hangar panel")
 		if is_instance_valid(pedestal):
