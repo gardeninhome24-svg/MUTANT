@@ -967,6 +967,7 @@ func _build_settings_modal() -> void:
 	settings_modal.add_child(center)
 
 	var card := _make_card(Color(0.28, 0.92, 1.0, 0.95))
+	card.name = "SettingsCard"
 	card.custom_minimum_size = Vector2(460, 380)
 	center.add_child(card)
 
@@ -975,6 +976,7 @@ func _build_settings_modal() -> void:
 	card.add_child(v)
 
 	var t := Label.new()
+	t.name = "SettingsTitle"
 	t.text = "⚙ USTAWIENIA SYSTEMOWE, AUDIO I JĘZYK"
 	t.add_theme_font_size_override("font_size", 16)
 	t.add_theme_color_override("font_color", Color(0.35, 0.96, 1.0))
@@ -996,9 +998,11 @@ func _build_settings_modal() -> void:
 	))
 
 	var lang_h := HBoxContainer.new()
+	lang_h.name = "SettingsLanguageRow"
 	lang_h.add_theme_constant_override("separation", 6)
 	v.add_child(lang_h)
 	var lang_l := Label.new()
+	lang_l.name = "SettingsLanguageLabel"
 	lang_l.text = "🌐 Język / Language:"
 	lang_l.custom_minimum_size = Vector2(150, 0)
 	lang_l.add_theme_font_size_override("font_size", 12)
@@ -1007,8 +1011,9 @@ func _build_settings_modal() -> void:
 	for l_def in [{"id": "pl", "name": "Polski"}, {"id": "en", "name": "English"}, {"id": "de", "name": "Deutsch"}]:
 		var lid: String = String(l_def["id"])
 		var lb := Button.new()
+		lb.name = "SettingsLanguage_" + lid
 		lb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		lb.custom_minimum_size = Vector2(0, 32)
+		lb.custom_minimum_size = Vector2(0, 44)
 		lb.text = String(l_def["name"])
 		lb.pressed.connect(func():
 			StageDirector.set_language(lid)
@@ -1018,7 +1023,8 @@ func _build_settings_modal() -> void:
 		lang_h.add_child(lb)
 
 	var net_btn := Button.new()
-	net_btn.custom_minimum_size = Vector2(0, 34)
+	net_btn.name = "SettingsNetworkButton"
+	net_btn.custom_minimum_size = Vector2(0, 44)
 	net_btn.text = "📶 Połączenie: włączone (funkcje testowe)"
 	net_btn.pressed.connect(func():
 		StageDirector.is_online_mode = not StageDirector.is_online_mode
@@ -1027,21 +1033,26 @@ func _build_settings_modal() -> void:
 	v.add_child(net_btn)
 
 	var close_b := Button.new()
+	close_b.name = "SettingsCloseButton"
 	close_b.text = "✕ ZAMKNIJ USTAWIENIA"
-	close_b.custom_minimum_size = Vector2(0, 36)
+	close_b.custom_minimum_size = Vector2(0, 48)
 	close_b.pressed.connect(func(): settings_modal.visible = false)
 	v.add_child(close_b)
 
 func _create_volume_slider_row(label_txt: String, init_val: float, cb: Callable) -> Control:
 	var h := HBoxContainer.new()
+	h.name = "SettingsVolumeRow"
 	h.add_theme_constant_override("separation", 8)
 	var l := Label.new()
+	l.name = "SettingsVolumeLabel"
 	l.text = label_txt
 	l.custom_minimum_size = Vector2(175, 0)
 	l.add_theme_font_size_override("font_size", 12)
 	h.add_child(l)
 
 	var slider := HSlider.new()
+	slider.name = "SettingsVolumeSlider"
+	slider.custom_minimum_size.x = 112.0
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slider.min_value = 0.0
 	slider.max_value = 1.0
@@ -1081,6 +1092,44 @@ func _apply_responsive_menu_layout() -> void:
 	# Use the smaller of actual viewport and resized root canvas. The 420px
 	# QA path resizes the Control while Godot can keep a 720px root viewport.
 	var compact_hub := portrait and minf(size.x, get_viewport_rect().size.x) < 600.0
+
+	# Settings were previously a fixed 460px card and clipped on 420px phones.
+	# Resize actual controls on every orientation/viewport change.
+	var settings_card := find_child("SettingsCard", true, false) as PanelContainer
+	if is_instance_valid(settings_card):
+		var available_settings_width := maxf(280.0, minf(size.x, get_viewport_rect().size.x) - (24.0 if portrait else 48.0))
+		settings_card.custom_minimum_size = Vector2(minf(460.0, available_settings_width), 380.0)
+		var settings_title := settings_card.find_child("SettingsTitle", true, false) as Label
+		if is_instance_valid(settings_title):
+			settings_title.text = "USTAWIENIA • AUDIO / JĘZYK" if compact_hub else "⚙ USTAWIENIA SYSTEMOWE, AUDIO I JĘZYK"
+			settings_title.add_theme_font_size_override("font_size", 13 if compact_hub else 16)
+		for volume_row in settings_card.find_children("SettingsVolumeRow", "HBoxContainer", true, false):
+			volume_row.add_theme_constant_override("separation", 6 if compact_hub else 8)
+			var volume_label := volume_row.find_child("SettingsVolumeLabel", false, false) as Label
+			if is_instance_valid(volume_label):
+				volume_label.custom_minimum_size.x = 104.0 if compact_hub else 175.0
+				volume_label.add_theme_font_size_override("font_size", 10 if compact_hub else 12)
+			var volume_slider := volume_row.find_child("SettingsVolumeSlider", false, false) as HSlider
+			if is_instance_valid(volume_slider):
+				volume_slider.custom_minimum_size.x = 118.0 if compact_hub else 155.0
+		var language_row := settings_card.find_child("SettingsLanguageRow", true, false) as HBoxContainer
+		if is_instance_valid(language_row):
+			language_row.add_theme_constant_override("separation", 3 if compact_hub else 6)
+			for language_button in language_row.get_children():
+				if language_button is Button:
+					(language_button as Button).add_theme_font_size_override("font_size", 10 if compact_hub else 12)
+			var language_label := language_row.find_child("SettingsLanguageLabel", false, false) as Label
+			if is_instance_valid(language_label):
+				language_label.text = "JĘZYK:" if compact_hub else "🌐 Język / Language:"
+				language_label.custom_minimum_size.x = 52.0 if compact_hub else 150.0
+				language_label.add_theme_font_size_override("font_size", 10 if compact_hub else 12)
+		var network_button := settings_card.find_child("SettingsNetworkButton", true, false) as Button
+		if is_instance_valid(network_button):
+			network_button.add_theme_font_size_override("font_size", 11 if compact_hub else 12)
+			network_button.text = ("📶 ONLINE (TEST)" if StageDirector.is_online_mode else "📴 OFFLINE") if compact_hub else ("📶 Połączenie: włączone (funkcje testowe)" if StageDirector.is_online_mode else "📴 Połączenie: wyłączone (kampania offline)")
+		var settings_close := settings_card.find_child("SettingsCloseButton", true, false) as Button
+		if is_instance_valid(settings_close):
+			settings_close.add_theme_font_size_override("font_size", 12 if compact_hub else 14)
 
 	# On phones around 420px, the normal 720px header cannot physically
 	# contain the portrait, three wallets and settings at full desktop scale.

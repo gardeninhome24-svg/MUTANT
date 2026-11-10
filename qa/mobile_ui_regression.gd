@@ -139,6 +139,27 @@ func _run() -> void:
 		menu.size = Vector2(test_width, test_width * 16.0 / 9.0)
 		menu.call("_apply_responsive_menu_layout")
 		if test_width == 420.0:
+			var settings_card: PanelContainer = menu.find_child("SettingsCard", true, false) as PanelContainer
+			_assert(is_instance_valid(settings_card), "Settings dialog has a real responsive panel")
+			if is_instance_valid(settings_card):
+				_assert(settings_card.custom_minimum_size.x <= 396.0, "420px settings panel fits with side margins")
+				var settings_title: Label = settings_card.find_child("SettingsTitle", true, false) as Label
+				_assert(is_instance_valid(settings_title) and settings_title.get_theme_font_size("font_size") <= 13, "420px settings heading is compact")
+				var volume_rows := settings_card.find_children("SettingsVolumeRow", "HBoxContainer", true, false)
+				_assert(volume_rows.size() == 3, "Settings has all three audio sliders")
+				for volume_row in volume_rows:
+					var volume_label := volume_row.find_child("SettingsVolumeLabel", false, false) as Label
+					var volume_slider := volume_row.find_child("SettingsVolumeSlider", false, false) as HSlider
+					_assert(is_instance_valid(volume_label) and volume_label.custom_minimum_size.x <= 104.0, "420px audio label leaves room for slider")
+					_assert(is_instance_valid(volume_slider) and volume_slider.custom_minimum_size.x >= 118.0, "420px audio slider remains usable")
+				var settings_languages: HBoxContainer = settings_card.find_child("SettingsLanguageRow", true, false) as HBoxContainer
+				_assert(is_instance_valid(settings_languages) and settings_languages.get_child_count() == 4, "Settings includes a language label and three options")
+				if is_instance_valid(settings_languages):
+					for option in settings_languages.get_children():
+						if option is Button:
+							_assert(option.custom_minimum_size.y >= 44.0, "Language switch remains touch-friendly")
+				var close_settings: Button = settings_card.find_child("SettingsCloseButton", true, false) as Button
+				_assert(is_instance_valid(close_settings) and close_settings.custom_minimum_size.y >= 48.0, "Settings close control has safe touch size")
 			_assert(hero.custom_minimum_size.y <= 220.0, "420px Base switches to compact hero spacing")
 			_assert(card.custom_minimum_size.y <= 310.0, "420px Base keeps compact mission card")
 		var limit := maxf(180.0, test_width - 44.0)
