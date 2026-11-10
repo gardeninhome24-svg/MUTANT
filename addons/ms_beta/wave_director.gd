@@ -19,6 +19,9 @@ var wave_time_left: float = 30.0
 var spawn_timer: float = 0.0
 var perf_sample_timer: float = 0.0
 var dynamic_cap_multiplier: float = 1.0
+var _last_wave_second: int = -1
+var _last_density_count: int = -1
+var _last_density_cap: int = -1
 
 # Object Pool for regular mutants to eliminate allocations/freeing GC spikes
 var enemy_pool: Dictionary = {} # enemy_id (String) -> Array[MutantEnemy]
@@ -67,6 +70,9 @@ func start_wave(w_num: int, duration_sec: float = 30.0) -> void:
 	wave_time_left = maxf(0.0, duration_sec)
 	spawn_timer = 0.0
 	perf_sample_timer = 0.0
+	_last_wave_second = int(ceil(wave_time_left))
+	_last_density_count = -1
+	_last_density_cap = -1
 	emit_signal("wave_changed", current_wave, wave_time_left, max_waves)
 
 func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
@@ -77,7 +83,11 @@ func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: flo
 
 	if wave_time_left > 0.0:
 		wave_time_left = maxf(0.0, wave_time_left - delta)
-		emit_signal("wave_changed", current_wave, wave_time_left, max_waves)
+		# Whole-second display: no need to emit 60 identical HUD updates/s.
+		var current_second: int = int(ceil(wave_time_left))
+		if current_second != _last_wave_second:
+			_last_wave_second = current_second
+			emit_signal("wave_changed", current_wave, wave_time_left, max_waves)
 		if wave_time_left <= 0.0:
 			emit_signal("wave_completed", current_wave)
 
@@ -86,7 +96,10 @@ func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: flo
 
 	var target_cap := get_max_active_for_wave(current_wave)
 	var current_count := active_enemies.size()
-	emit_signal("horde_density_updated", current_count, target_cap)
+	if current_count != _last_density_count or target_cap != _last_density_cap:
+		_last_density_count = current_count
+		_last_density_cap = target_cap
+		emit_signal("horde_density_updated", current_count, target_cap)
 
 	# Dynamic spawn interval: faster when below cap
 	var deficit := target_cap - current_count
@@ -122,11 +135,11 @@ func _update_adaptive_performance(delta: float) -> void:
 				dynamic_cap_multiplier = minf(1.0, dynamic_cap_multiplier + 0.04)
 
 func _prune_active_enemies() -> void:
-	var valid: Array[MutantEnemy] = []
-	for e in active_enemies:
-		if is_instance_valid(e) and not e.is_dying and e.is_inside_tree() and e.visible:
-			valid.append(e)
-	active_enemies = valid
+	# Reverse in-place pruning avoids allocating a fresh typed array every frame.
+	for index in range(active_enemies.size() - 1, -1, -1):
+		var e: MutantEnemy = active_enemies[index]
+		if not is_instance_valid(e) or e.is_dying or not e.is_inside_tree() or not e.visible:
+			active_enemies.remove_at(index)
 
 func _get_wave_archetype(stage_num: int, wave_num: int) -> String:
 	var pool := ["biegacz", "zracy_pelzacz", "zdziczaly", "zarazony", "plujacy_kwasem", "lowca", "skrzydlaty", "czerw"]
@@ -164,7 +177,7 @@ func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_
 	if enemy_pool.has(arch_id):
 		while not enemy_pool[arch_id].is_empty():
 			var candidate: MutantEnemy = enemy_pool[arch_id].pop_back()
-			if is_instance_valid(candidate) and candidate.is_inside_tree():
+			if is_instance_valid(candidate) and candidate.is_inside_tree() and not candidate.is_queued_for_deletion():
 				enemy = candidate
 				break
 	if is_instance_valid(enemy):
@@ -209,12 +222,21 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 		enemy_pool[aid] = []
 	if enemy_pool[aid].has(enemy):
 		return
+	# Purge orphan references before checking the cap. Otherwise dead
+	# references can block reuse and create needless extra allocations.
+	for index in range(enemy_pool[aid].size() - 1, -1, -1):
+		var old_enemy: MutantEnemy = enemy_pool[aid][index]
+		if not is_instance_valid(old_enemy) or old_enemy.is_queued_for_deletion():
+			enemy_pool[aid].remove_at(index)
 	if enemy_pool[aid].size() >= MAX_POOLED_PER_ARCHETYPE:
 		enemy.queue_free()
 		return
 	enemy_pool[aid].append(enemy)
 
 func _on_pooled_enemy_died(enemy: MutantEnemy) -> void:
+	# A repeated or late event must not grant another run kill.
+	if not active_enemies.has(enemy):
+		return
 	active_enemies.erase(enemy)
 	if is_instance_valid(main_ref) and main_ref.is_inside_tree() and main_ref.has_method("_on_enemy_died"):
 		main_ref.call("_on_enemy_died", enemy)
@@ -226,6 +248,9 @@ func recycle_all_enemies() -> void:
 	active_enemies.clear()
 	spawn_timer = 0.0
 	perf_sample_timer = 0.0
+	_last_wave_second = -1
+	_last_density_count = -1
+	_last_density_cap = -1
 	for k in enemy_pool.keys():
 		for e in enemy_pool[k]:
 			if is_instance_valid(e):

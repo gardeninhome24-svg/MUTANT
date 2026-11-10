@@ -61,6 +61,7 @@ func _test_horde_performance_limits() -> void:
 	director.set_performance_profile(0)
 	_assert(director.get_max_active_for_wave(1) <= 14, "Adaptive low mode never exceeds base low-end cap")
 	director.start_wave(1, -30.0)
+	_assert(int(director._last_wave_second) == 0, "Wave cache initializes even with zero duration")
 	_assert(int(director.current_wave) == 1, "Wave remains valid after negative duration")
 	_assert(director.wave_time_left == 0.0, "Negative wave duration clamps to zero")
 	_assert(int(director.MAX_POOLED_PER_ARCHETYPE) == 24, "Inactive pool has 24-per-type ceiling")
@@ -69,7 +70,32 @@ func _test_horde_performance_limits() -> void:
 	_assert(director.spawn_timer == 0.0, "Cleanup resets spawn timer")
 	_assert(director.dynamic_cap_multiplier == 1.0, "Cleanup resets performance scaling")
 	_assert(director.enemy_pool.is_empty(), "Cleanup empties pool")
+	_assert(director._last_wave_second == -1, "Cleanup resets HUD wave cache")
+	_assert(director._last_density_count == -1, "Cleanup resets HUD density cache")
 	_assert(director.active_enemies.is_empty(), "Cleanup empties active registry")
+	# Verify HUD signals are not re-emitted for every 60 FPS update.
+	var signal_counts := {"wave": 0, "density": 0}
+	director.wave_changed.connect(func(_wave: int, _seconds: float, _max: int):
+		signal_counts["wave"] += 1
+	)
+	director.horde_density_updated.connect(func(_active: int, _cap: int):
+		signal_counts["density"] += 1
+	)
+	var dummy_player := Node2D.new()
+	root.add_child(dummy_player)
+	var dummy_layer := Node2D.new()
+	root.add_child(dummy_layer)
+	director.bind_context(null, dummy_layer, null)
+	director.start_wave(1, 10.0)
+	for frame in range(3):
+		director.process_wave(0.05, dummy_player, 1, 0.0)
+	_assert(int(signal_counts["wave"]) == 1, "Sub-second updates do not redraw wave text")
+	_assert(int(signal_counts["density"]) == 1, "Unchanged enemy density emits once")
+	director.process_wave(1.0, dummy_player, 1, 1.0)
+	_assert(int(signal_counts["wave"]) == 2, "Wave counter updates when countdown second changes")
+	director.recycle_all_enemies()
+	dummy_player.queue_free()
+	dummy_layer.queue_free()
 	director.queue_free()
 
 
