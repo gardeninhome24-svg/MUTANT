@@ -56,7 +56,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://qa/prebeta_validation.gd
+          godot --headless --path . --script res://qa/prebeta_validation.gd 2>&1 | tee /tmp/prebeta-validation.log
+          grep -Fq 'PREBETA PASS:' /tmp/prebeta-validation.log
 
       - name: Full 100-stage F2P progression and rewards audit
         shell: bash
@@ -67,6 +68,7 @@ jobs:
             echo "::error::100-stage F2P progression regression failed."
             exit 1
           fi
+          grep -Fq 'F2P PASS:' /tmp/campaign-100-f2p.log
 
       - name: Verify production art paths and list remaining static sprites
         shell: bash
@@ -77,6 +79,7 @@ jobs:
             echo "::error::Missing art resources or art-audit script regression."
             exit 1
           fi
+          grep -Fq 'ART RESOURCES PASS:' /tmp/production-art-audit.log
 
       - name: Portrait HUD overlap and required art resource gate
         shell: bash
@@ -87,6 +90,7 @@ jobs:
             echo "::error::Visual resource or HUD geometry regression detected."
             exit 1
           fi
+          grep -Fq 'VISUAL GATE PASS:' /tmp/visual-release-gate.log
 
       - name: Mobile menu, campaign and inventory layout regression
         shell: bash
@@ -97,6 +101,7 @@ jobs:
             echo "::error::Mobile UI layout regression failed."
             exit 1
           fi
+          grep -Fq 'MOBILE UI PASS:' /tmp/mobile-ui-regression.log
 
       - name: Premium beta bonus, shop and F2P reward regression
         shell: bash
@@ -107,6 +112,7 @@ jobs:
             echo "::error::Premium economy or beta-wallet regression failed."
             exit 1
           fi
+          grep -Fq 'PREMIUM QA PASS:' /tmp/premium-shop-regression.log
 
       - name: Gameplay regression (bosses, rewards, equipment, saves)
         shell: bash
@@ -117,6 +123,7 @@ jobs:
             echo "::error::Gameplay regression logged an error."
             exit 1
           fi
+          grep -Fq 'GAMEPLAY REGRESSION PASS:' /tmp/gameplay-regression.log
 
       - name: Install Python for private APK release report
         shell: bash
@@ -207,6 +214,8 @@ jobs:
             /tmp/apk-signature.log
             /tmp/apk-badging.log
             /tmp/google-play-preflight.log
+            /tmp/prebeta-validation.log
+            /tmp/production-art-audit.log
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
             /tmp/chapter-boss-integration.log
