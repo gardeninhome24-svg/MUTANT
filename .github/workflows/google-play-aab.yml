@@ -55,6 +55,17 @@ jobs:
           set -euo pipefail
           python3 tools/google_play_preflight.py
 
+      - name: Verify every real combat stage loads before release
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/mission_scene_100_smoke.gd 2>&1 | tee /tmp/mission-scene-100.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|MISSION SCENE FAIL:|MISSION SCENE FAILED:" /tmp/mission-scene-100.log; then
+            echo "::error::100-stage real combat scene QA failed"
+            exit 1
+          fi
+          grep -Fq 'MISSION SCENE PASS: 100 real stage scenes instantiated' /tmp/mission-scene-100.log
+
       - name: Verify gameplay, premium and Android UI
         shell: bash
         run: |
