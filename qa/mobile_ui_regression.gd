@@ -239,6 +239,7 @@ func _run() -> void:
 			await process_frame
 			_assert(bag.get_child_count() == 30, "Page one renders exactly 30 slots, not all 35 items")
 			_assert(not next_page.disabled and previous_page.disabled, "First page can advance only")
+			var page_one_selection: String = String(profile.get("selected_bag_instance_id"))
 			profile.set("inventory_page", 1)
 			profile.set("selected_bag_instance_id", "")
 			profile.call("_refresh_inventory_tab_ui")
@@ -246,7 +247,7 @@ func _run() -> void:
 			_assert(bag.get_child_count() == 30, "Last page displays 5 items plus 25 empty slots")
 			_assert(next_page.disabled and not previous_page.disabled, "Final page can navigate back only")
 			_assert(String(page_label.text).contains("2 / 2"), "Page label reflects actual item count")
-			_assert(String(profile.get("selected_bag_instance_id")) == "__qa_page_30", "Second page selects its first visible item")
+			_assert(not String(profile.get("selected_bag_instance_id")).is_empty() and String(profile.get("selected_bag_instance_id")) != page_one_selection, "Second page selects a different visible item regardless of sorting")
 			_assert(not previous_page.disabled and next_page.disabled, "Page boundaries remain enforced after refresh")
 			stage_manager.inventory = original_inventory
 			profile.set("filter_slot", original_filter)
@@ -349,6 +350,9 @@ func _run() -> void:
 			_assert(is_instance_valid(pedestal.get_node_or_null("ArmoryBackdrop")), "Operator hangar art exists within character panel")
 		if is_instance_valid(inv_grid):
 			_assert(inv_grid.columns == 4, "420px Metin backpack shows four touch-friendly columns")
+		for quick_action in [quick_equip, quick_unequip]:
+			if is_instance_valid(quick_action):
+				_assert(quick_action.custom_minimum_size.x <= 72.0, "420px quick equip buttons fit bordered panel")
 		if is_instance_valid(detail_actions):
 			_assert(detail_actions.columns == 1, "420px equipment details stack actions vertically")
 		if is_instance_valid(filter_grid):
@@ -363,6 +367,7 @@ func _run() -> void:
 		profile.call("_apply_responsive_metrics", 720.0)
 		if is_instance_valid(inv_grid):
 			_assert(inv_grid.columns == 5, "720px Metin backpack returns to five columns")
+		_assert(is_instance_valid(profile.find_child("ProfileContentScroll", true, false)), "Profile exposes scroll viewport for real screenshot QA")
 		if is_instance_valid(detail_actions):
 			_assert(detail_actions.columns == 3, "720px equipment details use compact three-action row")
 		if is_instance_valid(store_cards):

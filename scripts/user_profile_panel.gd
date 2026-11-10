@@ -240,6 +240,17 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		if is_instance_valid(flank):
 			flank.custom_minimum_size = Vector2(70, 0) if narrow else Vector2(112, 0)
 			flank.add_theme_constant_override("separation", 4 if narrow else 10)
+	# Compact primary item actions to avoid colliding with illustrated borders
+	# at 420px, while keeping real 48px finger targets.
+	var quick_row := find_child("InventoryQuickActions", true, false) as HBoxContainer
+	if is_instance_valid(quick_row):
+		quick_row.add_theme_constant_override("separation", 3 if narrow else 5)
+	if is_instance_valid(inv_quick_info):
+		inv_quick_info.add_theme_font_size_override("font_size", 10 if narrow else 12)
+	for quick_action in [inv_quick_equip, inv_quick_unequip]:
+		if is_instance_valid(quick_action):
+			quick_action.custom_minimum_size = Vector2(72, 48) if narrow else Vector2(88, 48)
+			quick_action.add_theme_font_size_override("font_size", 10 if narrow else 12)
 	if is_instance_valid(inv_chest_btn):
 		inv_chest_btn.text = "SKRZYNIA · 80 Kr" if portrait else "SKRZYNIA ZBROJOWNI (-80 Kr)"
 		inv_chest_btn.custom_minimum_size = Vector2(126, 34) if portrait else Vector2(180, 34)
@@ -442,6 +453,7 @@ func _build_ui() -> void:
 		tab_buttons.append(t_btn)
 
 	var scroll := ScrollContainer.new()
+	scroll.name = "ProfileContentScroll"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	root_vbox.add_child(scroll)
@@ -1415,7 +1427,7 @@ func _refresh_inventory_quick_actions() -> void:
 	var has_item: bool = not item.is_empty()
 	var slot: String = String(item.get("slot", selected_inspect_slot_id))
 	var is_equipped: bool = has_item and String(StageDirector.equipped_items.get(slot, "")) == selected_bag_instance_id
-	inv_quick_info.text = String(item.get("name", "PUSTY SLOT — WYBIERZ PRZEDMIOT")).left(24)
+	inv_quick_info.text = String(item.get("name", "PUSTY SLOT — WYBIERZ PRZEDMIOT")).left(12 if narrow_portrait_ui else 24)
 	inv_quick_equip.disabled = not has_item or is_equipped
 	inv_quick_unequip.disabled = not is_equipped
 

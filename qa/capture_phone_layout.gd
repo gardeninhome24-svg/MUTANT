@@ -192,7 +192,7 @@ func _capture() -> void:
 	var paging_label: Label = phone_profile.find_child("InventoryPageLabel", true, false) as Label
 	var paging_prev: Button = phone_profile.find_child("InventoryPagePrevious", true, false) as Button
 	var paging_next: Button = phone_profile.find_child("InventoryPageNext", true, false) as Button
-	var inventory_scroll: ScrollContainer = phone_profile.find_child("ScrollContainer", true, false) as ScrollContainer
+	var inventory_scroll: ScrollContainer = phone_profile.find_child("ProfileContentScroll", true, false) as ScrollContainer
 	if not is_instance_valid(paging_grid) or not is_instance_valid(paging_label) or not is_instance_valid(inventory_scroll):
 		printerr("PHONE SHOT ERROR: inventory pagination render controls missing")
 		quit(1)
