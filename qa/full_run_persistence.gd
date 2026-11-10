@@ -289,7 +289,7 @@ func _execute() -> void:
 	battle.set_process(false)
 	_check(String(battle.get("primary_objective_type")) == "clear_elites", "Stage 7 uses elite-kill objective")
 	battle.call("start_wave", 7, 5)
-	var mandatory_elites: Array[Node] = []
+	var mandatory_elites: Array[MutantEnemy] = []
 	for enemy in get_nodes_in_group("enemies"):
 		if is_instance_valid(enemy) and enemy is MutantEnemy:
 			if enemy.tier == "miniboss" and enemy.enemy_id == "elite_ch01_stage07":
