@@ -140,6 +140,31 @@ func _execute() -> void:
 	stage.load_campaign_profile()
 	_check(int(stage.credits) == before_loss, "Failure settlement remains consistent after reload")
 	_check(int(stage.max_unlocked_stage) == 3, "Unlocked stage remains three after failed operation")
+	# A player can die on wave 10 without completing the objective.
+	# Surviving the timer does not grant a victory or stage unlock.
+	stage.current_stage = 3
+	stage.is_practice_mode = false
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	battle.call("start_wave", 3, 10)
+	battle.set("wave_time_left", 0.0)
+	battle.set("primary_objective_done", false)
+	_check(not bool(battle.call("_can_claim_victory")), "Wave ten alone cannot bypass missing objective")
+	var credits_before_final_loss: int = int(stage.credits)
+	battle.call("_on_player_died")
+	battle.call("_finalize_failure_once")
+	_check(String(battle.get("run_result_state")) == "failure_final", "Final-wave death ends in failure")
+	_check(int(stage.max_unlocked_stage) == 3, "Final-wave loss never unlocks stage four")
+	var credits_after_final_loss: int = int(stage.credits)
+	_check(credits_after_final_loss >= credits_before_final_loss, "Final-wave failure cannot subtract earned credits")
+	battle.call("_finalize_failure_once")
+	_check(int(stage.credits) == credits_after_final_loss, "Repeated final-wave failure does not duplicate rewards")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	# Chapter 1 finale is a REAL boss encounter, unlike ordinary stage 2.
 	# Practice ensures this separately tests combat without awarding currency.
 	stage.current_stage = 10
