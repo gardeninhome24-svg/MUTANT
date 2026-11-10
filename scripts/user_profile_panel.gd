@@ -1818,7 +1818,8 @@ func _build_tab_campaign_and_talents() -> Control:
 	SurvivorVisualSystem.decorate_button(chapter_toggle, SurvivorVisualSystem.LIME, 44.0)
 	chapter_toggle.pressed.connect(func():
 		campaign_chapters_expanded = not campaign_chapters_expanded
-		_apply_responsive_metrics()
+		# Preserve the active physical phone width during UI interaction and headless QA.
+		_apply_responsive_metrics(420.0 if narrow_portrait_ui else -1.0)
 	)
 	c_vbox.add_child(chapter_toggle)
 	var chapter_grid := GridContainer.new()
