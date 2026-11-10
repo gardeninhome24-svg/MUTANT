@@ -107,15 +107,15 @@ const LEFT_SLOTS := ["weapon", "chest", "boots"]
 const RIGHT_SLOTS := ["helmet", "gloves", "amulet"]
 
 const TALENT_DEFS := [
-	{"id": "vitality", "name": "Witalność Nano-Ogniw", "desc": "+6% Maks. HP na poziom", "icon": "res://assets/mutantsurvivor_ch01/icons/medkit.png", "base_cost": 60},
-	{"id": "firepower", "name": "Rdzeń Siły Ognia", "desc": "+5% Obrażeń Broni na poziom", "icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png", "base_cost": 65},
-	{"id": "scanner", "name": "Skaner Magnetyczny", "desc": "+18 px Zasięgu Skanera XP na poziom", "icon": "res://assets/mutantsurvivor_ch01/icons/skill_luck.png", "base_cost": 50},
-	{"id": "armor_plating", "name": "Poszycie Tytanowe", "desc": "+3% Redukcji Obrażeń na poziom", "icon": "res://assets/mutantsurvivor_ch01/icons/shield_orb.png", "base_cost": 75}
+	{"id": "vitality", "name": "Witalność Nano-Ogniw", "desc": "+6% Maks. HP na poziom", "icon": "res://assets/ui/talents/vitality.svg", "base_cost": 60},
+	{"id": "firepower", "name": "Rdzeń Siły Ognia", "desc": "+5% Obrażeń Broni na poziom", "icon": "res://assets/ui/talents/firepower.svg", "base_cost": 65},
+	{"id": "scanner", "name": "Skaner Magnetyczny", "desc": "+18 px Zasięgu Skanera XP na poziom", "icon": "res://assets/ui/talents/scanner.svg", "base_cost": 50},
+	{"id": "armor_plating", "name": "Poszycie Tytanowe", "desc": "+3% Redukcji Obrażeń na poziom", "icon": "res://assets/ui/talents/armor_plating.svg", "base_cost": 75}
 ]
 
 const STORE_PRODUCTS := [
 	{
-		"id": "skin_neon_hunter", "category": "skins",
+		"id": "skin_neon_hunter", "badge": "res://assets/ui/store_emblems/skin_neon_hunter.svg", "category": "skins",
 		"category_label": "SKÓRKI OPERATORÓW",
 		"title": "Cyber Ronin X-9",
 		"contents": "Wygląd operatora Cyber Ronin • bez bonusów bojowych • na stałe",
@@ -124,7 +124,7 @@ const STORE_PRODUCTS := [
 		"accent": Color(0.25, 0.92, 1.0), "once": true, "skin_unlock": "neon_hunter"
 	},
 	{
-		"id": "skin_hazmat_trooper", "category": "skins",
+		"id": "skin_hazmat_trooper", "badge": "res://assets/ui/store_emblems/skin_hazmat_trooper.svg", "category": "skins",
 		"category_label": "SKÓRKI OPERATORÓW",
 		"title": "Szturmowiec Bio-Hazmat",
 		"contents": "Wygląd kombinezonu Hazmat • bez bonusów bojowych • na stałe",
@@ -133,7 +133,7 @@ const STORE_PRODUCTS := [
 		"accent": Color(0.45, 1.0, 0.35), "once": true, "skin_unlock": "hazmat_trooper"
 	},
 	{
-		"id": "skin_crimson_storm", "category": "skins",
+		"id": "skin_crimson_storm", "badge": "res://assets/ui/store_emblems/skin_crimson_storm.svg", "category": "skins",
 		"category_label": "SKÓRKI OPERATORÓW",
 		"title": "Karmazynowy Medyk",
 		"contents": "Wygląd medyka • bez bonusów bojowych • na stałe",
@@ -142,7 +142,7 @@ const STORE_PRODUCTS := [
 		"accent": Color(1.0, 0.35, 0.45), "once": true, "skin_unlock": "crimson_storm"
 	},
 	{
-		"id": "skin_void_sniper", "category": "skins",
+		"id": "skin_void_sniper", "badge": "res://assets/ui/store_emblems/skin_void_sniper.svg", "category": "skins",
 		"category_label": "SKÓRKI OPERATORÓW",
 		"title": "Snajper Otchłani",
 		"contents": "Wygląd zwiadowcy • bez bonusów bojowych • na stałe",
@@ -151,7 +151,7 @@ const STORE_PRODUCTS := [
 		"accent": Color(0.78, 0.42, 1.0), "once": true, "skin_unlock": "void_sniper"
 	},
 	{
-		"id": "attempts_refill_full", "category": "attempts",
+		"id": "attempts_refill_full", "badge": "res://assets/ui/store_emblems/attempts_refill_full.svg", "category": "attempts",
 		"category_label": "PRÓBY KAMPANII",
 		"title": "Odnowienie prób 5/5",
 		"contents": "Odnawia wszystkie próby • normalna regeneracja pozostaje darmowa",
@@ -160,7 +160,7 @@ const STORE_PRODUCTS := [
 		"accent": Color(0.28, 0.95, 0.72), "once": false
 	},
 	{
-		"id": "crystals_pack_500", "category": "crystals",
+		"id": "crystals_pack_500", "badge": "res://assets/ui/store_emblems/crystals_pack_500.svg", "category": "crystals",
 		"category_label": "KRYSZTAŁY PREMIUM",
 		"title": "500 kryształów",
 		"contents": "Zakup za prawdziwe pieniądze zostanie uruchomiony dopiero po wdrożeniu bezpiecznej płatności.",
@@ -2096,7 +2096,18 @@ func _refresh_store_tab_ui() -> void:
 		cat_lbl.text = String(prod["category_label"])
 		cat_lbl.add_theme_font_size_override("font_size", 11)
 		cat_lbl.add_theme_color_override("font_color", accent)
-		cv.add_child(cat_lbl)
+		var category_header := HBoxContainer.new()
+		category_header.add_theme_constant_override("separation", 5)
+		cv.add_child(category_header)
+		var category_badge := TextureRect.new()
+		category_badge.name = "StoreProductBadge"
+		category_badge.texture = AssetRegistry.get_tex(String(prod.get("badge", "")))
+		category_badge.custom_minimum_size = Vector2(24, 24)
+		category_badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		category_badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		category_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		category_header.add_child(category_badge)
+		category_header.add_child(cat_lbl)
 
 		var top_h := HBoxContainer.new()
 		top_h.add_theme_constant_override("separation", 8)

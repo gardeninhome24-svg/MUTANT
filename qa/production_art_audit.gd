@@ -19,6 +19,10 @@ func _check(path: String, label: String) -> void:
 func _run() -> void:
 	await process_frame
 	_check("res://assets/ui/target_theme/icon_mutant_survivor.svg", "Branded project icon")
+	for talent_id in ["vitality", "firepower", "scanner", "armor_plating"]:
+		_check("res://assets/ui/talents/%s.svg" % talent_id, "Illustrated talent " + talent_id)
+	for product_id in ["skin_neon_hunter", "skin_hazmat_trooper", "skin_crimson_storm", "skin_void_sniper", "attempts_refill_full", "crystals_pack_500"]:
+		_check("res://assets/ui/store_emblems/%s.svg" % product_id, "Illustrated store emblem " + product_id)
 	for item_id in AssetRegistry.EQUIPMENT_SLOT_ICONS:
 		_check(String(AssetRegistry.EQUIPMENT_SLOT_ICONS[item_id]), "Gear placeholder " + String(item_id))
 	for boss_id in AssetRegistry.BOSS_CAMPAIGN_PORTRAITS:

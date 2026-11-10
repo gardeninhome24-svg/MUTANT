@@ -1103,7 +1103,9 @@ func _apply_responsive_menu_layout() -> void:
 		if is_instance_valid(settings_title):
 			settings_title.text = "USTAWIENIA • AUDIO / JĘZYK" if compact_hub else "⚙ USTAWIENIA SYSTEMOWE, AUDIO I JĘZYK"
 			settings_title.add_theme_font_size_override("font_size", 13 if compact_hub else 16)
-		for volume_row in settings_card.find_children("SettingsVolumeRow*", "HBoxContainer", true, false):
+		for volume_row in settings_card.get_child(0).get_children():
+			if not (volume_row is HBoxContainer):
+				continue
 			volume_row.add_theme_constant_override("separation", 6 if compact_hub else 8)
 			var volume_label := volume_row.find_child("SettingsVolumeLabel", false, false) as Label
 			if is_instance_valid(volume_label):

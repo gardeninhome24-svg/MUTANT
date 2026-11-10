@@ -145,7 +145,10 @@ func _run() -> void:
 				_assert(settings_card.custom_minimum_size.x <= 396.0, "420px settings panel fits with side margins")
 				var settings_title: Label = settings_card.find_child("SettingsTitle", true, false) as Label
 				_assert(is_instance_valid(settings_title) and settings_title.get_theme_font_size("font_size") <= 13, "420px settings heading is compact")
-				var volume_rows := settings_card.find_children("SettingsVolumeRow*", "HBoxContainer", true, false)
+				var volume_rows: Array[Node] = []
+				for item in settings_card.get_child(0).get_children():
+					if item is HBoxContainer and item.has_node("SettingsVolumeSlider"):
+						volume_rows.append(item)
 				_assert(volume_rows.size() == 3, "Settings has all three audio sliders")
 				for volume_row in volume_rows:
 					var volume_label := volume_row.find_child("SettingsVolumeLabel", false, false) as Label
@@ -357,6 +360,8 @@ func _run() -> void:
 		if is_instance_valid(store_cards):
 			_assert(store_cards.get_child_count() == 6, "Shop only shows six curated player-facing offers")
 			for offer in store_cards.get_children():
+				var offer_badge: TextureRect = offer.find_child("StoreProductBadge", true, false) as TextureRect
+				_assert(is_instance_valid(offer_badge) and offer_badge.texture != null, "Each shop offer has a dedicated category emblem")
 				var offer_art: TextureRect = offer.find_child("StoreProductArtwork", true, false) as TextureRect
 				var offer_title: Label = offer.find_child("StoreProductTitle", true, false) as Label
 				var offer_purchase: Button = offer.find_child("StoreProductPurchase", true, false) as Button
