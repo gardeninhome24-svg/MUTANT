@@ -252,6 +252,25 @@ func _apply_responsive_metrics(test_width_override: float = -1.0) -> void:
 		inventory_actions.columns = 1 if narrow else 3
 	if is_instance_valid(stage_boss_preview):
 		stage_boss_preview.custom_minimum_size = Vector2(92, 125) if narrow else Vector2(250, 285)
+	# The four campaign navigation actions must remain finger-sized at 420px.
+	var campaign_nav := find_child("StageDirectionRow", true, false) as HBoxContainer
+	if is_instance_valid(campaign_nav):
+		campaign_nav.add_theme_constant_override("separation", 3 if narrow else 6)
+		for nav_action in campaign_nav.get_children():
+			if nav_action is Button:
+				(nav_action as Button).custom_minimum_size.y = 48.0
+	var chapter_shortcuts := find_child("StageJumpGrid", true, false) as GridContainer
+	if is_instance_valid(chapter_shortcuts):
+		for shortcut in chapter_shortcuts.get_children():
+			if shortcut is Button:
+				(shortcut as Button).custom_minimum_size.y = 48.0
+	for reward_kind in ["Credits", "Scrap", "Equipment"]:
+		var icon_node := find_child("CampaignRewardIcon" + reward_kind, true, false) as TextureRect
+		if is_instance_valid(icon_node):
+			icon_node.custom_minimum_size = Vector2(32, 32) if narrow else Vector2(38, 36)
+		var value_node := find_child("CampaignRewardValue" + reward_kind, true, false) as Label
+		if is_instance_valid(value_node):
+			value_node.add_theme_font_size_override("font_size", 11 if narrow else 14)
 	for talent_id in talent_rows.keys():
 		var talent_ui: Dictionary = talent_rows[talent_id]
 		var upgrade: Button = talent_ui["btn"] as Button
