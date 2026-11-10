@@ -493,11 +493,19 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	sprite.vframes = 1
 	sprite.texture = walk_frames[0] if not walk_frames.is_empty() else tex
 	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
-	if tex != null and (BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)):
-		# A 70px-wide broken legacy frame and a 256px candidate must not be
-		# drawn with the same scale. Normalize full silhouettes to 155px.
-		var visual_extent: float = float(maxi(tex.get_width(), tex.get_height()))
-		var normalized_scale: float = 155.0 / maxf(1.0, visual_extent)
+	# Sprite source PNGs have drastically different canvas sizes. Normalize
+	# using the actual DISPLAYED frame and give priority enemies a visibly
+	# stronger silhouette relative to the player. This changes visuals only,
+	# not collisions, hit registration, movement, or gameplay balance.
+	var displayed: Texture2D = sprite.texture
+	if displayed != null:
+		var extent: float = float(maxi(displayed.get_width(), displayed.get_height()))
+		var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
+		var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
+		var target_extent: float = 220.0 if is_boss else (155.0 if is_large else 112.0)
+		# Clamp preserves readability and prevents enormous source textures
+		# from covering the entire battlefield.
+		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.35, 2.25)
 		sprite.scale = Vector2(normalized_scale, normalized_scale)
 	return {
 		"is_animated": (walk_frames.size() > 0),
