@@ -30,6 +30,17 @@
 | B11 | Check offline start, background/resume, interrupted save | No permanent loading screen or profile corruption |
 | B12 | Test purchases/ads only if enabled in the beta | No test-only grants leak into public release; billing policies checked |
 
+## Verified repository asset blocker (2026-11-10)
+
+GitHub repository contents lookups returned **404** for both
+`boss_portrait.png` and `phase1_anim_1.png` in every directory from
+`assets/bosses/boss_ch05` to `boss_ch10` (12 sampled paths).
+This confirms that these sampled required files are absent from the current
+`main`; it does **not** establish the state of the other 54 PNGs.
+Do not claim `NEW_BOSS_PACKS_ACTIVE=6/6` or final visual approval
+until the complete pack is committed and validated with
+`python3 tools/boss_art_pack.py --zip <pack.zip>` followed by real screenshots.
+
 ## Release blockers that must remain visible
 
 - Final 66 boss PNGs for chapters 5–10 must be imported and visually approved. A file-count or image-dimension PASS is not a visual approval.
