@@ -24,6 +24,12 @@ func _ready() -> void:
 
 	print("Selected scenario filter: %s" % capture_target)
 
+	if capture_target in ["all", "approved_ui", "home_9x16", "menu_9x16"]:
+		await _capture_home_approved_9x16()
+
+	if capture_target in ["approved_ui", "approved_combat_9x16"]:
+		await _capture_hud_mobile_9x16()
+
 	if capture_target in ["all", "defeat", "defeat_overlay_16x9"]:
 		await _capture_defeat_overlay()
 
@@ -48,6 +54,33 @@ func _ready() -> void:
 	else:
 		print("[Visual QA] CAPTURES PASS: %d real viewport PNGs saved" % saved_captures)
 		get_tree().quit(0)
+
+func _capture_home_approved_9x16() -> void:
+	# Real menu: live StageDirector data and existing responsive Godot nodes.
+	var sub := _create_subviewport(Vector2i(720, 1280))
+	add_child(sub)
+	var old_orientation: String = StageDirector.orientation_mode
+	StageDirector.orientation_mode = "portrait"
+	var scene: PackedScene = load("res://scenes/ui/main_menu.tscn") as PackedScene
+	if scene == null:
+		failed_captures += 1
+		push_error("[Visual QA] Approved home menu scene did not load")
+		sub.queue_free()
+		StageDirector.orientation_mode = old_orientation
+		return
+	var menu := scene.instantiate()
+	sub.add_child(menu)
+	for frame in range(24):
+		await get_tree().process_frame
+	menu.call("_apply_responsive_menu_layout")
+	for frame in range(14):
+		await get_tree().process_frame
+	await _save_viewport_png(sub, "approved_menu_720x1280_actual")
+	menu.queue_free()
+	sub.queue_free()
+	StageDirector.orientation_mode = old_orientation
+	await get_tree().process_frame
+
 
 func _capture_defeat_overlay() -> void:
 	print("\n[Visual QA] Capturing: Defeat Overlay (1280x720)...")
