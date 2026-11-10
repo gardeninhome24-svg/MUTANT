@@ -11,6 +11,8 @@ class_name MutantEnemy
 var current_health: float = 55.0
 var target: Node2D = null
 var anim_timer: float = 0.0
+var attack_visual_timer: float = 0.0
+const ATTACK_VISUAL_DURATION: float = 0.36
 var impact_fx_cooldown: float = 0.0
 var base_scale: Vector2 = Vector2(0.55, 0.55)
 var is_animated_sheet: bool = false
@@ -62,6 +64,7 @@ func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elaps
 	velocity = Vector2.ZERO
 	target = null
 	anim_timer = 0.0
+	attack_visual_timer = 0.0
 	impact_fx_cooldown = 0.0
 	special_timer = 2.0
 	ranged_spit_timer = 2.6
@@ -89,6 +92,7 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 	enemy_id = p_enemy_id
 	tier = p_tier
 	current_stage_context = stage_num
+	attack_visual_timer = 0.0
 	boss_phase = 1
 	telegraph_radius = 120.0
 	special_cooldown = 5.5
@@ -161,6 +165,7 @@ func _draw() -> void:
 
 func _physics_process(delta: float) -> void:
 	impact_fx_cooldown = maxf(0.0, impact_fx_cooldown - delta)
+	attack_visual_timer = maxf(0.0, attack_visual_timer - delta)
 	if is_dying or not is_instance_valid(target) or not target.is_inside_tree() or not is_inside_tree():
 		return
 
@@ -185,6 +190,8 @@ func _physics_process(delta: float) -> void:
 		ranged_spit_timer -= delta
 		if ranged_spit_timer <= 0.0 and global_position.distance_to(target.global_position) <= 440.0:
 			ranged_spit_timer = 3.2 if enemy_id == "plujacy_kwasem" else 4.2
+			attack_visual_timer = ATTACK_VISUAL_DURATION
+			anim_timer = 0.0
 			_fire_acid_glob(target.global_position)
 
 	# Obsługa telegrafowanego ataku obszarowego dla Bossa i Minibossa
@@ -217,7 +224,7 @@ func _physics_process(delta: float) -> void:
 	global_position.y = clampf(global_position.y, -960.0, 960.0)
 
 	anim_timer += delta
-	if is_telegraphing and not attack_frames.is_empty():
+	if (is_telegraphing or attack_visual_timer > 0.0) and not attack_frames.is_empty():
 		var af_idx := int(anim_timer * sheet_fps) % attack_frames.size()
 		sprite.texture = attack_frames[af_idx]
 		sprite.scale = base_scale
@@ -240,6 +247,9 @@ func _physics_process(delta: float) -> void:
 		var collision := get_slide_collision(i)
 		var collider := collision.get_collider()
 		if collider is Player:
+			if attack_visual_timer <= 0.0:
+				attack_visual_timer = ATTACK_VISUAL_DURATION
+				anim_timer = 0.0
 			collider.take_damage(damage * delta)
 
 func _execute_telegraphed_slam() -> void:
@@ -339,6 +349,7 @@ func die() -> void:
 		return
 	is_dying = true
 	is_telegraphing = false
+	attack_visual_timer = 0.0
 	velocity = Vector2.ZERO
 	queue_redraw()
 	if not death_frames.is_empty() and sprite:
@@ -353,9 +364,23 @@ func die() -> void:
 		shard.xp_amount = xp_value
 		get_parent().call_deferred("add_child", shard)
 
-	# Animacja śmierci wroga (rozbłysk toksyczny)
+	# Independent death echo stays visible even when enemy is pooled instantly.
 	var parent_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
 	if is_instance_valid(parent_layer) and parent_layer.is_inside_tree():
+		if not death_frames.is_empty() and is_instance_valid(sprite):
+			var echo := Sprite2D.new()
+			echo.texture = death_frames[0]
+			echo.global_position = global_position
+			echo.scale = base_scale
+			echo.flip_h = sprite.flip_h
+			parent_layer.add_child(echo)
+			var echo_tween := echo.create_tween()
+			for frame_index in range(1, death_frames.size()):
+				var frame_tex: Texture2D = death_frames[frame_index]
+				echo_tween.tween_interval(0.12)
+				echo_tween.tween_callback(func(): echo.texture = frame_tex)
+			echo_tween.tween_property(echo, "modulate:a", 0.0, 0.20)
+			echo_tween.tween_callback(echo.queue_free)
 		var death_fx := Sprite2D.new()
 		death_fx.texture = TOXIC_SPLASH_TEX
 		death_fx.material = PowerEffects.get_additive_mat()

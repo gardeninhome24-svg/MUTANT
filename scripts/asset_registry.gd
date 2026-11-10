@@ -385,66 +385,50 @@ static func apply_player_visual(sprite: Sprite2D, class_id: String, skin_id: Str
 		sprite.vframes = 1
 		sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
 
+const MUTANT_ANIM_FOLDERS := {
+	"biegacz": "mutant_stalker", "plujacy_kwasem": "mutant_spitter",
+	"lowca": "mutant_leaper", "zarazony": "mutant_viral",
+	"zdziczaly": "mutant_tank", "zracy_pelzacz": "mutant_armored",
+	"skrzydlaty": "mutant_gargoyle", "wybuchowy": "mutant_boomer"
+}
+const BOSS_ANIM_FOLDERS := {
+	"boss_ch01": "boss_matka_roju", "matka_roju": "boss_matka_roju",
+	"boss_ch02": "boss_goliat", "miniboss_ch01": "boss_goliat", "boss_goliat": "boss_goliat",
+	"boss_ch03": "boss_lewiatan", "boss_ch04": "boss_lewiatan", "boss_lewiatan": "boss_lewiatan"
+}
+
 static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary:
 	var spec: Dictionary = {}
 	var walk_frames: Array[Texture2D] = []
 	var attack_frames: Array[Texture2D] = []
 	var death_frames: Array[Texture2D] = []
 
-	# Boss Multi-Phase Sprites
-	if enemy_id in ["boss_ch01", "matka_roju"]:
-		var b_path := "res://assets/bosses/boss_matka_roju/"
-		for fi in range(1, 5):
-			var w := get_tex(b_path + "phase1_anim_%d.png" % fi)
-			var a := get_tex(b_path + "phase2_attack_%d.png" % fi)
-			if w: walk_frames.append(w)
-			if a: attack_frames.append(a)
-		for di in range(1, 3):
-			var d := get_tex(b_path + "death_%d.png" % di)
-			if d: death_frames.append(d)
-		spec = {"texture_path": b_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
-	elif enemy_id in ["boss_ch02", "miniboss_ch01", "boss_goliat"]:
-		var b_path := "res://assets/bosses/boss_goliat/"
-		for fi in range(1, 5):
-			var w := get_tex(b_path + "phase1_anim_%d.png" % fi)
-			var a := get_tex(b_path + "phase2_attack_%d.png" % fi)
-			if w: walk_frames.append(w)
-			if a: attack_frames.append(a)
-		for di in range(1, 3):
-			var d := get_tex(b_path + "death_%d.png" % di)
-			if d: death_frames.append(d)
-		spec = {"texture_path": b_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
-	elif enemy_id in ["boss_ch03", "boss_ch04", "boss_lewiatan"]:
-		var b_path := "res://assets/bosses/boss_lewiatan/"
-		for fi in range(1, 5):
-			var w := get_tex(b_path + "phase1_anim_%d.png" % fi)
-			var a := get_tex(b_path + "phase2_attack_%d.png" % fi)
-			if w: walk_frames.append(w)
-			if a: attack_frames.append(a)
-		for di in range(1, 3):
-			var d := get_tex(b_path + "death_%d.png" % di)
-			if d: death_frames.append(d)
-		spec = {"texture_path": b_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
+	# Production 4-frame loops shared with the game's actual enemy sprite renderer.
+	if BOSS_ANIM_FOLDERS.has(enemy_id):
+		var root_path := "res://assets/bosses/" + String(BOSS_ANIM_FOLDERS[enemy_id]) + "/"
+		for idx in range(1, 5):
+			var w: Texture2D = get_tex(root_path + "phase1_anim_%d.png" % idx)
+			var a: Texture2D = get_tex(root_path + "phase2_attack_%d.png" % idx)
+			if w != null: walk_frames.append(w)
+			if a != null: attack_frames.append(a)
+		for idx in range(1, 3):
+			var d: Texture2D = get_tex(root_path + "death_%d.png" % idx)
+			if d != null: death_frames.append(d)
+		spec = {"texture_path": root_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
 	else:
-		# 8 Mutant Enemy Types
-		var mutant_folder := ""
-		if enemy_id in ["biegacz", "stalker"]: mutant_folder = "mutant_stalker"
-		elif enemy_id in ["plujacy_kwasem", "spitter"]: mutant_folder = "mutant_spitter"
-		elif enemy_id in ["lowca", "leaper"]: mutant_folder = "mutant_leaper"
-		elif enemy_id in ["zarazony", "viral"]: mutant_folder = "mutant_viral"
-		elif enemy_id in ["zdziczaly", "tank"]: mutant_folder = "mutant_tank"
-		elif enemy_id in ["wybuchowy", "boomer"]: mutant_folder = "mutant_boomer"
-		elif enemy_id in ["zracy_pelzacz", "pancerny", "beetle"]: mutant_folder = "mutant_armored"
-		elif enemy_id in ["skrzydlaty", "gargoyle"]: mutant_folder = "mutant_gargoyle"
-
-		if mutant_folder != "":
-			var m_path := "res://assets/enemies/" + mutant_folder + "/"
-			for fi in range(1, 5):
-				var w := get_tex(m_path + "walk_%d.png" % fi)
-				var a := get_tex(m_path + "attack_%d.png" % fi)
-				if w: walk_frames.append(w)
-				if a: attack_frames.append(a)
-			spec = {"texture_path": m_path + "portrait.png", "scale": Vector2(0.60, 0.60), "status": "HD_MUTANT_V2"}
+		var mutant_id: String = enemy_id
+		var aliases := {"stalker":"biegacz","spitter":"plujacy_kwasem","leaper":"lowca","viral":"zarazony","tank":"zdziczaly","boomer":"wybuchowy","pancerny":"zracy_pelzacz","beetle":"zracy_pelzacz","gargoyle":"skrzydlaty"}
+		if aliases.has(mutant_id):
+			mutant_id = String(aliases[mutant_id])
+		var folder: String = String(MUTANT_ANIM_FOLDERS.get(mutant_id, ""))
+		if not folder.is_empty():
+			var root_path := "res://assets/enemies/" + folder + "/"
+			for idx in range(1, 5):
+				var w: Texture2D = get_tex(root_path + "walk_%d.png" % idx)
+				var a: Texture2D = get_tex(root_path + "attack_%d.png" % idx)
+				if w != null: walk_frames.append(w)
+				if a != null: attack_frames.append(a)
+			spec = {"texture_path": root_path + "portrait.png", "scale": Vector2(0.60, 0.60), "status": "HD_MUTANT_V2"}
 		elif ENEMY_ASSETS.has(enemy_id):
 			spec = ENEMY_ASSETS[enemy_id]
 		else:
@@ -453,7 +437,7 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	var tex := get_tex(String(spec.get("texture_path", "")))
 	sprite.hframes = 1
 	sprite.vframes = 1
-	sprite.texture = tex
+	sprite.texture = walk_frames[0] if not walk_frames.is_empty() else tex
 	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
 	return {
 		"is_animated": (walk_frames.size() > 0),

@@ -34,6 +34,7 @@ func _run() -> void:
 
 	_test_horde_performance_limits()
 	_test_character_art_sequences()
+	_test_enemy_art_sequences()
 	_test_starter_gear()
 	_test_equipment_and_save()
 	_test_rarity_fusion_protection()
@@ -55,6 +56,16 @@ func _test_character_art_sequences() -> void:
 			_assert(AssetRegistry.get_player_animation_frame(String(cls_id), String(action), 1) != null, "Initial %s %s frame exists" % [cls_id, action])
 			_assert(AssetRegistry.get_player_animation_frame(String(cls_id), String(action), max_frame) != null, "Final %s %s frame exists" % [cls_id, action])
 		_assert(AssetRegistry.get_player_animation_frame(String(cls_id), "shoot", 7) == null, "Invalid shoot frame is rejected")
+
+
+func _test_enemy_art_sequences() -> void:
+	_assert(AssetRegistry.MUTANT_ANIM_FOLDERS.size() == 8, "Eight mutant art families have animation sets")
+	for enemy_id in AssetRegistry.MUTANT_ANIM_FOLDERS.keys():
+		var folder: String = String(AssetRegistry.MUTANT_ANIM_FOLDERS[enemy_id])
+		_assert(AssetRegistry.get_tex("res://assets/enemies/%s/walk_1.png" % folder) != null, "Mutant walking visuals load: " + String(enemy_id))
+		_assert(AssetRegistry.get_tex("res://assets/enemies/%s/attack_4.png" % folder) != null, "Mutant attack visuals load: " + String(enemy_id))
+	for folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
+		_assert(AssetRegistry.get_tex("res://assets/bosses/%s/death_2.png" % folder) != null, "Boss death sprite loads: " + folder)
 
 
 func _test_horde_performance_limits() -> void:

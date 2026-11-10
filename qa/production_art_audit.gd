@@ -37,6 +37,17 @@ func _run() -> void:
 		else:
 			static_references.append("Operator %s: missing dedicated animated sequence" % key)
 
+	for enemy_id in AssetRegistry.MUTANT_ANIM_FOLDERS.keys():
+		var folder: String = String(AssetRegistry.MUTANT_ANIM_FOLDERS[enemy_id])
+		for idx in range(1, 5):
+			_check("res://assets/enemies/%s/walk_%d.png" % [folder, idx], "%s walking %d" % [enemy_id, idx])
+			_check("res://assets/enemies/%s/attack_%d.png" % [folder, idx], "%s attacking %d" % [enemy_id, idx])
+	for boss_folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
+		for idx in range(1, 5):
+			_check("res://assets/bosses/%s/phase1_anim_%d.png" % [boss_folder, idx], "%s movement %d" % [boss_folder, idx])
+			_check("res://assets/bosses/%s/phase2_attack_%d.png" % [boss_folder, idx], "%s attack %d" % [boss_folder, idx])
+		for idx in range(1, 3):
+			_check("res://assets/bosses/%s/death_%d.png" % [boss_folder, idx], "%s death %d" % [boss_folder, idx])
 	for key in AssetRegistry.ENEMY_ASSETS.keys():
 		var item: Dictionary = AssetRegistry.ENEMY_ASSETS[key]
 		_check(String(item.get("texture_path", "")), "Enemy %s" % key)
