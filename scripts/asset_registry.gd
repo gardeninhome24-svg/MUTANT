@@ -394,7 +394,20 @@ const MUTANT_ANIM_FOLDERS := {
 const BOSS_ANIM_FOLDERS := {
 	"boss_ch01": "boss_matka_roju", "matka_roju": "boss_matka_roju",
 	"boss_ch02": "boss_goliat", "miniboss_ch01": "boss_goliat", "boss_goliat": "boss_goliat",
-	"boss_ch03": "boss_lewiatan", "boss_ch04": "boss_lewiatan", "boss_lewiatan": "boss_lewiatan"
+	"boss_ch03": "boss_lewiatan", "boss_ch04": "boss_lewiatan", "boss_lewiatan": "boss_lewiatan",
+	"boss_ch05": "boss_lewiatan", "boss_ch06": "boss_matka_roju",
+	"boss_ch07": "boss_goliat", "boss_ch08": "boss_goliat",
+	"boss_ch09": "boss_lewiatan", "boss_ch10": "boss_matka_roju"
+}
+
+# Distinct chapter colors; chapter 5–10 still reuse existing sprite motion kits.
+const BOSS_CHAPTER_TINTS := {
+	"boss_ch05": Color(0.77, 1.0, 0.55),
+	"boss_ch06": Color(1.0, 0.64, 0.72),
+	"boss_ch07": Color(0.91, 0.79, 0.60),
+	"boss_ch08": Color(1.0, 0.73, 0.45),
+	"boss_ch09": Color(0.75, 0.66, 1.0),
+	"boss_ch10": Color(0.79, 0.88, 1.0)
 }
 
 static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary:
@@ -414,7 +427,7 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 		for idx in range(1, 3):
 			var d: Texture2D = get_tex(root_path + "death_%d.png" % idx)
 			if d != null: death_frames.append(d)
-		spec = {"texture_path": root_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_V2"}
+		spec = {"texture_path": root_path + "boss_portrait.png", "scale": Vector2(0.88, 0.88), "status": "HD_BOSS_REUSED" if BOSS_CHAPTER_TINTS.has(enemy_id) else "HD_BOSS_V2"}
 	else:
 		var mutant_id: String = enemy_id
 		var aliases := {"stalker":"biegacz","spitter":"plujacy_kwasem","leaper":"lowca","viral":"zarazony","tank":"zdziczaly","boomer":"wybuchowy","pancerny":"zracy_pelzacz","beetle":"zracy_pelzacz","gargoyle":"skrzydlaty"}
@@ -438,7 +451,7 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	sprite.hframes = 1
 	sprite.vframes = 1
 	sprite.texture = walk_frames[0] if not walk_frames.is_empty() else tex
-	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
+	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))	sprite.modulate = BOSS_CHAPTER_TINTS.get(enemy_id, Color.WHITE)
 	return {
 		"is_animated": (walk_frames.size() > 0),
 		"fps": 8.0,
@@ -446,5 +459,6 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 		"attack_frames": attack_frames,
 		"death_frames": death_frames,
 		"status": String(spec.get("status", "HD_STATIC_RGBA")),
-		"base_scale": sprite.scale
+		"base_scale": sprite.scale,
+		"base_tint": sprite.modulate
 	}

@@ -15,6 +15,7 @@ var attack_visual_timer: float = 0.0
 const ATTACK_VISUAL_DURATION: float = 0.36
 var impact_fx_cooldown: float = 0.0
 var base_scale: Vector2 = Vector2(0.55, 0.55)
+var base_tint: Color = Color.WHITE
 var is_animated_sheet: bool = false
 var walk_frames: Array[Texture2D] = []
 var attack_frames: Array[Texture2D] = []
@@ -102,6 +103,7 @@ func setup_enemy_archetype(p_enemy_id: String, p_tier: String, stage_num: int, e
 		sheet_fps = maxf(1.0, float(vis_info.get("fps", 9.0)))
 		asset_status = String(vis_info.get("status", "HD_MUTANT_V2"))
 		base_scale = vis_info.get("base_scale", Vector2(0.56, 0.56))
+		base_tint = vis_info.get("base_tint", Color.WHITE)
 		walk_frames.clear()
 		for f in vis_info.get("walk_frames", []):
 			if f is Texture2D: walk_frames.append(f)
@@ -138,7 +140,8 @@ func apply_scaling(hp_mult: float, speed_mult: float) -> void:
 func _draw() -> void:
 	# Pierścień pod elitą / minibossem / bossem
 	if tier == "boss":
-		draw_arc(Vector2(0, 6), 54.0, 0.0, TAU, 40, Color(1.0, 0.22, 0.18, 0.78), 3.0, true)
+		var ring_col := Color(base_tint.r, base_tint.g, base_tint.b, 0.82)
+		draw_arc(Vector2(0, 6), 54.0, 0.0, TAU, 40, ring_col, 3.0, true)
 	elif tier == "miniboss" or tier == "elite":
 		draw_arc(Vector2(0, 4), 38.0, 0.0, TAU, 32, Color(1.0, 0.65, 0.15, 0.68), 2.5, true)
 
@@ -306,7 +309,7 @@ func take_damage(amount: float) -> void:
 		tw_fx.tween_callback(hit_fx.queue_free)
 		var tween := create_tween()
 		sprite.modulate = Color(2.5, 0.45, 0.45, 1.0)
-		tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
+		tween.tween_property(sprite, "modulate", base_tint, 0.12)
 
 	if current_health <= 0.0:
 		die()
@@ -373,12 +376,13 @@ func die() -> void:
 			echo.global_position = global_position
 			echo.scale = base_scale
 			echo.flip_h = sprite.flip_h
+			echo.modulate = base_tint
 			parent_layer.add_child(echo)
 			var echo_tween := echo.create_tween()
 			for frame_index in range(1, death_frames.size()):
 				var frame_tex: Texture2D = death_frames[frame_index]
 				echo_tween.tween_interval(0.12)
-				echo_tween.tween_callback(func(): echo.texture = frame_tex)
+				echo_tween.tween_callback(echo.set.bind("texture", frame_tex))
 			echo_tween.tween_property(echo, "modulate:a", 0.0, 0.20)
 			echo_tween.tween_callback(echo.queue_free)
 		var death_fx := Sprite2D.new()

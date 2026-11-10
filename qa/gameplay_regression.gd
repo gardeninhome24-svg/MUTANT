@@ -66,6 +66,22 @@ func _test_enemy_art_sequences() -> void:
 		_assert(AssetRegistry.get_tex("res://assets/enemies/%s/attack_4.png" % folder) != null, "Mutant attack visuals load: " + String(enemy_id))
 	for folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		_assert(AssetRegistry.get_tex("res://assets/bosses/%s/death_2.png" % folder) != null, "Boss death sprite loads: " + folder)
+	var later_tints: Array[Color] = []
+	for chapter in range(1, 11):
+		var boss_id: String = "boss_ch%02d" % chapter
+		_assert(AssetRegistry.BOSS_ANIM_FOLDERS.has(boss_id), "Chapter %d has an animated boss mapping" % chapter)
+		var preview := Sprite2D.new()
+		var visuals: Dictionary = AssetRegistry.apply_enemy_visual(preview, boss_id)
+		_assert(visuals.get("walk_frames", []).size() == 4, "Chapter %d has complete moving frames" % chapter)
+		_assert(visuals.get("attack_frames", []).size() == 4, "Chapter %d has complete attack frames" % chapter)
+		_assert(visuals.get("death_frames", []).size() == 2, "Chapter %d has complete death frames" % chapter)
+		if chapter >= 5:
+			_assert(String(visuals.get("status", "")) == "HD_BOSS_REUSED", "Reused chapter artwork is explicitly identified")
+			var tint: Color = visuals.get("base_tint", Color.WHITE)
+			_assert(tint != Color.WHITE, "Chapter %d has an individual color identity" % chapter)
+			_assert(not later_tints.has(tint), "Chapter %d tint is unique" % chapter)
+			later_tints.append(tint)
+		preview.free()
 
 
 func _test_horde_performance_limits() -> void:
