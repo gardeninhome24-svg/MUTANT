@@ -121,13 +121,17 @@ func _run() -> void:
 	await process_frame
 	var safe_top: float = stage.get_safe_top_margin()
 	if is_instance_valid(wave):
-		_check(absf(wave.offset_top - (210.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
+		_check(absf(wave.offset_top - (242.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
 	if is_instance_valid(radar):
 		_check(absf(radar.offset_top - (75.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
 	if is_instance_valid(currencies):
 		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
 	if is_instance_valid(currencies) and is_instance_valid(wave):
 		_check(currencies.offset_bottom + 2.0 <= wave.offset_top, "420px currency and wave rows do not overlap")
+	if is_instance_valid(goals) and is_instance_valid(currencies):
+		_check(goals.offset_bottom + 2.0 <= currencies.offset_top, "420px objectives end before second currency row")
+	if is_instance_valid(radar) and is_instance_valid(currencies):
+		_check(radar.offset_bottom + 2.0 <= currencies.offset_top, "420px minimap ends before second currency row")
 	var avatar: TextureRect = combat.get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox/Avatar") as TextureRect
 	var hp: ProgressBar = combat.get("hp_bar") as ProgressBar
 	var xp: ProgressBar = combat.get("xp_bar") as ProgressBar
