@@ -152,10 +152,9 @@ for chapter in CHAPTERS:
             if len(data) < 150:
                 raise ValueError("empty or truncated PNG")
             digests.append(inspect_png(data, name))
-            if name != "boss_portrait.png":
-                shape = alpha_bounds(data, relative)
-                if shape["feet"] < 0.88:
-                    raise ValueError("actor feet do not reach the lower frame anchor")
+            shape = alpha_bounds(data, relative)
+            if name != "boss_portrait.png" and shape["feet"] < 0.88:
+                raise ValueError("actor feet do not reach the lower frame anchor")
         except (OSError, ValueError) as error:
             invalid_boss_frames.append(f"{relative} ({error})")
             complete = False
