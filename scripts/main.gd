@@ -111,6 +111,8 @@ var objective_elites_required: int = 2
 var objective_steps_done: int = 0
 var objective_steps_required: int = 1
 var escort_destination: Vector2 = Vector2(0, -340)
+var rescue_npc_freed: bool = false
+var rescue_destination: Vector2 = Vector2(-500, -320)
 var enemies_killed_in_run: int = 0
 var solid_obstacle_positions: Array[Vector2] = []
 
@@ -591,7 +593,7 @@ func _build_layered_arena(stage_num: int) -> void:
 	_spawn_primary_mission_target(beacon_world_pos, primary_objective_type)
 	# These missions have world pickups, enemy targets or a survival timer.
 	# A fake central console and its radar marker would mislead players.
-	var uses_world_objective: bool = primary_objective_type in ["collect_item", "clear_elites", "survive_hazard"]
+	var uses_world_objective: bool = primary_objective_type in ["collect_item", "clear_elites", "survive_hazard", "destroy_target"]
 	if uses_world_objective and is_instance_valid(primary_objective_area):
 		primary_objective_area.visible = false
 	if is_instance_valid(radar):
@@ -854,6 +856,7 @@ func start_stage(stage_num: int) -> void:
 	data_cores_collected = 0
 	objective_elites_defeated = 0
 	objective_steps_done = 0
+	rescue_npc_freed = false
 	enemies_killed_in_run = 0
 	has_used_revive = false
 	run_result_state = "active"
@@ -980,6 +983,8 @@ func _update_objectives_ui() -> void:
 		obj1_label.text = "%s Generatory %d/%d (%d%%)" % [c1, objective_steps_done, objective_steps_required, pct]
 	elif primary_objective_type == "escort":
 		obj1_label.text = "%s Eskorta %d%%" % [c1, pct]
+	elif primary_objective_type == "rescue_npc":
+		obj1_label.text = "%s %s" % [c1, "Doprowadź ocalałego do ewakuacji" if rescue_npc_freed else "Uwolnij ocalałego"]
 	elif primary_objective_type == "defeat_boss":
 		obj1_label.text = "%s Boss (%d/1)" % [c1, 1 if primary_objective_done else 0] if StageDirector.is_portrait_mode() else "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
 	elif primary_objective_type == "defend_node":
@@ -1006,9 +1011,11 @@ func _process(delta: float) -> void:
 		_advance_defense_objective(delta)
 		if run_result_state != "active":
 			return
+	if primary_objective_type == "rescue_npc" and not primary_objective_done:
+		_advance_rescue_objective(delta)
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard", "destroy_target", "defend_node"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard", "destroy_target", "defend_node", "rescue_npc"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if dist_to_obj <= 115.0:
 			if primary_objective_type == "escort":
@@ -1073,6 +1080,46 @@ func _process(delta: float) -> void:
 			var enemies_count := get_tree().get_nodes_in_group("enemies").size()
 			if enemies_count < max_active:
 				spawn_wave_enemy()
+
+func _advance_rescue_objective(delta: float) -> void:
+	# Stage 5 of every chapter: release the survivor, then personally lead
+	# them to extraction. Both interactions matter, unlike a generic console.
+	if run_result_state != "active" or primary_objective_done or primary_objective_type != "rescue_npc":
+		return
+	if not is_instance_valid(player) or not is_instance_valid(primary_objective_area):
+		return
+	var npc_pos: Vector2 = primary_objective_area.global_position
+	var hero_distance: float = player.global_position.distance_to(npc_pos)
+	if not rescue_npc_freed:
+		if hero_distance <= 100.0:
+			primary_objective_progress = minf(2.5, primary_objective_progress + maxf(0.0, delta))
+			if is_instance_valid(primary_objective_bar):
+				primary_objective_bar.value = primary_objective_progress
+			if primary_objective_progress >= 2.5:
+				rescue_npc_freed = true
+				primary_objective_progress = 0.0
+				primary_objective_required_sec = npc_pos.distance_to(rescue_destination)
+				if is_instance_valid(primary_objective_bar):
+					primary_objective_bar.max_value = primary_objective_required_sec
+					primary_objective_bar.value = 0.0
+				show_npc_comms("Mara", "Ocalały jest wolny! Doprowadź go do punktu ewakuacji.")
+	else:
+		# The NPC moves only while the hero stays close; when the player runs
+		# away, the survivor waits rather than teleporting through the horde.
+		if hero_distance <= 180.0 and hero_distance >= 45.0:
+			var old_pos: Vector2 = primary_objective_area.global_position
+			var next_pos: Vector2 = old_pos.move_toward(player.global_position, 90.0 * maxf(0.0, delta))
+			primary_objective_area.global_position = next_pos
+			primary_objective_progress = minf(primary_objective_required_sec,
+				primary_objective_progress + old_pos.distance_to(next_pos))
+		if is_instance_valid(radar):
+			radar.beacon_world_pos = primary_objective_area.global_position
+		if is_instance_valid(primary_objective_bar):
+			primary_objective_bar.value = primary_objective_progress
+		if primary_objective_area.global_position.distance_to(rescue_destination) <= 85.0 and player.global_position.distance_to(rescue_destination) <= 140.0:
+			_complete_primary_objective()
+	_update_objectives_ui()
+
 
 func _advance_defense_objective(delta: float) -> void:
 	# Defense completes after surviving the contract timer while the
