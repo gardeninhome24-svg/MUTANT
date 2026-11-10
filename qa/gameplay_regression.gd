@@ -44,7 +44,7 @@ func _run() -> void:
 	await _test_combat_and_bosses()
 	# Test files live only inside the CI runner, never inside an APK.
 	for suffix in ["", ".bak", ".tmp", ".bak.tmp"]:
-		var disposable := path + suffix
+		var disposable: String = path + String(suffix)
 		if FileAccess.file_exists(disposable):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(disposable))
 	_finish()
