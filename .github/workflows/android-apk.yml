@@ -444,6 +444,28 @@ jobs:
           if-no-files-found: warn
           retention-days: 21
 
+      - name: Archive APK after all automated gameplay QA passes
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-Android-APK-QA-PASS-${{ github.run_number }}
+          path: |
+            build/android/MutantSurvivor.apk
+            build/android/MutantSurvivor.apk.sha256
+          if-no-files-found: error
+          retention-days: 21
+
+      - name: Explain the remaining real-device and artwork requirements
+        shell: bash
+        run: |
+          {
+            echo ""
+            echo "### Automated checks passed on the signed Android debug APK"
+            echo "QA-PASS means the checks in this workflow succeeded on GitHub CI."
+            echo "It does NOT establish performance, graphics approval or actual"
+            echo "installation/playability on a physical Android device."
+            echo "Art from assets/bosses/ART_CANDIDATE.txt still requires manual review."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       # Publishing is opt-in: builds from ordinary pushes are NOT exposed to testers.
       - name: Publish APK to private itch.io beta (manual opt-in only)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_to_itch == true }}
