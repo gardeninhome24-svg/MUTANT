@@ -11,6 +11,7 @@ class_name MutantEnemy
 var current_health: float = 55.0
 var target: Node2D = null
 var anim_timer: float = 0.0
+var impact_fx_cooldown: float = 0.0
 var base_scale: Vector2 = Vector2(0.55, 0.55)
 var is_animated_sheet: bool = false
 var walk_frames: Array[Texture2D] = []
@@ -61,6 +62,7 @@ func reset_for_respawn(p_enemy_id: String, p_tier: String, stage_num: int, elaps
 	velocity = Vector2.ZERO
 	target = null
 	anim_timer = 0.0
+	impact_fx_cooldown = 0.0
 	special_timer = 2.0
 	ranged_spit_timer = 2.6
 	is_telegraphing = false
@@ -155,6 +157,7 @@ func _draw() -> void:
 	draw_rect(Rect2(bar_pos, Vector2(bar_w * ratio, bar_h)), fill_col)
 
 func _physics_process(delta: float) -> void:
+	impact_fx_cooldown = maxf(0.0, impact_fx_cooldown - delta)
 	if is_dying or not is_instance_valid(target) or not is_inside_tree():
 		return
 
@@ -267,20 +270,22 @@ func take_damage(amount: float) -> void:
 	parent_layer.add_child(dmg_lbl)
 	dmg_lbl.setup(amount, amount > 45.0, global_position + Vector2(0, -36))
 
-	# Krótki efekt trafienia (impact_burst)
-	var hit_fx := Sprite2D.new()
-	hit_fx.texture = IMPACT_BURST_TEX
-	hit_fx.material = PowerEffects.get_additive_mat()
-	hit_fx.global_position = global_position + Vector2(randf_range(-10, 10), -28)
-	hit_fx.scale = Vector2(0.42, 0.42)
-	parent_layer.add_child(hit_fx)
-	var tw_fx := hit_fx.create_tween()
-	tw_fx.tween_property(hit_fx, "modulate:a", 0.0, 0.14)
-	tw_fx.tween_callback(hit_fx.queue_free)
-
-	var tween := create_tween()
-	sprite.modulate = Color(2.5, 0.45, 0.45, 1.0)
-	tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
+	# Throttle purely visual hit flashes during dense bullet storms.
+	# Damage, damage numbers and XP remain unchanged.
+	if impact_fx_cooldown <= 0.0:
+		impact_fx_cooldown = 0.07
+		var hit_fx := Sprite2D.new()
+		hit_fx.texture = IMPACT_BURST_TEX
+		hit_fx.material = PowerEffects.get_additive_mat()
+		hit_fx.global_position = global_position + Vector2(randf_range(-10, 10), -28)
+		hit_fx.scale = Vector2(0.42, 0.42)
+		parent_layer.add_child(hit_fx)
+		var tw_fx := hit_fx.create_tween()
+		tw_fx.tween_property(hit_fx, "modulate:a", 0.0, 0.14)
+		tw_fx.tween_callback(hit_fx.queue_free)
+		var tween := create_tween()
+		sprite.modulate = Color(2.5, 0.45, 0.45, 1.0)
+		tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
 
 	if current_health <= 0.0:
 		die()

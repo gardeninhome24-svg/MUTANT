@@ -20,11 +20,10 @@ static func get_additive_mat() -> CanvasItemMaterial:
 
 ## 1. Łuk elektryczny Tesla (Chain Lightning pomiędzy graczem a trafionymi wrogami)
 static func spawn_chain_lightning(layer: Node, chain_points: PackedVector2Array) -> void:
-	if not is_instance_valid(layer) or chain_points.size() < 2:
+	if not is_instance_valid(layer) or not layer.is_inside_tree() or chain_points.size() < 2:
 		return
 
-	var add_mat := CanvasItemMaterial.new()
-	add_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	var add_mat := get_additive_mat()
 
 	for idx in range(chain_points.size() - 1):
 		var p_start := chain_points[idx]
@@ -77,7 +76,7 @@ static func spawn_chain_lightning(layer: Node, chain_points: PackedVector2Array)
 
 ## 2. Widmowy ślad Dasha (Afterimage Ghost Trail)
 static func spawn_dash_ghost(layer: Node, source_sprite: Sprite2D, world_pos: Vector2) -> void:
-	if not is_instance_valid(layer) or not is_instance_valid(source_sprite):
+	if not is_instance_valid(layer) or not layer.is_inside_tree() or not is_instance_valid(source_sprite) or source_sprite.texture == null:
 		return
 	var ghost := Sprite2D.new()
 	ghost.texture = source_sprite.texture
@@ -96,7 +95,11 @@ static func spawn_dash_ghost(layer: Node, source_sprite: Sprite2D, world_pos: Ve
 
 ## 3. Rzut Granatem Plazmowym (parabola lotu + fala uderzeniowa + wybuch + dym)
 static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Vector2, blast_damage: float, blast_radius: float = 175.0) -> void:
-	if not is_instance_valid(layer):
+	if not is_instance_valid(layer) or not layer.is_inside_tree():
+		return
+	blast_radius = maxf(0.0, blast_radius)
+	blast_damage = maxf(0.0, blast_damage)
+	if blast_damage <= 0.0:
 		return
 
 	var gren := Sprite2D.new()
@@ -107,7 +110,7 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 
 	var flight_time := 0.38
 	var elapsed := 0.0
-	while elapsed < flight_time and is_instance_valid(gren):
+	while elapsed < flight_time and is_instance_valid(gren) and is_instance_valid(layer) and layer.is_inside_tree():
 		var dt := layer.get_process_delta_time()
 		elapsed += dt
 		var t := clampf(elapsed / flight_time, 0.0, 1.0)
@@ -127,11 +130,10 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 	var enemies := layer.get_tree().get_nodes_in_group("enemies")
 	for e in enemies:
 		var enemy := e as MutantEnemy
-		if is_instance_valid(enemy) and enemy.global_position.distance_to(target_pos) <= blast_radius:
+		if is_instance_valid(enemy) and not enemy.is_dying and enemy.visible and enemy.global_position.distance_to(target_pos) <= blast_radius:
 			enemy.take_damage(blast_damage)
 
-	var add_mat := CanvasItemMaterial.new()
-	add_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	var add_mat := get_additive_mat()
 
 	# Dym pod wybuchem
 	var smoke := Sprite2D.new()
@@ -162,11 +164,13 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 
 ## 4. Osobliwość Antygrawitacyjna / Czarna Dziura (wciąga wrogów i zadaje obrażenia fazowe)
 static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damage: float, duration: float = 2.8, pull_radius: float = 240.0) -> void:
-	if not is_instance_valid(layer):
+	if not is_instance_valid(layer) or not layer.is_inside_tree():
 		return
+	duration = maxf(0.05, duration)
+	pull_radius = maxf(0.0, pull_radius)
+	tick_damage = maxf(0.0, tick_damage)
 
-	var add_mat := CanvasItemMaterial.new()
-	add_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	var add_mat := get_additive_mat()
 
 	var vortex := Sprite2D.new()
 	vortex.texture = PORTAL_TEX
@@ -187,7 +191,7 @@ static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damag
 
 	var elapsed := 0.0
 	var dmg_accum := 0.0
-	while elapsed < duration and is_instance_valid(vortex):
+	while elapsed < duration and is_instance_valid(vortex) and is_instance_valid(core) and is_instance_valid(layer) and layer.is_inside_tree():
 		var dt := layer.get_process_delta_time()
 		elapsed += dt
 		dmg_accum += dt
@@ -203,7 +207,7 @@ static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damag
 		var enemies := layer.get_tree().get_nodes_in_group("enemies")
 		for e in enemies:
 			var enemy := e as MutantEnemy
-			if is_instance_valid(enemy):
+			if is_instance_valid(enemy) and not enemy.is_dying and enemy.visible:
 				var dist := enemy.global_position.distance_to(world_pos)
 				if dist <= pull_radius and dist > 18.0:
 					var pull_dir := (world_pos - enemy.global_position).normalized()

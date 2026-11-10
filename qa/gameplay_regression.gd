@@ -232,6 +232,7 @@ func _test_combat_and_bosses() -> void:
 			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "One mutant death counts as exactly one daily kill")
 			mutant.take_damage(100.0)
 			_assert(_get_daily_progress("kill_mutants") == kills_before + 1, "Dead mutant cannot grant a second kill")
+			_assert(mutant.impact_fx_cooldown >= 0.0, "Impact visual cooldown is valid after enemy death")
 			_assert(mutant.current_health == 0.0, "Dead mutant health is clamped at zero")
 			_assert(int(battle.get("enemies_killed_in_run")) == 1, "Mutant death updates run kill counter")
 	battle.call("start_wave", 1, 5)
