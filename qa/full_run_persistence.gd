@@ -383,6 +383,11 @@ func _execute() -> void:
 			mission_targets.append(candidate)
 	_check(mission_targets.size() == 2, "Stage 4 spawns two shootable incubators")
 	if mission_targets.size() == 2:
+		var mission_shooter: Node2D = battle.get("player") as Node2D
+		if is_instance_valid(mission_shooter):
+			mission_shooter.global_position = mission_targets[0].global_position + Vector2(90, 0)
+			_check(mission_shooter.call("find_primary_fire_target") == mission_targets[0],
+				"Close mission incubator is selectable by mobile auto-aim")
 		mission_targets[0].take_damage(mission_targets[0].max_health + 1.0)
 		_check(int(battle.get("objective_steps_done")) == 1, "First incubator destruction counts once")
 		_check(not bool(battle.get("primary_objective_done")), "One destroyed incubator cannot finish stage 4")
