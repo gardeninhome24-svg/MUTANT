@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
-from zipfile import BadZipFile, ZipFile, ZIP_DEFLATED
+from zipfile import BadZipFile, ZipFile, ZIP_STORED
 
 EXPECTED_PACKAGE = "com.zielonadolina.mutantsurvivor"
 
@@ -42,7 +42,7 @@ def inspect(path: Path) -> dict:
         return {
             "apk": str(path),
             "size_bytes": path.stat().st_size,
-            "sha256": hashlib.file_digest(path.open("rb"), "sha256").hexdigest(),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "zip_entries": len(names),
             "arm64_libraries": len(arm64),
             "package_expected": EXPECTED_PACKAGE,
@@ -54,7 +54,7 @@ def self_test() -> None:
     with tempfile.TemporaryDirectory() as directory:
         apk = Path(directory) / "sample.apk"
         payload = b"0" * 1_050_000
-        with ZipFile(apk, "w", ZIP_DEFLATED) as out:
+        with ZipFile(apk, "w", ZIP_STORED) as out:
             out.writestr("AndroidManifest.xml", b"manifest")
             out.writestr("classes.dex", payload)
             out.writestr("lib/arm64-v8a/libgodot_android.so", b"native")
