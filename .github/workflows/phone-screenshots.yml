@@ -12,6 +12,7 @@ on:
       - "scripts/user_profile_panel.gd"
       - "scripts/ui/**"
       - "scripts/stage_director.gd"
+      - "project.godot"
       - "assets/ui/**"
       - "scenes/main/main.tscn"
       - "scenes/ui/main_menu.tscn"

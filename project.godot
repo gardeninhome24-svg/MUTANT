@@ -9,7 +9,7 @@ config_version=5
 config/name="MutantSurvivor"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://assets/mutantsurvivor_ch01/icons/purple_crystal.png"
+config/icon="res://assets/ui/target_theme/icon_mutant_survivor.svg"
 
 [autoload]
 

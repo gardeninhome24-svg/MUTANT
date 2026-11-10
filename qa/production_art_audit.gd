@@ -18,6 +18,7 @@ func _check(path: String, label: String) -> void:
 
 func _run() -> void:
 	await process_frame
+	_check("res://assets/ui/target_theme/icon_mutant_survivor.svg", "Branded project icon")
 	for key in AssetRegistry.CHARACTER_ASSETS.keys():
 		var item: Dictionary = AssetRegistry.CHARACTER_ASSETS[key]
 		_check(String(item.get("fallback_path", "")), "Operator %s" % key)

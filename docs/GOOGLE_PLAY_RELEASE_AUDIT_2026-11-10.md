@@ -12,7 +12,7 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 - Siatka plecaka 30 widocznych pól: 5 kolumn na 720px, 4 na 420px, wypełniana pustymi slotami (przy większej liczbie przedmiotów gra ich nie obcina).
 - Wybrany przedmiot, informacje o statystykach, szybkie ZAŁÓŻ/ZDEJMIJ na ekranie ekwipunku i trwały zapis w `user://`.
 - Ochrona zaznaczenia przed nieaktualnym ID po zmianie filtra, test w `qa/mobile_ui_regression.gd`.
-- **Nieukończone**: przeciąganie między slotami (na telefonie wymagane testy multitouch), paginacja przy dużej liczbie przedmiotów, test zapisu/odczytu po aktualizacji aplikacji na prawdziwym Androidzie.
+- **Nieukończone**: przeciąganie między slotami (na telefonie wymagane testy multitouch) oraz test zapisu/odczytu po aktualizacji aplikacji na prawdziwym Androidzie. **Paginacja dużego plecaka jest wdrożona** i objęta zrzutami dwóch stron w Visual QA.
 
 ## P0 — wymagania Google Play
 
@@ -21,14 +21,14 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 | AAB | **CZĘŚCIOWO NAPRAWIONE**: dodano izolowany preset `Android Google Play AAB` (Gradle, AAB, target 36). Nadal nie ma sprawdzonego, podpisanego pliku AAB; bazowy workflow do bety pozostaje APK. | Uruchomić **odrębny manualny** `.github/workflows/google-play-aab.yml` po wyłączeniu waluty beta i dodaniu podpisu, sprawdzić release-signed AAB w Play Console. Debug APK pozostaje niezależny. |
 | API Android | **CZĘŚCIOWO NAPRAWIONE**: nowy preset Play ma jawny `gradle_build/target_sdk="36"`, manualny pipeline instaluje Android SDK 36; nie sprawdzono wartości w faktycznie zbudowanym AAB. | Zweryfikować faktyczny target SDK w wygenerowanym AAB. Od 31 sierpnia 2026 nowe aplikacje wymagają API 36. |
 | Signing | Manualny release APK wymaga secrets, co jest dobrym rozwiązaniem. Dostępny manualny pipeline AAB z secrets; brak potwierdzenia udanego podpisanego eksportu i trwałego klucza upload. | Zweryfikować klucz, Play App Signing, numer wersji i instalację aktualizacji bez utraty zapisu. Nie publikować klucza w repo. |
-| Testowe kryształy | **BLOKER**: `StageDirector.BETA_TEST_GEMS_ENABLED = true` i jednorazowe 10 000 kryształów. | Wyłączyć w wersji produkcyjnej i przetestować migrację zapisów beta. |
+| Testowe kryształy | **Poprawione w kodzie**: `StageDirector.BETA_TEST_GEMS_ENABLED = false`; migracja wcześniejszych zapisów beta nadal wymaga testu na rzeczywistym urządzeniu. | Potwierdzić, że po aktualizacji i odtworzeniu starego zapisu nie pozostają nieuprawnione waluty ani przedmioty beta. |
 | Płatności cyfrowe | Pakiet 500 kryształów za realne pieniądze niedostępny; zakupy skórek używają lokalnego salda, nie Play Billing. | Google Play Billing oraz bezpieczna weryfikacja transakcji i zwrotów lub jawne wyłączenie płatnej oferty w publicznej wersji. Nie sprzedawać wartości przechowywanej tylko w lokalnym pliku. |
 | Polityka prywatności | W źródłach brak dowodu na publiczną stronę polityki prywatności, poprawne wypełnienie Data safety i link w grze. | Publiczny HTTPS URL, prawdziwy opis danych/SDK/reklam i widoczny link w grze; deklaracje w Play Console. Jeśli aplikacja oferuje zakładanie kont, także kanał ich usunięcia w aplikacji i przez stronę WWW. |
 | Treści / wiek | Zombie, walka, krew/efekty — brak zatwierdzonej klasyfikacji IARC w Play Console. | Wypełnić rzetelnie kwestionariusz wieku, przemocy i reklam; dopasować kampanię reklam do kategorii wiekowej. |
 | Testowanie konta | Brak potwierdzenia typu i daty utworzenia konta wydawcy. | Dla nowych osobistych kont od 13.11.2023 zwykle wymagane 12 testerów opt-in bez przerwy przez 14 dni przed wnioskiem o Production. |
 | Native ABI / 16 KB | arm64-v8a w presetach włączone, ale brak weryfikacji bibliotek `.so` i 16 KB page size docelowego AAB. | Sprawdzić bibliotekę Godot i ewentualne SDK w finalnym AAB oraz instalację na urządzeniu z 16 KB page size. |
 | Materiały sklepu / prawa | Brak potwierdzenia pełnej listy licencji grafik, muzyki, fontów i nazwy gry. | Zinwentaryzować prawa i przygotować ikony, feature graphic, screenshoty zgodne z faktyczną wersją oraz opis produktu. |
-| Ikona aplikacji | W `project.godot` wskazany jest `assets/mutantsurvivor_ch01/icons/purple_crystal.png`, czyli ikona waluty, nie zatwierdzony znak aplikacji. | Przygotować i przetestować osobną ikonę gry oraz adaptacyjne ikonki Androida; nie używać przypadkowej grafiki kryształu jako brandingu Play. |
+| Ikona aplikacji | **W kodzie poprawiono**: `project.godot` wskazuje osobny kwadratowy SVG `assets/ui/target_theme/icon_mutant_survivor.svg`, wywodzący się z istniejącego logo. CI sprawdza ścieżkę, import i geometrię. **Niezweryfikowane**: wygląd rzeczywistej ikony launchera i wariantów adaptacyjnych na Androidzie. | Sprawdzić wygląd ikony na urządzeniu, przygotować/włączyć monochromatyczny i adaptacyjny wariant Androida oraz zatwierdzić branding w Play Console. |
 
 ## P0 — stabilność samej gry
 - Test na fizycznych urządzeniach: 420×933, 720×1280, 20:9; Android 13–16, gesty systemowe, notch, joystick multitouch, rotacja.

@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import configparser
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 PARSER = argparse.ArgumentParser(description="Audit Google Play readiness without publishing")
@@ -108,6 +109,22 @@ else:
         block("Launcher icon", "Configured launcher icon does not exist: " + icon_path)
     else:
         passed.append("Branded launcher icon path configured (manual adaptive icon check still required)")
+        if icon_path.lower().endswith(".svg"):
+            try:
+                icon_xml = ET.parse(ROOT / icon_path).getroot()
+                viewbox = icon_xml.attrib.get("viewBox", "").split()
+                if icon_xml.tag != "{http://www.w3.org/2000/svg}svg" or len(viewbox) != 4:
+                    block("Launcher vector", "Icon must contain a valid SVG root and viewBox")
+                else:
+                    width, height = float(viewbox[2]), float(viewbox[3])
+                    if width <= 0 or height <= 0 or abs(width - height) > 0.01:
+                        block("Launcher shape", "Google Play icon artwork must have square geometry")
+                    else:
+                        passed.append("Launcher SVG has square viewBox")
+                if any(tag in (ROOT / icon_path).read_text(encoding="utf-8") for tag in ("http://www.w3.org/1999/xlink", "<image", "foreignObject")):
+                    block("Launcher security", "Icon must not reference embedded or external image resources")
+            except (ET.ParseError, OSError, ValueError) as error:
+                block("Launcher vector", "Invalid branded SVG: " + str(error))
 
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():

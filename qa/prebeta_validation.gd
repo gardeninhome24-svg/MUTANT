@@ -19,12 +19,21 @@ func _check(ok: bool, message: String) -> void:
 func _run_validation() -> void:
 	_validate_campaign()
 	_validate_scenes()
+	_validate_app_icon()
 	if not failures.is_empty():
 		push_error("PREBETA FAILED: %d of %d checks" % [failures.size(), checks])
 		quit(1)
 	else:
 		print("PREBETA PASS: %d checks; device playtesting still required" % checks)
 		quit(0)
+
+func _validate_app_icon() -> void:
+	var icon_path: String = String(ProjectSettings.get_setting("application/config/icon", ""))
+	_check(icon_path == "res://assets/ui/target_theme/icon_mutant_survivor.svg", "Branded MUTANT icon must be active in project.godot")
+	_check(FileAccess.file_exists(icon_path), "Configured launcher icon file must exist")
+	if FileAccess.file_exists(icon_path):
+		_check(ResourceLoader.exists(icon_path, "Texture2D"), "Branded icon must import as a Godot Texture2D")
+
 
 func _validate_campaign() -> void:
 	var path := "res://gamedesign/etapy_001_100.json"
