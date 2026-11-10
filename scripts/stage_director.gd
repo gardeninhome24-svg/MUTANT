@@ -639,14 +639,20 @@ func _parse_save_dictionary(raw: String) -> Dictionary:
 		return {}
 	if not (data["max_unlocked_stage"] is int or data["max_unlocked_stage"] is float):
 		return {}
-	if int(data["current_stage"]) < 1 or int(data["max_unlocked_stage"]) < 1:
+	var selected_stage: int = int(data["current_stage"])
+	var unlocked_stage: int = int(data["max_unlocked_stage"])
+	if unlocked_stage < 1 or unlocked_stage > 100 or selected_stage < 1 or selected_stage > unlocked_stage:
 		return {}
 	if data.has("inventory") and not (data["inventory"] is Array):
 		return {}
 	if data.has("equipped_items") and not (data["equipped_items"] is Dictionary):
 		return {}
-	if data.has("credits") and not (data["credits"] is int or data["credits"] is float):
-		return {}
+	for currency in ["credits", "scrap_materials", "dark_matter_gems"]:
+		if data.has(currency):
+			if not (data[currency] is int or data[currency] is float):
+				return {}
+			if int(data[currency]) < 0:
+				return {}
 	return data
 
 func _write_verified_save(path: String, serialized: String) -> bool:
