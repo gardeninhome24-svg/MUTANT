@@ -304,6 +304,23 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 9: environmental survival is elapsed active time, not proximity.
+	stage.current_stage = 9
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "survive_hazard", "Stage 9 requires active hazard survival")
+	var hazard_duration: float = float(battle.get("primary_objective_required_sec"))
+	_check(hazard_duration >= 90.0, "Stage 9 reads 90-second survival contract")
+	battle.call("_advance_hazard_survival", hazard_duration - 1.0)
+	_check(not bool(battle.get("primary_objective_done")), "Survival objective cannot finish before required duration")
+	battle.call("_advance_hazard_survival", 1.0)
+	_check(bool(battle.get("primary_objective_done")), "Survival objective completes after required active time")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
