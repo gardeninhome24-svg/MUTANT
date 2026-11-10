@@ -113,7 +113,7 @@ def self_test():
         with ZipFile(path, "w", ZIP_DEFLATED) as archive:
             for rel in EXPECTED:
                 wh = (320, 360) if rel.endswith("portrait.png") else (256, 256)
-                archive.writestr(rel, png(*wh) + rel.encode("ascii"))
+                archive.writestr(rel, png(*wh))
         # Self-test intentionally does not install these empty synthetic images.
         try:
             inspect_zip(path)
