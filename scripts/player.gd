@@ -399,6 +399,13 @@ func _clamp_to_arena() -> void:
 	global_position.x = clampf(global_position.x, -1210.0, 1210.0)
 	global_position.y = clampf(global_position.y, -950.0, 950.0)
 
+func _is_target_in_own_arena(candidate: Node) -> bool:
+	# Both touch auto-fire and regular enemy targeting must ignore actors
+	# from another running combat SubViewport.
+	var arena: Node = get_parent().get_parent() if is_instance_valid(get_parent()) else null
+	return is_instance_valid(arena) and is_instance_valid(candidate) and arena.is_ancestor_of(candidate)
+
+
 func find_primary_fire_target() -> Node2D:
 	# Mission incubators are shootable by the same plasma bolts as mutants.
 	# When the player deliberately approaches one, target it even during a
@@ -408,7 +415,7 @@ func find_primary_fire_target() -> Node2D:
 	for node in get_tree().get_nodes_in_group("destructibles"):
 		if not (node is ExplosiveBarrel) or not node.has_meta("mission_target"):
 			continue
-		if node.is_exploded or not node.is_inside_tree():
+		if node.is_exploded or not node.is_inside_tree() or not _is_target_in_own_arena(node):
 			continue
 		var dist_sq: float = global_position.distance_squared_to(node.global_position)
 		if dist_sq < best_distance_sq:
@@ -425,7 +432,7 @@ func find_nearest_enemy() -> Node2D:
 	var nearest_distance_sq := 720.0 * 720.0
 
 	for enemy in enemies:
-		if not (enemy is MutantEnemy) or enemy.is_dying or not enemy.visible or not enemy.is_inside_tree():
+		if not (enemy is MutantEnemy) or enemy.is_dying or not enemy.visible or not enemy.is_inside_tree() or not _is_target_in_own_arena(enemy):
 			continue
 		var distance_sq := global_position.distance_squared_to(enemy.global_position)
 		if distance_sq < nearest_distance_sq:
