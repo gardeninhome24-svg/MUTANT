@@ -1448,82 +1448,105 @@ func _on_reroll_pressed() -> void:
 		_populate_upgrade_cards()
 
 func create_upgrade_card(upgrade_data: Dictionary) -> Control:
-	var portrait := StageDirector.is_portrait_mode()
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(192 if portrait else 236, 246 if portrait else 310)
+	var portrait: bool = StageDirector.is_portrait_mode()
+	var current_tier: int = int(upgrade_tiers.get(upgrade_data["id"], 0))
+	var next_tier: int = current_tier + 1
+	var max_tier: int = int(upgrade_data["max_tier"])
+	# Higher ranks get gold/violet trims, but EVERY card keeps a readable CTA.
+	var accent: Color = Color(0.34, 0.88, 0.98)
+	var grade: String = "MODUŁ STANDARD"
+	if next_tier >= 4:
+		accent = Color(1.0, 0.77, 0.34)
+		grade = "MODUŁ ELITARNY"
+	elif next_tier >= 2:
+		accent = Color(0.70, 0.49, 1.0)
+		grade = "MODUŁ ULEPSZONY"
 
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(192, 242) if portrait else Vector2(236, 302)
+	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.035, 0.065, 0.105, 0.97)
-	style.border_width_left = 2
-	style.border_width_top = 2
-	style.border_width_right = 2
-	style.border_width_bottom = 2
-	style.border_color = Color(0.18, 0.72, 0.78, 0.82)
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
+	style.bg_color = Color(0.025, 0.055, 0.092, 0.98)
+	style.border_color = accent.darkened(0.25)
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(12)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.48)
+	style.shadow_size = 5
 	panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8 if portrait else 10)
-	margin.add_theme_constant_override("margin_right", 8 if portrait else 10)
-	margin.add_theme_constant_override("margin_top", 8 if portrait else 12)
-	margin.add_theme_constant_override("margin_bottom", 8 if portrait else 12)
+	margin.add_theme_constant_override("margin_left", 11)
+	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_top", 11)
+	margin.add_theme_constant_override("margin_bottom", 11)
+	panel.add_child(margin)
 
-	var vbox := VBoxContainer.new()
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 5 if portrait else 8)
+	var body := VBoxContainer.new()
+	body.alignment = BoxContainer.ALIGNMENT_CENTER
+	body.add_theme_constant_override("separation", 6 if portrait else 9)
+	margin.add_child(body)
 
-	var icon_path: String = POWER_ICONS.get(upgrade_data["id"], "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png")
-	var icon_rect := TextureRect.new()
-	icon_rect.texture = AssetRegistry.get_tex(icon_path)
-	icon_rect.custom_minimum_size = Vector2(48, 48) if portrait else Vector2(64, 64)
-	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var header := Label.new()
+	header.text = grade
+	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_theme_font_size_override("font_size", 10 if portrait else 12)
+	header.add_theme_color_override("font_color", accent)
+	body.add_child(header)
+
+	var icon := TextureRect.new()
+	icon.texture = AssetRegistry.get_tex(String(POWER_ICONS.get(upgrade_data["id"], "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png")))
+	icon.custom_minimum_size = Vector2(58, 62) if portrait else Vector2(80, 84)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body.add_child(icon)
 
 	var title := Label.new()
-	var tier := int(upgrade_tiers.get(upgrade_data["id"], 0)) + 1
-	var max_t := int(upgrade_data["max_tier"])
 	title.text = String(upgrade_data["name"]).to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title.add_theme_font_size_override("font_size", 12 if portrait else 15)
-	title.add_theme_color_override("font_color", Color(0.38, 0.96, 1.0))
+	title.add_theme_font_size_override("font_size", 13 if portrait else 16)
+	title.add_theme_color_override("font_color", Color(0.95, 0.98, 1.0))
+	body.add_child(title)
 
-	var desc := Label.new()
-	desc.text = String(upgrade_data["desc"])
-	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.add_theme_font_size_override("font_size", 10 if portrait else 12)
+	var detail := Label.new()
+	detail.text = String(upgrade_data["desc"])
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_font_size_override("font_size", 11 if portrait else 13)
+	detail.add_theme_color_override("font_color", Color(0.72, 0.83, 0.91))
+	body.add_child(detail)
 
-	# Gwiazdki poziomu (★ ★ ★ ☆ ☆) zgodnie z arkuszem -9.png
-	var stars_lbl := Label.new()
-	var stars_str := ""
-	for s_i in range(max_t):
-		stars_str += "★ " if s_i < tier else "☆ "
-	stars_lbl.text = stars_str.strip_edges()
-	stars_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stars_lbl.add_theme_font_size_override("font_size", 11 if portrait else 14)
-	stars_lbl.add_theme_color_override("font_color", Color(1.0, 0.84, 0.22))
+	var level := Label.new()
+	level.text = "POZIOM %d / %d" % [next_tier, max_tier]
+	level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	level.add_theme_font_size_override("font_size", 11 if portrait else 13)
+	level.add_theme_color_override("font_color", accent)
+	body.add_child(level)
 
-	var btn := Button.new()
-	btn.text = "WYBIERZ"
-	btn.custom_minimum_size = Vector2(120, 36) if portrait else Vector2(150, 38)
-	btn.pressed.connect(func():
+	var button := Button.new()
+	button.text = "WYBIERZ MODUŁ"
+	button.custom_minimum_size = Vector2(0, 46 if portrait else 52)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.add_theme_font_size_override("font_size", 11 if portrait else 14)
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = accent.darkened(0.38)
+	normal.border_color = accent
+	normal.set_border_width_all(1)
+	normal.set_corner_radius_all(8)
+	button.add_theme_stylebox_override("normal", normal)
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.bg_color = accent.darkened(0.15)
+	button.add_theme_stylebox_override("hover", hover)
+	var pressed := normal.duplicate() as StyleBoxFlat
+	pressed.bg_color = accent.darkened(0.52)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.pressed.connect(func():
 		apply_upgrade(String(upgrade_data["id"]))
 		upgrade_panel.visible = false
 		get_tree().paused = false
 	)
-
-	vbox.add_child(icon_rect)
-	vbox.add_child(title)
-	vbox.add_child(desc)
-	vbox.add_child(stars_lbl)
-	vbox.add_child(btn)
-	margin.add_child(vbox)
-	panel.add_child(margin)
+	body.add_child(button)
 	return panel
 
 func apply_upgrade(up_id: String) -> void:
