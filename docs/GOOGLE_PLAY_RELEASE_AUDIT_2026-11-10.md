@@ -60,3 +60,8 @@ Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. T
 - Dodano `tools/google_play_preflight.py`: statyczny test typu NO-GO, który zatrzymuje release przy włączonych kryształach beta lub niegotowym AAB.
 - Dodano osobny preset `Android Google Play AAB` oraz manualny workflow `.github/workflows/google-play-aab.yml` — **nie zostały jeszcze zweryfikowane przez udany podpisany build AAB**.
 - Zwykły debug APK pozostaje na dotychczasowym presie i jest testowany osobno. Release do Play nie jest publikowany automatycznie.
+
+
+## Blokada końcowego AAB — brak finalnych grafik bossów 5–10
+
+Ścisły `tools/google_play_preflight.py` weryfikuje teraz, czy wszystkie **66 plików PNG** sześciu bossów znajdują się w repozytorium używanym do budowania wydania. Wersja prywatna APK pokazuje informację o braku, lecz nie jest blokowana przez tę kontrolę. Podpisane AAB nie powinno przejść, dopóki komplet grafik nie trafi do źródeł. Ten test sprawdza obecność i niepustość plików, **nie zatwierdza jakości 97%** ani licencji; odbiór wizualny nadal jest obowiązkowy.

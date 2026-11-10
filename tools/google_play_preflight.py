@@ -126,6 +126,31 @@ else:
             except (ET.ParseError, OSError, ValueError) as error:
                 block("Launcher vector", "Invalid branded SVG: " + str(error))
 
+# Production must not silently ship the repeated/fragmented placeholder boss
+# animation art. This is a release-only blocker, not a private debug APK gate.
+boss_total = 0
+missing_boss_frames: list[str] = []
+for chapter in range(5, 11):
+    directory = ROOT / "assets" / "bosses" / f"boss_ch{chapter:02d}"
+    filenames = (["boss_portrait.png"]
+                 + [f"phase1_anim_{i}.png" for i in range(1, 5)]
+                 + [f"phase2_attack_{i}.png" for i in range(1, 5)]
+                 + [f"death_{i}.png" for i in range(1, 3)])
+    present = [name for name in filenames
+               if (directory / name).is_file() and (directory / name).stat().st_size > 128]
+    if len(present) == len(filenames):
+        boss_total += 1
+    else:
+        missing_boss_frames.extend(f"boss_ch{chapter:02d}/{name}" for name in filenames if name not in present)
+
+if missing_boss_frames:
+    block("Final boss assets",
+          f"{boss_total}/6 chapter 5–10 sprite sets are complete; "
+          f"{len(missing_boss_frames)}/66 PNG files are missing or empty. "
+          "Install and version the final boss assets before signing the public AAB.")
+else:
+    passed.append("All 66 chapter 5–10 boss sprite files exist; manual art approval still required")
+
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
     block("Release AAB pipeline", "No separate signed Google Play AAB workflow found")
