@@ -7,6 +7,8 @@ class_name AssetRegistry
 ## - "ANIMATED_ATLAS": wieloklatkowy arkusz animacji (spritesheet).
 
 const CH01_ROOT := "res://assets/mutantsurvivor_ch01/"
+# Cached alpha-based enemy silhouette dimensions (graphics-only scale).
+static var _enemy_visual_extents: Dictionary = {}
 
 const CHARACTER_ASSETS := {
 	"soldier": {
@@ -499,13 +501,24 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	# not collisions, hit registration, movement, or gameplay balance.
 	var displayed: Texture2D = sprite.texture
 	if displayed != null:
+		# Many imported PNGs contain generous TRANSPARENT margins. Measuring
+		# canvas pixels made real monsters tiny even with a 112px target.
+		# Cache alpha bounds by resource path; do not decode on every spawn.
+		var cache_key: String = displayed.resource_path
 		var extent: float = float(maxi(displayed.get_width(), displayed.get_height()))
+		if _enemy_visual_extents.has(cache_key):
+			extent = float(_enemy_visual_extents[cache_key])
+		else:
+			var image_data: Image = displayed.get_image()
+			if image_data != null and not image_data.is_empty():
+				var used: Rect2i = image_data.get_used_rect()
+				if used.size.x > 8 and used.size.y > 8:
+					extent = float(maxi(used.size.x, used.size.y))
+			_enemy_visual_extents[cache_key] = extent
 		var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
 		var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
-		var target_extent: float = 220.0 if is_boss else (155.0 if is_large else 112.0)
-		# Clamp preserves readability and prevents enormous source textures
-		# from covering the entire battlefield.
-		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.35, 2.25)
+		var target_extent: float = 255.0 if is_boss else (182.0 if is_large else 138.0)
+		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.40, 2.45)
 		sprite.scale = Vector2(normalized_scale, normalized_scale)
 	return {
 		"is_animated": (walk_frames.size() > 0),
