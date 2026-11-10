@@ -288,7 +288,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(upgrade_scroll):
 		upgrade_scroll.custom_minimum_size = Vector2(
 			minf(650.0, maxf(252.0, view_width - 36.0)) if portrait else 760.0,
-			274.0 if portrait else 344.0
+			390.0 if portrait else 367.0
 		)
 		upgrade_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
 	var up_vbox := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox") as VBoxContainer
@@ -296,7 +296,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		up_vbox.add_theme_constant_override("separation", 10 if portrait else 20)
 	var up_title := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(up_title):
-		up_title.add_theme_font_size_override("font_size", 18 if portrait else 28)
+		up_title.add_theme_font_size_override("font_size", 27 if portrait else 29)
 		up_title.text = "WYBIERZ ULEPSZENIE" if portrait else "AWANS! WYBIERZ MODUŁ BOJOWY"
 	var win_title := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(win_title):
@@ -1470,7 +1470,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 		grade = "MODUŁ ULEPSZONY"
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(192, 242) if portrait else Vector2(236, 302)
+	panel.custom_minimum_size = Vector2(218, 362) if portrait else Vector2(245, 342)
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.025, 0.055, 0.092, 0.98)
@@ -1496,13 +1496,13 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	var header := Label.new()
 	header.text = grade
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	header.add_theme_font_size_override("font_size", 10 if portrait else 12)
+	header.add_theme_font_size_override("font_size", 12 if portrait else 13)
 	header.add_theme_color_override("font_color", accent)
 	body.add_child(header)
 
 	var icon := TextureRect.new()
 	icon.texture = AssetRegistry.get_tex(String(POWER_ICONS.get(upgrade_data["id"], "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png")))
-	icon.custom_minimum_size = Vector2(58, 62) if portrait else Vector2(80, 84)
+	icon.custom_minimum_size = Vector2(82, 102) if portrait else Vector2(88, 98)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1512,7 +1512,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	title.text = String(upgrade_data["name"]).to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title.add_theme_font_size_override("font_size", 13 if portrait else 16)
+	title.add_theme_font_size_override("font_size", 15 if portrait else 17)
 	title.add_theme_color_override("font_color", Color(0.95, 0.98, 1.0))
 	body.add_child(title)
 
@@ -1520,22 +1520,22 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	detail.text = String(upgrade_data["desc"])
 	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.add_theme_font_size_override("font_size", 11 if portrait else 13)
+	detail.add_theme_font_size_override("font_size", 13 if portrait else 14)
 	detail.add_theme_color_override("font_color", Color(0.72, 0.83, 0.91))
 	body.add_child(detail)
 
 	var level := Label.new()
 	level.text = "POZIOM %d / %d" % [next_tier, max_tier]
 	level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level.add_theme_font_size_override("font_size", 11 if portrait else 13)
+	level.add_theme_font_size_override("font_size", 13 if portrait else 14)
 	level.add_theme_color_override("font_color", accent)
 	body.add_child(level)
 
 	var button := Button.new()
 	button.text = "WYBIERZ MODUŁ"
-	button.custom_minimum_size = Vector2(0, 46 if portrait else 52)
+	button.custom_minimum_size = Vector2(0, 56 if portrait else 54)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.add_theme_font_size_override("font_size", 11 if portrait else 14)
+	button.add_theme_font_size_override("font_size", 14 if portrait else 15)
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = accent.darkened(0.38)
 	normal.border_color = accent
