@@ -118,10 +118,19 @@ jobs:
             exit 1
           fi
 
+      - name: Install Python for private APK release report
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3
+          python3 --version
+
       - name: Report Google Play release blockers (informational for private APK only)
         shell: bash
         run: |
           set -euo pipefail
+          command -v python3 >/dev/null
           python3 tools/google_play_preflight.py --report-only 2>&1 | tee /tmp/google-play-preflight.log
           {
             echo ""
@@ -196,6 +205,7 @@ jobs:
         with:
           name: MutantSurvivor-QA-failure-logs
           path: |
+            /tmp/google-play-preflight.log
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
             /tmp/premium-shop-regression.log

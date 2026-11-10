@@ -33,6 +33,16 @@ jobs:
           sdkmanager "platforms;android-36" "build-tools;36.0.0"
           godot --version
 
+      - name: Install AAB preflight and archive verification dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 unzip
+          python3 --version
+          command -v unzip
+          command -v jarsigner
+
       - name: Import game resources
         shell: bash
         run: |
@@ -84,8 +94,9 @@ jobs:
           test -s build/android/MutantSurvivor-play.aab
           # AAB is a signed ZIP/JAR; reject corrupted or unsigned artifacts.
           unzip -tqq build/android/MutantSurvivor-play.aab
-          jarsigner -verify build/android/MutantSurvivor-play.aab
+          jarsigner -verify -strict build/android/MutantSurvivor-play.aab
           sha256sum build/android/MutantSurvivor-play.aab
+          unzip -Z1 build/android/MutantSurvivor-play.aab | grep -q "^base/manifest/AndroidManifest.xml$"
 
       - name: Keep signed bundle as private artifact only (never auto-publish)
         uses: actions/upload-artifact@v4

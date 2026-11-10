@@ -27,6 +27,7 @@ config.read(ROOT / "export_presets.cfg", encoding="utf-8")
 android_presets = []
 release_presets = []
 package_names: set[str] = set()
+missing_package_names: list[str] = []
 for section in config.sections():
     if not re.fullmatch(r"preset\.\d+", section):
         continue
@@ -38,6 +39,8 @@ for section in config.sections():
         pkg = config.get(opts, "package/unique_name", fallback="").strip('"')
         if pkg:
             package_names.add(pkg)
+        else:
+            missing_package_names.append(section)
         if "google play" in config.get(section, "name", fallback="").lower():
             release_presets.append((section, config[opts]))
 
@@ -55,7 +58,9 @@ else:
             passed.append(name + ": arm64-v8a enabled")
     if not compliant:
         block("AAB / target SDK", "Need a release Android Gradle preset with AAB export_format=1 and target_sdk>=36")
-    if len(package_names) != 1:
+    else:
+        passed.append("Google Play preset uses Gradle, AAB and target API 36+")
+    if missing_package_names or len(package_names) != 1:
         block("Application ID", "Android beta and Play release must use the same stable, non-empty package identifier")
     elif not re.fullmatch(r"[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*){2,}", next(iter(package_names))):
         block("Application ID", "Invalid Android application ID syntax")
@@ -121,6 +126,10 @@ else:
         block("Upload signing", "Release must use protected signing credentials")
     if "actions/upload-artifact@" not in workflow_text:
         block("AAB artifact", "Release workflow must preserve the signed bundle for manual inspection")
+    if "jarsigner -verify -strict" not in workflow_text:
+        block("AAB signature validation", "Signed AAB must pass strict jarsigner verification")
+    if "unzip -tqq" not in workflow_text:
+        block("AAB archive validation", "AAB workflow must validate ZIP archive integrity")
 
 print("MutantSurvivor — Google Play static preflight")
 for detail in passed:
@@ -136,4 +145,5 @@ if issues:
     if not ARGS.report_only:
         raise SystemExit(1)
     print("REPORT ONLY: debug APK testing can continue; release remains blocked")
-print("RESULT: STATIC CHECKS PASSED — still requires human and device approval")
+else:
+    print("RESULT: STATIC CHECKS PASSED — still requires human and device approval")

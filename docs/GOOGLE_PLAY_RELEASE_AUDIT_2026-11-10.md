@@ -2,6 +2,8 @@
 **Stan repozytorium: 10 listopada 2026.** Zakres: kod gry, ekwipunek, `export_presets.cfg`, `.github/workflows/android-apk.yml`, `.github/workflows/android-release-signed.yml`, dotychczasowe testy oraz oficjalne zasady Google Play. Nie obejmuje zweryfikowanych testów fizycznych urządzeń ani danych Play Console.
 
 ## Decyzja: NO-GO dla publicznej premiery — prywatna beta nadal możliwa
+
+**Aktualizacja workflow:** prywatny debug APK uruchamia raport `tools/google_play_preflight.py --report-only` po instalacji Pythona w obrazie CI. Raport nie blokuje testowania APK, ale wyraźnie zachowuje status `NO-GO` dla wydania. Manualny workflow AAB instaluje wymagane narzędzia, testuje strukturę ZIP i wymaga rygorystycznej walidacji podpisu `jarsigner -verify -strict`. Nie oznacza to, że podpisany AAB został zbudowany ani zaakceptowany przez Play Console.
 Udana kompilacja debug APK i headless QA nie dowodzi zgodności z Google Play. Trzeba zamknąć wszystkie P0 poniżej przed przekazaniem do Production.
 
 ## Ekwipunek Metin-style — wdrożony zakres
