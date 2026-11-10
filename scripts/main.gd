@@ -582,7 +582,7 @@ func _build_layered_arena(stage_num: int) -> void:
 				data_cores_total = mini(3, maxi(1, int(story_obj.get("count", 3))))
 			elif String(story_obj.get("type", "")) == "clear_elites":
 				objective_elites_required = maxi(1, int(story_obj.get("count", 2)))
-			elif String(story_obj.get("type", "")) == "survive_hazard":
+			elif String(story_obj.get("type", "")) in ["survive_hazard", "defend_node"]:
 				primary_objective_required_sec = maxf(1.0, float(story_obj.get("count", 90)))
 			elif String(story_obj.get("type", "")) in ["repair_generator", "destroy_target"]:
 				objective_steps_required = maxi(1, int(story_obj.get("count", 2)))
@@ -1002,29 +1002,14 @@ func _process(delta: float) -> void:
 	_update_active_power_buttons()
 	if primary_objective_type == "survive_hazard" and not primary_objective_done:
 		_advance_hazard_survival(delta)
+	if primary_objective_type == "defend_node" and not primary_objective_done:
+		_advance_defense_objective(delta)
+		if run_result_state != "active":
+			return
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard", "destroy_target"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard", "destroy_target", "defend_node"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
-		if primary_objective_type == "defend_node":
-			# Cap effective attackers so high spawn density cannot erase a
-			# 300-HP objective almost instantly. Dead/pooled enemies do not attack.
-			var attackers: int = 0
-			for e in get_tree().get_nodes_in_group("enemies"):
-				if not (e is MutantEnemy) or not is_instance_valid(e):
-					continue
-				if e.is_dying or e.current_health <= 0.0:
-					continue
-				if e.global_position.distance_to(primary_objective_area.global_position) <= 95.0:
-					attackers += 1
-					if attackers >= 3:
-						break
-			if attackers > 0:
-				primary_objective_hp = maxf(0.0, primary_objective_hp - 7.5 * float(attackers) * delta)
-				_update_objectives_ui()
-				if primary_objective_hp <= 0.0:
-					_on_player_died()
-					return
 		if dist_to_obj <= 115.0:
 			if primary_objective_type == "escort":
 				var old_position: Vector2 = primary_objective_area.position
@@ -1088,6 +1073,37 @@ func _process(delta: float) -> void:
 			var enemies_count := get_tree().get_nodes_in_group("enemies").size()
 			if enemies_count < max_active:
 				spawn_wave_enemy()
+
+func _advance_defense_objective(delta: float) -> void:
+	# Defense completes after surviving the contract timer while the
+	# objective remains intact. The player need not stand on the generator.
+	if run_result_state != "active" or primary_objective_done or primary_objective_type != "defend_node":
+		return
+	var attackers: int = 0
+	if is_instance_valid(primary_objective_area):
+		for enemy in get_tree().get_nodes_in_group("enemies"):
+			if not (enemy is MutantEnemy) or not is_instance_valid(enemy):
+				continue
+			if enemy.is_dying or enemy.current_health <= 0.0:
+				continue
+			if enemy.global_position.distance_to(primary_objective_area.global_position) <= 95.0:
+				attackers += 1
+				if attackers >= 3:
+					break
+	if attackers > 0:
+		primary_objective_hp = maxf(0.0, primary_objective_hp - 7.5 * float(attackers) * maxf(0.0, delta))
+	if primary_objective_hp <= 0.0:
+		_update_objectives_ui()
+		_on_player_died()
+		return
+	primary_objective_progress = minf(primary_objective_required_sec, primary_objective_progress + maxf(0.0, delta))
+	if is_instance_valid(primary_objective_bar):
+		primary_objective_bar.value = primary_objective_progress
+	if primary_objective_progress >= primary_objective_required_sec:
+		_complete_primary_objective()
+	else:
+		_update_objectives_ui()
+
 
 func _advance_hazard_survival(delta: float) -> void:
 	# This objective measures active survival time; the player is free
