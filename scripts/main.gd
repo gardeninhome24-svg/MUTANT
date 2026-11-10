@@ -236,7 +236,9 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
-			mission_text.add_theme_font_size_override("font_size", 11)
+			mission_text.add_theme_font_size_override("font_size", 11 if compact else 12)
+			mission_text.clip_text = true
+			mission_text.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if is_instance_valid(weapon_slots_hbox):
 		weapon_slots_hbox.add_theme_constant_override("separation", 3 if compact else 6)
 	if is_instance_valid(radar_panel):
@@ -450,13 +452,31 @@ func _style_combat_hud() -> void:
 		wave_label.add_theme_color_override("font_outline_color", Color(0.02, 0.04, 0.07))
 		wave_label.add_theme_constant_override("outline_size", 3)
 	if is_instance_valid(wave_timer_bar):
-		wave_timer_bar.custom_minimum_size = Vector2(0, 6)
+		wave_timer_bar.custom_minimum_size = Vector2(0, 8)
+		wave_timer_bar.show_percentage = false
+		var track := StyleBoxFlat.new()
+		track.bg_color = Color(0.08, 0.14, 0.20, 0.96)
+		track.set_corner_radius_all(4)
+		wave_timer_bar.add_theme_stylebox_override("background", track)
+		var timer_fill := StyleBoxFlat.new()
+		timer_fill.bg_color = Color(0.97, 0.73, 0.25)
+		timer_fill.set_corner_radius_all(4)
+		wave_timer_bar.add_theme_stylebox_override("fill", timer_fill)
 	if is_instance_valid(boss_hp_bar):
-		boss_hp_bar.custom_minimum_size = Vector2(0, 9)
+		boss_hp_bar.custom_minimum_size = Vector2(0, 10)
+		boss_hp_bar.show_percentage = false
+		var boss_fill := StyleBoxFlat.new()
+		boss_fill.bg_color = Color(0.96, 0.20, 0.34)
+		boss_fill.set_corner_radius_all(4)
+		boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
 	if is_instance_valid(radar_panel):
 		radar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if is_instance_valid(objectives_panel):
 		objectives_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for status_label in [hp_label, run_level_label, obj1_label, obj2_label, obj3_label]:
+		if is_instance_valid(status_label):
+			status_label.add_theme_color_override("font_outline_color", Color(0.01, 0.03, 0.06, 0.92))
+			status_label.add_theme_constant_override("outline_size", 2)
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -983,15 +1003,29 @@ func _update_objectives_ui() -> void:
 	elif primary_objective_type == "escort":
 		obj1_label.text = "%s Eskorta %d%%" % [c1, pct]
 	elif primary_objective_type == "rescue_npc":
-		obj1_label.text = "%s %s" % [c1, "Doprowadź ocalałego do ewakuacji" if rescue_npc_freed else "Uwolnij ocalałego"]
+		obj1_label.text = "%s %s" % [c1, ("Eskortuj ocalałego" if StageDirector.is_portrait_mode() else "Doprowadź ocalałego do ewakuacji") if rescue_npc_freed else "Uwolnij ocalałego"]
 	elif primary_objective_type == "defeat_boss":
 		obj1_label.text = "%s Boss (%d/1)" % [c1, 1 if primary_objective_done else 0] if StageDirector.is_portrait_mode() else "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
 	elif primary_objective_type == "defend_node":
 		obj1_label.text = "%s Obrona %d%% (HP %d)" % [c1, pct, int(primary_objective_hp)] if StageDirector.is_portrait_mode() else "%s %s (%d%% | HP: %d/%d)" % [c1, obj_pl, pct, int(primary_objective_hp), int(primary_objective_max_hp)]
 	else:
 		obj1_label.text = "%s Cel misji: %d%%" % [c1, pct] if StageDirector.is_portrait_mode() else "%s %s (%d%%)" % [c1, obj_pl, pct]
-	obj2_label.text = "%s DNA %d/%d" % [c2, data_cores_collected, data_cores_total] if StageDirector.is_portrait_mode() else "%s Próbki DNA (%d/%d)" % [c2, data_cores_collected, data_cores_total]
+	# Avoid printing the same DNA mission twice. For collection contracts,
+	# show combat progress instead of a duplicated checklist item.
+	if primary_objective_type == "collect_item":
+		obj2_label.text = "▸ Mutanci: %d" % enemies_killed_in_run
+	else:
+		obj2_label.text = "%s DNA %d/%d" % [c2, data_cores_collected, data_cores_total] if StageDirector.is_portrait_mode() else "%s Próbki DNA (%d/%d)" % [c2, data_cores_collected, data_cores_total]
 	obj3_label.text = "%s Fale %d/%d" % [c3, current_wave_num, max_waves_in_stage] if StageDirector.is_portrait_mode() else "%s Przetrwaj 10 fal (Fala %d/%d | Zabici: %d)" % [c3, current_wave_num, max_waves_in_stage, enemies_killed_in_run]
+	# The live objective palette makes the next required action unmistakable
+	# without changing victory checks or adding new HUD widgets.
+	for objective_label in [obj1_label, obj2_label, obj3_label]:
+		if is_instance_valid(objective_label):
+			var done: bool = objective_label.text.begins_with("☑")
+			objective_label.add_theme_color_override("font_color",
+				Color(0.47, 0.96, 0.68) if done else Color(0.90, 0.95, 1.0))
+	if is_instance_valid(obj_header):
+		obj_header.add_theme_color_override("font_color", Color(0.42, 0.88, 1.0))
 
 func _process(delta: float) -> void:
 	if run_result_state != "active":
