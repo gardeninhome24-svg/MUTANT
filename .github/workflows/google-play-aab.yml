@@ -69,6 +69,17 @@ jobs:
             fi
           done
 
+      - name: End-to-end campaign persistence and boss victory gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/full_run_persistence.gd 2>&1 | tee /tmp/full-run-persistence.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|FULL RUN FAIL:|FULL RUN FAILED:" /tmp/full-run-persistence.log; then
+            echo "::error::Release gameplay persistence regression failed"
+            exit 1
+          fi
+          grep -q 'FULL RUN PASS:' /tmp/full-run-persistence.log
+
       - name: Sign and export Android Google Play AAB
         shell: bash
         env:
