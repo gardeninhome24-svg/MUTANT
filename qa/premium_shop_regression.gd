@@ -42,11 +42,26 @@ func _run() -> void:
 	stage.last_daily_calendar_claim_day = -1
 	stage.attempts = 5
 
-	_check(stage._grant_beta_test_gems_once(), "First beta grant succeeds")
-	_check(stage.dark_matter_gems == 10000, "Beta grant adds exactly 10000 gems")
-	_check(stage.beta_test_gems_remaining == 10000, "Beta grant is tracked separately")
-	_check(not stage._grant_beta_test_gems_once(), "Second beta grant blocked")
-	_check(stage.dark_matter_gems == 10000, "Beta grant cannot be duplicated")
+	# Public release must not create premium currency on a clean account.
+	_check(not stage.BETA_TEST_GEMS_ENABLED, "Public build disables beta grants")
+	_check(not stage._grant_beta_test_gems_once(), "New account receives no beta grant")
+	_check(stage.dark_matter_gems == 0, "New account has no unearned premium currency")
+	_check(stage.beta_test_gems_remaining == 0, "New account has no tracked beta balance")
+
+	# Simulate a legacy beta account to test purchasing, save/load and
+	# automatic cleanup without turning the beta grant back on in production.
+	stage.dark_matter_gems = 10000
+	stage.beta_test_gems_granted = true
+	stage.beta_test_gems_remaining = 10000
+	_check(not stage._grant_beta_test_gems_once(), "Legacy beta account cannot receive another grant")
+	_check(stage.dark_matter_gems == 0, "Legacy unspent beta gems are revoked automatically")
+	_check(stage.beta_test_gems_remaining == 0, "Legacy beta tracking clears automatically")
+
+	# Reconstruct a legacy wallet for verifying the existing shop and
+	# spent-beta cosmetic migration paths using a disposable QA save.
+	stage.dark_matter_gems = 10000
+	stage.beta_test_gems_granted = true
+	stage.beta_test_gems_remaining = 10000
 
 	_check(not stage.buy_skin_with_gems("unknown_skin"), "Unknown skin cannot be bought")
 	_check(stage.buy_skin_with_gems("neon_hunter"), "Cosmetic skin purchase succeeds")
