@@ -38,6 +38,38 @@ func _run() -> void:
 				"%s gameplay sprite uses 256x256 frame" % boss_id)
 		actor_sprite.free()
 
+	# Instantiate an actual MutantEnemy scene to verify setup_enemy_archetype
+	# uses the imported animation frames, not just registry lookups.
+	var enemy_scene: PackedScene = load("res://scenes/enemies/mutant_beetle.tscn") as PackedScene
+	_check(enemy_scene != null, "MutantEnemy gameplay scene loads")
+	if enemy_scene != null:
+		for boss_id in boss_ids:
+			var enemy: Node = enemy_scene.instantiate()
+			root.add_child(enemy)
+			enemy.set_physics_process(false)
+			enemy.call("setup_enemy_archetype", boss_id, "boss", 60, 0.0)
+			var gameplay_sprite: Sprite2D = enemy.get_node_or_null("Sprite2D") as Sprite2D
+			_check(is_instance_valid(gameplay_sprite) and gameplay_sprite.texture != null,
+				"%s live enemy instance displays an animated frame" % boss_id)
+			_check(enemy.get("walk_frames").size() == 4,
+				"%s actual MutantEnemy caches walk animation" % boss_id)
+			_check(enemy.get("attack_frames").size() == 4,
+				"%s actual MutantEnemy caches attack animation" % boss_id)
+			_check(enemy.get("death_frames").size() == 2,
+				"%s actual MutantEnemy caches death animation" % boss_id)
+			enemy.queue_free()
+			await process_frame
+		var larva: Node = enemy_scene.instantiate()
+		root.add_child(larva)
+		larva.set_physics_process(false)
+		larva.call("setup_enemy_archetype", "czerw", "normal", 5, 0.0)
+		_check(larva.get("walk_frames").size() == 4,
+			"Actual larva enemy scene caches all walk animation frames")
+		_check(larva.get("attack_frames").size() == 4,
+			"Actual larva enemy scene caches all attack animation frames")
+		larva.queue_free()
+		await process_frame
+
 	for action in AssetRegistry.PLAYER_ANIMATION_COUNTS:
 		var count: int = int(AssetRegistry.PLAYER_ANIMATION_COUNTS[action])
 		for idx in range(1, count + 1):
