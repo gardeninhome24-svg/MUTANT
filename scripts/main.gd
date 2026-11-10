@@ -220,23 +220,23 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(stats_card):
 		stats_card.custom_minimum_size = Vector2(195, 56) if compact else Vector2(275, 72)
 	if is_instance_valid(hp_bar):
-		hp_bar.custom_minimum_size = Vector2(110, 13) if compact else Vector2(165, 15)
+		hp_bar.custom_minimum_size = Vector2(110, 15) if compact else Vector2(176, 19)
 	if is_instance_valid(xp_bar):
-		xp_bar.custom_minimum_size = Vector2(110, 8) if compact else Vector2(165, 10)
+		xp_bar.custom_minimum_size = Vector2(110, 9) if compact else Vector2(176, 13)
 	if is_instance_valid(hp_label):
 		hp_label.add_theme_font_size_override("font_size", 12 if compact else 15)
 	if is_instance_valid(run_level_label):
 		run_level_label.add_theme_font_size_override("font_size", 12 if compact else 16)
 	if is_instance_valid(wave_label):
-		wave_label.add_theme_font_size_override("font_size", 16 if compact else 21)
+		wave_label.add_theme_font_size_override("font_size", 18 if compact else 24)
 	if is_instance_valid(boss_label):
 		boss_label.add_theme_font_size_override("font_size", 11 if compact else 13)
 	if is_instance_valid(obj_header):
-		obj_header.add_theme_font_size_override("font_size", 13 if compact else 17)
+		obj_header.add_theme_font_size_override("font_size", 14 if compact else 19)
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
-			mission_text.add_theme_font_size_override("font_size", 12 if compact else 15)
+			mission_text.add_theme_font_size_override("font_size", 13 if compact else 17)
 			mission_text.clip_text = true
 			mission_text.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if is_instance_valid(weapon_slots_hbox):
@@ -253,7 +253,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if cam:
 		# 0.92 camera zoom made every already-small mutant shrink further.
 		# Keep the combat readable, without changing collisions/spawn geometry.
-		cam.zoom = Vector2(1.04, 1.04) if portrait else Vector2(1.0, 1.0)
+		cam.zoom = Vector2(1.10, 1.10) if portrait else Vector2(1.0, 1.0)
 
 	if is_instance_valid(orient_hud_btn):
 		orient_hud_btn.text = "9:16" if portrait else "16:9"
@@ -271,10 +271,10 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 				coin_group.add_theme_constant_override("separation", 3 if portrait else 6)
 				var icon_rect := coin_group.get_node_or_null("Icon") as TextureRect
 				if icon_rect:
-					icon_rect.custom_minimum_size = Vector2(18, 18) if portrait else Vector2(28, 28)
+					icon_rect.custom_minimum_size = Vector2(24, 24) if portrait else Vector2(28, 28)
 		for lbl in [energy_label, dark_matter_label]:
 			if lbl:
-				lbl.add_theme_font_size_override("font_size", 11 if portrait else 14)
+				lbl.add_theme_font_size_override("font_size", 14 if portrait else 16)
 	if is_instance_valid(chapter_label):
 		chapter_label.clip_text = true
 		chapter_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -284,20 +284,20 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 
 	# Dopasowanie okien modalnych (UpgradePanel, WinPanel, DeathPanel) do szerokości 720px w pionie 9:16
 	if is_instance_valid(cards_container):
-		cards_container.add_theme_constant_override("separation", 10 if portrait else 20)
+		cards_container.add_theme_constant_override("separation", 8 if portrait else 20)
 	var upgrade_scroll := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll") as ScrollContainer
 	if is_instance_valid(upgrade_scroll):
 		upgrade_scroll.custom_minimum_size = Vector2(
 			minf(650.0, maxf(252.0, view_width - 36.0)) if portrait else 760.0,
-			390.0 if portrait else 367.0
+			404.0 if portrait else 367.0
 		)
 		upgrade_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
 	var up_vbox := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox") as VBoxContainer
 	if is_instance_valid(up_vbox):
-		up_vbox.add_theme_constant_override("separation", 10 if portrait else 20)
+		up_vbox.add_theme_constant_override("separation", 15 if portrait else 20)
 	var up_title := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(up_title):
-		up_title.add_theme_font_size_override("font_size", 27 if portrait else 29)
+		up_title.add_theme_font_size_override("font_size", 30 if portrait else 29)
 		up_title.text = "WYBIERZ ULEPSZENIE" if portrait else "AWANS! WYBIERZ MODUŁ BOJOWY"
 	var win_title := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(win_title):
@@ -346,14 +346,14 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
 			objectives_panel.offset_top = (80.0 if compact else 180.0) + safe_top
-			objectives_panel.offset_right = 208.0 if compact else 278.0
-			objectives_panel.offset_bottom = (167.0 if compact else 330.0) + safe_top
+			objectives_panel.offset_right = 212.0 if compact else 304.0
+			objectives_panel.offset_bottom = (181.0 if compact else 349.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			radar_panel.offset_left = -105.0 if compact else -160.0
-			radar_panel.offset_top = (70.0 if compact else 152.0) + safe_top
+			radar_panel.offset_left = -112.0 if compact else -176.0
+			radar_panel.offset_top = (75.0 if compact else 170.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (162.0 if compact else 305.0) + safe_top
+			radar_panel.offset_bottom = (180.0 if compact else 334.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(185.0, (view_width - 360.0) * 0.5)
@@ -556,6 +556,25 @@ func _style_combat_hud() -> void:
 			art.texture_margin_top = float(themed[3])
 			art.texture_margin_bottom = float(themed[3])
 			target_node.add_theme_stylebox_override("panel", art)
+
+	var reroll := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/RerollBtn") as Button
+	if is_instance_valid(reroll):
+		reroll.custom_minimum_size = Vector2(320.0, 60.0)
+		reroll.add_theme_font_size_override("font_size", 17)
+		var reroll_normal := StyleBoxFlat.new()
+		reroll_normal.bg_color = Color(0.019, 0.080, 0.125, 0.97)
+		reroll_normal.border_color = Color(0.14, 0.80, 0.98)
+		reroll_normal.set_border_width_all(2)
+		reroll_normal.set_corner_radius_all(10)
+		reroll_normal.set_content_margin_all(12)
+		reroll.add_theme_stylebox_override("normal", reroll_normal)
+		var reroll_hover := reroll_normal.duplicate() as StyleBoxFlat
+		reroll_hover.bg_color = Color(0.085, 0.24, 0.33)
+		reroll.add_theme_stylebox_override("hover", reroll_hover)
+		reroll.add_theme_color_override("font_color", Color(0.94, 0.97, 1.0))
+	var upgrade_shade := get_node_or_null("HUD/HUDRoot/UpgradePanel") as ColorRect
+	if is_instance_valid(upgrade_shade):
+		upgrade_shade.color = Color(0.005, 0.013, 0.028, 0.63)
 
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1544,7 +1563,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 		grade = "MODUŁ ULEPSZONY"
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(218, 362) if portrait else Vector2(245, 342)
+	panel.custom_minimum_size = Vector2(202, 368) if portrait else Vector2(245, 342)
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.025, 0.055, 0.092, 0.98)
@@ -1568,15 +1587,15 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 		panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 11)
-	margin.add_theme_constant_override("margin_right", 11)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_right", 12)
 	margin.add_theme_constant_override("margin_top", 11)
 	margin.add_theme_constant_override("margin_bottom", 11)
 	panel.add_child(margin)
 
 	var body := VBoxContainer.new()
 	body.alignment = BoxContainer.ALIGNMENT_CENTER
-	body.add_theme_constant_override("separation", 6 if portrait else 9)
+	body.add_theme_constant_override("separation", 9 if portrait else 10)
 	margin.add_child(body)
 
 	var header := Label.new()
@@ -1588,7 +1607,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 
 	var icon := TextureRect.new()
 	icon.texture = AssetRegistry.get_tex(String(POWER_ICONS.get(upgrade_data["id"], "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png")))
-	icon.custom_minimum_size = Vector2(82, 102) if portrait else Vector2(88, 98)
+	icon.custom_minimum_size = Vector2(86, 109) if portrait else Vector2(88, 98)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1606,7 +1625,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	detail.text = String(upgrade_data["desc"])
 	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.add_theme_font_size_override("font_size", 13 if portrait else 14)
+	detail.add_theme_font_size_override("font_size", 14 if portrait else 14)
 	detail.add_theme_color_override("font_color", Color(0.72, 0.83, 0.91))
 	body.add_child(detail)
 
@@ -1618,10 +1637,10 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	body.add_child(level)
 
 	var button := Button.new()
-	button.text = "WYBIERZ MODUŁ"
-	button.custom_minimum_size = Vector2(0, 56 if portrait else 54)
+	button.text = "WYBIERZ"
+	button.custom_minimum_size = Vector2(0, 60 if portrait else 56)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.add_theme_font_size_override("font_size", 14 if portrait else 15)
+	button.add_theme_font_size_override("font_size", 17 if portrait else 16)
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = accent.darkened(0.38)
 	normal.border_color = accent
