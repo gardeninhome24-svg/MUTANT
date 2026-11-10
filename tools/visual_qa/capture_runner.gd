@@ -1,9 +1,13 @@
 extends Node
 
 const CAPTURES_DIR := "res://visual_qa/captures/"
+var failed_captures: int = 0
+var saved_captures: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().paused = false
+	StageDirector.is_practice_mode = true
 	StageDirector.save_path_override = "user://visual_qa_test_save.json"
 	if FileAccess.file_exists(StageDirector.save_path_override):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(StageDirector.save_path_override))
@@ -32,8 +36,14 @@ func _ready() -> void:
 	if capture_target in ["all", "hud_9x16", "hud_mobile_9x16"]:
 		await _capture_hud_mobile_9x16()
 
-	print("\n[Visual QA] All requested screen captures successfully rendered!")
-	get_tree().quit(0)
+	get_tree().paused = false
+	StageDirector.save_path_override = ""
+	if failed_captures > 0 or saved_captures == 0:
+		printerr("[Visual QA] Capture FAILED: %d failed, %d saved" % [failed_captures, saved_captures])
+		get_tree().quit(1)
+	else:
+		print("[Visual QA] CAPTURES PASS: %d real viewport PNGs saved" % saved_captures)
+		get_tree().quit(0)
 
 func _capture_defeat_overlay() -> void:
 	print("\n[Visual QA] Capturing: Defeat Overlay (1280x720)...")
@@ -69,19 +79,27 @@ func _capture_victory_overlay() -> void:
 	var sub := _create_subviewport(Vector2i(1280, 720))
 	add_child(sub)
 
+	StageDirector.current_stage = 2
+	StageDirector.is_practice_mode = true
 	var main_scene := load("res://scenes/main/main.tscn") as PackedScene
 	var main_inst = main_scene.instantiate()
 	sub.add_child(main_inst)
-
-	for frame in range(25):
+	for frame in range(15):
 		await get_tree().process_frame
-
-	if main_inst.has_method("_on_stage_victory"):
-		main_inst.call("_on_stage_victory")
-		for frame in range(20):
-			await get_tree().process_frame
-
+	# Real victory now verifies wave ten, time and mission objective.
+	# Stage two has no chapter boss; finish its objective before capture.
+	main_inst.set_process(false)
+	main_inst.call("start_wave", 2, 10)
+	main_inst.set("primary_objective_done", true)
+	main_inst.set("wave_time_left", 0.0)
+	main_inst.call("_on_stage_victory")
+	if String(main_inst.get("run_result_state")) != "victory":
+		failed_captures += 1
+		push_error("[Visual QA] Victory state did not activate")
+	for frame in range(12):
+		await get_tree().process_frame
 	await _save_viewport_png(sub, "victory_overlay_1280x720_actual")
+	get_tree().paused = false
 	main_inst.queue_free()
 	sub.queue_free()
 	await get_tree().process_frame
@@ -100,14 +118,14 @@ func _capture_hud_combat_16x9() -> void:
 	for frame in range(40):
 		await get_tree().process_frame
 
-	var player = main_inst.get_node_or_null("Player")
-	var spawner = main_inst.get_node_or_null("EnemySpawner")
-	if is_instance_valid(player) and is_instance_valid(spawner) and spawner.has_method("spawn_enemy"):
-		var enemies := ["biegacz", "tank", "plujacy_kwasem", "skoczek", "pancerny"]
+	var player: Player = main_inst.get_node_or_null("CharactersLayer/Player") as Player
+	if is_instance_valid(player):
+		main_inst.set_process(false)
 		for i in range(10):
-			var angle := float(i) * (TAU / 10.0)
-			var offset := Vector2(cos(angle) * 220.0, sin(angle) * 160.0)
-			spawner.spawn_enemy(player.global_position + offset, enemies[i % enemies.size()], "normal")
+			main_inst.call("spawn_wave_enemy")
+	else:
+		failed_captures += 1
+		push_error("[Visual QA] Combat screenshot has no playable hero")
 
 	for frame in range(35):
 		await get_tree().process_frame
@@ -131,14 +149,14 @@ func _capture_hud_mobile_9x16() -> void:
 	for frame in range(40):
 		await get_tree().process_frame
 
-	var player = main_inst.get_node_or_null("Player")
-	var spawner = main_inst.get_node_or_null("EnemySpawner")
-	if is_instance_valid(player) and is_instance_valid(spawner) and spawner.has_method("spawn_enemy"):
-		var enemies := ["biegacz", "wirusowy", "tank", "skrzydlaty", "wybuchowy"]
+	var player: Player = main_inst.get_node_or_null("CharactersLayer/Player") as Player
+	if is_instance_valid(player):
+		main_inst.set_process(false)
 		for i in range(10):
-			var angle := float(i) * (TAU / 10.0)
-			var offset := Vector2(cos(angle) * 160.0, sin(angle) * 230.0)
-			spawner.spawn_enemy(player.global_position + offset, enemies[i % enemies.size()], "normal")
+			main_inst.call("spawn_wave_enemy")
+	else:
+		failed_captures += 1
+		push_error("[Visual QA] Combat screenshot has no playable hero")
 
 	for frame in range(35):
 		await get_tree().process_frame
@@ -159,6 +177,7 @@ func _save_viewport_png(sub: SubViewport, file_stem: String) -> void:
 		await get_tree().process_frame
 	var img := sub.get_texture().get_image()
 	if not img:
+		failed_captures += 1
 		push_error("[Visual QA] Failed to get viewport image for %s" % file_stem)
 		return
 
@@ -167,6 +186,8 @@ func _save_viewport_png(sub: SubViewport, file_stem: String) -> void:
 	var full_path := out_dir.path_join(file_stem + ".png")
 	var err := img.save_png(full_path)
 	if err == OK:
+		saved_captures += 1
 		print("[Visual QA] Saved actual screenshot: %s (%dx%d)" % [full_path, img.get_width(), img.get_height()])
 	else:
+		failed_captures += 1
 		push_error("[Visual QA] Error saving PNG: %d" % err)
