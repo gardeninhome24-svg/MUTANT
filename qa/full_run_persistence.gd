@@ -295,6 +295,11 @@ func _execute() -> void:
 			if enemy.tier == "miniboss" and enemy.enemy_id == "elite_ch01_stage07":
 				mandatory_elites.append(enemy)
 	_check(mandatory_elites.size() == 2, "Stage 7 spawns two mandatory chapter elites")
+	battle.call("spawn_special_enemy", "miniboss_ch01", "miniboss", "QA unrelated elite")
+	var unrelated_elite: Node = battle.get("active_boss")
+	if is_instance_valid(unrelated_elite):
+		unrelated_elite.take_damage(float(unrelated_elite.get("max_health")) + 1000000.0)
+	_check(int(battle.get("objective_elites_defeated")) == 0, "Unrelated miniboss cannot satisfy chapter-seven elite contract")
 	if mandatory_elites.size() == 2:
 		mandatory_elites[0].take_damage(float(mandatory_elites[0].max_health) + 1000000.0)
 		_check(not bool(battle.get("primary_objective_done")), "One elite kill cannot finish stage 7 objective")
