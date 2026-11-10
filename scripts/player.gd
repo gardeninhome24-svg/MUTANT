@@ -377,7 +377,7 @@ func _physics_process(delta: float) -> void:
 
 	attack_timer += delta
 	if attack_timer >= attack_cooldown:
-		var target := find_nearest_enemy()
+		var target := find_primary_fire_target()
 		if target:
 			shoot_at_enemy(target)
 			attack_timer = 0.0
@@ -398,6 +398,26 @@ func _physics_process(delta: float) -> void:
 func _clamp_to_arena() -> void:
 	global_position.x = clampf(global_position.x, -1210.0, 1210.0)
 	global_position.y = clampf(global_position.y, -950.0, 950.0)
+
+func find_primary_fire_target() -> Node2D:
+	# Mission incubators are shootable by the same plasma bolts as mutants.
+	# When the player deliberately approaches one, target it even during a
+	# horde; otherwise retain the usual nearest-enemy auto-aim behavior.
+	var nearest_target: Node2D = null
+	var best_distance_sq: float = 280.0 * 280.0
+	for node in get_tree().get_nodes_in_group("destructibles"):
+		if not (node is ExplosiveBarrel) or not node.has_meta("mission_target"):
+			continue
+		if node.is_exploded or not node.is_inside_tree():
+			continue
+		var dist_sq: float = global_position.distance_squared_to(node.global_position)
+		if dist_sq < best_distance_sq:
+			best_distance_sq = dist_sq
+			nearest_target = node
+	if is_instance_valid(nearest_target):
+		return nearest_target
+	return find_nearest_enemy()
+
 
 func find_nearest_enemy() -> Node2D:
 	var enemies := get_tree().get_nodes_in_group("enemies")
