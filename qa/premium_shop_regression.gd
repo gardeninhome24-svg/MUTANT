@@ -43,7 +43,7 @@ func _run() -> void:
 	stage.attempts = 5
 
 	# Public release must not create premium currency on a clean account.
-	_check(not stage.BETA_TEST_GEMS_ENABLED, "Public build disables beta grants")
+	_check(not bool(stage.get_script().get_script_constant_map().get("BETA_TEST_GEMS_ENABLED", true)), "Public build disables beta grants")
 	_check(not stage._grant_beta_test_gems_once(), "New account receives no beta grant")
 	_check(stage.dark_matter_gems == 0, "New account has no unearned premium currency")
 	_check(stage.beta_test_gems_remaining == 0, "New account has no tracked beta balance")
