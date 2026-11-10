@@ -81,6 +81,18 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_load_textures()
+	# The portrait/landscape "background" source files already contain
+	# rendered defeat UI. Displaying them behind the functional card creates
+	# an enormous duplicate panel. Keep the arena visible under one dimmer.
+	backdrop.texture = null
+	backdrop.visible = false
+	var dimmer := ColorRect.new()
+	dimmer.name = "CombatDimmer"
+	dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dimmer.color = Color(0.015, 0.025, 0.045, 0.87)
+	dimmer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(dimmer)
+	move_child(dimmer, 1)
 	_connect_signals()
 	update_responsive_layout()
 	get_viewport().size_changed.connect(update_responsive_layout)
@@ -174,8 +186,7 @@ func update_responsive_layout() -> void:
 		_apply_landscape_layout(vp_size)
 
 func _apply_landscape_layout(vp_size: Vector2) -> void:
-	if _tex_landscape_bg:
-		backdrop.texture = _tex_landscape_bg
+	backdrop.texture = null
 	if _tex_landscape_card and is_instance_valid(card_frame):
 		card_frame.texture = _tex_landscape_card
 
@@ -287,8 +298,8 @@ func _apply_landscape_layout(vp_size: Vector2) -> void:
 		tex_hub_btn.position = Vector2(450, 495)
 
 func _apply_portrait_layout(vp_size: Vector2) -> void:
-	if _tex_portrait_bg:
-		backdrop.texture = _tex_portrait_bg
+	# Do not re-enable the precomposed portrait screenshot as a background.
+	backdrop.texture = null
 	if _tex_portrait_card and is_instance_valid(card_frame):
 		card_frame.texture = _tex_portrait_card
 
@@ -423,7 +434,7 @@ func configure(data: Dictionary) -> void:
 	var time_sec := maxi(0, int(data.get("time_seconds", 272)))
 	var reason_text := String(data.get("reason", "Ulepsz wyposażenie lub spróbuj innej strategii."))
 	var gems_avail := int(data.get("gems", 300))
-	var revive_cost := int(data.get("revive_cost", 300))
+	var revive_cost := int(data.get("revive_cost", 30))
 	var attempts_cnt := int(data.get("attempts", 1))
 	var spent := bool(data.get("already_revived", false))
 	var ad_avail := bool(data.get("ad_available", true))
