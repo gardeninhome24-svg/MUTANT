@@ -1,6 +1,6 @@
 # MUTANT: unikalna grafika bossów rozdziałów 5–10
 
-Nowy pipeline obsługuje opcjonalny, przygotowany poza repozytorium pakiet `MUTANT_Boss_05_10_Godot_Assets.zip`. Każdy rozdział 5–10 ma osobny katalog `assets/bosses/boss_chNN/` z 11 plikami PNG:
+Nowy pipeline obsługuje opcjonalny, przygotowany poza repozytorium pakiet `MUTANT_Boss_05_10_Godot_Assets_v2.zip`. Każdy rozdział 5–10 ma osobny katalog `assets/bosses/boss_chNN/` z 11 plikami PNG:
 
 - `boss_portrait.png` (portret)
 - `phase1_anim_1.png` do `phase1_anim_4.png` (ruch)
@@ -22,3 +22,17 @@ godot --headless --path . --script res://qa/production_art_audit.gd
 ```
 
 Ostatni warunek premiery: **nie traktować obecnych plików kandydackich jako zatwierdzonych grafik bossów** bez ręcznego i wizualnego QA.
+
+## Kontrolowany import — nowy instalator
+
+Pobierz ZIP z rozmowy, zapisz go obok katalogu projektu, następnie uruchom:
+
+```powershell
+cd "C:\\Users\\patry\\Desktop\\2026\\MUTANT"
+py -3 tools/boss_art_pack.py --zip "..\\MUTANT_Boss_05_10_Godot_Assets_v2.zip"
+py -3 tools/boss_art_pack.py --zip "..\\MUTANT_Boss_05_10_Godot_Assets_v2.zip" --install
+```
+
+Zmień ścieżkę projektu, jeśli lokalna kopia znajduje się w innym folderze. Instalator wymaga `project.godot`, sprawdza **66 plików, 6 katalogów, 8-bit RGBA PNG, rozdzielczości klatek i unikalność obrazów** oraz odrzuca niekompletny pakiet. Nie rozpakowuje dowolnych ścieżek z ZIP. Jeśli klatki były wcześniej zainstalowane, użyj `--replace` po wykonaniu kopii zapasowej katalogu zasobów.
+
+Uwaga: wersja **v2 normalizuje położenie stóp i wielkość większości klatek**, ale generator grafik nie zapewnia w pełni jednolitej geometrii każdego bossa. Szczególnej ręcznej kontroli wymaga rozdział 8. Samo przejście instalatora **nie dowodzi 97% zgodności wizualnej**.
