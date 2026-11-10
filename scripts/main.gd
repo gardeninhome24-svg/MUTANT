@@ -162,7 +162,7 @@ func _ready() -> void:
 	if radar:
 		radar.player_ref = player
 		radar.beacon_world_pos = beacon_world_pos
-		radar.show_beacon = true
+		radar.show_beacon = not (primary_objective_type in ["collect_item", "clear_elites", "survive_hazard"])
 
 	if not player.health_changed.is_connected(_on_player_health_changed):
 		player.health_changed.connect(_on_player_health_changed)
@@ -581,6 +581,13 @@ func _build_layered_arena(stage_num: int) -> void:
 			elif String(story_obj.get("type", "")) == "survive_hazard":
 				primary_objective_required_sec = maxf(1.0, float(story_obj.get("count", 90)))
 	_spawn_primary_mission_target(beacon_world_pos, primary_objective_type)
+	# These missions have world pickups, enemy targets or a survival timer.
+	# A fake central console and its radar marker would mislead players.
+	var uses_world_objective: bool = primary_objective_type in ["collect_item", "clear_elites", "survive_hazard"]
+	if uses_world_objective and is_instance_valid(primary_objective_area):
+		primary_objective_area.visible = false
+	if is_instance_valid(radar):
+		radar.show_beacon = not uses_world_objective
 	_spawn_data_cores_and_medkits()
 	_spawn_lamp_posts()
 
