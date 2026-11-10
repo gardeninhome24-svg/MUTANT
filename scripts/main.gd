@@ -832,10 +832,9 @@ func _spawn_data_cores_and_medkits() -> void:
 		decorations_layer.add_child(med)
 
 func spawn_hazard_barrels() -> void:
-	for b in get_tree().get_nodes_in_group("destructibles"):
-		if is_instance_valid(b):
-			b.queue_free()
-
+	# Only this arena owns these props. Never free destructibles from a
+	# different arena/subviewport (notably during all-stage smoke and Visual QA).
+	# _build_layered_arena already queues the previous obstacles_layer children.
 	var barrel_positions := [
 		Vector2(-220, -90), Vector2(220, -70),
 		Vector2(-310, 260), Vector2(310, 280),
