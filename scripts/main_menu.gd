@@ -1289,6 +1289,9 @@ func _apply_responsive_menu_layout() -> void:
 	if nav_buttons.size() >= 5:
 		nav_buttons[3].visible = not portrait
 	if is_instance_valid(inbox_btn):
+		# The approved portrait already has POCZTA in left-side navigation.
+		# Hide the duplicate floating envelope without removing its callback.
+		inbox_btn.visible = not portrait
 		inbox_btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		inbox_btn.offset_left = 22.0 if portrait else 28.0
 		inbox_btn.offset_top = 85.0 + safe_top
