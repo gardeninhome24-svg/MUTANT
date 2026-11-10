@@ -171,6 +171,30 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Successful premium revive must close the shop rather than leaving
+	# interactive combat running underneath an obstructing store overlay.
+	stage.is_practice_mode = true
+	stage.dark_matter_gems = 50
+	stage.current_stage = 3
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	battle.call("_on_player_died")
+	battle.call("toggle_premium_shop")
+	var revive_shop: Control = battle.get("premium_shop_panel") as Control
+	_check(is_instance_valid(revive_shop) and revive_shop.visible, "Revive shop opens on death screen")
+	battle.call("_on_revive_premium_pressed")
+	_check(String(battle.get("run_result_state")) == "active", "Premium revive resumes active combat")
+	_check(not paused, "Successful premium revive unpauses combat")
+	_check(is_instance_valid(revive_shop) and not revive_shop.visible, "Successful revive closes premium shop")
+	_check(int(stage.dark_matter_gems) == 20, "Premium revive costs exactly 30 gems")
+	battle.call("_on_revive_premium_pressed")
+	_check(int(stage.dark_matter_gems) == 20, "Repeat revive callback cannot charge twice")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	# Chapter 1 finale is a REAL boss encounter, unlike ordinary stage 2.
 	# Practice ensures this separately tests combat without awarding currency.
 	stage.current_stage = 10
