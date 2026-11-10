@@ -59,7 +59,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://qa/prebeta_validation.gd
+          godot --headless --path . --script res://qa/prebeta_validation.gd 2>&1 | tee /tmp/prebeta-validation.log
+          grep -Fq 'PREBETA PASS:' /tmp/prebeta-validation.log
           for script in campaign_100_f2p mobile_ui_regression premium_shop_regression gameplay_regression visual_release_gate; do
             echo "Running $script"
             godot --headless --path . --script "res://qa/$script.gd" 2>&1 | tee "/tmp/$script.log"
@@ -67,6 +68,15 @@ jobs:
               echo "::error::$script failed"
               exit 1
             fi
+            case "$script" in
+              campaign_100_f2p) marker="F2P PASS:" ;;
+              mobile_ui_regression) marker="MOBILE UI PASS:" ;;
+              premium_shop_regression) marker="PREMIUM QA PASS:" ;;
+              gameplay_regression) marker="GAMEPLAY REGRESSION PASS:" ;;
+              visual_release_gate) marker="VISUAL GATE PASS:" ;;
+              *) echo "::error::Unknown QA script $script"; exit 1 ;;
+            esac
+            grep -Fq "$marker" "/tmp/$script.log"
           done
 
       - name: End-to-end campaign persistence and boss victory gate
