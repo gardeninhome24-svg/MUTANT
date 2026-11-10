@@ -1,0 +1,85 @@
+name: MutantSurvivor Approved Menu & HUD — Godot Screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/main_menu.gd
+      - scripts/main.gd
+      - scenes/ui/main_menu.tscn
+      - scenes/main/main.tscn
+      - tools/visual_qa/capture_runner.gd
+      - .github/workflows/approved-ui-screenshots.yml
+
+concurrency:
+  group: approved-ui-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  capture-actual-ui:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+    steps:
+      - name: Checkout MUTANT assets and Godot scenes
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Import project resources and check script errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/approved-ui-import.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Compilation failed|Failed to load script" /tmp/approved-ui-import.log; then
+            exit 1
+          fi
+
+      - name: Prepare software X11 renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
+            xvfb xauth libxcursor1 libxi6 libxinerama1 libxrandr2 \
+            libxrender1 libxfixes3 libxext6 libx11-6 libwayland-cursor0 \
+            libgl1 libgl1-mesa-dri libfontconfig1 fonts-dejavu-core
+          ldconfig -p | grep -F 'libXcursor.so.1'
+
+      - name: Capture actual portrait menu and combat HUD
+        shell: bash
+        run: |
+          set -euo pipefail
+          xvfb-run -a -s '-screen 0 1280x720x24' env LIBGL_ALWAYS_SOFTWARE=1 \
+            godot --path . --rendering-driver opengl3 \
+            res://tools/visual_qa/capture_runner.tscn -- --scenario=approved_ui \
+            2>&1 | tee /tmp/approved-ui-render.log
+          grep -Fq 'CAPTURES PASS: 2 real viewport PNGs saved' /tmp/approved-ui-render.log
+          test -s visual_qa/captures/approved_menu_720x1280_actual.png
+          test -s visual_qa/captures/hud_mobile_720x1280_actual.png
+
+      - name: Upload real screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-ApprovedUI-Actual-${{ github.run_number }}
+          path: |
+            visual_qa/captures/approved_menu_720x1280_actual.png
+            visual_qa/captures/hud_mobile_720x1280_actual.png
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload diagnostic logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-ApprovedUI-Logs-${{ github.run_number }}
+          path: |
+            /tmp/approved-ui-import.log
+            /tmp/approved-ui-render.log
+          if-no-files-found: warn
+          retention-days: 14
