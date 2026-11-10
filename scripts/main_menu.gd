@@ -533,9 +533,9 @@ func _build_base_overlays() -> void:
 	base_overlay.add_child(base_right_actions)
 
 	for item in [
-		{"title": "POSTAĆ", "path": "res://assets/ui/target_theme/nav_clean_postac.svg", "tab": 1},
-		{"title": "EKWIPUNEK", "path": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg", "tab": 2},
-		{"title": "SKLEP", "path": "res://assets/ui/target_theme/nav_clean_sklep.svg", "tab": 4}
+		{"title": "POCZTA", "path": "res://assets/ui/target_theme/icon_mail.png", "tab": -2},
+		{"title": "ZADANIA", "path": "res://assets/ui/approved/icon_daily_tasks.svg", "tab": -3},
+		{"title": "PRZEPUSTKA", "path": "res://assets/ui/approved/icon_battle_pass.svg", "tab": -4}
 	]:
 		_add_base_action(base_left_actions, String(item["title"]), String(item["path"]), int(item["tab"]))
 	_add_base_action(base_right_actions, "NAGRODY", "res://assets/ms_beta_kit/ui/icons/reward_chest.png", 5)
@@ -578,10 +578,30 @@ func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, d
 		if destination == -1:
 			if is_instance_valid(settings_modal):
 				settings_modal.visible = true
+		elif destination == -2:
+			if is_instance_valid(inbox_modal):
+				inbox_modal.visible = true
+		elif destination == -3:
+			_open_rewards_shortcut("DailyMissionHeading")
+		elif destination == -4:
+			_open_rewards_shortcut("BattlePassHeading")
 		else:
 			switch_hub_tab(destination)
 	)
 	parent.add_child(action)
+
+func _open_rewards_shortcut(focus_name: String) -> void:
+	# The tasks/pass icons focus the corresponding live reward content.
+	# Do not invent separate empty screens or silently grant rewards.
+	switch_hub_tab(5)
+	await get_tree().process_frame
+	if not is_instance_valid(user_profile_panel):
+		return
+	var scroller := user_profile_panel.find_child("ProfileContentScroll", true, false) as ScrollContainer
+	var section := user_profile_panel.find_child(focus_name, true, false) as Control
+	if is_instance_valid(scroller) and is_instance_valid(section):
+		scroller.ensure_control_visible(section)
+
 
 func _build_base_tab_content() -> void:
 	# W układzie portretowym (9:16) postać i miasto stanowią integralne tło w górnej połowie.
