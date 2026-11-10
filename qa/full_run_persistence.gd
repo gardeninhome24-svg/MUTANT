@@ -401,6 +401,19 @@ func _execute() -> void:
 			mission_shooter.global_position = mission_targets[0].global_position + Vector2(90, 0)
 			_check(mission_shooter.call("find_primary_fire_target") == mission_targets[0],
 				"Close mission incubator is selectable by mobile auto-aim")
+			# Simulate a second arena with a closer objective. Mobile auto-fire
+			# must still target the current mission, not the foreign SubViewport.
+			var foreign_arena: Node2D = Node2D.new()
+			root.add_child(foreign_arena)
+			var barrel_scene: PackedScene = load("res://scenes/environment/explosive_barrel.tscn") as PackedScene
+			if is_instance_valid(barrel_scene):
+				var foreign_target: ExplosiveBarrel = barrel_scene.instantiate() as ExplosiveBarrel
+				foreign_target.set_meta("mission_target", true)
+				foreign_arena.add_child(foreign_target)
+				foreign_target.global_position = mission_shooter.global_position + Vector2(1, 0)
+				_check(mission_shooter.call("find_primary_fire_target") == mission_targets[0],
+					"Mobile auto-aim ignores closer incubator from another arena")
+			foreign_arena.queue_free()
 		mission_targets[0].take_damage(mission_targets[0].max_health + 1.0)
 		_check(int(battle.get("objective_steps_done")) == 1, "First incubator destruction counts once")
 		_check(not bool(battle.get("primary_objective_done")), "One destroyed incubator cannot finish stage 4")
