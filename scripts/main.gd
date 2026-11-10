@@ -251,8 +251,9 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
-		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
-		cam.zoom = Vector2(0.92, 0.92) if portrait else Vector2(1.0, 1.0)
+		# 0.92 camera zoom made every already-small mutant shrink further.
+		# Keep the combat readable, without changing collisions/spawn geometry.
+		cam.zoom = Vector2(1.04, 1.04) if portrait else Vector2(1.0, 1.0)
 
 	if is_instance_valid(orient_hud_btn):
 		orient_hud_btn.text = "9:16" if portrait else "16:9"
@@ -527,6 +528,35 @@ func _style_combat_hud() -> void:
 		wave_style.set_border_width_all(2)
 		wave_style.set_corner_radius_all(9)
 		wave_backdrop.add_theme_stylebox_override("panel", wave_style)
+	# Production artwork: use real scalable 9-slice metal trims, while
+	# status labels, bars and input remain actual live Godot Controls.
+	var themed_panels: Array = [
+		[objectives_panel, "res://assets/ui/approved/combat_objectives_frame.svg", 27.0, 26.0],
+		[radar_panel, "res://assets/ui/approved/combat_radar_frame.svg", 33.0, 33.0],
+		[bottom_weapons_panel, "res://assets/ui/approved/combat_inventory_frame.svg", 27.0, 25.0],
+		[$HUD/HUDRoot/WaveFrame, "res://assets/ui/approved/combat_wave_frame.svg", 41.0, 24.0]
+	]
+	for themed in themed_panels:
+		var target_node: PanelContainer = themed[0] as PanelContainer
+		if themed[0] is Panel and not (themed[0] is PanelContainer):
+			var wave_node: Panel = themed[0] as Panel
+			if ResourceLoader.exists(String(themed[1]), "Texture2D"):
+				var wave_art := StyleBoxTexture.new()
+				wave_art.texture = load(String(themed[1])) as Texture2D
+				wave_art.texture_margin_left = float(themed[2])
+				wave_art.texture_margin_right = float(themed[2])
+				wave_art.texture_margin_top = float(themed[3])
+				wave_art.texture_margin_bottom = float(themed[3])
+				wave_node.add_theme_stylebox_override("panel", wave_art)
+		elif is_instance_valid(target_node) and ResourceLoader.exists(String(themed[1]), "Texture2D"):
+			var art := StyleBoxTexture.new()
+			art.texture = load(String(themed[1])) as Texture2D
+			art.texture_margin_left = float(themed[2])
+			art.texture_margin_right = float(themed[2])
+			art.texture_margin_top = float(themed[3])
+			art.texture_margin_bottom = float(themed[3])
+			target_node.add_theme_stylebox_override("panel", art)
+
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
