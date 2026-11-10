@@ -46,6 +46,10 @@ func _run() -> void:
         _check(is_instance_valid(boss), "Stage %d spawns chapter boss" % stage_num)
         _check(bool(combat.get("boss_spawned_this_run")), "Stage %d records boss spawn" % stage_num)
         if is_instance_valid(boss):
+            combat.call("spawn_special_enemy", configured_id, "boss", "QA duplicate callback")
+            _check(combat.get("active_boss") == boss,
+                "Stage %d ignores duplicate chapter boss spawn callback" % stage_num)
+        if is_instance_valid(boss):
             _check(String(boss.get("enemy_id")) == configured_id, "Stage %d boss ID matches campaign data" % stage_num)
             combat.set("primary_objective_done", true)
             combat.set("wave_time_left", 0.0)
