@@ -78,8 +78,15 @@ jobs:
           test -x "$ANDROID_HOME/build-tools/35.0.0/aapt"
           godot --version
 
-      - name: Import project resources
-        run: godot --headless --path . --editor --import --quit
+      - name: Import project resources and fail on GDScript compilation errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/godot-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|Compilation failed|Failed to compile' /tmp/godot-import.log; then
+            echo "::error::Godot resource import reported script compilation errors"
+            exit 1
+          fi
 
       - name: Pre-beta structural validation (campaign and scenes)
         shell: bash
