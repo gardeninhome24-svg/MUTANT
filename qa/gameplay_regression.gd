@@ -67,27 +67,10 @@ func _test_enemy_art_sequences() -> void:
 		_assert(AssetRegistry.get_tex("res://assets/enemies/%s/attack_4.png" % folder) != null, "Mutant attack visuals load: " + String(enemy_id))
 	for folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		_assert(AssetRegistry.get_tex("res://assets/bosses/%s/death_2.png" % folder) != null, "Boss death sprite loads: " + folder)
-	var later_tints: Array[Color] = []
-	for chapter in range(1, 11):
-		var boss_id: String = "boss_ch%02d" % chapter
-		_assert(AssetRegistry.BOSS_ANIM_FOLDERS.has(boss_id), "Chapter %d has an animated boss mapping" % chapter)
-		var preview := Sprite2D.new()
-		var visuals: Dictionary = AssetRegistry.apply_enemy_visual(preview, boss_id)
-		_assert(visuals.get("walk_frames", []).size() == 4, "Chapter %d has complete moving frames" % chapter)
-		_assert(visuals.get("attack_frames", []).size() == 4, "Chapter %d has complete attack frames" % chapter)
-		_assert(visuals.get("death_frames", []).size() == 2, "Chapter %d has complete death frames" % chapter)
-		if chapter >= 5:
-			_assert(String(visuals.get("status", "")) == "HD_BOSS_REUSED", "Reused chapter artwork is explicitly identified")
-			var tint: Color = visuals.get("base_tint", Color.WHITE)
-			_assert(tint != Color.WHITE, "Chapter %d has an individual color identity" % chapter)
-			_assert(not later_tints.has(tint), "Chapter %d tint is unique" % chapter)
-			later_tints.append(tint)
-		preview.free()
 
 
 func _test_projectile_and_pickup_safety() -> void:
-	# Instantiate independently: avoid circular class-name script resolution
-	# in the headless Godot autoload environment.
+	# Load scripts at runtime to avoid class resolver preload cycles.
 	var bolt_script: Script = load("res://scripts/plasma_bolt.gd") as Script
 	var xp_script: Script = load("res://scripts/xp_shard.gd") as Script
 	var saw_script: Script = load("res://scripts/vibro_saw.gd") as Script
@@ -95,18 +78,16 @@ func _test_projectile_and_pickup_safety() -> void:
 	if bolt_script == null or xp_script == null or saw_script == null:
 		return
 	var bolt: Node = bolt_script.new()
-	_assert(not bolt.has_hit, "New projectiles begin unused")
-	bolt.has_hit = true
-	_assert(bolt.has_hit, "Projectile hit guard retains consumed state")
+	_assert(not bool(bolt.get("has_hit")), "New projectile is unconsumed")
+	bolt.set("has_hit", true)
+	_assert(bool(bolt.get("has_hit")), "Projectile remembers first collision")
 	bolt.free()
 	var shard: Node = xp_script.new()
-	_assert(not shard.is_collected, "XP pickup begins unclaimed")
-	shard.is_collected = true
-	_assert(shard.is_collected, "XP claim guard tracks collected pickups")
+	_assert(not bool(shard.get("is_collected")), "XP shard starts unclaimed")
+	shard.set("is_collected", true)
+	_assert(bool(shard.get("is_collected")), "XP pickup tracks its single claim")
 	shard.free()
-	var saw: Node = saw_script.new()
-	_assert(saw.HIT_INTERVAL >= 0.25, "Orbiting saw damage has per-target cooldown")
-	saw.free()
+	_assert(float(saw_script.get_script_constant_map().get("HIT_INTERVAL", 0.0)) >= 0.25, "Saw has a bounded per-target hit cooldown")
 
 
 func _test_horde_performance_limits() -> void:

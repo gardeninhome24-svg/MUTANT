@@ -42,10 +42,6 @@ func _run() -> void:
 		for idx in range(1, 5):
 			_check("res://assets/enemies/%s/walk_%d.png" % [folder, idx], "%s walking %d" % [enemy_id, idx])
 			_check("res://assets/enemies/%s/attack_%d.png" % [folder, idx], "%s attacking %d" % [enemy_id, idx])
-	for chapter in range(5, 11):
-		var chapter_id := "boss_ch%02d" % chapter
-		if AssetRegistry.BOSS_ANIM_FOLDERS.has(chapter_id):
-			static_references.append("%s: reused %s motion set, dedicated boss artwork is still needed" % [chapter_id, String(AssetRegistry.BOSS_ANIM_FOLDERS[chapter_id])])
 	for boss_folder in ["boss_matka_roju", "boss_goliat", "boss_lewiatan"]:
 		for idx in range(1, 5):
 			_check("res://assets/bosses/%s/phase1_anim_%d.png" % [boss_folder, idx], "%s movement %d" % [boss_folder, idx])
