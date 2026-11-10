@@ -159,6 +159,17 @@ jobs:
             echo "A green debug APK is not a release approval; production AAB uses strict preflight."
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Instantiate and validate every campaign combat scene (100/100)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://qa/mission_scene_100_smoke.gd 2>&1 | tee /tmp/mission-scene-100.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|Invalid call\\.|Failed to load script|MISSION SCENE FAIL:|MISSION SCENE FAILED:" /tmp/mission-scene-100.log; then
+            echo "::error::One or more live campaign stages failed to instantiate"
+            exit 1
+          fi
+          grep -Fq 'MISSION SCENE PASS: 100 real stage scenes instantiated' /tmp/mission-scene-100.log
+
       - name: Full gameplay loop — boss, victory, loot, save and next-stage defeat
         shell: bash
         run: |
@@ -218,6 +229,7 @@ jobs:
             /tmp/production-art-audit.log
             /tmp/campaign-100-f2p.log
             /tmp/gameplay-regression.log
+            /tmp/mission-scene-100.log
             /tmp/chapter-boss-integration.log
             /tmp/full-run-persistence.log
             /tmp/premium-shop-regression.log
@@ -273,6 +285,7 @@ jobs:
             echo "|---|---|"
             for entry in \
               "100-stage campaign:/tmp/campaign-100-f2p.log:F2P PASS:" \
+              "100 real stage scenes:/tmp/mission-scene-100.log:MISSION SCENE PASS:" \
               "Boss finale integration:/tmp/chapter-boss-integration.log:CHAPTER BOSS PASS:" \
               "Full-run save and rewards:/tmp/full-run-persistence.log:FULL RUN PASS:" \
               "Visual geometry:/tmp/visual-release-gate.log:VISUAL GATE PASS:" \
