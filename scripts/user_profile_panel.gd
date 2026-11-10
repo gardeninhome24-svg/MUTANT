@@ -1836,6 +1836,7 @@ func _build_tab_premium_store() -> Control:
 	depot_frame.add_child(depot_backdrop)
 	# Actual welcome content; avoid a blank decorative rectangle on 420px phones.
 	var depot_row := HBoxContainer.new()
+	depot_row.name = "StoreWelcomeRow"
 	depot_row.add_theme_constant_override("separation", 12)
 	depot_frame.add_child(depot_row)
 	var depot_crate := TextureRect.new()
@@ -1847,6 +1848,7 @@ func _build_tab_premium_store() -> Control:
 	depot_crate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	depot_row.add_child(depot_crate)
 	var depot_copy := VBoxContainer.new()
+	depot_copy.name = "StoreWelcomeCopy"
 	depot_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	depot_copy.alignment = BoxContainer.ALIGNMENT_CENTER
 	depot_row.add_child(depot_copy)
@@ -1857,6 +1859,7 @@ func _build_tab_premium_store() -> Control:
 	SurvivorVisualSystem.decorate_section(depot_title, SurvivorVisualSystem.GOLD, 24)
 	depot_copy.add_child(depot_title)
 	var depot_subtitle := Label.new()
+	depot_subtitle.name = "StoreWelcomeSubtitle"
 	depot_subtitle.text = "+150 kredytów  •  +5 złomu"
 	depot_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	depot_subtitle.add_theme_color_override("font_color", SurvivorVisualSystem.TEXT)
@@ -1990,6 +1993,7 @@ func _refresh_store_tab_ui() -> void:
 
 		var accent: Color = prod.get("accent", Color(0.25, 0.90, 1.0))
 		var card := _create_subpanel(accent)
+		card.name = "StoreProductCard_" + p_id
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.custom_minimum_size = Vector2(card.custom_minimum_size.x, 225.0)
 		var frame_path: String = ""
@@ -2022,8 +2026,9 @@ func _refresh_store_tab_ui() -> void:
 		cv.add_child(top_h)
 
 		var ic := TextureRect.new()
+		ic.name = "StoreProductArtwork"
 		ic.texture = AssetRegistry.get_tex(String(prod["icon"]))
-		ic.custom_minimum_size = Vector2(110, 130)
+		ic.custom_minimum_size = Vector2(96, 112) if narrow_portrait_ui else Vector2(110, 130)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		top_h.add_child(ic)
@@ -2034,6 +2039,7 @@ func _refresh_store_tab_ui() -> void:
 		top_h.add_child(tv)
 
 		var title_l := Label.new()
+		title_l.name = "StoreProductTitle"
 		title_l.text = String(prod["title"])
 		title_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		title_l.add_theme_font_size_override("font_size", 16)
@@ -2041,6 +2047,7 @@ func _refresh_store_tab_ui() -> void:
 		tv.add_child(title_l)
 
 		var desc_l := Label.new()
+		desc_l.name = "StoreProductDescription"
 		desc_l.text = String(prod["contents"])
 		desc_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		desc_l.add_theme_font_size_override("font_size", 13)
@@ -2048,6 +2055,7 @@ func _refresh_store_tab_ui() -> void:
 		tv.add_child(desc_l)
 
 		var buy_btn := Button.new()
+		buy_btn.name = "StoreProductPurchase"
 		buy_btn.custom_minimum_size = Vector2(0, 57)
 		buy_btn.add_theme_font_size_override("font_size", 12)
 		var gem_price := int(StageDirector.SKIN_GEM_PRICES.get(skin_unlock, 0))
