@@ -36,6 +36,10 @@ func _ready() -> void:
 	if capture_target in ["all", "hud_9x16", "hud_mobile_9x16"]:
 		await _capture_hud_mobile_9x16()
 
+	if capture_target in ["all", "bosses", "boss_gallery"]:
+		await _capture_boss_gallery("phase1_anim", 1)
+		await _capture_boss_gallery("phase2_attack", 3)
+
 	get_tree().paused = false
 	StageDirector.save_path_override = ""
 	if failed_captures > 0 or saved_captures == 0:
@@ -165,6 +169,66 @@ func _capture_hud_mobile_9x16() -> void:
 	main_inst.queue_free()
 	sub.queue_free()
 	await get_tree().process_frame
+
+func _capture_boss_gallery(action: String, frame_index: int) -> void:
+	# Real Godot render of the six imported chapter-boss textures.
+	# Two poses are captured to expose missing limbs/incorrect scale and
+	# facilitate side-by-side comparison; this is not animation approval.
+	var size: Vector2i = Vector2i(1280, 720)
+	var sub: SubViewport = _create_subviewport(size)
+	add_child(sub)
+	var canvas := Control.new()
+	canvas.set_anchors_preset(Control.PRESET_FULL_RECT)
+	canvas.size = Vector2(size)
+	sub.add_child(canvas)
+
+	var background := ColorRect.new()
+	background.color = Color("#101722")
+	background.size = Vector2(size)
+	canvas.add_child(background)
+	var heading := Label.new()
+	heading.text = "MUTANT — BOSS CHAPTERS 05–10 | %s FRAME %d | ART CANDIDATES" % [action.to_upper(), frame_index]
+	heading.position = Vector2(30, 12)
+	heading.add_theme_font_size_override("font_size", 22)
+	canvas.add_child(heading)
+
+	for chapter in range(5, 11):
+		var index: int = chapter - 5
+		var col: int = index % 3
+		var row: int = index / 3
+		var left: float = 24.0 + float(col) * 416.0
+		var top: float = 62.0 + float(row) * 324.0
+		var boss_id := "boss_ch%02d" % chapter
+		var frame_path := "res://assets/bosses/%s/%s_%d.png" % [boss_id, action, frame_index]
+		var tex: Texture2D = AssetRegistry.get_tex(frame_path)
+		if tex == null:
+			failed_captures += 1
+			push_error("[Visual QA] Boss gallery missing %s" % frame_path)
+			continue
+		var panel := ColorRect.new()
+		panel.position = Vector2(left, top)
+		panel.size = Vector2(400, 306)
+		panel.color = Color("#1b2734")
+		canvas.add_child(panel)
+		var portrait := TextureRect.new()
+		portrait.texture = tex
+		portrait.position = Vector2(left + 103.0, top + 12.0)
+		portrait.size = Vector2(194, 242)
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		canvas.add_child(portrait)
+		var name_label := Label.new()
+		name_label.text = "BOSS %02d  /  %s" % [chapter, action]
+		name_label.position = Vector2(left + 16.0, top + 266.0)
+		name_label.add_theme_font_size_override("font_size", 17)
+		canvas.add_child(name_label)
+
+	for frame in range(12):
+		await get_tree().process_frame
+	await _save_viewport_png(sub, "boss_gallery_%s_%d_1280x720_actual" % [action, frame_index])
+	sub.queue_free()
+	await get_tree().process_frame
+
 
 func _create_subviewport(size: Vector2i) -> SubViewport:
 	var sub := SubViewport.new()
