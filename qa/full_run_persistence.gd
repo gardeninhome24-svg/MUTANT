@@ -71,6 +71,8 @@ func _execute() -> void:
 	var xp_initial: int = int(stage.character_xp)
 	battle.call("start_wave", 2, 10)
 	_check(int(battle.get("current_wave_num")) == 10, "Final wave ten enters actual combat")
+	var final_wave_label: Label = battle.get("wave_label") as Label
+	_check(final_wave_label != null and not final_wave_label.text.contains("BOSS"), "Ordinary stage final wave does not falsely announce a boss")
 	var boss: Node = battle.get("active_boss")
 	_check(not is_instance_valid(boss), "Stage two is an ordinary mission without a chapter boss")
 	_check(not bool(battle.get("boss_spawned_this_run")), "Nonfinal chapter stage does not spawn a chapter boss")
@@ -150,6 +152,8 @@ func _execute() -> void:
 	battle.call("start_wave", 10, 10)
 	var chapter_boss: Node = battle.get("active_boss")
 	_check(bool(battle.call("_stage_requires_final_boss")), "Chapter 1 finale requires a real boss")
+	var boss_wave_label: Label = battle.get("wave_label") as Label
+	_check(boss_wave_label != null and boss_wave_label.text.contains("BOSS"), "Chapter finale final wave announces the boss")
 	_check(is_instance_valid(chapter_boss), "Stage ten actually spawns boss_ch01")
 	_check(bool(battle.get("boss_spawned_this_run")), "Chapter finale boss spawn is registered")
 	battle.set("primary_objective_done", true)
