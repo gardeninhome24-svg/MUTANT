@@ -1026,6 +1026,10 @@ func spawn_wave_enemy() -> void:
 	enemy.enemy_died.connect(_on_enemy_died)
 
 func spawn_special_enemy(enemy_id: String, tier: String, banner_title: String) -> void:
+	# Duplicate wave callbacks must never create a second chapter boss.
+	# Once defeated, the boss is terminal for this run.
+	if tier == "boss" and boss_spawned_this_run:
+		return
 	if not is_instance_valid(player):
 		return
 	var scene: PackedScene = ENEMY_SCENES["zdziczaly"]
