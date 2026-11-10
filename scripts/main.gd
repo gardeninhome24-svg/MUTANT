@@ -1247,7 +1247,10 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 	enemies_killed_in_run += 1
 	# MutantEnemy.die() already records each kill exactly once.
 	_update_objectives_ui()
-	if primary_objective_type == "clear_elites" and enemy.tier in ["elite", "miniboss"]:
+	# Only the chapter's contracted elites count; incidental elite spawns
+	# may still grant XP but cannot complete this story objective.
+	var required_elite_id: String = "elite_ch%02d_stage07" % int(StageDirector.get_stage_config(current_stage_num).get("chapter", 1))
+	if primary_objective_type == "clear_elites" and enemy.tier == "miniboss" and enemy.enemy_id == required_elite_id:
 		objective_elites_defeated = mini(objective_elites_required, objective_elites_defeated + 1)
 		if objective_elites_defeated >= objective_elites_required:
 			_complete_primary_objective()
