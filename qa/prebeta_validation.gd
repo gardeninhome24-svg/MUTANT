@@ -93,6 +93,24 @@ func _validate_runtime_campaign() -> void:
 			"Final boss assignment matches chapter finale rule on stage %d" % number)
 		_check((objective_type == "defeat_boss") == is_finale,
 			"Boss objective agrees with chapter finale on stage %d" % number)
+		# A mission must expose the matching v2 interaction and enough
+		# objects/time to complete it. Catch missing or zero-count contracts.
+		var objective_found: bool = false
+		var required_count: int = -1
+		for obj in cfg.get("objectives_v2", []):
+			if obj is Dictionary and String(obj.get("type", "")) == objective_type:
+				objective_found = true
+				required_count = int(obj.get("count", 0))
+				break
+		_check(objective_found, "Stage %d objective type exists in merged story contract" % number)
+		_check(required_count >= 1, "Stage %d objective count is positive" % number)
+		match objective_type:
+			"collect_item":
+				_check(required_count == 3, "Stage %d has three attainable DNA pickups" % number)
+			"clear_elites", "destroy_target", "repair_generator":
+				_check(required_count == 2, "Stage %d has two concrete targets" % number)
+			"defend_node", "survive_hazard":
+				_check(required_count == 90, "Stage %d has a ninety-second objective" % number)
 		var next_stage: Variant = cfg.get("mandatory_stage_unlock", null)
 		if number == 100:
 			_check(next_stage == null, "Final stage 100 must not unlock an invalid stage 101")
