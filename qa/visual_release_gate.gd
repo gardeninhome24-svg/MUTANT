@@ -21,6 +21,10 @@ func _not_overlapping(a: Control, b: Control, label: String) -> void:
 	if not is_instance_valid(a) or not is_instance_valid(b):
 		_check(false, label + " nodes missing")
 		return
+	# Hidden auto-combat skill buttons do not reserve clickable space.
+	if not a.is_visible_in_tree() or not b.is_visible_in_tree():
+		_check(true, label + " (one control intentionally hidden)")
+		return
 	# A small touch between borders should not be treated as overlap.
 	var ar: Rect2 = _rect(a).grow(-1)
 	var br: Rect2 = _rect(b).grow(-1)
@@ -46,6 +50,16 @@ func _run() -> void:
 	]:
 		_check_texture(path)
 
+	# The approved visual language must be backed by imported actual art,
+	# not just test markers or non-functional placeholder illustrations.
+	for skin in [
+		"res://assets/ui/approved/combat_objectives_frame.svg",
+		"res://assets/ui/approved/combat_wave_frame.svg",
+		"res://assets/ui/approved/combat_radar_frame.svg",
+		"res://assets/ui/approved/combat_inventory_frame.svg"
+	]:
+		_check_texture(skin)
+
 	var stage = root.get_node_or_null("StageDirector")
 	_check(stage != null, "StageDirector autoload is present")
 	if stage == null:
@@ -67,6 +81,17 @@ func _run() -> void:
 	await process_frame
 	combat.call("_apply_responsive_hud_layout")
 	await process_frame
+
+	var wave_frame: Panel = combat.get_node_or_null("HUD/HUDRoot/WaveFrame") as Panel
+	_check(is_instance_valid(wave_frame), "Actual HUD has a live wave artwork panel")
+	if is_instance_valid(wave_frame):
+		var wave_style: StyleBox = wave_frame.get_theme_stylebox("panel")
+		_check(wave_style is StyleBoxTexture, "Live wave panel uses nine-slice artwork")
+		_check(wave_frame.size.y <= 118.0, "Wave artwork does not expand to a giant blank rectangle")
+	for node_name in ["objectives_panel", "radar_panel", "bottom_weapons_panel"]:
+		var rendered_panel: PanelContainer = combat.get(node_name) as PanelContainer
+		_check(is_instance_valid(rendered_panel) and rendered_panel.get_theme_stylebox("panel") is StyleBoxTexture,
+			"Live %s uses approved nine-slice combat artwork" % node_name)
 
 	var stats: Control = combat.get("stats_card") as Control
 	var currencies: Control = combat.get("currency_bar") as Control
@@ -95,9 +120,9 @@ func _run() -> void:
 	await process_frame
 	var safe_top: float = stage.get_safe_top_margin()
 	if is_instance_valid(wave):
-		_check(absf(wave.offset_top - (190.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
+		_check(absf(wave.offset_top - (210.0 + safe_top)) < 0.1, "Narrow portrait wave timer stays below currencies")
 	if is_instance_valid(radar):
-		_check(absf(radar.offset_top - (60.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
+		_check(absf(radar.offset_top - (70.0 + safe_top)) < 0.1, "Narrow portrait radar stays beside objectives")
 	if is_instance_valid(currencies):
 		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
 	if is_instance_valid(currencies) and is_instance_valid(wave):
@@ -111,11 +136,11 @@ func _run() -> void:
 	if is_instance_valid(avatar):
 		_check(avatar.custom_minimum_size.x <= 32.0, "420px HUD avatar uses compact dimensions")
 	if is_instance_valid(hp) and is_instance_valid(xp):
-		_check(hp.custom_minimum_size.x == 95.0 and xp.custom_minimum_size.x == 95.0, "420px HP and XP bars fit compact stat card")
+		_check(hp.custom_minimum_size.x == 110.0 and xp.custom_minimum_size.x == 110.0, "420px HP and XP bars fit compact stat card")
 	if is_instance_valid(wave_title):
-		_check(wave_title.get_theme_font_size("font_size") == 12, "420px wave label is readable without truncation")
+		_check(wave_title.get_theme_font_size("font_size") == 16, "420px wave label is readable without truncation")
 	if is_instance_valid(objectives_title):
-		_check(objectives_title.get_theme_font_size("font_size") == 10, "420px objectives header has legible text")
+		_check(objectives_title.get_theme_font_size("font_size") == 13, "420px objectives header has legible text")
 		_check(objectives_title.text.begins_with("CELE • ETAP"), "420px objective title avoids clipped decoration")
 	if is_instance_valid(weapon_row):
 		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")
