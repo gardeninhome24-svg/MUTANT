@@ -45,23 +45,31 @@ func _run() -> void:
 	_finish()
 
 func _test_horde_performance_limits() -> void:
-	var director := MSWaveDirector.new()
+	var director_script: Script = load("res://addons/ms_beta/wave_director.gd") as Script
+	_assert(director_script != null, "Wave director loads after StageDirector autoload")
+	if director_script == null:
+		return
+	var director: Node = director_script.new()
 	root.add_child(director)
 	director.adaptive_density_enabled = false
-	director.set_performance_profile(MSWaveDirector.PerfProfile.LOW)
+	director.set_performance_profile(0)
 	_assert(director.get_max_active_for_wave(1) == 14, "Low performance wave one respects low cap")
-	director.set_performance_profile(MSWaveDirector.PerfProfile.HIGH)
+	director.set_performance_profile(2)
 	_assert(director.get_max_active_for_wave(1) == 22, "High performance wave one retains high cap")
 	director.adaptive_density_enabled = true
 	director.dynamic_cap_multiplier = 0.55
-	director.set_performance_profile(MSWaveDirector.PerfProfile.LOW)
+	director.set_performance_profile(0)
 	_assert(director.get_max_active_for_wave(1) <= 14, "Adaptive low mode never exceeds base low-end cap")
 	director.start_wave(1, -30.0)
+	_assert(int(director.current_wave) == 1, "Wave remains valid after negative duration")
 	_assert(director.wave_time_left == 0.0, "Negative wave duration clamps to zero")
+	_assert(int(director.MAX_POOLED_PER_ARCHETYPE) == 24, "Inactive pool has 24-per-type ceiling")
 	director.spawn_timer = 0.8
 	director.recycle_all_enemies()
 	_assert(director.spawn_timer == 0.0, "Cleanup resets spawn timer")
 	_assert(director.dynamic_cap_multiplier == 1.0, "Cleanup resets performance scaling")
+	_assert(director.enemy_pool.is_empty(), "Cleanup empties pool")
+	_assert(director.active_enemies.is_empty(), "Cleanup empties active registry")
 	director.queue_free()
 
 

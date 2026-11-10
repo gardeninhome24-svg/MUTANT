@@ -57,14 +57,16 @@ func get_max_active_for_wave(w: int) -> int:
 
 	if not adaptive_density_enabled:
 		return base_cap
+	dynamic_cap_multiplier = clampf(dynamic_cap_multiplier, 0.55, 1.0)
 	var adapted := int(roundf(float(base_cap) * dynamic_cap_multiplier))
 	# Honor low-end profile instead of silently forcing its first wave from 14 to 18.
 	return clampi(adapted, maxi(1, int(ceil(float(base_cap) * 0.55))), 105)
 
 func start_wave(w_num: int, duration_sec: float = 30.0) -> void:
-	current_wave = clampi(w_num, 1, max_waves)
+	current_wave = clampi(w_num, 1, maxi(1, max_waves))
 	wave_time_left = maxf(0.0, duration_sec)
 	spawn_timer = 0.0
+	perf_sample_timer = 0.0
 	emit_signal("wave_changed", current_wave, wave_time_left, max_waves)
 
 func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
@@ -89,6 +91,7 @@ func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: flo
 	# Dynamic spawn interval: faster when below cap
 	var deficit := target_cap - current_count
 	if deficit <= 0:
+		spawn_timer = minf(spawn_timer, 0.25)
 		return
 
 	var interval := 0.25 if deficit > 16 else (0.45 if deficit > 6 else 0.75)
@@ -136,7 +139,7 @@ func _get_wave_archetype(stage_num: int, wave_num: int) -> String:
 	return pool[randi() % pool.size()]
 
 func _spawn_horde_pack(count: int, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
-	if not is_instance_valid(player) or not player.is_inside_tree() or count <= 0:
+	if not is_instance_valid(player) or not player.is_inside_tree() or not is_instance_valid(characters_layer) or count <= 0:
 		return
 	var center := player.global_position
 	var cluster_angle := randf() * TAU
@@ -182,6 +185,8 @@ func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_
 
 	if not is_instance_valid(enemy):
 		return null
+	enemy.is_pooled = true
+	enemy.wave_director_ref = self
 
 	# New and recycled enemies must always use the current battle effects layer.
 	enemy.effects_layer = effects_layer
@@ -196,6 +201,8 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 	if not is_instance_valid(enemy):
 		return
 	active_enemies.erase(enemy)
+	if enemy.is_queued_for_deletion():
+		return
 	enemy.velocity = Vector2.ZERO
 	var aid := enemy.enemy_id
 	if not enemy_pool.has(aid):
@@ -209,7 +216,7 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 
 func _on_pooled_enemy_died(enemy: MutantEnemy) -> void:
 	active_enemies.erase(enemy)
-	if is_instance_valid(main_ref) and main_ref.has_method("_on_enemy_died"):
+	if is_instance_valid(main_ref) and main_ref.is_inside_tree() and main_ref.has_method("_on_enemy_died"):
 		main_ref.call("_on_enemy_died", enemy)
 
 func recycle_all_enemies() -> void:
@@ -225,3 +232,4 @@ func recycle_all_enemies() -> void:
 				e.queue_free()
 	enemy_pool.clear()
 	dynamic_cap_multiplier = 1.0
+	wave_time_left = 0.0
