@@ -1126,8 +1126,10 @@ func _advance_defense_objective(delta: float) -> void:
 	if run_result_state != "active" or primary_objective_done or primary_objective_type != "defend_node":
 		return
 	var attackers: int = 0
-	if is_instance_valid(primary_objective_area):
-		for enemy in get_tree().get_nodes_in_group("enemies"):
+	if is_instance_valid(primary_objective_area) and is_instance_valid(characters_layer):
+		# Limit damage to mutants from THIS combat arena. Global enemy
+		# groups can contain actors from another SubViewport/QA scene.
+		for enemy in characters_layer.get_children():
 			if not (enemy is MutantEnemy) or not is_instance_valid(enemy):
 				continue
 			if enemy.is_dying or enemy.current_health <= 0.0:
