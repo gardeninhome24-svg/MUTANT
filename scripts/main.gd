@@ -944,7 +944,7 @@ func _process(delta: float) -> void:
 	_update_active_power_buttons()
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and not primary_objective_type in ["defeat_boss", "collect_item", "clear_elites"] and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if primary_objective_type == "defend_node":
 			# Cap effective attackers so high spawn density cannot erase a
