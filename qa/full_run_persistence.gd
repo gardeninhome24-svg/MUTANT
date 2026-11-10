@@ -124,6 +124,12 @@ func _execute() -> void:
 	_check(String(battle.get("run_result_state")) == "awaiting_revive", "Real death waits for revive decision")
 	battle.call("_on_player_died")
 	_check(String(battle.get("run_result_state")) == "awaiting_revive", "Duplicate death callback is ignored")
+	battle.call("toggle_premium_shop")
+	_check(paused, "Opening premium shop while dead keeps combat paused")
+	battle.call("toggle_premium_shop")
+	_check(paused, "Closing premium shop while dead does not resume combat")
+	var death_shop: Control = battle.get("premium_shop_panel") as Control
+	_check(is_instance_valid(death_shop) and not death_shop.visible, "Closing premium shop restores death overlay")
 	battle.call("_finalize_failure_once")
 	_check(String(battle.get("run_result_state")) == "failure_final", "Giving up revive settles defeat")
 	_check(int(stage.credits) == before_loss, "Zero-wave defeat grants no farming currency")
