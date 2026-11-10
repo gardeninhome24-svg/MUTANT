@@ -28,6 +28,9 @@ var active_enemies: Array[MutantEnemy] = []
 const HORDE_TARGETS_MEDIUM := [18, 26, 36, 46, 54, 62, 72, 82, 92, 65]
 const HORDE_TARGETS_LOW    := [14, 20, 26, 32, 38, 44, 50, 56, 62, 48]
 const HORDE_TARGETS_HIGH   := [22, 32, 44, 56, 68, 78, 88, 98, 108, 80]
+const MAX_POOLED_PER_ARCHETYPE: int = 24
+const MIN_SPAWN_DELTA: float = 0.0
+const MAX_SPAWN_DELTA: float = 0.25
 
 signal wave_changed(wave_num: int, time_left: float, max_waves: int)
 signal wave_completed(wave_num: int)
@@ -55,16 +58,19 @@ func get_max_active_for_wave(w: int) -> int:
 	if not adaptive_density_enabled:
 		return base_cap
 	var adapted := int(roundf(float(base_cap) * dynamic_cap_multiplier))
-	# Floor at 18 so the battlefield is never deserted, cap at 105
-	return clampi(adapted, 18, 105)
+	# Honor low-end profile instead of silently forcing its first wave from 14 to 18.
+	return clampi(adapted, maxi(1, int(ceil(float(base_cap) * 0.55))), 105)
 
 func start_wave(w_num: int, duration_sec: float = 30.0) -> void:
 	current_wave = clampi(w_num, 1, max_waves)
-	wave_time_left = duration_sec
+	wave_time_left = maxf(0.0, duration_sec)
 	spawn_timer = 0.0
 	emit_signal("wave_changed", current_wave, wave_time_left, max_waves)
 
 func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
+	if not is_instance_valid(player) or not player.is_inside_tree():
+		return
+	delta = maxf(0.0, delta)
 	_update_adaptive_performance(delta)
 
 	if wave_time_left > 0.0:
@@ -86,18 +92,21 @@ func process_wave(delta: float, player: Node2D, stage_num: int, elapsed_sec: flo
 		return
 
 	var interval := 0.25 if deficit > 16 else (0.45 if deficit > 6 else 0.75)
-	spawn_timer += delta
+	# Limit catch-up burst after the app resumes from background.
+	spawn_timer += clampf(delta, MIN_SPAWN_DELTA, MAX_SPAWN_DELTA)
 	if spawn_timer >= interval:
 		spawn_timer = 0.0
 		# Spawn in packs of 2 to 6 for authentic, thrilling swarm feel
 		var max_p := 4 if current_wave < 4 else 6
 		var pack_size := clampi(mini(deficit, randi_range(2, max_p)), 1, deficit)
+		if not is_instance_valid(characters_layer) or not characters_layer.is_inside_tree():
+			return
 		_spawn_horde_pack(pack_size, player, stage_num, elapsed_sec)
 
 func _update_adaptive_performance(delta: float) -> void:
 	if not adaptive_density_enabled:
 		return
-	perf_sample_timer += delta
+	perf_sample_timer += minf(maxf(0.0, delta), 0.25)
 	if perf_sample_timer >= 0.45:
 		perf_sample_timer = 0.0
 		var fps := float(Engine.get_frames_per_second())
@@ -127,7 +136,7 @@ func _get_wave_archetype(stage_num: int, wave_num: int) -> String:
 	return pool[randi() % pool.size()]
 
 func _spawn_horde_pack(count: int, player: Node2D, stage_num: int, elapsed_sec: float) -> void:
-	if not is_instance_valid(player):
+	if not is_instance_valid(player) or not player.is_inside_tree() or count <= 0:
 		return
 	var center := player.global_position
 	var cluster_angle := randf() * TAU
@@ -149,10 +158,14 @@ func _spawn_single_enemy(arch_id: String, pos: Vector2, stage_num: int, elapsed_
 	var is_elite := (current_wave >= 5) and (randf() < 0.12)
 	var tier := "elite" if is_elite else "normal"
 
-	if enemy_pool.has(arch_id) and enemy_pool[arch_id].size() > 0:
-		enemy = enemy_pool[arch_id].pop_back()
-		if is_instance_valid(enemy):
-			enemy.reset_for_respawn(arch_id, tier, stage_num, elapsed_sec, pos)
+	if enemy_pool.has(arch_id):
+		while not enemy_pool[arch_id].is_empty():
+			var candidate: MutantEnemy = enemy_pool[arch_id].pop_back()
+			if is_instance_valid(candidate) and candidate.is_inside_tree():
+				enemy = candidate
+				break
+	if is_instance_valid(enemy):
+		enemy.reset_for_respawn(arch_id, tier, stage_num, elapsed_sec, pos)
 	else:
 		if main_ref and main_ref.get("ENEMY_SCENES") != null:
 			var scenes: Dictionary = main_ref.ENEMY_SCENES
@@ -187,8 +200,12 @@ func recycle_enemy(enemy: MutantEnemy) -> void:
 	var aid := enemy.enemy_id
 	if not enemy_pool.has(aid):
 		enemy_pool[aid] = []
-	if not enemy_pool[aid].has(enemy):
-		enemy_pool[aid].append(enemy)
+	if enemy_pool[aid].has(enemy):
+		return
+	if enemy_pool[aid].size() >= MAX_POOLED_PER_ARCHETYPE:
+		enemy.queue_free()
+		return
+	enemy_pool[aid].append(enemy)
 
 func _on_pooled_enemy_died(enemy: MutantEnemy) -> void:
 	active_enemies.erase(enemy)
@@ -200,8 +217,11 @@ func recycle_all_enemies() -> void:
 		if is_instance_valid(e):
 			e.queue_free()
 	active_enemies.clear()
+	spawn_timer = 0.0
+	perf_sample_timer = 0.0
 	for k in enemy_pool.keys():
 		for e in enemy_pool[k]:
 			if is_instance_valid(e):
 				e.queue_free()
 	enemy_pool.clear()
+	dynamic_cap_multiplier = 1.0
