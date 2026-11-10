@@ -11,9 +11,10 @@ const STAGES_JSON_PATH := "res://gamedesign/etapy_001_100.json"
 const DIFFICULTY_JSON_PATH := "res://gamedesign/PROFILE_TRUDNOSCI.json"
 const V1_DATA_DIR := "res://mutant_v1/data/"
 const DEFAULT_SAVE_PATH := "user://mutant_campaign_save.json"
-# Closed beta only. Set to false before public release. Does not alter prices,
-# rewards or payment logic. Grants once per save, including legacy beta saves.
-const BETA_TEST_GEMS_ENABLED: bool = true
+# Public-release safety: do not grant temporary closed-beta currency.
+# _grant_beta_test_gems_once() also revokes tracked unspent beta currency
+# and test-funded cosmetics when migrating an existing beta save.
+const BETA_TEST_GEMS_ENABLED: bool = false
 const BETA_TEST_GEMS_AMOUNT: int = 10000
 
 static var save_path_override: String = ""
