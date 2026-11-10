@@ -2,6 +2,11 @@ name: MutantSurvivor Boss 5-10 Art Candidate
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/make_boss_candidate_pack.py
+      - .github/workflows/boss-art-review.yml
 
 permissions:
   contents: read
@@ -18,13 +23,14 @@ jobs:
 
       - name: Install image processing dependency
         run: |
-          python3 -m pip install --user "Pillow>=10,<13"
-          python3 -c "from PIL import Image; print('Pillow loaded:', Image.__version__)"
+          python3 -m venv .venv
+          .venv/bin/python -m pip install "Pillow>=10,<13"
+          .venv/bin/python -c "from PIL import Image; print('Pillow loaded:', Image.__version__)"
 
       - name: Generate all 66 chapter 5-10 boss images
         run: |
           set -euo pipefail
-          python3 tools/make_boss_candidate_pack.py --project . --out build/MutantSurvivor-BossArt-Candidate-05-10.zip
+          .venv/bin/python tools/make_boss_candidate_pack.py --project . --out build/MutantSurvivor-BossArt-Candidate-05-10.zip
           python3 tools/boss_art_pack.py --zip build/MutantSurvivor-BossArt-Candidate-05-10.zip
           python3 tools/boss_art_geometry.py --zip build/MutantSurvivor-BossArt-Candidate-05-10.zip --report build/boss-geometry.json
           unzip -Z1 build/MutantSurvivor-BossArt-Candidate-05-10.zip | tee build/boss-contents.txt
