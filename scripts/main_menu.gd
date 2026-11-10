@@ -92,6 +92,7 @@ func _ready() -> void:
 	_build_commercial_hub_ui()
 	_build_inbox_modal()
 	_build_settings_modal()
+	_polish_hub_visuals()
 
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
@@ -105,9 +106,47 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	idle_anim_time += delta
 	if current_hub_tab == 0 and is_instance_valid(play_big_btn):
-		var pulse := sin(idle_anim_time * 3.2) * 0.015
+		var pulse := sin(idle_anim_time * 2.1) * 0.006
 		play_big_btn.scale = Vector2(1.0 + pulse, 1.0 + pulse)
 		play_big_btn.pivot_offset = play_big_btn.size * 0.5
+
+func _polish_hub_visuals() -> void:
+	# Reuse the accepted art and existing interactive navigation. Improve
+	# hierarchy/contrast rather than covering the reference background with
+	# extra decorative text or non-functional buttons.
+	if is_instance_valid(top_hub_panel):
+		var header := StyleBoxFlat.new()
+		header.bg_color = Color(0.018, 0.035, 0.060, 0.94)
+		header.border_color = Color(0.22, 0.72, 0.85, 0.78)
+		header.border_width_bottom = 2
+		header.set_corner_radius_all(12)
+		header.set_content_margin_all(8)
+		# Inner shadows keep text clear over the ruined city backdrop.
+		header.shadow_color = Color(0, 0, 0, 0.45)
+		header.shadow_size = 5
+		top_hub_panel.add_theme_stylebox_override("panel", header)
+	if is_instance_valid(bottom_nav_panel):
+		var navigation := StyleBoxFlat.new()
+		navigation.bg_color = Color(0.014, 0.030, 0.055, 0.97)
+		navigation.border_color = Color(0.24, 0.70, 0.81, 0.74)
+		navigation.border_width_top = 2
+		navigation.set_corner_radius_all(11)
+		navigation.set_content_margin_all(5)
+		bottom_nav_panel.add_theme_stylebox_override("panel", navigation)
+	if is_instance_valid(mission_description):
+		mission_description.add_theme_font_size_override("font_size", 13)
+		mission_description.add_theme_color_override("font_color", Color(0.92, 0.95, 0.99))
+		mission_description.add_theme_color_override("font_outline_color", Color(0.015, 0.028, 0.045, 0.95))
+		mission_description.add_theme_constant_override("outline_size", 2)
+	if is_instance_valid(stage_title_lbl):
+		stage_title_lbl.add_theme_color_override("font_outline_color", Color(0.01, 0.02, 0.04))
+		stage_title_lbl.add_theme_constant_override("outline_size", 3)
+	if is_instance_valid(play_big_btn):
+		play_big_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		play_big_btn.focus_mode = Control.FOCUS_ALL
+		play_big_btn.mouse_entered.connect(func(): play_big_btn.modulate = Color(1.08, 1.05, 0.96))
+		play_big_btn.mouse_exited.connect(func(): play_big_btn.modulate = Color.WHITE)
+
 
 func _build_commercial_hub_ui() -> void:
 	# --------------------------------------------------------------------------
