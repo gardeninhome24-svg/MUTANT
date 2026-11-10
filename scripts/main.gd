@@ -1877,13 +1877,16 @@ func _on_player_died() -> void:
 			# No rewarded-ad SDK / verified completion callback in this beta.
 			ad_btn.disabled = true
 			ad_btn.text = "REKLAMY NIEDOSTĘPNE W BECIE"
+	var objective_destroyed: bool = primary_objective_type == "defend_node" and primary_objective_hp <= 0.0
 	if is_instance_valid(prem_btn):
-		prem_btn.disabled = has_used_revive
+		prem_btn.disabled = has_used_revive or objective_destroyed
 	if is_instance_valid(death_summary_lbl):
 		death_summary_lbl.text = (
 			"⏱ Czas przeżycia: %02d:%02d  |  🌊 Osiągnięta fala: %d/%d  |  ☠ Pokonani mutanci: %d\n" % [mins, secs, current_wave_num, max_waves_in_stage, enemies_killed_in_run] +
 			"Nagroda za porażkę zostanie rozliczona dopiero po rezygnacji z wskrzeszenia.\n" +
-			("Możesz skorzystać z 1 wskrzeszenia (z 3.5s tarczą ochronną), powtórzyć etap lub wrócić do bazy." if not has_used_revive else "Limit 1 wskrzeszenia na etap został już wykorzystany.")
+			("Cel obrony został zniszczony — wskrzeszenie nie przywróci misji. Powtórz etap lub wróć do bazy." if objective_destroyed else
+			"Możesz skorzystać z 1 wskrzeszenia (z 3.5s tarczą ochronną), powtórzyć etap lub wrócić do bazy." if not has_used_revive else
+			"Limit 1 wskrzeszenia na etap został już wykorzystany.")
 		)
 	player.external_move_dir = Vector2.ZERO
 	if is_instance_valid(joystick):
@@ -1918,6 +1921,10 @@ func _on_revive_ad_pressed() -> void:
 
 func _on_revive_premium_pressed() -> void:
 	if run_result_state != "awaiting_revive" or has_used_revive:
+		return
+	# Reviving the hero cannot repair a destroyed defense objective.
+	# Reject the purchase BEFORE charging the player's premium currency.
+	if primary_objective_type == "defend_node" and primary_objective_hp <= 0.0:
 		return
 	if StageDirector.spend_premium_gems(30):
 		StageDirector.save_campaign_profile()
