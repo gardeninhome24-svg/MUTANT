@@ -1900,7 +1900,8 @@ func _on_player_died() -> void:
 			"wave": current_wave_num,
 			"kills": enemies_killed_in_run,
 			"time_seconds": int(total_run_elapsed),
-			"reason": "Etap %03d: Ulepsz wyposażenie lub spróbuj innej strategii." % current_stage_num,
+			"reason": ("Etap %03d: Cel obrony został zniszczony. Wskrzeszenie nie jest dostępne." % current_stage_num if objective_destroyed else
+				"Etap %03d: Ulepsz wyposażenie lub spróbuj innej strategii." % current_stage_num),
 			"already_revived": has_used_revive,
 			"gems": StageDirector.dark_matter_gems,
 			"ad_available": false
