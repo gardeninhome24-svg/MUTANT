@@ -47,6 +47,8 @@ func _run() -> void:
 
 func _test_character_art_sequences() -> void:
 	_assert(AssetRegistry.PLAYER_ANIMATED_CLASSES.size() == 4, "Four base operator classes have production frame sets")
+	_assert(not String(AssetRegistry.SKIN_SPRITES.get("neon_hunter", "")).is_empty(), "Premium appearance has dedicated non-base artwork")
+	_assert(not String(AssetRegistry.SKIN_SPRITES.get("hazmat_trooper", "")).is_empty(), "Hazmat cosmetic appearance has its own texture")
 	for cls_id in AssetRegistry.PLAYER_ANIMATED_CLASSES:
 		for action in AssetRegistry.PLAYER_ANIMATION_COUNTS.keys():
 			var max_frame: int = int(AssetRegistry.PLAYER_ANIMATION_COUNTS[action])

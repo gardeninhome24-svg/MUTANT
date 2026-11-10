@@ -18,8 +18,13 @@ on:
       - "scenes/ui/main_menu.tscn"
       # Battle and art changes need actual renders, not only a headless APK.
       - "scripts/mutant_enemy.gd"
+      - "scripts/player.gd"
+      - "scripts/asset_registry.gd"
       - "scripts/power_effects.gd"
       - "addons/ms_beta/wave_director.gd"
+      - "assets/characters/**"
+      - "assets/enemies/**"
+      - "assets/bosses/**"
 
 permissions:
   contents: read

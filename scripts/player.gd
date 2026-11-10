@@ -158,6 +158,17 @@ func apply_class_and_talents(reset_full_hp: bool = false) -> void:
 			for fi in range(1, 7):
 				var dt := AssetRegistry.get_player_animation_frame(cls_id, "death", fi)
 				if dt: death_frames.append(dt)
+			# Cosmetic operator skins are standalone portraits without their
+			# own 25-frame kit. Never overwrite the purchased skin art with
+			# the base class frames during movement, firing or taking damage.
+			if StageDirector.selected_skin_id != "default" and not String(AssetRegistry.SKIN_SPRITES.get(StageDirector.selected_skin_id, "")).is_empty():
+				walk_frames.clear()
+				shoot_frames.clear()
+				idle_frames.clear()
+				hurt_frames.clear()
+				death_frames.clear()
+				has_frame_anim = false
+				use_soldier_frame_anim = false
 
 		if not is_instance_valid(auto_skill_ctrl):
 			auto_skill_ctrl = MSAutoSkillController.new()
