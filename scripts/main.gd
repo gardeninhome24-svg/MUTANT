@@ -569,6 +569,7 @@ func _build_layered_arena(stage_num: int) -> void:
 
 	# 2. Warstwa Dekoracji i Celów Misji (zgodnie z objective_scene_contracts.json)
 	primary_objective_type = String(cfg.get("scene_type", "activate_terminal"))
+	primary_objective_required_sec = 2.5
 	# Campaign v2 defines the actual target, not a generic terminal hold.
 	var story_objectives: Array = cfg.get("objectives_v2", [])
 	for story_obj in story_objectives:
@@ -577,6 +578,8 @@ func _build_layered_arena(stage_num: int) -> void:
 				data_cores_total = mini(3, maxi(1, int(story_obj.get("count", 3))))
 			elif String(story_obj.get("type", "")) == "clear_elites":
 				objective_elites_required = maxi(1, int(story_obj.get("count", 2)))
+			elif String(story_obj.get("type", "")) == "survive_hazard":
+				primary_objective_required_sec = maxf(1.0, float(story_obj.get("count", 90)))
 	_spawn_primary_mission_target(beacon_world_pos, primary_objective_type)
 	_spawn_data_cores_and_medkits()
 	_spawn_lamp_posts()
@@ -942,9 +945,11 @@ func _process(delta: float) -> void:
 		_last_wave_banner_second = displayed_second
 		_update_wave_banner()
 	_update_active_power_buttons()
+	if primary_objective_type == "survive_hazard" and not primary_objective_done:
+		_advance_hazard_survival(delta)
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if primary_objective_type == "defend_node":
 			# Cap effective attackers so high spawn density cannot erase a
@@ -1012,6 +1017,20 @@ func _process(delta: float) -> void:
 			var enemies_count := get_tree().get_nodes_in_group("enemies").size()
 			if enemies_count < max_active:
 				spawn_wave_enemy()
+
+func _advance_hazard_survival(delta: float) -> void:
+	# This objective measures active survival time; the player is free
+	# to dodge threats instead of standing at a generic console.
+	if run_result_state != "active" or primary_objective_done or primary_objective_type != "survive_hazard":
+		return
+	primary_objective_progress = minf(primary_objective_required_sec, primary_objective_progress + maxf(0.0, delta))
+	if is_instance_valid(primary_objective_bar):
+		primary_objective_bar.value = primary_objective_progress
+	if primary_objective_progress >= primary_objective_required_sec:
+		_complete_primary_objective()
+	else:
+		_update_objectives_ui()
+
 
 func _complete_primary_objective() -> void:
 	if primary_objective_done or run_result_state != "active":
