@@ -165,7 +165,7 @@ func _ready() -> void:
 	if radar:
 		radar.player_ref = player
 		radar.beacon_world_pos = beacon_world_pos
-		radar.show_beacon = not (primary_objective_type in ["collect_item", "clear_elites", "survive_hazard"])
+		radar.show_beacon = not (primary_objective_type in ["collect_item", "clear_elites", "survive_hazard", "destroy_target"])
 
 	if not player.health_changed.is_connected(_on_player_health_changed):
 		player.health_changed.connect(_on_player_health_changed)
@@ -584,7 +584,7 @@ func _build_layered_arena(stage_num: int) -> void:
 				objective_elites_required = maxi(1, int(story_obj.get("count", 2)))
 			elif String(story_obj.get("type", "")) == "survive_hazard":
 				primary_objective_required_sec = maxf(1.0, float(story_obj.get("count", 90)))
-			elif String(story_obj.get("type", "")) == "repair_generator":
+			elif String(story_obj.get("type", "")) in ["repair_generator", "destroy_target"]:
 				objective_steps_required = maxi(1, int(story_obj.get("count", 2)))
 	if primary_objective_type == "escort":
 		primary_objective_required_sec = beacon_world_pos.distance_to(escort_destination)
@@ -615,6 +615,39 @@ func _build_layered_arena(stage_num: int) -> void:
 		_create_obstacle_prop(p_id, anchor_positions[i])
 
 	spawn_hazard_barrels()
+	if primary_objective_type == "destroy_target":
+		_spawn_mission_destructibles()
+
+func _spawn_mission_destructibles() -> void:
+	# These are genuine shootable objects, not a proximity progress bar.
+	# Spawn after ordinary barrels so the arena reset does not remove them.
+	var positions: Array[Vector2] = [
+		Vector2(-440, -140), Vector2(430, 130), Vector2(0, 310)
+	]
+	for i in range(mini(objective_steps_required, positions.size())):
+		var target_barrel: ExplosiveBarrel = EXPLOSIVE_BARREL_SCENE.instantiate() as ExplosiveBarrel
+		target_barrel.position = positions[i]
+		target_barrel.max_health = 90.0 + current_stage_num * 2.0
+		target_barrel.set_meta("mission_target", true)
+		obstacles_layer.add_child(target_barrel)
+		var target_sprite: Sprite2D = target_barrel.get_node_or_null("Sprite2D") as Sprite2D
+		if is_instance_valid(target_sprite):
+			target_sprite.texture = AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/props/mutation_tank.png")
+			target_sprite.scale = Vector2(0.8, 0.8)
+		target_barrel.exploded.connect(_on_mission_destructible_exploded)
+
+
+func _on_mission_destructible_exploded(target: ExplosiveBarrel) -> void:
+	if primary_objective_type != "destroy_target" or run_result_state != "active":
+		return
+	if not is_instance_valid(target) or not target.has_meta("mission_target"):
+		return
+	objective_steps_done = mini(objective_steps_required, objective_steps_done + 1)
+	if objective_steps_done >= objective_steps_required:
+		_complete_primary_objective()
+	else:
+		_update_objectives_ui()
+
 
 func _create_obstacle_prop(prop_id: String, world_pos: Vector2) -> void:
 	var spec: Dictionary = AssetRegistry.PROP_ASSETS.get(prop_id, {})
@@ -941,6 +974,8 @@ func _update_objectives_ui() -> void:
 		obj1_label.text = "%s DNA %d/%d" % [c1, data_cores_collected, data_cores_total]
 	elif primary_objective_type == "clear_elites":
 		obj1_label.text = "%s Elity %d/%d" % [c1, objective_elites_defeated, objective_elites_required]
+	elif primary_objective_type == "destroy_target":
+		obj1_label.text = "%s Inkubatory %d/%d" % [c1, objective_steps_done, objective_steps_required]
 	elif primary_objective_type == "repair_generator":
 		obj1_label.text = "%s Generatory %d/%d (%d%%)" % [c1, objective_steps_done, objective_steps_required, pct]
 	elif primary_objective_type == "escort":
@@ -969,7 +1004,7 @@ func _process(delta: float) -> void:
 		_advance_hazard_survival(delta)
 
 	# Interaktywny postęp celu głównego na mapie (terminal / generator / eskorta / obrona węzła / zniszczenie)
-	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
+	if not primary_objective_done and not (primary_objective_type in ["defeat_boss", "collect_item", "clear_elites", "survive_hazard", "destroy_target"]) and is_instance_valid(primary_objective_area) and is_instance_valid(player):
 		var dist_to_obj := player.global_position.distance_to(primary_objective_area.global_position)
 		if primary_objective_type == "defend_node":
 			# Cap effective attackers so high spawn density cannot erase a
