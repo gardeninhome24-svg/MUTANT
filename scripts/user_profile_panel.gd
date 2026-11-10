@@ -2353,6 +2353,7 @@ func _build_tab_daily_rewards() -> Control:
 	bp_card.add_child(bp_vbox)
 
 	bp_label = Label.new()
+	bp_label.name = "BattlePassHeading"
 	bp_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bp_label.add_theme_font_size_override("font_size", 13)
 	bp_label.add_theme_color_override("font_color", Color(0.88, 0.62, 1.0))
