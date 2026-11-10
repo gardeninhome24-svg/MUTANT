@@ -130,7 +130,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile tools/boss_art_pack.py
+          python3 -m py_compile tools/boss_art_pack.py tools/boss_art_geometry.py
+          python3 tools/boss_art_geometry.py --self-test
           python3 tools/boss_art_pack.py --self-test
           # The optional 66 PNGs are supplied separately; CI must not confuse
           # fallback rendering with validation of the unbundled generated art.

@@ -69,6 +69,12 @@ def inspect_zip(path):
             chapter_paths = [n for n in EXPECTED if f"boss_ch{chapter:02d}/" in n]
             if len(set(checksums[n] for n in chapter_paths)) < 6:
                 raise ValueError(f"Boss {chapter}: repeated frames indicate an incomplete set")
+        # Enforce geometry consistency; a structurally valid ZIP can still
+        # contain a cropped or shrunken animation frame.
+        from boss_art_geometry import analyze_zip
+        geometry_errors, _ = analyze_zip(path)
+        if geometry_errors:
+            raise ValueError("Boss sprite geometry rejected: " + "; ".join(geometry_errors[:4]))
         return checksums
 
 

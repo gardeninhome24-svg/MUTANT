@@ -36,3 +36,16 @@ py -3 tools/boss_art_pack.py --zip "..\\MUTANT_Boss_05_10_Godot_Assets_v2.zip" -
 Zmień ścieżkę projektu, jeśli lokalna kopia znajduje się w innym folderze. Instalator wymaga `project.godot`, sprawdza **66 plików, 6 katalogów, 8-bit RGBA PNG, rozdzielczości klatek i unikalność obrazów** oraz odrzuca niekompletny pakiet. Nie rozpakowuje dowolnych ścieżek z ZIP. Jeśli klatki były wcześniej zainstalowane, użyj `--replace` po wykonaniu kopii zapasowej katalogu zasobów.
 
 Uwaga: wersja **v2 normalizuje położenie stóp i wielkość większości klatek**, ale generator grafik nie zapewnia w pełni jednolitej geometrii każdego bossa. Szczególnej ręcznej kontroli wymaga rozdział 8. Samo przejście instalatora **nie dowodzi 97% zgodności wizualnej**.
+
+## Wersja v3 — kontrola geometrii i rozmiaru postaci
+
+Pakiet `MUTANT_Boss_05_10_Godot_Assets_v3.zip` poprawia rozdział 8: w poprzednich klatkach ataku brakowało fragmentów postaci. Klatki v3 opierają się na kompletnej sylwetce tej samej postaci i delikatnych efektach broni, z zachowaniem poziomu stóp. **To etap przejściowy, a nie docelowa ręczna animacja.**
+
+Instalator sprawdza teraz nie tylko format i liczbę plików, lecz również przezroczyste obszary, proporcje sylwetki pomiędzy klatkami, wysokość ataku względem ruchu i wyrównanie stóp. Plik kontrolny `tools/boss_art_geometry.py` potrafi wykonać osobny audyt:
+
+```powershell
+py -3 tools/boss_art_geometry.py --zip ".\\MUTANT_Boss_05_10_Godot_Assets_v3.zip" --report boss_geometry_report.json
+py -3 tools/boss_art_pack.py --zip ".\\MUTANT_Boss_05_10_Godot_Assets_v3.zip" --install
+```
+
+Nie używaj już starszego ZIP v2 do instalacji, ponieważ zawiera niezgodne rozmiary postaci w rozdziale 8. Zielony wynik CI bez nowych PNG oznacza, że działa kod oraz test awaryjnych grafik, a nie że wszystkie nowe klatki występują już w APK. Zgodność 97% nadal wymaga niezależnego porównania artystycznego i prawdziwych screenów.
