@@ -108,6 +108,9 @@ var data_cores_collected: int = 0
 var data_cores_total: int = 3
 var objective_elites_defeated: int = 0
 var objective_elites_required: int = 2
+var objective_steps_done: int = 0
+var objective_steps_required: int = 1
+var escort_destination: Vector2 = Vector2(0, -340)
 var enemies_killed_in_run: int = 0
 var solid_obstacle_positions: Array[Vector2] = []
 
@@ -570,6 +573,7 @@ func _build_layered_arena(stage_num: int) -> void:
 	# 2. Warstwa Dekoracji i Celów Misji (zgodnie z objective_scene_contracts.json)
 	primary_objective_type = String(cfg.get("scene_type", "activate_terminal"))
 	primary_objective_required_sec = 2.5
+	objective_steps_required = 1
 	# Campaign v2 defines the actual target, not a generic terminal hold.
 	var story_objectives: Array = cfg.get("objectives_v2", [])
 	for story_obj in story_objectives:
@@ -580,6 +584,10 @@ func _build_layered_arena(stage_num: int) -> void:
 				objective_elites_required = maxi(1, int(story_obj.get("count", 2)))
 			elif String(story_obj.get("type", "")) == "survive_hazard":
 				primary_objective_required_sec = maxf(1.0, float(story_obj.get("count", 90)))
+			elif String(story_obj.get("type", "")) == "repair_generator":
+				objective_steps_required = maxi(1, int(story_obj.get("count", 2)))
+	if primary_objective_type == "escort":
+		primary_objective_required_sec = beacon_world_pos.distance_to(escort_destination)
 	_spawn_primary_mission_target(beacon_world_pos, primary_objective_type)
 	# These missions have world pickups, enemy targets or a survival timer.
 	# A fake central console and its radar marker would mislead players.
@@ -812,6 +820,7 @@ func start_stage(stage_num: int) -> void:
 	primary_objective_max_hp = 300.0
 	data_cores_collected = 0
 	objective_elites_defeated = 0
+	objective_steps_done = 0
 	enemies_killed_in_run = 0
 	has_used_revive = false
 	run_result_state = "active"
@@ -932,6 +941,10 @@ func _update_objectives_ui() -> void:
 		obj1_label.text = "%s DNA %d/%d" % [c1, data_cores_collected, data_cores_total]
 	elif primary_objective_type == "clear_elites":
 		obj1_label.text = "%s Elity %d/%d" % [c1, objective_elites_defeated, objective_elites_required]
+	elif primary_objective_type == "repair_generator":
+		obj1_label.text = "%s Generatory %d/%d (%d%%)" % [c1, objective_steps_done, objective_steps_required, pct]
+	elif primary_objective_type == "escort":
+		obj1_label.text = "%s Eskorta %d%%" % [c1, pct]
 	elif primary_objective_type == "defeat_boss":
 		obj1_label.text = "%s Boss (%d/1)" % [c1, 1 if primary_objective_done else 0] if StageDirector.is_portrait_mode() else "%s %s (%d/1)" % [c1, obj_pl, 1 if primary_objective_done else 0]
 	elif primary_objective_type == "defend_node":
@@ -978,15 +991,31 @@ func _process(delta: float) -> void:
 					_on_player_died()
 					return
 		if dist_to_obj <= 115.0:
-			primary_objective_progress = minf(primary_objective_required_sec, primary_objective_progress + delta)
 			if primary_objective_type == "escort":
-				primary_objective_area.position = primary_objective_area.position.move_toward(Vector2(0, -340), 75.0 * delta)
+				var old_position: Vector2 = primary_objective_area.position
+				primary_objective_area.position = old_position.move_toward(escort_destination, 75.0 * delta)
+				primary_objective_progress = minf(primary_objective_required_sec,
+					primary_objective_progress + old_position.distance_to(primary_objective_area.position))
 				if radar:
 					radar.beacon_world_pos = primary_objective_area.position
+			else:
+				primary_objective_progress = minf(primary_objective_required_sec, primary_objective_progress + delta)
 			if is_instance_valid(primary_objective_bar):
 				primary_objective_bar.value = primary_objective_progress
-			if primary_objective_progress >= primary_objective_required_sec:
-				_complete_primary_objective()
+			if primary_objective_progress >= primary_objective_required_sec or (primary_objective_type == "escort" and primary_objective_area.position.distance_to(escort_destination) <= 0.5):
+				if primary_objective_type == "repair_generator" and objective_steps_done + 1 < objective_steps_required:
+					objective_steps_done += 1
+					primary_objective_progress = 0.0
+					primary_objective_area.position = Vector2(-280, 190)
+					if radar:
+						radar.beacon_world_pos = primary_objective_area.position
+					if is_instance_valid(primary_objective_bar):
+						primary_objective_bar.value = 0.0
+				else:
+					if primary_objective_type == "repair_generator":
+						objective_steps_done = objective_steps_required
+					_complete_primary_objective()
+			_update_objectives_ui()
 
 	# Zagrożenia środowiskowe biomu (acid_spots, cryo_vent, sewer_gas, falling_debris, radiation_pulse)
 	hazard_timer += delta
