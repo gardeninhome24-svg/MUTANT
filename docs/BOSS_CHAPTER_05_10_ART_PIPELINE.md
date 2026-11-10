@@ -60,3 +60,6 @@ Workflow `MutantSurvivor Phone Resolution Screenshots` renderuje dodatkowo dwa z
 Każdy boss pokazuje cztery stany: pierwszą i ostatnią klatkę ruchu, trzecią klatkę ataku i końcową klatkę śmierci. Obok jest status `NOWE PNG (kandydat)` albo `FALLBACK / stare PNG`. Plik `boss_art_status.txt` informuje, ile z sześciu nowych zestawów rzeczywiście załadował Godot.
 
 **Ważne:** ten test nie mierzy 97% zgodności wizualnej. Jest testem obrazu i integracji. Dopóki PNG nie zostaną dodane do repozytorium lub podane do środowiska testowego, zrzuty pokazują fallback i raport wskazuje `NEW_BOSS_PACKS_ACTIVE=0/6`.
+
+
+Podgląd bossów zawiera też **portret źródłowy obok klatek animacji**, aby wykryć sytuacje, gdy animacje są błędnie wycięte z atlasu, a portret jest poprawny. Zielony import pliku nie oznacza, że klatka zawiera pojedynczą postać.

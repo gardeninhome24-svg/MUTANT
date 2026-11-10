@@ -45,8 +45,11 @@ func _boss_row(chapter: int) -> PanelContainer:
 	var deaths: Array = info.get("death_frames", [])
 	var candidate: bool = AssetRegistry.has_complete_chapter_boss_art(boss_id)
 	var status: String = "NOWE PNG (kandydat)" if candidate else "FALLBACK / stare PNG"
+	var source_dir: String = AssetRegistry.get_candidate_boss_directory(boss_id) if candidate else "res://assets/bosses/" + String(AssetRegistry.BOSS_CHAPTER_FALLBACK_KITS[boss_id]) + "/"
+	var fallback_portrait: Texture2D = AssetRegistry.get_tex(source_dir + "boss_portrait.png")
 	rows.append({"chapter": chapter, "candidate": candidate, "status": status,
-		"walk": walk.size(), "attack": attacks.size(), "death": deaths.size()})
+		"walk": walk.size(), "attack": attacks.size(), "death": deaths.size(),
+		"portrait": fallback_portrait != null})
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size.y = 314.0
 	var style := StyleBoxFlat.new()
@@ -67,8 +70,8 @@ func _boss_row(chapter: int) -> PanelContainer:
 		printerr("BOSS GALLERY ERROR: incomplete frames " + boss_id)
 		row.add_child(_build_label("BRAK KOMPLETU KLATEK", 19, Color.RED))
 	else:
+		row.add_child(_image_column(fallback_portrait, "Portret"))
 		row.add_child(_image_column(walk[0], "Ruch 1"))
-		row.add_child(_image_column(walk[3], "Ruch 4"))
 		row.add_child(_image_column(attacks[2], "Atak 3"))
 		row.add_child(_image_column(deaths[1], "Smierc 2"))
 	sprite.free()
@@ -119,8 +122,8 @@ func _capture() -> void:
 	for item in rows:
 		if item["candidate"]:
 			candidates += 1
-		report.store_line("boss_ch%02d: %s, movement=%d attack=%d death=%d" % [
-			item["chapter"], item["status"], item["walk"], item["attack"], item["death"]])
+		report.store_line("boss_ch%02d: %s, portrait=%s movement=%d attack=%d death=%d" % [
+			item["chapter"], item["status"], str(item["portrait"]), item["walk"], item["attack"], item["death"]])
 	report.store_line("NEW_BOSS_PACKS_ACTIVE=%d/6" % candidates)
 	report.store_line("NOTE: Godot render / Xvfb, not physical phone or 97%% style verification.")
 	report.close()
