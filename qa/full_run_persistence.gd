@@ -321,6 +321,53 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 8: the player must repair TWO generator locations, not one.
+	stage.current_stage = 8
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "repair_generator", "Stage 8 requires generator repairs")
+	_check(int(battle.get("objective_steps_required")) == 2, "Stage 8 reads two repairs from contract")
+	var repair_area: Area2D = battle.get("primary_objective_area") as Area2D
+	var repair_player: Node2D = battle.get("player") as Node2D
+	if is_instance_valid(repair_area) and is_instance_valid(repair_player):
+		repair_player.global_position = repair_area.global_position
+		battle.call("_process", 3.0)
+		_check(int(battle.get("objective_steps_done")) == 1, "First repair increments the generator counter")
+		_check(not bool(battle.get("primary_objective_done")), "One of two repairs never completes the mission")
+		_check(repair_area.position.distance_to(Vector2(-280, 190)) < 1.0, "Second generator requires visiting a separate location")
+		repair_player.global_position = repair_area.global_position
+		battle.call("_process", 3.0)
+		_check(int(battle.get("objective_steps_done")) == 2, "Second generator is repaired")
+		_check(bool(battle.get("primary_objective_done")), "Two repairs complete the stage-eight objective")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
+	# Stage 6: escort requires actual travel to the extraction destination.
+	stage.current_stage = 6
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "escort", "Stage 6 is an escort operation")
+	var escort_area: Area2D = battle.get("primary_objective_area") as Area2D
+	var escort_player: Node2D = battle.get("player") as Node2D
+	if is_instance_valid(escort_area) and is_instance_valid(escort_player):
+		var escort_origin: Vector2 = escort_area.global_position
+		escort_player.global_position = escort_origin
+		battle.call("_process", 0.25)
+		_check(not bool(battle.get("primary_objective_done")), "Escort cannot complete after a stationary quarter-second")
+		for step in range(12):
+			escort_player.global_position = escort_area.global_position
+			battle.call("_process", 0.5)
+		_check(escort_area.global_position.distance_to(escort_origin) > 350.0, "Escort unit travels across the arena")
+		_check(bool(battle.get("primary_objective_done")), "Escort finishes only upon reaching extraction")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
