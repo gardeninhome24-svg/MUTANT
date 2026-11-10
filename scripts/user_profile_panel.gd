@@ -176,6 +176,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	color = Color(0.02, 0.04, 0.08, 0.0 if embedded_in_hub else 0.92)
 	_build_ui()
+	_apply_approved_profile_style()
 	_setup_store_confirmation()
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
@@ -183,6 +184,36 @@ func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_apply_responsive_metrics):
 		get_viewport().size_changed.connect(_apply_responsive_metrics)
 	refresh_ui()
+
+func _apply_approved_profile_style() -> void:
+	# Reuse the same approved metal/cyan/lime language in equipment,
+	# campaign, daily rewards and premium shop. Keep all original controls.
+	if is_instance_valid(main_card):
+		var shell := StyleBoxFlat.new()
+		shell.bg_color = Color(0.012, 0.031, 0.052, 0.94)
+		shell.border_color = Color(0.18, 0.76, 0.94, 0.90)
+		shell.set_border_width_all(2)
+		shell.set_corner_radius_all(12)
+		shell.set_content_margin_all(10)
+		main_card.add_theme_stylebox_override("panel", shell)
+	if is_instance_valid(tab_bg_tex):
+		# Leave the approved scenic illustration visible as a subdued layer.
+		tab_bg_tex.modulate = Color(0.60, 0.76, 0.84, 0.40)
+	for section in [find_child("CampaignMainCard", true, false), find_child("StoreDepotBanner", true, false)]:
+		if section is PanelContainer:
+			var frame := StyleBoxFlat.new()
+			frame.bg_color = Color(0.018, 0.044, 0.067, 0.97)
+			frame.border_color = Color(0.14, 0.71, 0.92, 0.91)
+			frame.set_border_width_all(2)
+			frame.set_corner_radius_all(11)
+			frame.set_content_margin_all(8)
+			(section as PanelContainer).add_theme_stylebox_override("panel", frame)
+	for header in [find_child("CampaignMainTitle", true, false), find_child("DailyRewardsHeading", true, false), find_child("DailyMissionHeading", true, false)]:
+		if header is Label:
+			(header as Label).add_theme_color_override("font_color", Color(0.94, 0.97, 0.99))
+			(header as Label).add_theme_color_override("font_outline_color", Color(0.01, 0.025, 0.04))
+			(header as Label).add_theme_constant_override("outline_size", 2)
+
 
 func _on_orientation_changed(_is_portrait: bool) -> void:
 	_apply_responsive_metrics()
