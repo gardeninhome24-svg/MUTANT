@@ -106,6 +106,12 @@ func _run() -> void:
 		_assert(equipment_button.has_theme_stylebox_override("normal"), "Selected equipment tab stays visually styled")
 		menu.call("switch_hub_tab", 0)
 
+	_assert(ResourceLoader.exists("res://assets/ui/approved/mission_card_frame.svg", "Texture2D"),
+		"Approved cyan steel mission frame imports as a real Godot texture")
+	var mission_card_panel: PanelContainer = menu.get("stage_card") as PanelContainer
+	if is_instance_valid(mission_card_panel):
+		_assert(mission_card_panel.has_theme_stylebox_override("panel"),
+			"Approved mission art is applied to the live campaign card")
 	var card: Control = menu.get("stage_card") as Control
 	var play: Button = menu.get("play_big_btn") as Button
 	var hero: Control = menu.get("hero_spacer_control") as Control
