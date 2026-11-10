@@ -631,6 +631,63 @@ func _parse_save_dictionary(raw: String) -> Dictionary:
 	var data: Variant = parser.data
 	return data if data is Dictionary else {}
 
+func _write_verified_save(path: String, serialized: String) -> bool:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot open campaign save: " + path)
+		return false
+	file.store_string(serialized)
+	file.flush()
+	file.close()
+	if not FileAccess.file_exists(path):
+		return false
+	var read_back := FileAccess.get_file_as_string(path)
+	if read_back != serialized or _parse_save_dictionary(read_back).is_empty():
+		push_error("Campaign save verification failed: " + path)
+		return false
+	return true
+
+
+func _remove_save_path(path: String) -> bool:
+	if not FileAccess.file_exists(path):
+		return true
+	return DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK
+
+
+func _rename_save_path(source: String, target: String) -> bool:
+	return DirAccess.rename_absolute(ProjectSettings.globalize_path(source), ProjectSettings.globalize_path(target)) == OK
+
+
+func _commit_campaign_save(path: String, serialized: String) -> bool:
+	# 1. Stage complete JSON before replacing the current file.
+	var pending: String = path + ".tmp"
+	if not _write_verified_save(pending, serialized):
+		return false
+	# 2. Preserve the last valid primary; invalid primary must never replace
+	#    a good backup. Staging the backup also avoids a partial .bak write.
+	var previous_valid: String = ""
+	if FileAccess.file_exists(path):
+		var previous_raw := FileAccess.get_file_as_string(path)
+		if not _parse_save_dictionary(previous_raw).is_empty():
+			previous_valid = previous_raw
+	if not previous_valid.is_empty():
+		var backup_staging := path + ".bak.tmp"
+		if not _write_verified_save(backup_staging, previous_valid):
+			return false
+		if not _remove_save_path(path + ".bak") or not _rename_save_path(backup_staging, path + ".bak"):
+			push_error("Campaign backup promotion failed")
+			return false
+	# 3. Some platforms do not support renaming over an existing file.
+	#    A validated .bak is already durable before we remove the primary.
+	if not _remove_save_path(path):
+		push_error("Cannot replace campaign save: " + path)
+		return false
+	if not _rename_save_path(pending, path):
+		push_error("Campaign save promotion failed; backup remains available")
+		return false
+	return true
+
+
 func save_campaign_profile() -> void:
 	_sync_active_class_to_dict()
 	var data := {
@@ -677,24 +734,8 @@ func save_campaign_profile() -> void:
 		"pity_chest_counter": pity_chest_counter
 	}
 	var path := get_active_save_path()
-	# Preserve the last valid save before replacing the primary file.
-	# This lets beta users recover from interrupted writes/corrupt JSON.
-	if FileAccess.file_exists(path):
-		var previous_raw := FileAccess.get_file_as_string(path)
-		if not _parse_save_dictionary(previous_raw).is_empty():
-			var backup_file := FileAccess.open(path + ".bak", FileAccess.WRITE)
-			if backup_file:
-				backup_file.store_string(previous_raw)
-				backup_file.flush()
-				backup_file.close()
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(data, "\t"))
-		f.flush()
-		f.close()
-	else:
-		push_error("Cannot write campaign save file: " + path)
-	emit_signal("profile_data_changed")
+	if _commit_campaign_save(path, JSON.stringify(data, "\t")):
+		emit_signal("profile_data_changed")
 
 func load_campaign_profile() -> void:
 	var path := get_active_save_path()
@@ -705,6 +746,12 @@ func load_campaign_profile() -> void:
 		data = _parse_save_dictionary(FileAccess.get_file_as_string(path + ".bak"))
 		if data is Dictionary and not data.is_empty():
 			push_warning("Restored valid campaign save from backup")
+	# A crash could occur after staging the new save but before the final
+	# rename. Recover verified .tmp only when no usable primary or backup exists.
+	if (not (data is Dictionary) or data.is_empty()) and FileAccess.file_exists(path + ".tmp"):
+		data = _parse_save_dictionary(FileAccess.get_file_as_string(path + ".tmp"))
+		if data is Dictionary and not data.is_empty():
+			push_warning("Recovered interrupted campaign save from temporary file")
 	if data is Dictionary and not data.is_empty():
 		max_unlocked_stage = clampi(int(data.get("max_unlocked_stage", 1)), 1, 100)
 		current_stage = clampi(int(data.get("current_stage", 1)), 1, max_unlocked_stage)

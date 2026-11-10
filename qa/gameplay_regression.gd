@@ -43,8 +43,10 @@ func _run() -> void:
 	_test_rewards()
 	await _test_combat_and_bosses()
 	# Test files live only inside the CI runner, never inside an APK.
-	if FileAccess.file_exists(path):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	for suffix in ["", ".bak", ".tmp", ".bak.tmp"]:
+		var disposable := path + suffix
+		if FileAccess.file_exists(disposable):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(disposable))
 	_finish()
 
 func _test_character_art_sequences() -> void:
@@ -241,6 +243,34 @@ func _test_equipment_and_save() -> void:
 	stage.load_campaign_profile()
 	_assert(stage.credits == credits_safe, "Corrupted save recovers last valid campaign backup")
 	_assert(not stage.get_item_instance("qa_weapon").is_empty(), "Backup restores equipment after corruption")
+	# Interrupted transactional writes: only .tmp remains valid and the
+	# primary is corrupt. Keep real player data untouched (qa override).
+	var save_path: String = stage.get_active_save_path()
+	var current_valid: String = FileAccess.get_file_as_string(save_path + ".bak")
+	_assert(not current_valid.is_empty(), "Backup is populated with a valid previous save")
+	stage._remove_save_path(save_path + ".bak")
+	var staged_file := FileAccess.open(save_path + ".tmp", FileAccess.WRITE)
+	_assert(staged_file != null, "Interrupted-write fixture can be created")
+	if staged_file:
+		staged_file.store_string(current_valid)
+		staged_file.close()
+	stage.credits = 0
+	stage.load_campaign_profile()
+	_assert(stage.credits == credits_safe, "Interrupted write loads complete staged JSON")
+	_assert(not stage.get_item_instance("qa_weapon").is_empty(), "Interrupted write recovers equipped item data")
+	# Saving again promotes the recovered data to the primary file.
+	stage.save_campaign_profile()
+	_assert(not stage._parse_save_dictionary(FileAccess.get_file_as_string(save_path)).is_empty(), "Recovery rewrites validated primary save")
+	_assert(not FileAccess.file_exists(save_path + ".tmp"), "Successful save consumes pending transaction")
+	# Ensure stale .tmp cannot override a valid primary or its backup.
+	var stale := FileAccess.open(save_path + ".tmp", FileAccess.WRITE)
+	if stale:
+		stale.store_string('{ "credits": 1, "current_stage": 1 }')
+		stale.close()
+	stage.credits = 0
+	stage.load_campaign_profile()
+	_assert(stage.credits == credits_safe, "Valid primary outranks stale temporary save")
+	stage._remove_save_path(save_path + ".tmp")
 	# Daily pack can be claimed once per UTC day, then returns after the date changes.
 	stage.daily_reset_day = int(Time.get_unix_time_from_system() / 86400)
 	stage.daily_free_pack_claimed = false

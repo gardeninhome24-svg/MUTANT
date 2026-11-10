@@ -53,3 +53,8 @@ No changes should be called "verified" solely because APK export passes.
 The Android workflow produces **debug** APKs for testing. Do not use this as a
 public-release signing or app-store pipeline. Android screenshots and gesture
 behavior must be checked on devices; headless CI cannot verify visual polish.
+
+
+## Transakcyjny zapis kampanii
+
+Zapis `user://mutant_campaign_save.json` nie jest już nadpisywany bezpośrednio bez walidacji. Gra zapisuje i weryfikuje `.tmp`, następnie chroni poprzedni poprawny zapis jako `.bak` i dopiero promuje nową wersję. Przy uruchomieniu obowiązuje kolejność: **poprawny główny zapis → poprawny backup → poprawny plik tymczasowy**. Niekompletny lub wadliwy główny plik nie powinien trwale zniszczyć postępów. Testy obejmują symulowane przerwanie zapisu, recovery z backupu, stare pliki .tmp i atomowe zatwierdzanie. Nadal należy przetestować zabicie procesu na prawdziwym Androidzie podczas zapisu.
