@@ -175,6 +175,15 @@ if missing_boss_frames or invalid_boss_frames:
 else:
     passed.append("All 66 chapter 5–10 boss sprites pass dimensions, PNG and duplicate-frame checks; visual review still required")
 
+# Procedural candidate sprites must never be treated as final release art,
+# even when they satisfy all 66 PNG/geometry checks.
+candidate_marker = ROOT / "assets" / "bosses" / "ART_CANDIDATE.txt"
+if candidate_marker.exists():
+    block("Boss art visual approval",
+          "Chapter 5-10 sprites are generated candidates made from existing "
+          "reference silhouettes; replace or explicitly approve their art "
+          "and animation before deleting ART_CANDIDATE.txt and signing AAB")
+
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
     block("Release AAB pipeline", "No separate signed Google Play AAB workflow found")
