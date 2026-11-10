@@ -30,7 +30,26 @@ jobs:
           cp -a /root/.local/share/godot/export_templates/4.7.2.stable/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
           cp -a /root/.config/godot/. "$HOME/.config/godot/"
           test -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_source.zip"
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          yes | sdkmanager --licenses >/dev/null || true
+          install_android_component() {
+            local package="$1"
+            local expected="$2"
+            local partial="$3"
+            for attempt in 1 2 3 4; do
+              echo "Installing $package (attempt $attempt/4)"
+              if sdkmanager --sdk_root="$ANDROID_HOME" "$package" && test -e "$expected"; then
+                return 0
+              fi
+              echo "::warning::Android SDK package $package corrupt or incomplete (attempt $attempt)"
+              rm -rf "$ANDROID_HOME/.temp" "$partial"
+              sleep $((attempt * 5))
+            done
+            echo "::error::Could not install Android SDK package $package"
+            return 1
+          }
+          install_android_component "platforms;android-36" "$ANDROID_HOME/platforms/android-36/android.jar" "$ANDROID_HOME/platforms/android-36"
+          install_android_component "build-tools;36.0.0" "$ANDROID_HOME/build-tools/36.0.0/apksigner" "$ANDROID_HOME/build-tools/36.0.0"
+          test -x "$ANDROID_HOME/build-tools/36.0.0/apksigner"
           godot --version
 
       - name: Install AAB preflight and archive verification dependencies
