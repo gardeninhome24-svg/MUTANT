@@ -454,9 +454,15 @@ theme_override_font_sizes/font_size = 28
 text = "⚡ AWANS W RUNIE! WYBIERZ MODUŁ BOJOWY ⚡"
 horizontal_alignment = 1
 
-[node name="CardsContainer" type="HBoxContainer" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
+[node name="UpgradeScroll" type="ScrollContainer" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
+custom_minimum_size = Vector2(650, 274)
 layout_mode = 2
-theme_override_constants/separation = 20
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 0
+
+[node name="CardsContainer" type="HBoxContainer" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll"]
+layout_mode = 2
+theme_override_constants/separation = 12
 alignment = 1
 
 [node name="RerollBtn" type="Button" parent="HUD/HUDRoot/UpgradePanel/CenterContainer/VBox"]
