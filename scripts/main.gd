@@ -1249,12 +1249,13 @@ func _on_enemy_died(enemy: MutantEnemy) -> void:
 	_update_objectives_ui()
 	# Only the chapter's contracted elites count; incidental elite spawns
 	# may still grant XP but cannot complete this story objective.
-	var required_elite_id: String = "elite_ch%02d_stage07" % int(StageDirector.get_stage_config(current_stage_num).get("chapter", 1))
-	if primary_objective_type == "clear_elites" and enemy.tier == "miniboss" and enemy.enemy_id == required_elite_id:
-		objective_elites_defeated = mini(objective_elites_required, objective_elites_defeated + 1)
-		if objective_elites_defeated >= objective_elites_required:
-			_complete_primary_objective()
-		_update_objectives_ui()
+	if primary_objective_type == "clear_elites" and enemy.tier == "miniboss":
+		var required_elite_id: String = "elite_ch%02d_stage07" % int(StageDirector.get_stage_config(current_stage_num).get("chapter", 1))
+		if enemy.enemy_id == required_elite_id:
+			objective_elites_defeated = mini(objective_elites_required, objective_elites_defeated + 1)
+			if objective_elites_defeated >= objective_elites_required:
+				_complete_primary_objective()
+			_update_objectives_ui()
 	if enemy == active_boss:
 		# A wave-five elite is displayed in the boss HUD, but must never
 		# complete the final chapter boss objective or victory gate.
