@@ -1182,7 +1182,7 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, minf(size.x, get_viewport_rect().size.x) - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), 320.0 if portrait else 330.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (300.0 if compact_hub else 320.0) if portrait else 330.0)
 	# Compress intrinsic child minimum widths before the 420px screenshot:
 	# a wide title/navigation row used to force the whole card to 480px.
 	if is_instance_valid(stage_card):
@@ -1220,7 +1220,7 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (242.0 if compact_hub else 395.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (210.0 if compact_hub else 395.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
 		stage_title_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (31 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
