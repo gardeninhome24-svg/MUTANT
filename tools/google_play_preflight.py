@@ -128,28 +128,48 @@ else:
 
 # Production must not silently ship the repeated/fragmented placeholder boss
 # animation art. This is a release-only blocker, not a private debug APK gate.
+# Reuse the same PNG contract as the standalone boss importer. File existence
+# alone cannot establish that a release contains valid and distinct animation art.
+from boss_art_pack import FRAMES, CHAPTERS, inspect_png
+
 boss_total = 0
 missing_boss_frames: list[str] = []
-for chapter in range(5, 11):
+invalid_boss_frames: list[str] = []
+for chapter in CHAPTERS:
     directory = ROOT / "assets" / "bosses" / f"boss_ch{chapter:02d}"
-    filenames = (["boss_portrait.png"]
-                 + [f"phase1_anim_{i}.png" for i in range(1, 5)]
-                 + [f"phase2_attack_{i}.png" for i in range(1, 5)]
-                 + [f"death_{i}.png" for i in range(1, 3)])
-    present = [name for name in filenames
-               if (directory / name).is_file() and (directory / name).stat().st_size > 128]
-    if len(present) == len(filenames):
+    digests: list[str] = []
+    complete = True
+    for name in FRAMES:
+        path = directory / name
+        relative = f"boss_ch{chapter:02d}/{name}"
+        if not path.is_file():
+            missing_boss_frames.append(relative)
+            complete = False
+            continue
+        try:
+            data = path.read_bytes()
+            if len(data) < 150:
+                raise ValueError("empty or truncated PNG")
+            digests.append(inspect_png(data, name))
+        except (OSError, ValueError) as error:
+            invalid_boss_frames.append(f"{relative} ({error})")
+            complete = False
+    # A repeated portrait pasted into each frame is not animation.
+    if complete and len(set(digests)) < 6:
+        invalid_boss_frames.append(f"boss_ch{chapter:02d}: fewer than 6 distinct frames")
+        complete = False
+    if complete:
         boss_total += 1
-    else:
-        missing_boss_frames.extend(f"boss_ch{chapter:02d}/{name}" for name in filenames if name not in present)
 
-if missing_boss_frames:
+if missing_boss_frames or invalid_boss_frames:
     block("Final boss assets",
-          f"{boss_total}/6 chapter 5–10 sprite sets are complete; "
-          f"{len(missing_boss_frames)}/66 PNG files are missing or empty. "
-          "Install and version the final boss assets before signing the public AAB.")
+          f"{boss_total}/6 chapter 5–10 sprite sets pass PNG validation; "
+          f"{len(missing_boss_frames)} files missing, "
+          f"{len(invalid_boss_frames)} invalid files or sprite sets. "
+          "Commit 66 validated images before signing the public AAB. "
+          f"Examples: {(missing_boss_frames + invalid_boss_frames)[:4]}")
 else:
-    passed.append("All 66 chapter 5–10 boss sprite files exist; manual art approval still required")
+    passed.append("All 66 chapter 5–10 boss sprites pass dimensions, PNG and duplicate-frame checks; visual review still required")
 
 workflow = ROOT / ".github" / "workflows" / "google-play-aab.yml"
 if not workflow.exists():
