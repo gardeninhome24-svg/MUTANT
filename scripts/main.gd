@@ -320,19 +320,6 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			revive_btn.custom_minimum_size = Vector2(160, 44) if portrait else Vector2(210, 48)
 			revive_btn.add_theme_font_size_override("font_size", 11 if portrait else 14)
 	var safe_top := StageDirector.get_safe_top_margin()
-	# Keep the real wave-frame backdrop aligned with the functional VBox
-	# in both 9:16 and 16:9 orientations.
-	var wave_frame := get_node_or_null("HUD/HUDRoot/WaveFrame") as Panel
-	if is_instance_valid(wave_frame) and is_instance_valid(wave_progress_box):
-		wave_frame.anchor_left = wave_progress_box.anchor_left
-		wave_frame.anchor_right = wave_progress_box.anchor_right
-		wave_frame.anchor_top = wave_progress_box.anchor_top
-		wave_frame.anchor_bottom = wave_progress_box.anchor_bottom
-		wave_frame.offset_left = wave_progress_box.offset_left - 9.0
-		wave_frame.offset_top = wave_progress_box.offset_top - 5.0
-		wave_frame.offset_right = wave_progress_box.offset_right + 9.0
-		wave_frame.offset_bottom = wave_progress_box.offset_bottom + 5.0
-
 
 	if portrait:
 		# UKŁAD PIONOWY 9:16 (Zoptymalizowany, kompaktowy HUD sci-fi — 80%+ pola bitwy wolne)
@@ -397,11 +384,12 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			dash_btn.offset_right = -165.0
 			dash_btn.offset_bottom = -115.0
 		if npc_dialogue_panel:
-			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
-			npc_dialogue_panel.offset_left = -maxf(90.0, view_width * 0.5 - 12.0) if compact else -220.0
-			npc_dialogue_panel.offset_top = (248.0 if compact else 226.0) + safe_top
-			npc_dialogue_panel.offset_right = maxf(90.0, view_width * 0.5 - 12.0) if compact else 220.0
-			npc_dialogue_panel.offset_bottom = (410.0 if compact else 355.0) + safe_top
+			# Briefing no longer masks the mission checklist and minimap.
+			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+			npc_dialogue_panel.offset_left = -minf(220.0, view_width * 0.5 - 14.0)
+			npc_dialogue_panel.offset_right = minf(220.0, view_width * 0.5 - 14.0)
+			npc_dialogue_panel.offset_top = -270.0
+			npc_dialogue_panel.offset_bottom = -178.0
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
@@ -452,6 +440,21 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			npc_dialogue_panel.offset_top = -172.0
 			npc_dialogue_panel.offset_right = 290.0
 			npc_dialogue_panel.offset_bottom = -92.0
+
+	# Sync the cyan background AFTER its VBox has received final anchors.
+	# The earlier ordering aligned it to stale editor offsets, causing a giant
+	# empty frame across the entire top of the 720x1280 combat screenshot.
+	var wave_frame := get_node_or_null("HUD/HUDRoot/WaveFrame") as Panel
+	if is_instance_valid(wave_frame) and is_instance_valid(wave_progress_box):
+		wave_frame.anchor_left = wave_progress_box.anchor_left
+		wave_frame.anchor_right = wave_progress_box.anchor_right
+		wave_frame.anchor_top = wave_progress_box.anchor_top
+		wave_frame.anchor_bottom = wave_progress_box.anchor_bottom
+		wave_frame.offset_left = wave_progress_box.offset_left - 6.0
+		wave_frame.offset_top = wave_progress_box.offset_top - 5.0
+		wave_frame.offset_right = wave_progress_box.offset_right + 6.0
+		wave_frame.offset_bottom = wave_progress_box.offset_bottom + 5.0
+
 
 func _style_combat_hud() -> void:
 	# Shared dark, low-noise visual treatment for the actual in-combat HUD.
@@ -953,13 +956,14 @@ func show_npc_comms(speaker: String, text: String) -> void:
 	var preview := text.strip_edges()
 	if preview.to_lower().begins_with(speaker.to_lower() + ":"):
 		preview = preview.substr(speaker.length() + 1).strip_edges()
-	# Keep the complete mission briefing visible: mobile HUD wraps over several lines.
-	# Use a generous bounded preview only for unusually long external dialogue.
-	if preview.length() > 260:
-		preview = preview.substr(0, 257).strip_edges() + "…"
+	# Full dialogue is saved to the journal below. A short radio toast
+	# keeps the tactical objectives and opponent field readable on phones.
+	var max_chars: int = 94 if StageDirector.is_portrait_mode() else 185
+	if preview.length() > max_chars:
+		preview = preview.substr(0, max_chars - 1).strip_edges() + "…"
 	npc_text_lbl.text = preview
 	npc_dialogue_panel.visible = true
-	npc_hide_timer = clampf(4.0 + float(preview.length()) / 42.0, 5.0, 10.0)
+	npc_hide_timer = 4.0 if StageDirector.is_portrait_mode() else clampf(4.0 + float(preview.length()) / 42.0, 5.0, 8.0)
 	var log_entry := "[Etap %03d | Fala %d] %s: %s" % [current_stage_num, current_wave_num, speaker.to_upper(), text]
 	if not npc_dialogue_history.has(log_entry):
 		npc_dialogue_history.append(log_entry)
