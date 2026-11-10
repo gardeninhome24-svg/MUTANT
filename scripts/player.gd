@@ -60,6 +60,10 @@ var effects_layer: Node2D = null
 var anim_timer: float = 0.0
 var dash_ghost_timer: float = 0.0
 var shoot_anim_timer: float = 0.0
+var hurt_anim_timer: float = 0.0
+var death_anim_elapsed: float = 0.0
+const HURT_ANIMATION_DURATION: float = 0.24
+const DEATH_ANIMATION_DURATION: float = 0.65
 var invulnerable_timer: float = 0.0
 var base_skin_tint: Color = Color.WHITE
 var equipped_rarity_color: Color = Color(0.18, 0.98, 0.38, 0.72)
@@ -130,8 +134,8 @@ func apply_class_and_talents(reset_full_hp: bool = false) -> void:
 			soldier_walk_frames.clear()
 			soldier_shoot_frames.clear()
 			for fi in range(1, 7):
-				var wt := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_walk_%d.png" % [cls_id, fi])
-				var st := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_shoot_%d.png" % [cls_id, fi])
+				var wt := AssetRegistry.get_player_animation_frame(cls_id, "walk", fi)
+				var st := AssetRegistry.get_player_animation_frame(cls_id, "shoot", fi)
 				if wt:
 					walk_frames.append(wt)
 					soldier_walk_frames.append(wt)
@@ -140,17 +144,19 @@ func apply_class_and_talents(reset_full_hp: bool = false) -> void:
 					soldier_shoot_frames.append(st)
 			has_frame_anim = (walk_frames.size() > 0)
 			use_soldier_frame_anim = has_frame_anim
+			hurt_anim_timer = 0.0
+			death_anim_elapsed = 0.0
 			idle_frames.clear()
 			hurt_frames.clear()
 			death_frames.clear()
 			for fi in range(1, 5):
-				var it := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_idle_%d.png" % [cls_id, fi])
+				var it := AssetRegistry.get_player_animation_frame(cls_id, "idle", fi)
 				if it: idle_frames.append(it)
 			for fi in range(1, 4):
-				var ht := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_hurt_%d.png" % [cls_id, fi])
+				var ht := AssetRegistry.get_player_animation_frame(cls_id, "hurt", fi)
 				if ht: hurt_frames.append(ht)
 			for fi in range(1, 7):
-				var dt := AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/characters/%s_death_%d.png" % [cls_id, fi])
+				var dt := AssetRegistry.get_player_animation_frame(cls_id, "death", fi)
 				if dt: death_frames.append(dt)
 
 		if not is_instance_valid(auto_skill_ctrl):
@@ -277,6 +283,15 @@ func _physics_process(delta: float) -> void:
 		invulnerable_timer = maxf(0.0, invulnerable_timer - delta)
 	if shoot_anim_timer > 0.0:
 		shoot_anim_timer = maxf(0.0, shoot_anim_timer - delta)
+	if hurt_anim_timer > 0.0:
+		hurt_anim_timer = maxf(0.0, hurt_anim_timer - delta)
+	if current_health <= 0.0:
+		velocity = Vector2.ZERO
+		death_anim_elapsed = minf(DEATH_ANIMATION_DURATION, death_anim_elapsed + delta)
+		if not death_frames.is_empty():
+			var death_idx := mini(death_frames.size() - 1, int(death_anim_elapsed / DEATH_ANIMATION_DURATION * float(death_frames.size())))
+			sprite.texture = death_frames[death_idx]
+		return
 
 	if shield_sprite:
 		var show_sh := (has_shield and shield_charges > 0) or (invulnerable_timer > 0.0)
@@ -340,6 +355,10 @@ func _physics_process(delta: float) -> void:
 	if has_frame_anim and shoot_anim_timer > 0.0 and shoot_frames.size() > 0:
 		var s_idx := clampi(int((1.0 - shoot_anim_timer / 0.18) * float(shoot_frames.size())), 0, shoot_frames.size() - 1)
 		sprite.texture = shoot_frames[s_idx]
+	if hurt_anim_timer > 0.0 and not hurt_frames.is_empty():
+		var hurt_progress := 1.0 - hurt_anim_timer / HURT_ANIMATION_DURATION
+		var hurt_idx := mini(hurt_frames.size() - 1, int(hurt_progress * float(hurt_frames.size())))
+		sprite.texture = hurt_frames[hurt_idx]
 
 	if final_input.x != 0.0:
 		sprite.flip_h = final_input.x < 0.0
@@ -450,7 +469,7 @@ func heal(amount: float) -> void:
 	queue_redraw()
 
 func take_damage(amount: float) -> void:
-	if is_dashing or invulnerable_timer > 0.0:
+	if current_health <= 0.0 or amount <= 0.0 or is_dashing or invulnerable_timer > 0.0:
 		return
 	if has_shield and shield_charges > 0:
 		shield_charges -= 1
@@ -469,16 +488,28 @@ func take_damage(amount: float) -> void:
 	var tween := create_tween()
 	sprite.modulate = Color(2.6, 0.35, 0.35, 1.0)
 	if not hurt_frames.is_empty():
+		hurt_anim_timer = HURT_ANIMATION_DURATION
 		sprite.texture = hurt_frames[0]
 	tween.tween_property(sprite, "modulate", base_skin_tint, 0.15)
 
 	if current_health <= 0.0:
+		hurt_anim_timer = 0.0
+		shoot_anim_timer = 0.0
+		death_anim_elapsed = 0.0
+		velocity = Vector2.ZERO
 		if not death_frames.is_empty():
 			sprite.texture = death_frames[0]
 		emit_signal("player_died")
 
 func revive(restore_percent: float = 0.65) -> void:
-	current_health = max_health * restore_percent
+	current_health = max_health * clampf(restore_percent, 0.01, 1.0)
+	hurt_anim_timer = 0.0
+	death_anim_elapsed = 0.0
+	shoot_anim_timer = 0.0
+	if not idle_frames.is_empty():
+		sprite.texture = idle_frames[0]
+	elif base_idle_tex != null:
+		sprite.texture = base_idle_tex
 	invulnerable_timer = 3.5 # 3.5s tymczasowej ochrony po wskrzeszeniu
 	StageDirector.play_sfx("level_up")
 	emit_signal("health_changed", current_health, max_health)

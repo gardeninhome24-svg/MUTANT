@@ -30,8 +30,12 @@ func _run() -> void:
 	for key in AssetRegistry.CHARACTER_ASSETS.keys():
 		var item: Dictionary = AssetRegistry.CHARACTER_ASSETS[key]
 		_check(String(item.get("fallback_path", "")), "Operator %s" % key)
-		if String(item.get("sheet_path", "")).is_empty():
-			static_references.append("Operator %s: no animated atlas" % key)
+		if AssetRegistry.PLAYER_ANIMATED_CLASSES.has(String(key)):
+			for action in AssetRegistry.PLAYER_ANIMATION_COUNTS.keys():
+				for frame in range(1, int(AssetRegistry.PLAYER_ANIMATION_COUNTS[action]) + 1):
+					_check("res://assets/characters/%s/%s_%d.png" % [key, action, frame], "%s %s frame %d" % [key, action, frame])
+		else:
+			static_references.append("Operator %s: missing dedicated animated sequence" % key)
 
 	for key in AssetRegistry.ENEMY_ASSETS.keys():
 		var item: Dictionary = AssetRegistry.ENEMY_ASSETS[key]

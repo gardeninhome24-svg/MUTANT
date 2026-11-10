@@ -100,6 +100,20 @@ const SKIN_SPRITES := {
 	"void_sniper": CH01_ROOT + "characters/void_sniper.png"
 }
 
+const PLAYER_ANIMATION_COUNTS := {"idle": 4, "walk": 6, "shoot": 6, "hurt": 3, "death": 6}
+const PLAYER_ANIMATED_CLASSES := ["soldier", "engineer", "medic", "scout"]
+
+static func get_player_animation_frame(class_id: String, action: String, frame: int) -> Texture2D:
+	if not PLAYER_ANIMATION_COUNTS.has(action) or frame < 1 or frame > int(PLAYER_ANIMATION_COUNTS[action]):
+		return null
+	if PLAYER_ANIMATED_CLASSES.has(class_id):
+		var production_path := "res://assets/characters/%s/%s_%d.png" % [class_id, action, frame]
+		var prod_frame: Texture2D = get_tex(production_path)
+		if prod_frame != null:
+			return prod_frame
+	return get_tex(CH01_ROOT + "characters/%s_%s_%d.png" % [class_id, action, frame])
+
+
 static func get_hero_skin_sprite(class_id: String, skin_id: String) -> String:
 	var skin_path := String(SKIN_SPRITES.get(skin_id, ""))
 	if not skin_path.is_empty() and ResourceLoader.exists(skin_path):

@@ -33,6 +33,7 @@ func _run() -> void:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 	_test_horde_performance_limits()
+	_test_character_art_sequences()
 	_test_starter_gear()
 	_test_equipment_and_save()
 	_test_rarity_fusion_protection()
@@ -43,6 +44,16 @@ func _run() -> void:
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	_finish()
+
+func _test_character_art_sequences() -> void:
+	_assert(AssetRegistry.PLAYER_ANIMATED_CLASSES.size() == 4, "Four base operator classes have production frame sets")
+	for cls_id in AssetRegistry.PLAYER_ANIMATED_CLASSES:
+		for action in AssetRegistry.PLAYER_ANIMATION_COUNTS.keys():
+			var max_frame: int = int(AssetRegistry.PLAYER_ANIMATION_COUNTS[action])
+			_assert(AssetRegistry.get_player_animation_frame(String(cls_id), String(action), 1) != null, "Initial %s %s frame exists" % [cls_id, action])
+			_assert(AssetRegistry.get_player_animation_frame(String(cls_id), String(action), max_frame) != null, "Final %s %s frame exists" % [cls_id, action])
+		_assert(AssetRegistry.get_player_animation_frame(String(cls_id), "shoot", 7) == null, "Invalid shoot frame is rejected")
+
 
 func _test_horde_performance_limits() -> void:
 	var director_script: Script = load("res://addons/ms_beta/wave_director.gd") as Script
