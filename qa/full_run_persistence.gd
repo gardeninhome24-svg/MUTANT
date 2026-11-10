@@ -195,6 +195,27 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Destroyed defense objectives cannot be repaired by paid hero revives.
+	# Billing must be prevented even when an old UI callback is invoked.
+	stage.is_practice_mode = true
+	stage.dark_matter_gems = 50
+	stage.current_stage = 2
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	battle.set("primary_objective_hp", 0.0)
+	battle.call("_on_player_died")
+	var defense_revive_button: Button = battle.get_node_or_null("HUD/HUDRoot/DeathPanel/CenterContainer/VBox/HBox/ReviveDMBtn") as Button
+	if is_instance_valid(defense_revive_button):
+		_check(defense_revive_button.disabled, "Destroyed defense target disables premium revive button")
+	battle.call("_on_revive_premium_pressed")
+	_check(int(stage.dark_matter_gems) == 50, "Destroyed defense objective cannot charge premium revive gems")
+	_check(String(battle.get("run_result_state")) == "awaiting_revive", "Destroyed defense objective remains failed after attempted paid revive")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	# Chapter 1 finale is a REAL boss encounter, unlike ordinary stage 2.
 	# Practice ensures this separately tests combat without awarding currency.
 	stage.current_stage = 10
