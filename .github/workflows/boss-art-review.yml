@@ -8,8 +8,13 @@ on:
       - tools/make_boss_candidate_pack.py
       - .github/workflows/boss-art-review.yml
 
+# Do not run parallel candidate generations against the same branch.
+concurrency:
+  group: boss-candidates-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   boss-art-review:
@@ -36,6 +41,20 @@ jobs:
           unzip -Z1 build/MutantSurvivor-BossArt-Candidate-05-10.zip | tee build/boss-contents.txt
           test "$(wc -l < build/boss-contents.txt)" -eq 66
           sha256sum build/MutantSurvivor-BossArt-Candidate-05-10.zip | tee build/boss-sha256.txt
+
+      - name: Install validated boss candidate frames into MUTANT main
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          python3 tools/boss_art_pack.py --zip build/MutantSurvivor-BossArt-Candidate-05-10.zip --install
+          printf '%s\n'             'ART CANDIDATE ONLY — 66 images generated from existing MUTANT reference silhouettes.'             'Rigid pose transformations and palette variants are NOT artist-approved keyframe animation.'             'Do not remove this marker or publish to Google Play until manually reviewed and replaced if needed.'             > assets/bosses/ART_CANDIDATE.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/bosses/boss_ch0{5,6,7,8,9}/ assets/bosses/boss_ch10/ assets/bosses/ART_CANDIDATE.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "art: install 66 validated chapter 5-10 candidate boss sprites [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: Export candidate artwork for human visual review
         if: always()
