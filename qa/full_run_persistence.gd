@@ -415,6 +415,35 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 5: rescue requires releasing the survivor AND reaching extraction.
+	stage.is_practice_mode = true
+	stage.current_stage = 5
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "rescue_npc", "Stage 5 loads rescue-NPC contract")
+	var survivor: Area2D = battle.get("primary_objective_area") as Area2D
+	var rescue_player: Node2D = battle.get("player") as Node2D
+	if is_instance_valid(survivor) and is_instance_valid(rescue_player):
+		rescue_player.global_position = survivor.global_position
+		battle.call("_advance_rescue_objective", 2.5)
+		_check(bool(battle.get("rescue_npc_freed")), "Survivor can be freed by reaching them")
+		_check(not bool(battle.get("primary_objective_done")), "Freeing survivor alone does not complete rescue")
+		var survivor_before: Vector2 = survivor.global_position
+		rescue_player.global_position = survivor_before + Vector2(350, 0)
+		battle.call("_advance_rescue_objective", 2.0)
+		_check(survivor.global_position.distance_to(survivor_before) < 0.1, "Survivor waits when player abandons them")
+		rescue_player.global_position = survivor_before
+		var extraction: Vector2 = battle.get("rescue_destination")
+		for step in range(16):
+			rescue_player.global_position = rescue_player.global_position.move_toward(extraction, 90.0)
+			battle.call("_advance_rescue_objective", 1.0)
+		_check(bool(battle.get("primary_objective_done")), "Guiding survivor to extraction finishes rescue")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
