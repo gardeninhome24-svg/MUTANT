@@ -176,9 +176,9 @@ func _save_viewport_png(sub: SubViewport, file_stem: String) -> void:
 	for _f in range(3):
 		await get_tree().process_frame
 	var img := sub.get_texture().get_image()
-	if not img:
+	if not img or img.is_empty() or img.get_width() < 32 or img.get_height() < 32:
 		failed_captures += 1
-		push_error("[Visual QA] Failed to get viewport image for %s" % file_stem)
+		push_error("[Visual QA] Missing or invalid viewport image for %s" % file_stem)
 		return
 
 	# A successful PNG write alone is not evidence of a rendered frame.
