@@ -1553,7 +1553,19 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	style.set_corner_radius_all(12)
 	style.shadow_color = Color(0.0, 0.0, 0.0, 0.48)
 	style.shadow_size = 5
-	panel.add_theme_stylebox_override("panel", style)
+	# A real nine-slice metallic frame replaces generic flat boxes;
+	# rarity color remains data-bound in the header and SELECT action.
+	var card_art_path := "res://assets/ui/approved/upgrade_card_frame.svg"
+	if ResourceLoader.exists(card_art_path, "Texture2D"):
+		var frame := StyleBoxTexture.new()
+		frame.texture = load(card_art_path) as Texture2D
+		frame.texture_margin_left = 32.0
+		frame.texture_margin_right = 32.0
+		frame.texture_margin_top = 32.0
+		frame.texture_margin_bottom = 32.0
+		panel.add_theme_stylebox_override("panel", frame)
+	else:
+		panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 11)
@@ -1568,7 +1580,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	margin.add_child(body)
 
 	var header := Label.new()
-	header.text = grade
+	header.text = "◆ " + grade + " ◆"
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_theme_font_size_override("font_size", 12 if portrait else 13)
 	header.add_theme_color_override("font_color", accent)
