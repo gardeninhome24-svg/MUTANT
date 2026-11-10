@@ -368,6 +368,31 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	# Stage 4: the incubation tanks must take real projectile-style damage.
+	# A single destroyed target never completes a two-target contract.
+	stage.current_stage = 4
+	battle = packed.instantiate()
+	root.add_child(battle)
+	await process_frame
+	battle.set_process(false)
+	_check(String(battle.get("primary_objective_type")) == "destroy_target", "Stage 4 is a destruction mission")
+	_check(int(battle.get("objective_steps_required")) == 2, "Stage 4 requires two destroyed incubators")
+	var mission_targets: Array[ExplosiveBarrel] = []
+	for candidate in get_nodes_in_group("destructibles"):
+		if candidate is ExplosiveBarrel and candidate.has_meta("mission_target"):
+			mission_targets.append(candidate)
+	_check(mission_targets.size() == 2, "Stage 4 spawns two shootable incubators")
+	if mission_targets.size() == 2:
+		mission_targets[0].take_damage(mission_targets[0].max_health + 1.0)
+		_check(int(battle.get("objective_steps_done")) == 1, "First incubator destruction counts once")
+		_check(not bool(battle.get("primary_objective_done")), "One destroyed incubator cannot finish stage 4")
+		mission_targets[1].take_damage(mission_targets[1].max_health + 1.0)
+		_check(int(battle.get("objective_steps_done")) == 2, "Second incubator destruction counts")
+		_check(bool(battle.get("primary_objective_done")), "Two destroyed incubators complete the objective")
+	paused = false
+	battle.queue_free()
+	await process_frame
+
 	_remove_fixtures()
 	_done()
 
