@@ -61,7 +61,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: BossArt-Ch05-Ch10-REVIEW-\${{ github.run_number }}
+          name: BossArt-Ch05-Ch10-REVIEW-${{ github.run_number }}
           path: |
             build/MutantSurvivor-BossArt-Candidate-05-10.zip
             build/boss_contact_sheet.png
