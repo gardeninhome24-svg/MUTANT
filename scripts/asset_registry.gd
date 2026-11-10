@@ -584,8 +584,11 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 			_enemy_visual_extents[cache_key] = extent
 		var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
 		var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
-		var target_extent: float = 255.0 if is_boss else (182.0 if is_large else 138.0)
-		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.40, 2.45)
+		# Opaque body targets are independent of padded PNG dimensions.
+		# Raising the scale ceiling matters for tiny sprites with large
+		# transparent gutters, which previously remained tiny on 9:16.
+		var target_extent: float = 282.0 if is_boss else (205.0 if is_large else 156.0)
+		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.35, 4.40)
 		sprite.scale = Vector2(normalized_scale, normalized_scale)
 	return {
 		"is_animated": (walk_frames.size() > 0),
