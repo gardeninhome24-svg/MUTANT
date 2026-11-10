@@ -110,6 +110,16 @@ func _capture() -> void:
 			printerr("PHONE SHOT ERROR: phone wallet and wave counter overlap")
 			quit(1)
 			return
+	var phone_hp: ProgressBar = combat.get("hp_bar") as ProgressBar
+	var phone_xp: ProgressBar = combat.get("xp_bar") as ProgressBar
+	if not is_instance_valid(phone_hp) or not is_instance_valid(phone_xp):
+		printerr("PHONE SHOT ERROR: missing actual HP or XP HUD bars")
+		quit(1)
+		return
+	if phone_hp.custom_minimum_size.x > 96.0 or phone_xp.custom_minimum_size.x > 96.0:
+		printerr("PHONE SHOT ERROR: compact HP or XP bar exceeds 420px design")
+		quit(1)
+		return
 	if not await _shot("08_combat_420x933.png"):
 		quit(1)
 		return

@@ -204,6 +204,34 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	var portrait := StageDirector.is_portrait_mode()
 	var view_width := view_width_override if view_width_override > 0.0 else get_viewport_rect().size.x
 	var compact := _is_compact_portrait_hud(view_width)
+	# HUD readability pass: resize real live controls for narrow phones;
+	# never introduce a second HUD or alter player combat statistics.
+	var hud_avatar := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox/Avatar") as TextureRect
+	if is_instance_valid(hud_avatar):
+		hud_avatar.custom_minimum_size = Vector2(32, 32) if compact else Vector2(38, 38)
+	if is_instance_valid(stats_card):
+		stats_card.custom_minimum_size = Vector2(185, 46) if compact else Vector2(195, 46)
+	if is_instance_valid(hp_bar):
+		hp_bar.custom_minimum_size = Vector2(95, 8) if compact else Vector2(110, 8)
+	if is_instance_valid(xp_bar):
+		xp_bar.custom_minimum_size = Vector2(95, 4) if compact else Vector2(110, 4)
+	if is_instance_valid(hp_label):
+		hp_label.add_theme_font_size_override("font_size", 10 if compact else 11)
+	if is_instance_valid(run_level_label):
+		run_level_label.add_theme_font_size_override("font_size", 10 if compact else 11)
+	if is_instance_valid(wave_label):
+		wave_label.add_theme_font_size_override("font_size", 11 if compact else 12)
+	if is_instance_valid(boss_label):
+		boss_label.add_theme_font_size_override("font_size", 10 if compact else 13)
+	if is_instance_valid(obj_header):
+		obj_header.add_theme_font_size_override("font_size", 9 if compact else 10)
+	for mission_text in [obj1_label, obj2_label, obj3_label]:
+		if is_instance_valid(mission_text):
+			mission_text.add_theme_font_size_override("font_size", 10 if compact else 11)
+	if is_instance_valid(weapon_slots_hbox):
+		weapon_slots_hbox.add_theme_constant_override("separation", 3 if compact else 6)
+	if is_instance_valid(radar_panel):
+		radar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# W pionie 9:16 lekko oddalamy kamerę (zoom 0.92), aby gracz widział szerokie pole bitwy na telefonie
@@ -219,7 +247,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		profile_hud_btn.text = "RPG"
 		profile_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(68, 30)
 	if is_instance_valid(currency_bar):
-		currency_bar.add_theme_constant_override("separation", 8 if portrait else 18)
+		currency_bar.add_theme_constant_override("separation", (5 if compact else 8) if portrait else 18)
 		for coin_group in [get_node_or_null("HUD/HUDRoot/CurrencyBar/EnergyHBox"), get_node_or_null("HUD/HUDRoot/CurrencyBar/DMHBox")]:
 			if coin_group is HBoxContainer:
 				coin_group.add_theme_constant_override("separation", 3 if portrait else 6)

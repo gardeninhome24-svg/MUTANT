@@ -102,6 +102,22 @@ func _run() -> void:
 		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
 	if is_instance_valid(currencies) and is_instance_valid(wave):
 		_check(currencies.offset_bottom + 2.0 <= wave.offset_top, "420px currency and wave rows do not overlap")
+	var avatar: TextureRect = combat.get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/AvatarBox/Avatar") as TextureRect
+	var hp: ProgressBar = combat.get("hp_bar") as ProgressBar
+	var xp: ProgressBar = combat.get("xp_bar") as ProgressBar
+	var wave_title: Label = combat.get("wave_label") as Label
+	var objectives_title: Label = combat.get("obj_header") as Label
+	var weapon_row: HBoxContainer = combat.get("weapon_slots_hbox") as HBoxContainer
+	if is_instance_valid(avatar):
+		_check(avatar.custom_minimum_size.x <= 32.0, "420px HUD avatar uses compact dimensions")
+	if is_instance_valid(hp) and is_instance_valid(xp):
+		_check(hp.custom_minimum_size.x == 95.0 and xp.custom_minimum_size.x == 95.0, "420px HP and XP bars fit compact stat card")
+	if is_instance_valid(wave_title):
+		_check(wave_title.get_theme_font_size("font_size") <= 11, "420px wave label typography is compact")
+	if is_instance_valid(objectives_title):
+		_check(objectives_title.get_theme_font_size("font_size") <= 9, "420px objectives header stays readable")
+	if is_instance_valid(weapon_row):
+		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")
 	if is_instance_valid(weapons) and is_instance_valid(powers):
 		_check(weapons.offset_bottom <= powers.offset_top - 2.0, "Narrow portrait weapon and power bars occupy separate rows")
 	if is_instance_valid(joystick) and is_instance_valid(weapons):
