@@ -250,6 +250,10 @@ func _test_equipment_and_save() -> void:
 		incomplete_file.close()
 	_assert(stage._parse_save_dictionary('{"credits": 1, "current_stage": 1}').is_empty(),
 		"Incomplete valid JSON is rejected as a campaign profile")
+	_assert(stage._parse_save_dictionary('{"current_stage": 3, "max_unlocked_stage": 2, "credits": 20}').is_empty(),
+		"Selected stage beyond unlocks is rejected as corrupted save data")
+	_assert(stage._parse_save_dictionary('{"current_stage": 1, "max_unlocked_stage": 1, "credits": -500}').is_empty(),
+		"Negative wallet values are rejected as corrupted save data")
 	stage.credits = 0
 	stage.load_campaign_profile()
 	_assert(stage.credits == credits_safe, "Incomplete JSON restores verified backup rather than resetting credits")
