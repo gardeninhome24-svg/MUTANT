@@ -101,7 +101,7 @@ const SKIN_SPRITES := {
 }
 
 const PLAYER_ANIMATION_COUNTS := {"idle": 4, "walk": 6, "shoot": 6, "hurt": 3, "death": 6}
-const PLAYER_ANIMATED_CLASSES := ["soldier", "engineer", "medic", "scout"]
+const PLAYER_ANIMATED_CLASSES := ["soldier", "engineer", "medic", "scout", "toxic_soldier"]
 
 static func get_player_animation_frame(class_id: String, action: String, frame: int) -> Texture2D:
 	if not PLAYER_ANIMATION_COUNTS.has(action) or frame < 1 or frame > int(PLAYER_ANIMATION_COUNTS[action]):
@@ -389,7 +389,8 @@ const MUTANT_ANIM_FOLDERS := {
 	"biegacz": "mutant_stalker", "plujacy_kwasem": "mutant_spitter",
 	"lowca": "mutant_leaper", "zarazony": "mutant_viral",
 	"zdziczaly": "mutant_tank", "zracy_pelzacz": "mutant_armored",
-	"skrzydlaty": "mutant_gargoyle", "wybuchowy": "mutant_boomer"
+	"skrzydlaty": "mutant_gargoyle", "wybuchowy": "mutant_boomer",
+	"czerw": "mutant_worm"
 }
 const BOSS_ANIM_FOLDERS := {
 	"boss_ch01": "boss_matka_roju", "matka_roju": "boss_matka_roju",
@@ -399,6 +400,12 @@ const BOSS_ANIM_FOLDERS := {
 # Six distinct generated concepts are distributed as an optional verified art pack.
 # Until its PNG files have been copied and imported, use existing HD boss frames.
 const BOSS_CHAPTER_FALLBACK_KITS := {
+	"boss_ch01": "boss_matka_roju",
+	"boss_ch02": "boss_goliat",
+	"boss_ch03": "boss_lewiatan",
+	"boss_ch04": "boss_lewiatan",
+	"miniboss_ch01": "boss_goliat",
+	"matka_roju": "boss_matka_roju",
 	"boss_ch05": "boss_lewiatan",
 	"boss_ch06": "boss_matka_roju",
 	"boss_ch07": "boss_goliat",
