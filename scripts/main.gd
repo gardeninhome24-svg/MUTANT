@@ -388,8 +388,8 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 			npc_dialogue_panel.offset_left = -minf(220.0, view_width * 0.5 - 14.0)
 			npc_dialogue_panel.offset_right = minf(220.0, view_width * 0.5 - 14.0)
-			npc_dialogue_panel.offset_top = -270.0
-			npc_dialogue_panel.offset_bottom = -178.0
+			npc_dialogue_panel.offset_top = -382.0
+			npc_dialogue_panel.offset_bottom = -292.0
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
