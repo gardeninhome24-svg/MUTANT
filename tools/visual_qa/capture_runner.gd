@@ -198,6 +198,30 @@ func _capture_hud_mobile_9x16() -> void:
 	for frame in range(35):
 		await get_tree().process_frame
 
+	# Fail on the exact defects found in actual ApprovedUI-Actual-4:
+	# a huge displaced frame, radio dialogue covering mission objectives,
+	# or an opaque white hero animation rectangle.
+	var frame_panel := main_inst.get_node_or_null("HUD/HUDRoot/WaveFrame") as Control
+	if is_instance_valid(frame_panel):
+		if frame_panel.size.x > 395.0 or frame_panel.size.y > 115.0:
+			failed_captures += 1
+			push_error("[Visual QA] Wave frame oversized/off-layout: %s" % frame_panel.size)
+	var goals := main_inst.get_node_or_null("HUD/HUDRoot/ObjectivesPanel") as Control
+	var comms := main_inst.get("npc_dialogue_panel") as Control
+	if is_instance_valid(goals) and is_instance_valid(comms) and comms.visible:
+		if goals.get_global_rect().intersects(comms.get_global_rect()):
+			failed_captures += 1
+			push_error("[Visual QA] NPC briefing overlaps mission checklist")
+	if is_instance_valid(player):
+		var hero_sprite := player.get_node_or_null("Sprite2D") as Sprite2D
+		if is_instance_valid(hero_sprite) and hero_sprite.texture != null:
+			var hero_img := hero_sprite.texture.get_image()
+			if hero_img != null and not hero_img.is_empty():
+				var corner: Color = hero_img.get_pixel(0, 0)
+				if corner.a > 0.98 and corner.r > 0.95 and corner.g > 0.95 and corner.b > 0.95:
+					failed_captures += 1
+					push_error("[Visual QA] Hero animation still has an opaque white background")
+
 	await _save_viewport_png(sub, "hud_mobile_720x1280_actual")
 	main_inst.queue_free()
 	sub.queue_free()
