@@ -135,6 +135,9 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
+	stage.load_campaign_profile()
+	_check(int(stage.credits) == before_loss, "Failure settlement remains consistent after reload")
+	_check(int(stage.max_unlocked_stage) == 3, "Unlocked stage remains three after failed operation")
 	# Chapter 1 finale is a REAL boss encounter, unlike ordinary stage 2.
 	# Practice ensures this separately tests combat without awarding currency.
 	stage.current_stage = 10
@@ -167,9 +170,6 @@ func _execute() -> void:
 	battle.queue_free()
 	await process_frame
 
-	stage.load_campaign_profile()
-	_check(int(stage.credits) == before_loss, "Failure settlement remains consistent after reload")
-	_check(int(stage.max_unlocked_stage) == 3, "Unlocked stage remains three after failed operation")
 	_remove_fixtures()
 	_done()
 
