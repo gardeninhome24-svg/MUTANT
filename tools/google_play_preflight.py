@@ -6,9 +6,14 @@ This is deliberately stricter than debug APK CI. A green APK job is not a Play r
 """
 from __future__ import annotations
 
+import argparse
 import configparser
 import re
 from pathlib import Path
+
+PARSER = argparse.ArgumentParser(description="Audit Google Play readiness without publishing")
+PARSER.add_argument("--report-only", action="store_true", help="Report blockers without failing private debug APK CI")
+ARGS = PARSER.parse_args()
 
 ROOT = Path(__file__).resolve().parents[1]
 issues: list[tuple[str, str]] = []
@@ -20,6 +25,8 @@ def block(topic: str, detail: str) -> None:
 config = configparser.ConfigParser(interpolation=None)
 config.read(ROOT / "export_presets.cfg", encoding="utf-8")
 android_presets = []
+release_presets = []
+package_names: set[str] = set()
 for section in config.sections():
     if not re.fullmatch(r"preset\.\d+", section):
         continue
@@ -28,6 +35,11 @@ for section in config.sections():
     opts = section + ".options"
     if config.has_section(opts):
         android_presets.append((section, config[opts]))
+        pkg = config.get(opts, "package/unique_name", fallback="").strip('"')
+        if pkg:
+            package_names.add(pkg)
+        if "google play" in config.get(section, "name", fallback="").lower():
+            release_presets.append((section, config[opts]))
 
 if not android_presets:
     block("Android preset", "No Android export preset found")
@@ -43,6 +55,35 @@ else:
             passed.append(name + ": arm64-v8a enabled")
     if not compliant:
         block("AAB / target SDK", "Need a release Android Gradle preset with AAB export_format=1 and target_sdk>=36")
+    if len(package_names) != 1:
+        block("Application ID", "Android beta and Play release must use the same stable, non-empty package identifier")
+    elif not re.fullmatch(r"[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*){2,}", next(iter(package_names))):
+        block("Application ID", "Invalid Android application ID syntax")
+    else:
+        passed.append("Android package ID consistent across presets")
+    if len(release_presets) != 1:
+        block("Play preset", "Exactly one Google Play AAB preset must exist")
+    else:
+        release_name, release_opts = release_presets[0]
+        if config.get(release_name, "runnable", fallback="false") != "false":
+            block("Play release", "Play AAB preset must not be runnable as debug")
+        code = release_opts.get("version/code", "").strip('"')
+        if not code.isdigit() or int(code) <= 0:
+            block("Play version code", "Google Play preset must specify a positive integer version/code")
+        else:
+            passed.append("Play release has explicit positive version code")
+        version = release_opts.get("version/name", "").strip('"')
+        if not version or re.search(r"[^0-9A-Za-z._+-]", version):
+            block("Play version name", "Missing or malformed version/name")
+        if release_opts.get("package/signed", "false") != "true":
+            block("Play signing", "AAB preset must require a signed package")
+        if release_opts.get("architectures/arm64-v8a", "false") != "true":
+            block("Play ABI", "Release must include arm64-v8a")
+        if release_opts.get("architectures/x86", "false") == "true" or release_opts.get("architectures/x86_64", "false") == "true":
+            block("Play ABI", "Review unexpected emulator x86 ABI in production release")
+        minimum = release_opts.get("gradle_build/min_sdk", "").strip('"')
+        if not minimum.isdigit() or int(minimum) < 23:
+            block("Play minimum SDK", "Explicit Android minimum SDK must be 23 or higher; verify device support")
 
 director = (ROOT / "scripts" / "stage_director.gd").read_text(encoding="utf-8")
 if not re.search(r"(?m)^const\s+BETA_TEST_GEMS_ENABLED\s*:\s*bool\s*=\s*false\s*$", director):
@@ -72,6 +113,14 @@ else:
         block("Signed AAB", "Google Play workflow does not export the signed Android Google Play AAB preset")
     else:
         passed.append("Isolated signed AAB workflow configured; credentials and output still need verification")
+    if not re.search(r"(?m)^\s+workflow_dispatch:\s*$", workflow_text) or re.search(r"(?m)^\s+push:\s*$", workflow_text):
+        block("Manual release trigger", "Google Play upload must be manual-only, never triggered on push")
+    if "python3 tools/google_play_preflight.py" not in workflow_text:
+        block("Release gate", "Play workflow must run the strict preflight before signing")
+    if "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD" not in workflow_text or "ANDROID_RELEASE_KEYSTORE_BASE64" not in workflow_text:
+        block("Upload signing", "Release must use protected signing credentials")
+    if "actions/upload-artifact@" not in workflow_text:
+        block("AAB artifact", "Release workflow must preserve the signed bundle for manual inspection")
 
 print("MutantSurvivor — Google Play static preflight")
 for detail in passed:
@@ -84,5 +133,7 @@ print("MANUAL: 16 KB native page size, real Android performance / gestures / sav
 print("MANUAL: developer-account closed testing eligibility (12 testers / 14 days if applicable)")
 if issues:
     print("RESULT: NO-GO; %d technical blockers" % len(issues))
-    raise SystemExit(1)
+    if not ARGS.report_only:
+        raise SystemExit(1)
+    print("REPORT ONLY: debug APK testing can continue; release remains blocked")
 print("RESULT: STATIC CHECKS PASSED — still requires human and device approval")

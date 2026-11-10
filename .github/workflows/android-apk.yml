@@ -118,6 +118,21 @@ jobs:
             exit 1
           fi
 
+      - name: Report Google Play release blockers (informational for private APK only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/google_play_preflight.py --report-only 2>&1 | tee /tmp/google-play-preflight.log
+          {
+            echo ""
+            echo "### Google Play production readiness — informational only"
+            echo ""
+            echo '~~~text'
+            cat /tmp/google-play-preflight.log
+            echo '~~~'
+            echo "A green debug APK is not a release approval; production AAB uses strict preflight."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Smoke test booting the main menu (headless)
         shell: bash
         run: |

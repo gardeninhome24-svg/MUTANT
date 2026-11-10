@@ -82,6 +82,9 @@ jobs:
           mkdir -p build/android
           godot --headless --path . --install-android-build-template --export-release "Android Google Play AAB" build/android/MutantSurvivor-play.aab
           test -s build/android/MutantSurvivor-play.aab
+          # AAB is a signed ZIP/JAR; reject corrupted or unsigned artifacts.
+          unzip -tqq build/android/MutantSurvivor-play.aab
+          jarsigner -verify build/android/MutantSurvivor-play.aab
           sha256sum build/android/MutantSurvivor-play.aab
 
       - name: Keep signed bundle as private artifact only (never auto-publish)
