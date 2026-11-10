@@ -9,7 +9,7 @@ on:
       - .github/workflows/legacy-art-review.yml
 
 concurrency:
-  group: mutant-legacy-art-\${{ github.ref }}
+  group: mutant-legacy-art-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -94,7 +94,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MutantSurvivor-LegacyArt-REVIEW-\${{ github.run_number }}
+          name: MutantSurvivor-LegacyArt-REVIEW-${{ github.run_number }}
           path: |
             build/legacy_art_candidates.zip
             build/legacy-art-sha256.txt
