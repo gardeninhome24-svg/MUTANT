@@ -320,6 +320,19 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			revive_btn.custom_minimum_size = Vector2(160, 44) if portrait else Vector2(210, 48)
 			revive_btn.add_theme_font_size_override("font_size", 11 if portrait else 14)
 	var safe_top := StageDirector.get_safe_top_margin()
+	# Keep the real wave-frame backdrop aligned with the functional VBox
+	# in both 9:16 and 16:9 orientations.
+	var wave_frame := get_node_or_null("HUD/HUDRoot/WaveFrame") as Panel
+	if is_instance_valid(wave_frame) and is_instance_valid(wave_progress_box):
+		wave_frame.anchor_left = wave_progress_box.anchor_left
+		wave_frame.anchor_right = wave_progress_box.anchor_right
+		wave_frame.anchor_top = wave_progress_box.anchor_top
+		wave_frame.anchor_bottom = wave_progress_box.anchor_bottom
+		wave_frame.offset_left = wave_progress_box.offset_left - 9.0
+		wave_frame.offset_top = wave_progress_box.offset_top - 5.0
+		wave_frame.offset_right = wave_progress_box.offset_right + 9.0
+		wave_frame.offset_bottom = wave_progress_box.offset_bottom + 5.0
+
 
 	if portrait:
 		# UKŁAD PIONOWY 9:16 (Zoptymalizowany, kompaktowy HUD sci-fi — 80%+ pola bitwy wolne)
@@ -494,15 +507,23 @@ func _style_combat_hud() -> void:
 		xp_fill.bg_color = Color(0.08, 0.83, 1.0)
 		xp_fill.set_corner_radius_all(4)
 		xp_bar.add_theme_stylebox_override("fill", xp_fill)
+	# WaveProgress is a VBoxContainer, not a PanelContainer. Put a real
+	# decorative Panel BEHIND it so the cyan timer framing is actually rendered.
 	if is_instance_valid(wave_progress_box):
-		var wave_box := get_node_or_null("HUD/HUDRoot/WaveProgressBox") as PanelContainer
-		if is_instance_valid(wave_box):
-			var wave_style := StyleBoxFlat.new()
-			wave_style.bg_color = Color(0.008, 0.024, 0.05, 0.90)
-			wave_style.border_color = Color(0.22, 0.80, 1.0, 0.90)
-			wave_style.set_border_width_all(2)
-			wave_style.set_corner_radius_all(9)
-			wave_box.add_theme_stylebox_override("panel", wave_style)
+		var hud_root: Control = $HUD/HUDRoot
+		var wave_backdrop := hud_root.get_node_or_null("WaveFrame") as Panel
+		if wave_backdrop == null:
+			wave_backdrop = Panel.new()
+			wave_backdrop.name = "WaveFrame"
+			wave_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			hud_root.add_child(wave_backdrop)
+			hud_root.move_child(wave_backdrop, 0)
+		var wave_style := StyleBoxFlat.new()
+		wave_style.bg_color = Color(0.009, 0.027, 0.052, 0.92)
+		wave_style.border_color = Color(0.22, 0.81, 1.0, 0.92)
+		wave_style.set_border_width_all(2)
+		wave_style.set_corner_radius_all(9)
+		wave_backdrop.add_theme_stylebox_override("panel", wave_style)
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
