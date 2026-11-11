@@ -38,13 +38,13 @@ func _ready() -> void:
 	if capture_target in ["approved_ui", "compact_hud"]:
 		await _capture_hud_mobile_9x16(false, true)
 
-	if capture_target in ["all", "defeat", "defeat_overlay_16x9"]:
+	if capture_target in ["all", "visual_comparison", "defeat", "defeat_overlay_16x9"]:
 		await _capture_defeat_overlay()
 
-	if capture_target in ["all", "victory", "victory_overlay_16x9"]:
+	if capture_target in ["all", "visual_comparison", "victory", "victory_overlay_16x9"]:
 		await _capture_victory_overlay()
 
-	if capture_target in ["all", "hud_16x9", "hud_combat_16x9"]:
+	if capture_target in ["all", "visual_comparison", "hud_16x9", "hud_combat_16x9"]:
 		await _capture_hud_combat_16x9()
 
 	if capture_target in ["all", "hud_9x16", "hud_mobile_9x16"]:
