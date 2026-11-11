@@ -133,12 +133,12 @@ static func _hero_frame_without_white_matte(tex: Texture2D) -> Texture2D:
 	image.convert(Image.FORMAT_RGBA8)
 	var border_samples: int = 0
 	var matte_samples: int = 0
-	for x in range(0, width, maxi(1, width / 32)):
+	for x in range(0, width, maxi(1, int(width / 32))):
 		for y in [0, height - 1]:
 			border_samples += 1
 			if _is_light_character_matte(image.get_pixel(x, y)):
 				matte_samples += 1
-	for y in range(0, height, maxi(1, height / 32)):
+	for y in range(0, height, maxi(1, int(height / 32))):
 		for x in [0, width - 1]:
 			border_samples += 1
 			if _is_light_character_matte(image.get_pixel(x, y)):
