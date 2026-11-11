@@ -113,31 +113,43 @@ static func _hero_frame_without_white_matte(tex: Texture2D) -> Texture2D:
 	if tex == null:
 		return null
 	var key: String = tex.resource_path
+	if key.is_empty():
+		key = str(tex.get_instance_id())
 	if _hero_alpha_cache.has(key):
 		return _hero_alpha_cache[key]
-	var image: Image = tex.get_image()
-	if image == null or image.is_empty():
+	var source: Image = tex.get_image()
+	if source == null or source.is_empty():
 		return tex
-	var width: int = image.get_width()
-	var height: int = image.get_height()
+	var width: int = source.get_width()
+	var height: int = source.get_height()
 	if width < 4 or height < 4:
 		return tex
-	# Avoid rewriting already-transparent frames.
-	var corners: Array[Color] = [
-		image.get_pixel(0, 0), image.get_pixel(width - 1, 0),
-		image.get_pixel(0, height - 1), image.get_pixel(width - 1, height - 1)
-	]
-	var opaque_white_corners: int = 0
-	for c in corners:
-		if c.a > 0.98 and c.r > 0.93 and c.g > 0.93 and c.b > 0.93:
-			opaque_white_corners += 1
-	if opaque_white_corners < 2:
+
+	# Existing art imports include an off-white/blue studio background.
+	# The old algorithm returned the original PNG whenever just two
+	# CORNERS were not pure white. Detect the surrounding matte from
+	# the whole border and flood-fill only background-connected pixels.
+	var image: Image = source.duplicate()
+	image.convert(Image.FORMAT_RGBA8)
+	var border_samples: int = 0
+	var matte_samples: int = 0
+	for x in range(0, width, maxi(1, width / 32)):
+		for y in [0, height - 1]:
+			border_samples += 1
+			if _is_light_character_matte(image.get_pixel(x, y)):
+				matte_samples += 1
+	for y in range(0, height, maxi(1, height / 32)):
+		for x in [0, width - 1]:
+			border_samples += 1
+			if _is_light_character_matte(image.get_pixel(x, y)):
+				matte_samples += 1
+	if float(matte_samples) / float(maxi(1, border_samples)) < 0.32:
 		_hero_alpha_cache[key] = tex
 		return tex
-	image.convert(Image.FORMAT_RGBA8)
-	var queue: Array[Vector2i] = []
+
 	var visited := PackedByteArray()
 	visited.resize(width * height)
+	var queue: Array[Vector2i] = []
 	for x in range(width):
 		queue.append(Vector2i(x, 0))
 		queue.append(Vector2i(x, height - 1))
@@ -145,18 +157,20 @@ static func _hero_frame_without_white_matte(tex: Texture2D) -> Texture2D:
 		queue.append(Vector2i(0, y))
 		queue.append(Vector2i(width - 1, y))
 	var front: int = 0
+	var erased: int = 0
 	while front < queue.size():
 		var pos: Vector2i = queue[front]
 		front += 1
-		var idx: int = pos.y * width + pos.x
-		if visited[idx] != 0:
+		var index: int = pos.y * width + pos.x
+		if visited[index] != 0:
 			continue
-		visited[idx] = 1
-		var pixel: Color = image.get_pixelv(pos)
-		if pixel.a < 0.96 or pixel.r < 0.91 or pixel.g < 0.91 or pixel.b < 0.91:
+		visited[index] = 1
+		var c: Color = image.get_pixelv(pos)
+		if not _is_light_character_matte(c):
 			continue
-		pixel.a = 0.0
-		image.set_pixelv(pos, pixel)
+		c.a = 0.0
+		image.set_pixelv(pos, c)
+		erased += 1
 		if pos.x > 0:
 			queue.append(Vector2i(pos.x - 1, pos.y))
 		if pos.x + 1 < width:
@@ -165,9 +179,23 @@ static func _hero_frame_without_white_matte(tex: Texture2D) -> Texture2D:
 			queue.append(Vector2i(pos.x, pos.y - 1))
 		if pos.y + 1 < height:
 			queue.append(Vector2i(pos.x, pos.y + 1))
-	var fixed: ImageTexture = ImageTexture.create_from_image(image)
-	_hero_alpha_cache[key] = fixed
-	return fixed
+	# Guard against accidental removal of a mostly pale character frame.
+	if erased < width * height / 8 or erased > width * height * 9 / 10:
+		_hero_alpha_cache[key] = tex
+		return tex
+	var result: Texture2D = ImageTexture.create_from_image(image)
+	_hero_alpha_cache[key] = result
+	return result
+
+
+static func _is_light_character_matte(c: Color) -> bool:
+	if c.a < 0.90:
+		return false
+	# The actual white card around the engineer is pale blue-gray, not
+	# RGB(255,255,255). Limit removal to neutral/light backgrounds.
+	var lowest: float = minf(c.r, minf(c.g, c.b))
+	var highest: float = maxf(c.r, maxf(c.g, c.b))
+	return lowest > 0.70 and highest - lowest < 0.25
 
 
 const PLAYER_ANIMATED_CLASSES := ["soldier", "engineer", "medic", "scout", "toxic_soldier"]
