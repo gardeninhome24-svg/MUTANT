@@ -69,6 +69,30 @@ jobs:
           test -s visual_qa/captures/upgrade_mobile_720x1280_actual.png
           test -s visual_qa/captures/hud_compact_420x840_actual.png
 
+      - name: Capture additional real landscape and result overlays
+        shell: bash
+        run: |
+          set -euo pipefail
+          xvfb-run -a -s '-screen 0 1280x720x24' env LIBGL_ALWAYS_SOFTWARE=1 \
+            godot --path . --rendering-driver opengl3 \
+            res://tools/visual_qa/capture_runner.tscn -- --scenario=visual_comparison \
+            2>&1 | tee /tmp/visual-comparison-render.log
+          grep -Fq 'CAPTURES PASS: 3 real viewport PNGs saved' /tmp/visual-comparison-render.log
+          test -s visual_qa/captures/hud_combat_1280x720_actual.png
+          test -s visual_qa/captures/defeat_overlay_1280x720_actual.png
+          test -s visual_qa/captures/victory_overlay_1280x720_actual.png
+
+      - name: Build visual comparisons for all available approved references
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --break-system-packages --quiet numpy pillow scikit-image
+          python3 tools/visual_qa/compare_images.py --root . \
+            --scenario hud_mobile_9x16 \
+            --scenario hud_combat_16x9 \
+            --scenario defeat_overlay_16x9 \
+            --scenario victory_overlay_16x9
+
       - name: Compare actual HUD with approved reference — strict 97% gate
         shell: bash
         run: |
@@ -97,6 +121,9 @@ jobs:
             visual_qa/captures/hud_mobile_720x1280_actual.png
             visual_qa/captures/upgrade_mobile_720x1280_actual.png
             visual_qa/captures/hud_compact_420x840_actual.png
+            visual_qa/captures/hud_combat_1280x720_actual.png
+            visual_qa/captures/defeat_overlay_1280x720_actual.png
+            visual_qa/captures/victory_overlay_1280x720_actual.png
           if-no-files-found: warn
           retention-days: 30
 
@@ -108,5 +135,6 @@ jobs:
           path: |
             /tmp/approved-ui-import.log
             /tmp/approved-ui-render.log
+            /tmp/visual-comparison-render.log
           if-no-files-found: warn
           retention-days: 14
