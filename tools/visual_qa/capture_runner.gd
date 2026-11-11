@@ -202,6 +202,21 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 		main_inst.set_process(false)
 		for i in range(10):
 			main_inst.call("spawn_wave_enemy")
+		# Use repeatable visible combat composition for the portrait capture.
+		# Spawn points outside the camera previously produced a mostly empty
+		# screenshot and distorted visual parity against the approved gameplay.
+		# Pause enemy processing for a stable, reproducible QA arrangement.
+		var enemy_index: int = 0
+		for actor in main_inst.get_node("CharactersLayer").get_children():
+			if actor is MutantEnemy:
+				var angle: float = TAU * float(enemy_index) / 10.0
+				actor.global_position = player.global_position + Vector2(cos(angle), sin(angle)) * (125.0 + float(enemy_index % 3) * 22.0)
+				actor.set_process(false)
+				actor.set_physics_process(false)
+				enemy_index += 1
+		if enemy_index < 6:
+			failed_captures += 1
+			push_error("[Visual QA] Expected at least 6 visible mutant actors; found %d" % enemy_index)
 	else:
 		failed_captures += 1
 		push_error("[Visual QA] Combat screenshot has no playable hero")
