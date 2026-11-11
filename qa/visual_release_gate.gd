@@ -122,6 +122,17 @@ func _run() -> void:
 	_not_overlapping(joystick, dash, "Joystick vs dash")
 	_not_overlapping(joystick, fire, "Joystick vs fire")
 	_not_overlapping(dash, fire, "Dash vs fire")
+	# The approved 720px portrait layout reserves a large joystick at the
+	# lower left. The upgrade inventory and live power row must stay separate.
+	if is_instance_valid(weapons) and is_instance_valid(joystick):
+		_check(weapons.get_global_rect().position.x >= joystick.get_global_rect().end.x,
+			"720px illustrated weapon inventory clears the mobile joystick")
+	var live_radar: MiniRadar = combat.get_node_or_null("HUD/HUDRoot/RadarPanel/MiniRadar") as MiniRadar
+	if is_instance_valid(live_radar):
+		_check(live_radar.tracking_diameter <= 900.0, "Radar tracks nearby combat instead of the entire stage")
+	if is_instance_valid(combat.get("weapon_slots_hbox")):
+		var inventory: HBoxContainer = combat.get("weapon_slots_hbox") as HBoxContainer
+		_check(inventory.get_child_count() >= 3, "Bottom combat inventory shows gun and actual available skills")
 
 	# Test the narrow mobile layout branch, which is different from 720x1280.
 	# This is a structural offset check; a physical Android device still needs QA.

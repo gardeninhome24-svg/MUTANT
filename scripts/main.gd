@@ -403,7 +403,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			radar_panel.offset_bottom = (178.0 if compact else 315.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(170.0, (view_width - 400.0) * 0.5)
+			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(180.0, (view_width - 400.0) * 0.5)
 			bottom_weapons_panel.offset_top = -128.0 if compact else -102.0
 			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 105.0, (view_width + 400.0) * 0.5)
 			bottom_weapons_panel.offset_bottom = -78.0 if compact else -20.0
