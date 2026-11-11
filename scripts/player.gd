@@ -358,7 +358,7 @@ func _physics_process(delta: float) -> void:
 		anim_timer += delta * 14.0
 		var bob := sin(anim_timer) * 0.045
 		var tilt := clampf(velocity.x * 0.0005, -0.12, 0.12)
-		sprite.scale = Vector2(0.69 + bob, 0.69 - bob)
+		sprite.scale = Vector2(0.77 + bob, 0.77 - bob)
 		sprite.rotation = tilt
 		if has_frame_anim and shoot_anim_timer <= 0.0 and walk_frames.size() > 0:
 			var f_idx := int(anim_timer * 0.8) % walk_frames.size()
@@ -366,7 +366,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		anim_timer += delta * 3.5
 		var breathe := sin(anim_timer) * 0.018
-		sprite.scale = Vector2(0.69, 0.69 + breathe)
+		sprite.scale = Vector2(0.77, 0.77 + breathe)
 		sprite.rotation = lerpf(sprite.rotation, 0.0, 10.0 * delta)
 		if not idle_frames.is_empty() and shoot_anim_timer <= 0.0:
 			var i_idx := int(anim_timer * 1.5) % idle_frames.size()

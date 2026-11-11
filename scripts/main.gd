@@ -257,7 +257,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		# minimum expanded the panel beyond its anchors into other HUD panels.
 		var radar_view := radar_panel.get_node_or_null("MiniRadar") as MiniRadar
 		if is_instance_valid(radar_view):
-			radar_view.radar_size = Vector2(86, 86) if compact else (Vector2(132, 110) if portrait else Vector2(140, 110))
+			radar_view.radar_size = Vector2(86, 86) if compact else (Vector2(128, 128) if portrait else Vector2(140, 110))
 			radar_view.custom_minimum_size = radar_view.radar_size
 			radar_view.queue_redraw()
 	if is_instance_valid(npc_portrait_rect):
@@ -375,50 +375,50 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			stats_card.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			stats_card.offset_left = 10.0
 			stats_card.offset_top = 8.0 + safe_top
-			stats_card.offset_right = 205.0
-			stats_card.offset_bottom = (64.0 if compact else 85.0) + safe_top
+			stats_card.offset_right = 205.0 if compact else 286.0
+			stats_card.offset_bottom = (64.0 if compact else 82.0) + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -minf(395.0, view_width - 20.0) if compact else -302.0
+			currency_bar.offset_left = -minf(395.0, view_width - 20.0) if compact else -286.0
 			currency_bar.offset_top = (193.0 if compact else 8.0) + safe_top
 			currency_bar.offset_right = -10.0
 			currency_bar.offset_bottom = (227.0 if compact else 45.0) + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -110.0 if compact else -115.0
-			wave_progress_box.offset_top = (242.0 if compact else 110.0) + safe_top
+			wave_progress_box.offset_top = (242.0 if compact else 90.0) + safe_top
 			wave_progress_box.offset_right = 110.0 if compact else 115.0
-			wave_progress_box.offset_bottom = (292.0 if compact else 196.0) + safe_top
+			wave_progress_box.offset_bottom = (292.0 if compact else 144.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
-			objectives_panel.offset_top = (80.0 if compact else 213.0) + safe_top
-			objectives_panel.offset_right = 205.0 if compact else 304.0
-			objectives_panel.offset_bottom = (181.0 if compact else 390.0) + safe_top
+			objectives_panel.offset_top = (80.0 if compact else 168.0) + safe_top
+			objectives_panel.offset_right = 205.0 if compact else 286.0
+			objectives_panel.offset_bottom = (181.0 if compact else 315.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			radar_panel.offset_left = -108.0 if compact else -166.0
-			radar_panel.offset_top = (75.0 if compact else 120.0) + safe_top
+			radar_panel.offset_left = -108.0 if compact else -150.0
+			radar_panel.offset_top = (75.0 if compact else 168.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (178.0 if compact else 258.0) + safe_top
+			radar_panel.offset_bottom = (178.0 if compact else 315.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(185.0, (view_width - 360.0) * 0.5)
-			bottom_weapons_panel.offset_top = -128.0 if compact else -110.0
-			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 115.0, (view_width + 360.0) * 0.5)
-			bottom_weapons_panel.offset_bottom = -78.0 if compact else -30.0
+			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(170.0, (view_width - 400.0) * 0.5)
+			bottom_weapons_panel.offset_top = -128.0 if compact else -102.0
+			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 105.0, (view_width + 400.0) * 0.5)
+			bottom_weapons_panel.offset_bottom = -78.0 if compact else -20.0
 		if powers_hbox:
 			powers_hbox.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-			powers_hbox.offset_left = -355.0 if not compact else -330.0
-			powers_hbox.offset_top = -74.0
-			powers_hbox.offset_right = -12.0
-			powers_hbox.offset_bottom = -12.0
+			powers_hbox.offset_left = -330.0 if compact else -350.0
+			powers_hbox.offset_top = -74.0 if compact else -184.0
+			powers_hbox.offset_right = -12.0 if compact else -26.0
+			powers_hbox.offset_bottom = -12.0 if compact else -124.0
 		if joystick:
 			joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			joystick.offset_left = 20.0
-			joystick.offset_top = -300.0 if compact else -228.0
-			joystick.offset_right = 152.0
-			joystick.offset_bottom = -168.0 if compact else -96.0
+			joystick.offset_top = -300.0 if compact else -245.0
+			joystick.offset_right = 152.0 if compact else 174.0
+			joystick.offset_bottom = -168.0 if compact else -91.0
 		if fire_btn:
 			fire_btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 			fire_btn.offset_left = -150.0
@@ -2320,24 +2320,26 @@ func _refresh_weapon_loadout_bar() -> void:
 	for c in weapon_slots_hbox.get_children():
 		c.queue_free()
 
+	# The hero starts with real active combat tools. A strip of four blank
+	# squares made working combat look unfinished in the approved screenshot.
+	# These are read-only status icons; actual skill buttons stay interactive.
 	var items: Array[Dictionary] = [
-		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0))}
+		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0)), "caption": "BROŃ"},
+		{"icon": "res://assets/mutantsurvivor_ch01/icons/grenade.png", "lvl": 1, "caption": "Q"},
+		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_12.png", "lvl": 1, "caption": "E"}
 	]
 	for up_id in upgrade_tiers.keys():
-		if up_id == "plasma_dmg":
+		if up_id == "plasma_dmg" or items.size() >= 5:
 			continue
-		if items.size() >= 5:
-			break
 		items.append({
 			"icon": POWER_ICONS.get(up_id, "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png"),
-			"lvl": int(upgrade_tiers[up_id])
+			"lvl": int(upgrade_tiers[up_id]),
+			"caption": "LV"
 		})
-	while items.size() < 5:
-		items.append({"icon": "", "lvl": 0})
 
 	for slot_data in items:
 		var slot_box := PanelContainer.new()
-		slot_box.custom_minimum_size = Vector2(46, 44) if StageDirector.is_portrait_mode() else Vector2(56, 50)
+		slot_box.custom_minimum_size = Vector2(50, 52) if StageDirector.is_portrait_mode() else Vector2(56, 50)
 		var st := StyleBoxFlat.new()
 		st.bg_color = Color(0.08, 0.12, 0.19, 0.95)
 		st.border_width_left = 1
@@ -2365,7 +2367,7 @@ func _refresh_weapon_loadout_bar() -> void:
 			v.add_child(tr)
 
 			var l := Label.new()
-			l.text = "Lv.%d" % int(slot_data["lvl"])
+			l.text = ("Lv.%d" % int(slot_data["lvl"])) if String(slot_data.get("caption", "")) == "LV" or String(slot_data.get("caption", "")) == "BROŃ" else String(slot_data.get("caption", ""))
 			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			l.add_theme_font_size_override("font_size", 10)
 			l.add_theme_color_override("font_color", Color(0.4, 0.98, 1.0))

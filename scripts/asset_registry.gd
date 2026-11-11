@@ -675,13 +675,13 @@ static func enemy_frame_scale(tex: Texture2D, enemy_id: String) -> Vector2:
 		_enemy_visual_extents[cache_key] = extent
 	var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
 	var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
-	var target_extent: float = 282.0 if is_boss else (205.0 if is_large else 156.0)
+	var target_extent: float = 286.0 if is_boss else (220.0 if is_large else 174.0)
 	# Many supplied mutant frames include dark rectangular pixel backgrounds.
 	# Alpha-only scaling made that entire frame enormous (300-500 px),
 	# covering the hero and revealing hard-edged matte rectangles in combat.
 	# Bound the FULL frame to a readable on-screen budget as well.
 	var frame_extent: float = float(maxi(tex.get_width(), tex.get_height()))
-	var canvas_budget: float = 300.0 if is_boss else (248.0 if is_large else 215.0)
+	var canvas_budget: float = 300.0 if is_boss else (252.0 if is_large else 226.0)
 	var silhouette_scale: float = target_extent / maxf(1.0, extent)
 	var canvas_scale: float = canvas_budget / maxf(1.0, frame_extent)
 	var normalized: float = clampf(minf(silhouette_scale, canvas_scale), 0.15, 1.25)
