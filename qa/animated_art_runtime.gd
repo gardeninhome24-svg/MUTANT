@@ -26,6 +26,9 @@ func _run() -> void:
 			"%s has 11 imported images" % boss_id)
 		var actor_sprite: Sprite2D = Sprite2D.new()
 		var visual: Dictionary = AssetRegistry.apply_enemy_visual(actor_sprite, boss_id)
+		if actor_sprite.texture != null:
+			var max_drawn_side: float = float(maxi(actor_sprite.texture.get_width(), actor_sprite.texture.get_height())) * actor_sprite.scale.x
+			_check(max_drawn_side <= 301.0, "%s frame stays inside readable 300px boss bounds" % boss_id)
 		_check(String(visual.get("status", "")) == "BOSS_ART_CANDIDATE",
 			"%s uses candidate animation instead of broken static fallback" % boss_id)
 		_check(bool(visual.get("is_animated", false)), "%s is flagged animated" % boss_id)
