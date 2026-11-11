@@ -8,6 +8,10 @@ on:
       - scripts/main_menu.gd
       - scripts/main.gd
       - scripts/asset_registry.gd
+      - scripts/mini_radar.gd
+      - scripts/player.gd
+      - scripts/mutant_enemy.gd
+      - qa/visual_release_gate.gd
       - scenes/ui/main_menu.tscn
       - scenes/main/main.tscn
       - tools/visual_qa/capture_runner.gd

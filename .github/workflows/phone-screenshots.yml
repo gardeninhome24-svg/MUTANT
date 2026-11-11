@@ -21,6 +21,7 @@ on:
       - "scripts/mutant_enemy.gd"
       - "scripts/player.gd"
       - "scripts/asset_registry.gd"
+      - "scripts/mini_radar.gd"
       - "scripts/power_effects.gd"
       - "addons/ms_beta/wave_director.gd"
       - "assets/characters/**"
