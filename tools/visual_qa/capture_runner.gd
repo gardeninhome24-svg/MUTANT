@@ -77,6 +77,21 @@ func _capture_home_approved_9x16() -> void:
 	menu.call("_apply_responsive_menu_layout")
 	for frame in range(14):
 		await get_tree().process_frame
+	# Validate actual menu controls as well as the exported PNG. A screenshot
+	# alone did not catch wide cards extending beyond the mobile viewport.
+	for property_name in ["top_hub_panel", "stage_card", "play_big_btn", "bottom_nav_panel"]:
+		var control := menu.get(property_name) as Control
+		if not is_instance_valid(control):
+			failed_captures += 1
+			push_error("[Visual QA] Missing required menu element: %s" % property_name)
+			continue
+		var bounds := control.get_global_rect()
+		if bounds.size.x <= 1.0 or bounds.size.y <= 1.0:
+			failed_captures += 1
+			push_error("[Visual QA] Empty menu element: %s" % property_name)
+		elif bounds.position.x < -2.0 or bounds.end.x > 722.0:
+			failed_captures += 1
+			push_error("[Visual QA] Menu element clips horizontally: %s (%s)" % [property_name, bounds])
 	await _save_viewport_png(sub, "approved_menu_720x1280_actual")
 	menu.queue_free()
 	sub.queue_free()
