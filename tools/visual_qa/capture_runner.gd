@@ -26,6 +26,10 @@ func _ready() -> void:
 
 	if capture_target in ["all", "approved_ui", "home_9x16", "menu_9x16"]:
 		await _capture_home_approved_9x16()
+	if capture_target in ["approved_ui", "compact_menu", "menu_420"]:
+		await _capture_home_approved_9x16(420, 840)
+	if capture_target in ["approved_ui", "menu_540"]:
+		await _capture_home_approved_9x16(540, 960)
 
 	if capture_target in ["approved_ui", "approved_combat_9x16"]:
 		await _capture_hud_mobile_9x16(false)
@@ -59,9 +63,9 @@ func _ready() -> void:
 		print("[Visual QA] CAPTURES PASS: %d real viewport PNGs saved" % saved_captures)
 		get_tree().quit(0)
 
-func _capture_home_approved_9x16() -> void:
-	# Real menu: live StageDirector data and existing responsive Godot nodes.
-	var sub := _create_subviewport(Vector2i(720, 1280))
+func _capture_home_approved_9x16(width: int = 720, height: int = 1280) -> void:
+	# Capture the same real menu at 420, 540 and 720 logical widths.
+	var sub := _create_subviewport(Vector2i(width, height))
 	add_child(sub)
 	var old_orientation: String = StageDirector.orientation_mode
 	StageDirector.orientation_mode = "portrait"
@@ -91,10 +95,18 @@ func _capture_home_approved_9x16() -> void:
 		if bounds.size.x <= 1.0 or bounds.size.y <= 1.0:
 			failed_captures += 1
 			push_error("[Visual QA] Empty menu element: %s" % property_name)
-		elif bounds.position.x < -2.0 or bounds.end.x > 722.0:
+		elif bounds.position.x < -2.0 or bounds.end.x > float(width) + 2.0:
 			failed_captures += 1
 			push_error("[Visual QA] Menu element clips horizontally: %s (%s)" % [property_name, bounds])
-	await _save_viewport_png(sub, "approved_menu_720x1280_actual")
+	var play_button := menu.get("play_big_btn") as Control
+	var visible_scroll := menu.get("base_scroll") as Control
+	if is_instance_valid(play_button) and is_instance_valid(visible_scroll):
+		var play_rect := play_button.get_global_rect()
+		var viewport_rect := visible_scroll.get_global_rect()
+		if play_rect.position.y < viewport_rect.position.y or play_rect.end.y > viewport_rect.end.y + 2.0:
+			failed_captures += 1
+			push_error("[Visual QA] PLAY button is not fully visible at %dpx: %s vs %s" % [width, play_rect, viewport_rect])
+	await _save_viewport_png(sub, "approved_menu_%dx%d_actual" % [width, height])
 	menu.queue_free()
 	sub.queue_free()
 	StageDirector.orientation_mode = old_orientation
