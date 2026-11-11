@@ -395,6 +395,13 @@ func _test_combat_and_bosses() -> void:
 	_assert(battle.get("wave_director") != null, "Wave director initialized")
 	_assert(is_instance_valid(battle.get("player")), "Player initialized in battle")
 	_assert(int(battle.get("current_wave_num")) == 1, "Battle starts at wave 1")
+	var live_player: Player = battle.get("player") as Player
+	if is_instance_valid(live_player):
+		_assert(not live_player.has_toxic_mines, "Toxic mines start locked")
+		battle.call("apply_upgrade", "bio_hazard")
+		_assert(live_player.has_toxic_mines and live_player.toxic_mine_tier == 1, "Toxic mine card unlocks real proximity mines")
+		battle.call("apply_upgrade", "bio_hazard")
+		_assert(live_player.toxic_mine_tier == 2 and live_player.toxic_mine_timer <= 0.7, "Second toxic mine card improves damage and deployment rate")
 	_assert(bool(battle.call("_stage_requires_final_boss")), "Tutorial stage one intentionally contains a boss")
 	# Stop automatic time progression while exercising deterministic wave transitions.
 	battle.set_process(false)

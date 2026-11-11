@@ -29,6 +29,10 @@ var has_vibro_saws: bool = false
 var saw_count: int = 0
 var saw_damage: float = 42.0
 
+var has_toxic_mines: bool = false
+var toxic_mine_tier: int = 0
+var toxic_mine_timer: float = 0.0
+
 var has_tesla: bool = false
 var tesla_timer: float = 0.0
 var tesla_cooldown: float = 1.5
@@ -286,6 +290,12 @@ func use_antigravity_vortex() -> bool:
 func _physics_process(delta: float) -> void:
 	if dash_timer > 0.0:
 		dash_timer = maxf(0.0, dash_timer - delta)
+	if has_toxic_mines and current_health > 0.0:
+		toxic_mine_timer -= delta
+		if toxic_mine_timer <= 0.0:
+			toxic_mine_timer = maxf(3.8, 7.5 - float(toxic_mine_tier) * 0.65)
+			var mine_layer: Node = effects_layer if is_instance_valid(effects_layer) else get_parent()
+			PowerEffects.deploy_toxic_mine(mine_layer, global_position, 48.0 + float(toxic_mine_tier) * 22.0)
 	if grenade_timer > 0.0:
 		grenade_timer = maxf(0.0, grenade_timer - delta)
 	if vortex_timer > 0.0:

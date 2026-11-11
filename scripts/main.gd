@@ -1854,6 +1854,10 @@ func apply_upgrade(up_id: String) -> void:
 		"critical_focus":
 			player.crit_chance += 0.12
 			player.crit_multiplier += 0.35
+		"bio_hazard":
+			player.has_toxic_mines = true
+			player.toxic_mine_tier += 1
+			player.toxic_mine_timer = minf(player.toxic_mine_timer, 0.7)
 		"energy_shield":
 			player.has_shield = true
 			player.shield_charges = 2

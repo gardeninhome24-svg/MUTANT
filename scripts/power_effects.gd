@@ -164,6 +164,57 @@ static func throw_plasma_grenade(layer: Node, start_pos: Vector2, target_pos: Ve
 		if is_instance_valid(smoke): smoke.queue_free()
 	)
 
+## Toxic mine is a real proximity-triggered combat upgrade, not a cosmetic card.
+## Uses the existing grenade/energy visual assets and an armed green glow.
+static func deploy_toxic_mine(layer: Node, world_pos: Vector2, damage: float) -> void:
+	if not is_instance_valid(layer) or not layer.is_inside_tree():
+		return
+	var mine := Sprite2D.new()
+	mine.texture = GRENADE_TEX
+	mine.global_position = world_pos
+	mine.modulate = Color(0.26, 1.0, 0.43, 0.94)
+	mine.scale = Vector2(0.35, 0.35)
+	mine.z_index = 1
+	layer.add_child(mine)
+	var elapsed: float = 0.0
+	var detonated: bool = false
+	while elapsed < 11.0 and is_instance_valid(mine) and mine.is_inside_tree():
+		await layer.get_tree().process_frame
+		if not is_instance_valid(layer) or not layer.is_inside_tree() or not is_instance_valid(mine):
+			return
+		elapsed += maxf(0.001, layer.get_process_delta_time())
+		mine.modulate.a = 0.78 + 0.18 * sin(elapsed * 5.0)
+		if elapsed < 0.35:
+			continue
+		for actor in layer.get_tree().get_nodes_in_group("enemies"):
+			var target := actor as MutantEnemy
+			if is_instance_valid(target) and not target.is_dying and target.global_position.distance_squared_to(world_pos) <= 56.0 * 56.0:
+				detonated = true
+				break
+		if detonated:
+			break
+	if is_instance_valid(mine):
+		mine.queue_free()
+	if not detonated or not is_instance_valid(layer) or not layer.is_inside_tree():
+		return
+	for actor in layer.get_tree().get_nodes_in_group("enemies"):
+		var enemy := actor as MutantEnemy
+		if is_instance_valid(enemy) and not enemy.is_dying and enemy.global_position.distance_squared_to(world_pos) <= 115.0 * 115.0:
+			enemy.take_damage(maxf(1.0, damage))
+	var bloom := Sprite2D.new()
+	bloom.texture = EXPLOSION_TEX
+	bloom.global_position = world_pos
+	bloom.modulate = Color(0.24, 1.0, 0.42, 0.8)
+	bloom.scale = Vector2(0.35, 0.35)
+	bloom.material = get_additive_mat()
+	layer.add_child(bloom)
+	var pulse := bloom.create_tween()
+	pulse.set_parallel(true)
+	pulse.tween_property(bloom, "scale", Vector2(1.35, 1.35), 0.32)
+	pulse.tween_property(bloom, "modulate:a", 0.0, 0.32)
+	pulse.chain().tween_callback(bloom.queue_free)
+
+
 ## 4. Osobliwość Antygrawitacyjna / Czarna Dziura (wciąga wrogów i zadaje obrażenia fazowe)
 static func spawn_antigravity_vortex(layer: Node, world_pos: Vector2, tick_damage: float, duration: float = 2.8, pull_radius: float = 240.0) -> void:
 	if not is_instance_valid(layer) or not layer.is_inside_tree():
