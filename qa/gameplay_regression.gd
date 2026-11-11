@@ -395,7 +395,10 @@ func _test_combat_and_bosses() -> void:
 	_assert(battle.get("wave_director") != null, "Wave director initialized")
 	_assert(is_instance_valid(battle.get("player")), "Player initialized in battle")
 	_assert(int(battle.get("current_wave_num")) == 1, "Battle starts at wave 1")
-	var live_player: Player = battle.get("player") as Player
+	# Avoid eagerly resolving Player during SceneTree --script compilation:
+	# Player -> PowerEffects -> MutantEnemy loads StageDirector before autoload
+	# singleton registration on clean CI runners.
+	var live_player = battle.get("player")
 	if is_instance_valid(live_player):
 		_assert(not live_player.has_toxic_mines, "Toxic mines start locked")
 		battle.call("apply_upgrade", "bio_hazard")
