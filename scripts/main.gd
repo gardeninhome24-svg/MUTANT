@@ -2324,9 +2324,9 @@ func _refresh_weapon_loadout_bar() -> void:
 	# squares made working combat look unfinished in the approved screenshot.
 	# These are read-only status icons; actual skill buttons stay interactive.
 	var items: Array[Dictionary] = [
-		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0)), "caption": "BROŃ"},
-		{"icon": "res://assets/mutantsurvivor_ch01/icons/grenade.png", "lvl": 1, "caption": "Q"},
-		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_12.png", "lvl": 1, "caption": "E"}
+		{"icon": "res://assets/ui/production_icons/weapon.svg", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0)), "caption": "BROŃ"},
+		{"icon": "res://assets/ui/production_icons/grenade.svg", "lvl": 1, "caption": "Q"},
+		{"icon": "res://assets/ui/production_icons/vortex.svg", "lvl": 1, "caption": "E"}
 	]
 	for up_id in upgrade_tiers.keys():
 		if up_id == "plasma_dmg" or items.size() >= 5:
@@ -2339,20 +2339,19 @@ func _refresh_weapon_loadout_bar() -> void:
 
 	for slot_data in items:
 		var slot_box := PanelContainer.new()
-		slot_box.custom_minimum_size = Vector2(50, 52) if StageDirector.is_portrait_mode() else Vector2(56, 50)
+		slot_box.custom_minimum_size = Vector2(58, 62) if StageDirector.is_portrait_mode() else Vector2(65, 62)
 		var st := StyleBoxFlat.new()
-		st.bg_color = Color(0.08, 0.12, 0.19, 0.95)
-		st.border_width_left = 1
-		st.border_width_top = 1
-		st.border_width_right = 1
-		st.border_width_bottom = 1
+		st.bg_color = Color(0.013, 0.046, 0.077, 0.98)
+		st.set_border_width_all(2)
+		st.set_content_margin_all(2)
 		var active := int(slot_data["lvl"]) > 0
-		st.border_color = Color(0.25, 0.90, 1.0, 0.9) if active else Color(0.22, 0.30, 0.40, 0.5)
+		st.border_color = Color(0.97, 0.70, 0.26, 0.97) if active else Color(0.22, 0.60, 0.78, 0.55)
 		st.corner_radius_top_left = 6
 		st.corner_radius_top_right = 6
 		st.corner_radius_bottom_left = 6
 		st.corner_radius_bottom_right = 6
 		slot_box.add_theme_stylebox_override("panel", st)
+		slot_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 		var v := VBoxContainer.new()
 		v.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -2361,7 +2360,7 @@ func _refresh_weapon_loadout_bar() -> void:
 		if active and not String(slot_data["icon"]).is_empty():
 			var tr := TextureRect.new()
 			tr.texture = AssetRegistry.get_tex(String(slot_data["icon"]))
-			tr.custom_minimum_size = Vector2(28, 23) if StageDirector.is_portrait_mode() else Vector2(34, 28)
+			tr.custom_minimum_size = Vector2(38, 34) if StageDirector.is_portrait_mode() else Vector2(42, 38)
 			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			v.add_child(tr)
@@ -2370,7 +2369,7 @@ func _refresh_weapon_loadout_bar() -> void:
 			l.text = ("Lv.%d" % int(slot_data["lvl"])) if String(slot_data.get("caption", "")) == "LV" or String(slot_data.get("caption", "")) == "BROŃ" else String(slot_data.get("caption", ""))
 			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			l.add_theme_font_size_override("font_size", 10)
-			l.add_theme_color_override("font_color", Color(0.4, 0.98, 1.0))
+			l.add_theme_color_override("font_color", Color(1.0, 0.85, 0.44))
 			v.add_child(l)
 		else:
 			var empty_l := Label.new()
