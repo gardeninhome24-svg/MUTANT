@@ -542,6 +542,10 @@ static func get_campaign_boss_portrait(boss_id: String) -> String:
 # Cache every texture; all work happens once during resource setup, not each frame.
 static var _mutant_matte_cache: Dictionary = {}
 
+static func _mutant_matte_distance_sq(a: Color, b: Color) -> float:
+	return (a.r - b.r) * (a.r - b.r) + (a.g - b.g) * (a.g - b.g) + (a.b - b.b) * (a.b - b.b)
+
+
 static func _mutant_frame_without_flat_matte(tex: Texture2D) -> Texture2D:
 	if tex == null:
 		return null
@@ -579,13 +583,13 @@ static func _mutant_frame_without_flat_matte(tex: Texture2D) -> Texture2D:
 		for y in [0, height - 1]:
 			var p: Color = raw.get_pixel(x, y)
 			sampled += 1
-			if p.a > 0.95 and p.distance_squared_to(matte) < 0.020:
+			if p.a > 0.95 and _mutant_matte_distance_sq(p, matte) < 0.020:
 				matched += 1
 	for y in range(0, height, maxi(1, int(height / 24))):
 		for x in [0, width - 1]:
 			var p: Color = raw.get_pixel(x, y)
 			sampled += 1
-			if p.a > 0.95 and p.distance_squared_to(matte) < 0.020:
+			if p.a > 0.95 and _mutant_matte_distance_sq(p, matte) < 0.020:
 				matched += 1
 	if matched < int(float(sampled) * 0.82):
 		return tex
@@ -610,7 +614,7 @@ static func _mutant_frame_without_flat_matte(tex: Texture2D) -> Texture2D:
 			continue
 		visited[idx] = 1
 		var c: Color = image.get_pixelv(pos)
-		if c.a < 0.95 or c.distance_squared_to(matte) > 0.020:
+		if c.a < 0.95 or _mutant_matte_distance_sq(c, matte) > 0.020:
 			continue
 		c.a = 0.0
 		image.set_pixelv(pos, c)
