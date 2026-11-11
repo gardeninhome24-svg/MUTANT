@@ -7,6 +7,7 @@ on:
     paths:
       - scripts/main_menu.gd
       - scripts/main.gd
+      - scripts/asset_registry.gd
       - scenes/ui/main_menu.tscn
       - scenes/main/main.tscn
       - tools/visual_qa/capture_runner.gd

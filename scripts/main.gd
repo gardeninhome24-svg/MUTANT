@@ -236,7 +236,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
-			mission_text.add_theme_font_size_override("font_size", 13 if compact else 17)
+			mission_text.add_theme_font_size_override("font_size", 12 if compact else 17)
 			mission_text.clip_text = true
 			mission_text.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if is_instance_valid(weapon_slots_hbox):
@@ -268,7 +268,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		profile_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(68, 30)
 		profile_hud_btn.visible = not portrait
 	if is_instance_valid(currency_bar):
-		currency_bar.add_theme_constant_override("separation", (5 if compact else 8) if portrait else 18)
+		currency_bar.add_theme_constant_override("separation", (3 if compact else 8) if portrait else 18)
 		for coin_group in [get_node_or_null("HUD/HUDRoot/CurrencyBar/EnergyHBox"), get_node_or_null("HUD/HUDRoot/CurrencyBar/DMHBox")]:
 			if coin_group is HBoxContainer:
 				coin_group.add_theme_constant_override("separation", 3 if portrait else 6)
@@ -277,7 +277,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 					icon_rect.custom_minimum_size = Vector2(24, 24) if portrait else Vector2(28, 28)
 		for lbl in [energy_label, dark_matter_label]:
 			if lbl:
-				lbl.add_theme_font_size_override("font_size", 14 if portrait else 16)
+				lbl.add_theme_font_size_override("font_size", (12 if compact else 14) if portrait else 16)
 	if is_instance_valid(chapter_label):
 		chapter_label.clip_text = true
 		chapter_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -302,7 +302,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		up_vbox.add_theme_constant_override("separation", 15 if portrait else 20)
 	var up_title := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(up_title):
-		up_title.add_theme_font_size_override("font_size", 30 if portrait else 29)
+		up_title.add_theme_font_size_override("font_size", (21 if compact else 30) if portrait else 29)
 		up_title.text = "WYBIERZ ULEPSZENIE" if portrait else "AWANS! WYBIERZ MODUŁ BOJOWY"
 	var win_title := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(win_title):
@@ -337,7 +337,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			stats_card.offset_bottom = (64.0 if compact else 85.0) + safe_top
 		if currency_bar:
 			currency_bar.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			currency_bar.offset_left = -395.0 if compact else -302.0
+			currency_bar.offset_left = -minf(395.0, view_width - 20.0) if compact else -302.0
 			currency_bar.offset_top = (193.0 if compact else 8.0) + safe_top
 			currency_bar.offset_right = -10.0
 			currency_bar.offset_bottom = (227.0 if compact else 45.0) + safe_top

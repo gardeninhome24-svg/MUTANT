@@ -429,10 +429,9 @@ func _build_commercial_hub_ui() -> void:
 	bottom_nav_panel.add_child(nav_hbox)
 
 	var nav_defs := [
-		{"id": 0, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
+		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
 		{"id": 1, "name": "Postać", "icon": "res://assets/ui/target_theme/nav_clean_postac.svg"},
 		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg"},
-		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
 		{"id": 4, "name": "Sklep", "icon": "res://assets/ui/target_theme/nav_clean_sklep.svg"}
 	]
 	for nd in nav_defs:
@@ -441,6 +440,7 @@ func _build_commercial_hub_ui() -> void:
 		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		tab_btn.flat = false
+		tab_btn.set_meta("hub_tab_id", tab_id)
 		SurvivorVisualSystem.decorate_button(tab_btn, SurvivorVisualSystem.CYAN, 54.0)
 		tab_btn.custom_minimum_size = Vector2(0, 56)
 		# Bottom bar buttons are actual touch targets, not decorative art.
@@ -976,7 +976,8 @@ func switch_hub_tab(tab_id: int) -> void:
 	current_hub_tab = tab_id
 	for i in range(nav_buttons.size()):
 		var nb: Button = nav_buttons[i]
-		var active := (i == current_hub_tab)
+		var destination: int = int(nb.get_meta("hub_tab_id", -1))
+		var active := destination == current_hub_tab or (current_hub_tab == 0 and destination == 3)
 		SurvivorVisualSystem.decorate_button(nb, SurvivorVisualSystem.LIME if active else SurvivorVisualSystem.CYAN, 58.0)
 		if active:
 			nb.add_theme_stylebox_override("normal", SurvivorVisualSystem.button_style(SurvivorVisualSystem.LIME, "hover"))
@@ -1251,23 +1252,23 @@ func _apply_responsive_menu_layout() -> void:
 	# On phones around 420px, the normal 720px header cannot physically
 	# contain the portrait, three wallets and settings at full desktop scale.
 	if is_instance_valid(top_hub_content):
-		top_hub_content.add_theme_constant_override("separation", 5 if compact_hub else 15)
+		top_hub_content.add_theme_constant_override("separation", 2 if compact_hub else 15)
 		for row_child in top_hub_content.get_children():
 			if row_child is HBoxContainer:
-				row_child.add_theme_constant_override("separation", 3 if compact_hub else 8)
+				row_child.add_theme_constant_override("separation", 2 if compact_hub else 8)
 				for element in row_child.get_children():
 					if element is TextureRect:
-						element.custom_minimum_size = Vector2(17, 17) if compact_hub else Vector2(31, 31)
+						element.custom_minimum_size = Vector2(15, 15) if compact_hub else Vector2(31, 31)
 					elif element is Label:
-						element.add_theme_font_size_override("font_size", 11 if compact_hub else 21)
+						element.add_theme_font_size_override("font_size", 10 if compact_hub else 21)
 	if is_instance_valid(avatar_tex):
 		avatar_tex.custom_minimum_size = Vector2(32, 32) if compact_hub else Vector2(60, 60)
 	if is_instance_valid(account_xp_bar):
-		account_xp_bar.custom_minimum_size = Vector2(48, 7) if compact_hub else Vector2(106, 10)
+		account_xp_bar.custom_minimum_size = Vector2(42, 7) if compact_hub else Vector2(106, 10)
 	if is_instance_valid(account_lvl_lbl):
 		account_lvl_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else 21)
 	if is_instance_valid(settings_btn):
-		settings_btn.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(50, 50)
+		settings_btn.custom_minimum_size = Vector2(28, 34) if compact_hub else Vector2(50, 50)
 	for nav_btn in nav_buttons:
 		var nav_content := nav_btn.get_child(0) as VBoxContainer
 		if is_instance_valid(nav_content):
@@ -1284,10 +1285,8 @@ func _apply_responsive_menu_layout() -> void:
 		top_hub_panel.offset_right = -10.0 if portrait else -24.0
 		top_hub_panel.offset_bottom = (68.0 if compact_hub else 90.0) + safe_top
 
-	# Five routes remain registered; portrait shows four primary actions.
-	# The map remains accessible via OpenCampaignMap in the stage card.
-	if nav_buttons.size() >= 5:
-		nav_buttons[3].visible = not portrait
+	# Four real routes remain visible on every device. Home and the campaign
+	# screen share the Campaign active state; no duplicate hidden navigation.
 	if is_instance_valid(inbox_btn):
 		# The approved portrait already has POCZTA in left-side navigation.
 		# Hide the duplicate floating envelope without removing its callback.
@@ -1357,7 +1356,7 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, minf(size.x, get_viewport_rect().size.x) - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (290.0 if compact_hub else 342.0) if portrait else 330.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (276.0 if compact_hub else 342.0) if portrait else 330.0)
 	# Compress intrinsic child minimum widths before the 420px screenshot:
 	# a wide title/navigation row used to force the whole card to 480px.
 	# Compact home must show its single primary CTA without sacrificing the
@@ -1385,11 +1384,16 @@ func _apply_responsive_menu_layout() -> void:
 			for reward_icon in stage_rewards_hbox.get_children():
 				if reward_icon is TextureRect:
 					reward_icon.custom_minimum_size = Vector2(27, 28) if compact_hub else Vector2(46, 42)
+	var map_link_btn := stage_card.find_child("OpenCampaignMap", true, false) as Button
+	if is_instance_valid(map_link_btn):
+		map_link_btn.text = "MAPA ETAPÓW 1–100" if compact_hub else "KAMPANIA  •  MAPA 1–100"
+		map_link_btn.add_theme_font_size_override("font_size", 11 if compact_hub else 16)
+		map_link_btn.custom_minimum_size.y = 24.0 if compact_hub else 30.0
 	if is_instance_valid(mission_description):
 		mission_description.add_theme_font_size_override("font_size", 11 if compact_hub else 17)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = true
-		stage_preview.custom_minimum_size = Vector2(90, 156) if compact_hub else (Vector2(165, 212) if portrait else Vector2(175, 180))
+		stage_preview.custom_minimum_size = Vector2(84, 146) if compact_hub else (Vector2(165, 212) if portrait else Vector2(175, 180))
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(630.0 if portrait else 600.0, available_width), (78.0 if compact_hub else 118.0) if portrait else 100.0)
 	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
@@ -1399,9 +1403,9 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (150.0 if compact_hub else 438.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (clampf(get_viewport_rect().size.y * 0.16, 105.0, 148.0) if compact_hub else 438.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 21 if compact_hub else (35 if portrait else 33))
+		stage_title_lbl.add_theme_font_size_override("font_size", 20 if compact_hub else (35 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
 		stage_details_lbl.add_theme_font_size_override("font_size", 15 if compact_hub else (22 if portrait else 25))
 		stage_details_lbl.custom_minimum_size.y = 22.0 if compact_hub else 36.0

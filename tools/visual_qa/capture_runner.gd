@@ -98,6 +98,20 @@ func _capture_home_approved_9x16(width: int = 720, height: int = 1280) -> void:
 		elif bounds.position.x < -2.0 or bounds.end.x > float(width) + 2.0:
 			failed_captures += 1
 			push_error("[Visual QA] Menu element clips horizontally: %s (%s)" % [property_name, bounds])
+	var nav_buttons: Array = menu.get("nav_buttons")
+	if nav_buttons.size() != 4:
+		failed_captures += 1
+		push_error("[Visual QA] Home needs exactly four functional navigation tiles")
+	else:
+		var expected_routes := [3, 1, 2, 4]
+		for i in range(4):
+			var tile := nav_buttons[i] as Button
+			if not is_instance_valid(tile) or int(tile.get_meta("hub_tab_id", -1)) != expected_routes[i]:
+				failed_captures += 1
+				push_error("[Visual QA] Navigation route mismatch at index %d" % i)
+			elif not tile.visible or tile.size.x < 40.0:
+				failed_captures += 1
+				push_error("[Visual QA] Navigation tile hidden/too narrow at index %d" % i)
 	var play_button := menu.get("play_big_btn") as Control
 	var visible_scroll := menu.get("base_scroll") as Control
 	if is_instance_valid(play_button) and is_instance_valid(visible_scroll):
