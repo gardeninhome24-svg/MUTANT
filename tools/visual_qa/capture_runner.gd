@@ -262,6 +262,26 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 					failed_captures += 1
 					push_error("[Visual QA] Hero animation still has an opaque white background")
 
+	if not capture_upgrade:
+		# Pixel-level test on actual composited viewport. The previous
+		# check only looked at the (0,0) raw texture pixel and missed
+		# white/blue matte patches around the hero on release screenshots.
+		var real_frame: Image = sub.get_texture().get_image()
+		if real_frame != null and real_frame.get_width() >= 600 and real_frame.get_height() >= 1100:
+			var white: int = 0
+			var samples: int = 0
+			for y in range(475, 760, 4):
+				for x in range(230, 485, 4):
+					var c: Color = real_frame.get_pixel(x, y)
+					samples += 1
+					var low: float = minf(c.r, minf(c.g, c.b))
+					var high: float = maxf(c.r, maxf(c.g, c.b))
+					if low > 0.86 and high - low < 0.17:
+						white += 1
+			if float(white) / float(maxi(1, samples)) > 0.045:
+				failed_captures += 1
+				push_error("[Visual QA] Opaque white hero rectangle is still visible in rendered combat viewport")
+
 	await _save_viewport_png(sub, "upgrade_mobile_720x1280_actual" if capture_upgrade else "hud_mobile_720x1280_actual")
 	get_tree().paused = false
 	main_inst.queue_free()
