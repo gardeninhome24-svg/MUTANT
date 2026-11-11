@@ -28,7 +28,9 @@ func _ready() -> void:
 		await _capture_home_approved_9x16()
 
 	if capture_target in ["approved_ui", "approved_combat_9x16"]:
-		await _capture_hud_mobile_9x16()
+		await _capture_hud_mobile_9x16(false)
+	if capture_target in ["approved_ui", "upgrade_9x16"]:
+		await _capture_hud_mobile_9x16(true)
 
 	if capture_target in ["all", "defeat", "defeat_overlay_16x9"]:
 		await _capture_defeat_overlay()
@@ -172,8 +174,8 @@ func _capture_hud_combat_16x9() -> void:
 	sub.queue_free()
 	await get_tree().process_frame
 
-func _capture_hud_mobile_9x16() -> void:
-	print("\n[Visual QA] Capturing: HUD Mobile 9:16 (720x1280)...")
+func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
+	print("\n[Visual QA] Capturing: %s (720x1280)..." % ("Upgrade Choice" if capture_upgrade else "HUD Mobile 9:16"))
 	var sub := _create_subviewport(Vector2i(720, 1280))
 	add_child(sub)
 
@@ -196,6 +198,35 @@ func _capture_hud_mobile_9x16() -> void:
 		push_error("[Visual QA] Combat screenshot has no playable hero")
 
 	for frame in range(35):
+		await get_tree().process_frame
+
+	var upgrade_modal := main_inst.get_node_or_null("HUD/HUDRoot/UpgradePanel") as Control
+	if capture_upgrade:
+		# Capture the *actual* Godot three-choice modal with live cards,
+		# rather than accidentally photographing it as a combat HUD.
+		if is_instance_valid(player):
+			main_inst.call("_on_player_leveled_up", 2)
+		for frame in range(4):
+			await get_tree().process_frame
+		if is_instance_valid(upgrade_modal) and upgrade_modal.visible:
+			var strip := main_inst.get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll") as ScrollContainer
+			var items := main_inst.get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll/CardsContainer") as HBoxContainer
+			if not is_instance_valid(strip) or not is_instance_valid(items) or items.get_child_count() != 3:
+				failed_captures += 1
+				push_error("[Visual QA] Upgrade modal must show three interactive cards")
+			elif strip.size.x >= 680.0 and items.size.x > strip.size.x + 1.0:
+				failed_captures += 1
+				push_error("[Visual QA] Third upgrade card is clipped on 720px portrait")
+		else:
+			failed_captures += 1
+			push_error("[Visual QA] Upgrade modal did not open")
+	else:
+		# Real combat state, not an incidental level-up screen. This allows
+		# visual comparison against the approved HUD gameplay reference.
+		if is_instance_valid(upgrade_modal):
+			upgrade_modal.visible = false
+		get_tree().paused = false
+	for frame in range(2):
 		await get_tree().process_frame
 
 	# Fail on the exact defects found in actual ApprovedUI-Actual-4:
@@ -222,7 +253,8 @@ func _capture_hud_mobile_9x16() -> void:
 					failed_captures += 1
 					push_error("[Visual QA] Hero animation still has an opaque white background")
 
-	await _save_viewport_png(sub, "hud_mobile_720x1280_actual")
+	await _save_viewport_png(sub, "upgrade_mobile_720x1280_actual" if capture_upgrade else "hud_mobile_720x1280_actual")
+	get_tree().paused = false
 	main_inst.queue_free()
 	sub.queue_free()
 	await get_tree().process_frame
