@@ -447,6 +447,18 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			npc_dialogue_panel.offset_right = 290.0
 			npc_dialogue_panel.offset_bottom = -92.0
 
+	# The currency frame tracks the actual responsive currency bar.
+	var wallet_frame := get_node_or_null("HUD/HUDRoot/CurrencyFrame") as Panel
+	if is_instance_valid(wallet_frame) and is_instance_valid(currency_bar):
+		wallet_frame.anchor_left = currency_bar.anchor_left
+		wallet_frame.anchor_right = currency_bar.anchor_right
+		wallet_frame.anchor_top = currency_bar.anchor_top
+		wallet_frame.anchor_bottom = currency_bar.anchor_bottom
+		wallet_frame.offset_left = currency_bar.offset_left - 8.0
+		wallet_frame.offset_top = currency_bar.offset_top - 5.0
+		wallet_frame.offset_right = currency_bar.offset_right + 8.0
+		wallet_frame.offset_bottom = currency_bar.offset_bottom + 5.0
+
 	# Sync the cyan background AFTER its VBox has received final anchors.
 	# The earlier ordering aligned it to stale editor offsets, causing a giant
 	# empty frame across the entire top of the 720x1280 combat screenshot.
@@ -475,6 +487,38 @@ func _style_combat_hud() -> void:
 		style.set_corner_radius_all(10)
 		style.set_content_margin_all(7.0)
 		panel.add_theme_stylebox_override("panel", style)
+	# The reference uses a segmented metal avatar/HP/XP shell,
+	# not a plain rounded rectangle around all three widgets.
+	var stats_skin_path := "res://assets/ui/approved/combat_stats_frame.svg"
+	if is_instance_valid(stats_card) and ResourceLoader.exists(stats_skin_path, "Texture2D"):
+		var stats_skin := StyleBoxTexture.new()
+		stats_skin.texture = load(stats_skin_path) as Texture2D
+		stats_skin.texture_margin_left = 86.0
+		stats_skin.texture_margin_right = 42.0
+		stats_skin.texture_margin_top = 22.0
+		stats_skin.texture_margin_bottom = 22.0
+		stats_card.add_theme_stylebox_override("panel", stats_skin)
+
+	# CurrencyBar is an HBoxContainer: adding a theme style directly to it
+	# draws nothing. Give it a real Panel behind the live amounts/icons.
+	if is_instance_valid(currency_bar):
+		var hud_base := $HUD/HUDRoot
+		var wallet_frame := hud_base.get_node_or_null("CurrencyFrame") as Panel
+		if wallet_frame == null:
+			wallet_frame = Panel.new()
+			wallet_frame.name = "CurrencyFrame"
+			wallet_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			hud_base.add_child(wallet_frame)
+			hud_base.move_child(wallet_frame, 0)
+		var wallet_art_path := "res://assets/ui/approved/combat_wallet_frame.svg"
+		if ResourceLoader.exists(wallet_art_path, "Texture2D"):
+			var wallet_skin := StyleBoxTexture.new()
+			wallet_skin.texture = load(wallet_art_path) as Texture2D
+			wallet_skin.texture_margin_left = 28.0
+			wallet_skin.texture_margin_right = 28.0
+			wallet_skin.texture_margin_top = 18.0
+			wallet_skin.texture_margin_bottom = 18.0
+			wallet_frame.add_theme_stylebox_override("panel", wallet_skin)
 	if is_instance_valid(wave_label):
 		wave_label.add_theme_font_size_override("font_size", 21)
 		wave_label.add_theme_color_override("font_color", Color(0.98, 0.99, 1.0))
