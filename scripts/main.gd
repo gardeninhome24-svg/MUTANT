@@ -220,19 +220,26 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(stats_card):
 		stats_card.custom_minimum_size = Vector2(195, 56) if compact else Vector2(275, 72)
 	if is_instance_valid(hp_bar):
-		hp_bar.custom_minimum_size = Vector2(110, 15) if compact else Vector2(176, 19)
+		hp_bar.custom_minimum_size = Vector2(96, 15) if compact else Vector2(176, 19)
 	if is_instance_valid(xp_bar):
-		xp_bar.custom_minimum_size = Vector2(110, 9) if compact else Vector2(176, 13)
+		xp_bar.custom_minimum_size = Vector2(96, 9) if compact else Vector2(176, 13)
 	if is_instance_valid(hp_label):
 		hp_label.add_theme_font_size_override("font_size", 12 if compact else 15)
 	if is_instance_valid(run_level_label):
 		run_level_label.add_theme_font_size_override("font_size", 12 if compact else 16)
 	if is_instance_valid(wave_label):
-		wave_label.add_theme_font_size_override("font_size", 18 if compact else 24)
+		wave_label.add_theme_font_size_override("font_size", 16 if compact else (19 if portrait else 24))
+		wave_label.clip_text = true
+		wave_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		wave_label.custom_minimum_size.x = 0.0
+	if is_instance_valid(wave_progress_box):
+		wave_progress_box.custom_minimum_size.x = 0.0
 	if is_instance_valid(boss_label):
 		boss_label.add_theme_font_size_override("font_size", 11 if compact else 13)
 	if is_instance_valid(obj_header):
-		obj_header.add_theme_font_size_override("font_size", 14 if compact else 19)
+		obj_header.add_theme_font_size_override("font_size", 13 if compact else 19)
+		obj_header.clip_text = true
+		obj_header.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
@@ -243,6 +250,14 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		weapon_slots_hbox.add_theme_constant_override("separation", 3 if compact else 6)
 	if is_instance_valid(radar_panel):
 		radar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		radar_panel.custom_minimum_size = Vector2.ZERO
+		# Fit the minimap inside its 420px slot; the previous 144px child
+		# minimum expanded the panel beyond its anchors into other HUD panels.
+		var radar_view := radar_panel.get_node_or_null("MiniRadar") as MiniRadar
+		if is_instance_valid(radar_view):
+			radar_view.radar_size = Vector2(86, 86) if compact else (Vector2(132, 110) if portrait else Vector2(140, 110))
+			radar_view.custom_minimum_size = radar_view.radar_size
+			radar_view.queue_redraw()
 	if is_instance_valid(npc_portrait_rect):
 		npc_portrait_rect.custom_minimum_size = Vector2(38, 46) if compact else Vector2(42, 48)
 	if is_instance_valid(npc_speaker_lbl):
@@ -343,22 +358,22 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			currency_bar.offset_bottom = (227.0 if compact else 45.0) + safe_top
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
-			wave_progress_box.offset_left = -115.0 if compact else -145.0
+			wave_progress_box.offset_left = -110.0 if compact else -115.0
 			wave_progress_box.offset_top = (242.0 if compact else 110.0) + safe_top
-			wave_progress_box.offset_right = 115.0 if compact else 145.0
+			wave_progress_box.offset_right = 110.0 if compact else 115.0
 			wave_progress_box.offset_bottom = (292.0 if compact else 196.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
 			objectives_panel.offset_top = (80.0 if compact else 213.0) + safe_top
-			objectives_panel.offset_right = 212.0 if compact else 304.0
+			objectives_panel.offset_right = 205.0 if compact else 304.0
 			objectives_panel.offset_bottom = (181.0 if compact else 390.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-			radar_panel.offset_left = -112.0 if compact else -176.0
+			radar_panel.offset_left = -108.0 if compact else -166.0
 			radar_panel.offset_top = (75.0 if compact else 120.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (180.0 if compact else 278.0) + safe_top
+			radar_panel.offset_bottom = (178.0 if compact else 258.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(185.0, (view_width - 360.0) * 0.5)

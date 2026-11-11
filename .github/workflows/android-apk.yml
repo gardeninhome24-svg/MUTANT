@@ -92,8 +92,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3
+          # DNS outages at Ubuntu mirrors must not kill otherwise valid APK builds.
+          if ! command -v python3 >/dev/null 2>&1; then
+            for attempt in 1 2 3 4 5; do
+              echo "Install Python: attempt $attempt/5"
+              if apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3; then
+                break
+              fi
+              sleep $((attempt * 6))
+            done
+          fi
+          command -v python3
           python3 --version
 
       - name: Verify boss pack import tooling and unbundled asset safeguards

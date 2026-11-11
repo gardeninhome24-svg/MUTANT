@@ -152,11 +152,11 @@ func _run() -> void:
 	if is_instance_valid(avatar):
 		_check(avatar.custom_minimum_size.x <= 32.0, "420px HUD avatar uses compact dimensions")
 	if is_instance_valid(hp) and is_instance_valid(xp):
-		_check(hp.custom_minimum_size.x == 110.0 and xp.custom_minimum_size.x == 110.0, "420px HP and XP bars fit compact stat card")
+		_check(hp.custom_minimum_size.x == 96.0 and xp.custom_minimum_size.x == 96.0, "420px HP and XP bars fit compact stat card")
 	if is_instance_valid(wave_title):
-		_check(wave_title.get_theme_font_size("font_size") == 18, "420px wave label is readable without truncation")
+		_check(wave_title.get_theme_font_size("font_size") == 16, "420px wave label is readable without truncation")
 	if is_instance_valid(objectives_title):
-		_check(objectives_title.get_theme_font_size("font_size") == 14, "420px objectives header has legible text")
+		_check(objectives_title.get_theme_font_size("font_size") == 13, "420px objectives header has legible text")
 		_check(objectives_title.text.begins_with("CELE • ETAP"), "420px objective title avoids clipped decoration")
 	if is_instance_valid(weapon_row):
 		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")

@@ -10,6 +10,7 @@ var show_beacon: bool = false
 
 func _ready() -> void:
 	custom_minimum_size = radar_size
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _process(_delta: float) -> void:
 	queue_redraw()
