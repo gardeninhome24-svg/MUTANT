@@ -134,6 +134,18 @@ func _run() -> void:
 		var campaign_button: Button = navigation_buttons[0] as Button
 		_assert(campaign_button.modulate == Color.WHITE, "Home keeps Campaign tab highlighted")
 
+	for icon_name in ["mail", "tasks", "pass", "rewards", "settings", "campaign", "character", "equipment", "store", "weapon", "grenade", "vortex"]:
+		_assert(ResourceLoader.exists("res://assets/ui/production_icons/" + icon_name + ".svg", "Texture2D"), "New icon imports: " + icon_name)
+	for side_group_name in ["BaseLeftActions", "BaseRightActions"]:
+		var side_group := menu.find_child(side_group_name, true, false) as VBoxContainer
+		_assert(is_instance_valid(side_group), "Sidebar has buttons")
+		if is_instance_valid(side_group):
+			for side_action in side_group.get_children():
+				var side_button := side_action as Button
+				if is_instance_valid(side_button):
+					_assert(side_button.pressed.get_connections().size() > 0, "Sidebar action remains clickable")
+					var side_image := side_button.get_node_or_null("SideActionContent/SideActionIcon") as TextureRect
+					_assert(is_instance_valid(side_image) and side_image.texture != null, "Sidebar action displays new icon")
 	_assert(ResourceLoader.exists("res://assets/ui/approved/mission_card_frame.svg", "Texture2D"),
 		"Approved cyan steel mission frame imports as a real Godot texture")
 	var mission_card_panel: PanelContainer = menu.get("stage_card") as PanelContainer
