@@ -723,15 +723,23 @@ func _build_layered_arena(stage_num: int) -> void:
 			elif is_near_edge and (r + c) % 4 == 0:
 				tile_name = "warning_stripes"
 			else:
-				var h := absi((r * 73 + c * 47 + stage_num * 101 + (r ^ c) * 19)) % 100
-				if h < 55:
-					tile_name = base_tiles[(r * 3 + c * 5) % base_tiles.size()]
-				elif h < 75:
-					tile_name = cracked_tiles[(r * 7 + c * 11) % cracked_tiles.size()]
-				elif h < 90:
-					tile_name = grate_tiles[(r * 13 + c * 3) % grate_tiles.size()]
+				# Large random-pattern checkerboards look unlike the approved
+				# industrial battlefield. Keep an intact metal floor as the
+				# dominant material and group rust, fractures and acid into
+				# coherent 3x3 sections instead of one-cell confetti.
+				var sector_x: int = int(c / 3)
+				var sector_y: int = int(r / 3)
+				var patch: int = absi((sector_x * 1637) ^ (sector_y * 8191) ^ (stage_num * 7919)) % 100
+				var detail: int = absi((r * 73 + c * 47 + stage_num * 101)) % 17
+				var h: int = clampi(int(float(patch) * 0.85) + detail, 0, 99)
+				if h < 66:
+					tile_name = base_tiles[(r + sector_x * 3 + stage_num) % base_tiles.size()]
+				elif h < 88:
+					tile_name = cracked_tiles[(r + c + sector_y) % cracked_tiles.size()]
+				elif h < 97:
+					tile_name = grate_tiles[(r * 2 + c + sector_x) % grate_tiles.size()]
 				else:
-					tile_name = hazard_tiles[(r * 17 + c * 7) % hazard_tiles.size()]
+					tile_name = hazard_tiles[(r + c + stage_num) % hazard_tiles.size()]
 
 			var tile_spr := Sprite2D.new()
 			tile_spr.texture = AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/tiles/" + tile_name + ".png")
