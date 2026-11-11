@@ -285,7 +285,7 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false, compact_phone: bool
 		if goals.get_global_rect().intersects(comms.get_global_rect()):
 			failed_captures += 1
 			push_error("[Visual QA] NPC briefing overlaps mission checklist")
-	if compact_phone and is_instance_valid(comms):
+	if compact_phone and is_instance_valid(comms) and comms.visible:
 		# Also catch radio/dialogue obstructing essential mobile touch targets.
 		for touch_path in ["HUD/HUDRoot/VirtualJoystick", "HUD/HUDRoot/FireBtn", "HUD/HUDRoot/DashBtn"]:
 			var touch_target := main_inst.get_node_or_null(touch_path) as Control
