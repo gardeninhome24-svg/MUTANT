@@ -162,6 +162,14 @@ func _capture_hud_combat_16x9() -> void:
 		main_inst.set_process(false)
 		for i in range(10):
 			main_inst.call("spawn_wave_enemy")
+		# Visual QA only: keep representative mutant silhouettes inside
+		# the phone camera rather than off-screen at 340–580 world pixels.
+		var enemy_index: int = 0
+		for actor in main_inst.get_node("CharactersLayer").get_children():
+			if actor is MutantEnemy:
+				var angle: float = TAU * float(enemy_index) / 10.0
+				actor.global_position = player.global_position + Vector2(cos(angle), sin(angle)) * (170.0 + float(enemy_index % 3) * 26.0)
+				enemy_index += 1
 	else:
 		failed_captures += 1
 		push_error("[Visual QA] Combat screenshot has no playable hero")
@@ -179,7 +187,8 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 	var sub := _create_subviewport(Vector2i(720, 1280))
 	add_child(sub)
 
-	StageDirector.selected_class_id = "engineer"
+	# Approved combat screenshot uses the armored soldier, not Engineer.
+	StageDirector.selected_class_id = "soldier"
 	StageDirector.current_stage = 1
 	var main_scene := load("res://scenes/main/main.tscn") as PackedScene
 	var main_inst = main_scene.instantiate()
