@@ -242,6 +242,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		obj_header.clip_text = true
 		obj_header.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		obj_header.text = ("CELE • ETAP %03d" if compact else "◆ CELE MISJI (ETAP %03d)") % current_stage_num
+		obj_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	for mission_text in [obj1_label, obj2_label, obj3_label]:
 		if is_instance_valid(mission_text):
 			mission_text.add_theme_font_size_override("font_size", 12 if compact else 17)
@@ -264,7 +265,8 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(npc_speaker_lbl):
 		npc_speaker_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	if is_instance_valid(npc_text_lbl):
-		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
+		npc_text_lbl.add_theme_font_size_override("font_size", 12 if compact else 13)
+		npc_text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		# 0.92 camera zoom made every already-small mutant shrink further.
@@ -714,6 +716,24 @@ func _style_combat_hud() -> void:
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+func _set_combat_chrome_visible(show: bool) -> void:
+	# A result/level-up modal is the only visual focus. The arena HUD must
+	# not remain readable through its background or block the modal actions.
+	# This changes presentation only; health, inventory and combat state stay intact.
+	for element in [stats_card, objectives_panel, radar_panel, currency_bar, wave_progress_box, bottom_weapons_panel, powers_hbox, joystick]:
+		if is_instance_valid(element):
+			element.visible = show
+	for chrome_path in ["HUD/HUDRoot/CurrencyFrame", "HUD/HUDRoot/WaveFrame"]:
+		var chrome := get_node_or_null(chrome_path) as CanvasItem
+		if is_instance_valid(chrome):
+			chrome.visible = show
+	if not show and is_instance_valid(npc_dialogue_panel):
+		npc_dialogue_panel.visible = false
+		npc_hide_timer = 0.0
+	if show:
+		_configure_input_mode_hud()
+
+
 func _on_joystick_dir(dir: Vector2) -> void:
 	if is_instance_valid(player):
 		# Ignore touches behind overlays that pause or replace combat input.
@@ -809,23 +829,21 @@ func _build_layered_arena(stage_num: int) -> void:
 			elif is_near_edge and (r + c) % 4 == 0:
 				tile_name = "warning_stripes"
 			else:
-				# Large random-pattern checkerboards look unlike the approved
-				# industrial battlefield. Keep an intact metal floor as the
-				# dominant material and group rust, fractures and acid into
-				# coherent 3x3 sections instead of one-cell confetti.
-				var sector_x: int = int(c / 3)
-				var sector_y: int = int(r / 3)
+				# Keep broad 5x5 readable zones rather than noisy alternating
+				# tile families. All variation is deterministic per stage.
+				var sector_x: int = int(c / 5)
+				var sector_y: int = int(r / 5)
 				var patch: int = absi((sector_x * 1637) ^ (sector_y * 8191) ^ (stage_num * 7919)) % 100
-				var detail: int = absi((r * 73 + c * 47 + stage_num * 101)) % 17
-				var h: int = clampi(int(float(patch) * 0.85) + detail, 0, 99)
-				if h < 66:
-					tile_name = base_tiles[(r + sector_x * 3 + stage_num) % base_tiles.size()]
-				elif h < 88:
-					tile_name = cracked_tiles[(r + c + sector_y) % cracked_tiles.size()]
-				elif h < 97:
-					tile_name = grate_tiles[(r * 2 + c + sector_x) % grate_tiles.size()]
+				var detail: int = absi((r * 13 + c * 17 + stage_num * 7)) % 11
+				var h: int = clampi(patch + detail - 5, 0, 99)
+				if h < 75:
+					tile_name = base_tiles[(sector_x + sector_y + stage_num) % base_tiles.size()]
+				elif h < 91:
+					tile_name = cracked_tiles[(sector_x + sector_y * 2) % cracked_tiles.size()]
+				elif h < 98:
+					tile_name = grate_tiles[(sector_x + stage_num) % grate_tiles.size()]
 				else:
-					tile_name = hazard_tiles[(r + c + stage_num) % hazard_tiles.size()]
+					tile_name = hazard_tiles[(sector_y + stage_num) % hazard_tiles.size()]
 
 			var tile_spr := Sprite2D.new()
 			tile_spr.texture = AssetRegistry.get_tex("res://assets/mutantsurvivor_ch01/tiles/" + tile_name + ".png")
@@ -1155,7 +1173,7 @@ func show_npc_comms(speaker: String, text: String) -> void:
 		preview = preview.substr(0, max_chars - 1).strip_edges() + "…"
 	npc_text_lbl.text = preview
 	npc_dialogue_panel.visible = true
-	npc_hide_timer = 4.0 if StageDirector.is_portrait_mode() else clampf(4.0 + float(preview.length()) / 42.0, 5.0, 8.0)
+	npc_hide_timer = 2.8 if StageDirector.is_portrait_mode() else clampf(3.5 + float(preview.length()) / 55.0, 4.0, 6.0)
 	var log_entry := "[Etap %03d | Fala %d] %s: %s" % [current_stage_num, current_wave_num, speaker.to_upper(), text]
 	if not npc_dialogue_history.has(log_entry):
 		npc_dialogue_history.append(log_entry)
@@ -1616,6 +1634,7 @@ func _on_stage_victory() -> void:
 		"⚡ Kredyty: +%d  |  🔩 Złom Techniczny: +%d szt.\n" % [int(result["earned_credits"]), int(result.get("earned_scrap", 1))] +
 		"%s\n🗺 %s" % [drop_txt, unlock_txt]
 	)
+	_set_combat_chrome_visible(false)
 	get_tree().paused = true
 	win_panel.visible = true
 
@@ -1667,6 +1686,7 @@ func _on_player_leveled_up(_lvl: int) -> void:
 	if is_instance_valid(npc_dialogue_panel):
 		npc_dialogue_panel.visible = false
 		npc_hide_timer = 0.0
+	_set_combat_chrome_visible(false)
 	upgrade_panel.visible = true
 	_populate_upgrade_cards()
 
@@ -1804,6 +1824,7 @@ func create_upgrade_card(upgrade_data: Dictionary) -> Control:
 	button.pressed.connect(func():
 		apply_upgrade(String(upgrade_data["id"]))
 		upgrade_panel.visible = false
+		_set_combat_chrome_visible(true)
 		get_tree().paused = false
 	)
 	body.add_child(button)
@@ -2411,6 +2432,7 @@ func _on_player_died() -> void:
 	player.external_move_dir = Vector2.ZERO
 	if is_instance_valid(joystick):
 		joystick.cancel_touch()
+	_set_combat_chrome_visible(false)
 	get_tree().paused = true
 	# The modular defeat screen replaces the legacy DeathPanel. Keeping both
 	# visible overlays two full-screen cards and blocks portrait touch input.
@@ -2454,6 +2476,7 @@ func _on_revive_premium_pressed() -> void:
 		if is_instance_valid(defeat_overlay_inst): defeat_overlay_inst.visible = false
 		get_tree().paused = false
 		player.revive(1.0)
+		_set_combat_chrome_visible(true)
 		update_currency_display()
 	else:
 		toggle_premium_shop()

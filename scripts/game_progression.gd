@@ -109,62 +109,62 @@ static func get_enemy_scaling(game_time: float, current_lvl: int) -> Dictionary:
 const UPGRADES_DB = [
 	{
 		"id": "plasma_dmg",
-		"name": "Overcharged Coils",
-		"desc": "+25% Plasma Cannon Damage",
+		"name": "Cewki przeciążeniowe",
+		"desc": "+25% obrażeń działa plazmowego",
 		"max_tier": 5
 	},
 	{
 		"id": "plasma_cooldown",
-		"name": "Superconductors",
-		"desc": "+20% Attack Speed",
+		"name": "Nadprzewodniki",
+		"desc": "Krótszy odstęp między strzałami o 18%",
 		"max_tier": 5
 	},
 	{
 		"id": "vibro_saws",
-		"name": "Vibro-Saw Blades",
-		"desc": "Spawns high-speed spinning blades around the survivor",
+		"name": "Ostrza wibracyjne",
+		"desc": "Wirujące ostrza bronią bohatera z bliska",
 		"max_tier": 5
 	},
 	{
 		"id": "tesla_coil",
-		"name": "Tesla Lightning Discharge",
-		"desc": "Strikes random mutants with high voltage chain lightning",
+		"name": "Wyładowanie Tesli",
+		"desc": "Pioruny rażą mutanty i zwiększają obrażenia Tesli",
 		"max_tier": 5
 	},
 	{
 		"id": "titanium_skin",
-		"name": "Titanium Exosuit",
-		"desc": "+35 Max HP and +2.0 HP/sec Health Regeneration",
+		"name": "Tytanowy egzoszkielet",
+		"desc": "+35 maks. HP i +1,5 HP regeneracji na sekundę",
 		"max_tier": 5
 	},
 	{
 		"id": "bionic_speed",
-		"name": "Bionic Servos",
-		"desc": "+20% Movement Speed and Dash Recovery",
+		"name": "Serwomechanizmy",
+		"desc": "+18% prędkości poruszania się",
 		"max_tier": 5
 	},
 	{
 		"id": "magnetic_drone",
-		"name": "Scrap Magnet Drone",
-		"desc": "+50% XP Pickup range & auto-collects distant loot",
+		"name": "Dron magnetyczny",
+		"desc": "+45% zasięgu zbierania doświadczenia",
 		"max_tier": 5
 	},
 	{
 		"id": "critical_focus",
-		"name": "Neural Targeter",
-		"desc": "+15% Critical Chance & +50% Crit Damage",
+		"name": "Celownik neuronowy",
+		"desc": "+12 p.p. szansy na krytyk i +35% mnożnika",
 		"max_tier": 5
 	},
 	{
 		"id": "bio_hazard",
-		"name": "Toxic Landmines",
-		"desc": "Drops caustic chemical mines that explode on enemy contact",
+		"name": "Miny toksyczne",
+		"desc": "Miny kwasowe eksplodują po kontakcie z wrogiem",
 		"max_tier": 5
 	},
 	{
 		"id": "energy_shield",
-		"name": "Aegis Energy Shield",
-		"desc": "Generates a kinetic forcefield that absorbs enemy hits",
+		"name": "Tarcza energetyczna Aegis",
+		"desc": "Tarcza pochłania dwa trafienia przeciwników",
 		"max_tier": 5
 	}
 ]
