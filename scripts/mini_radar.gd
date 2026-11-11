@@ -26,8 +26,8 @@ func _draw() -> void:
 	draw_rect(full, Color(0.015, 0.046, 0.072, 0.94), true)
 	draw_rect(full.grow(-3.0), Color(0.12, 0.55, 0.65, 0.32), false, 1.0)
 	for fraction in [0.25, 0.5, 0.75]:
-		var xx := radar_size.x * fraction
-		var yy := radar_size.y * fraction
+		var xx: float = radar_size.x * float(fraction)
+		var yy: float = radar_size.y * float(fraction)
 		draw_line(Vector2(xx, 3), Vector2(xx, radar_size.y - 3), Color(0.15, 0.49, 0.58, 0.18), 1)
 		draw_line(Vector2(3, yy), Vector2(radar_size.x - 3, yy), Color(0.15, 0.49, 0.58, 0.18), 1)
 	if show_beacon:
@@ -41,8 +41,8 @@ func _draw() -> void:
 		var enemy := actor as Node2D
 		if not is_instance_valid(enemy) or enemy is Player:
 			continue
-		var point := _radar_pos(enemy.global_position)
+		var point: Vector2 = _radar_pos(enemy.global_position)
 		if not full.grow(-5.0).has_point(point):
 			continue
-		var elite := String(enemy.get("tier")) in ["boss", "miniboss"] if enemy is MutantEnemy else false
+		var elite: bool = enemy is MutantEnemy and String(enemy.get("tier")) in ["boss", "miniboss"]
 		draw_circle(point, 4.4 if elite else 2.6, Color(1.0, 0.70, 0.17) if elite else Color(1.0, 0.24, 0.26))

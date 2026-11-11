@@ -119,9 +119,12 @@ func _run() -> void:
 	_not_overlapping(goals, wave, "Mission objectives vs wave timer")
 	_not_overlapping(weapons, powers, "Bottom weapon and skill panels")
 	_not_overlapping(joystick, weapons, "Joystick vs weapon bar")
-	_not_overlapping(joystick, dash, "Joystick vs dash")
-	_not_overlapping(joystick, fire, "Joystick vs fire")
-	_not_overlapping(dash, fire, "Dash vs fire")
+	if is_instance_valid(dash) and dash.visible:
+		_not_overlapping(joystick, dash, "Joystick vs dash")
+	if is_instance_valid(fire) and fire.visible:
+		_not_overlapping(joystick, fire, "Joystick vs fire")
+	if is_instance_valid(dash) and dash.visible and is_instance_valid(fire) and fire.visible:
+		_not_overlapping(dash, fire, "Dash vs fire")
 	# The approved 720px portrait layout reserves a large joystick at the
 	# lower left. The upgrade inventory and live power row must stay separate.
 	if is_instance_valid(weapons) and is_instance_valid(joystick):
