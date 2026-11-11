@@ -267,6 +267,22 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 		if goals.get_global_rect().intersects(comms.get_global_rect()):
 			failed_captures += 1
 			push_error("[Visual QA] NPC briefing overlaps mission checklist")
+	# Test the actual positioned controls, not the intended offset constants.
+	# A successful PNG can otherwise hide a broken portrait HUD layout.
+	var ui_pairs: Array = [
+		["PlayerStatsCard", "CurrencyBar"],
+		["ObjectivesPanel", "RadarPanel"],
+		["ObjectivesPanel", "WaveProgress"],
+		["RadarPanel", "WaveProgress"],
+		["CurrencyBar", "WaveProgress"]
+	]
+	for pair in ui_pairs:
+		var left_control := main_inst.get_node_or_null("HUD/HUDRoot/" + String(pair[0])) as Control
+		var right_control := main_inst.get_node_or_null("HUD/HUDRoot/" + String(pair[1])) as Control
+		if is_instance_valid(left_control) and is_instance_valid(right_control):
+			if left_control.visible and right_control.visible and left_control.get_global_rect().intersects(right_control.get_global_rect()):
+				failed_captures += 1
+				push_error("[Visual QA] Portrait HUD overlap: %s / %s" % [pair[0], pair[1]])
 	if is_instance_valid(player):
 		var hero_sprite := player.get_node_or_null("Sprite2D") as Sprite2D
 		if is_instance_valid(hero_sprite) and hero_sprite.texture != null:
