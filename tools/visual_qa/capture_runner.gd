@@ -31,6 +31,8 @@ func _ready() -> void:
 		await _capture_hud_mobile_9x16(false)
 	if capture_target in ["approved_ui", "upgrade_9x16"]:
 		await _capture_hud_mobile_9x16(true)
+	if capture_target in ["approved_ui", "compact_hud"]:
+		await _capture_hud_mobile_9x16(false, true)
 
 	if capture_target in ["all", "defeat", "defeat_overlay_16x9"]:
 		await _capture_defeat_overlay()
@@ -197,9 +199,10 @@ func _capture_hud_combat_16x9() -> void:
 	sub.queue_free()
 	await get_tree().process_frame
 
-func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
-	print("\n[Visual QA] Capturing: %s (720x1280)..." % ("Upgrade Choice" if capture_upgrade else "HUD Mobile 9:16"))
-	var sub := _create_subviewport(Vector2i(720, 1280))
+func _capture_hud_mobile_9x16(capture_upgrade: bool = false, compact_phone: bool = false) -> void:
+	var capture_size := Vector2i(420, 840) if compact_phone else Vector2i(720, 1280)
+	print("\n[Visual QA] Capturing: %s (%dx%d)..." % ["Compact HUD" if compact_phone else ("Upgrade Choice" if capture_upgrade else "HUD Mobile 9:16"), capture_size.x, capture_size.y])
+	var sub := _create_subviewport(capture_size)
 	add_child(sub)
 
 	# Approved combat screenshot uses the armored soldier, not Engineer.
@@ -282,6 +285,14 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 		if goals.get_global_rect().intersects(comms.get_global_rect()):
 			failed_captures += 1
 			push_error("[Visual QA] NPC briefing overlaps mission checklist")
+	if compact_phone and is_instance_valid(comms):
+		# Also catch radio/dialogue obstructing essential mobile touch targets.
+		for touch_path in ["HUD/HUDRoot/VirtualJoystick", "HUD/HUDRoot/FireBtn", "HUD/HUDRoot/DashBtn"]:
+			var touch_target := main_inst.get_node_or_null(touch_path) as Control
+			if is_instance_valid(touch_target) and touch_target.visible:
+				if comms.get_global_rect().intersects(touch_target.get_global_rect()):
+					failed_captures += 1
+					push_error("[Visual QA] Compact briefing obscures touch control: %s" % touch_path)
 	# Test the actual positioned controls, not the intended offset constants.
 	# A successful PNG can otherwise hide a broken portrait HUD layout.
 	var ui_pairs: Array = [
@@ -328,7 +339,8 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false) -> void:
 				failed_captures += 1
 				push_error("[Visual QA] Opaque white hero rectangle is still visible in rendered combat viewport")
 
-	await _save_viewport_png(sub, "upgrade_mobile_720x1280_actual" if capture_upgrade else "hud_mobile_720x1280_actual")
+	var capture_name := "hud_compact_420x840_actual" if compact_phone else ("upgrade_mobile_720x1280_actual" if capture_upgrade else "hud_mobile_720x1280_actual")
+	await _save_viewport_png(sub, capture_name)
 	get_tree().paused = false
 	main_inst.queue_free()
 	sub.queue_free()
