@@ -429,10 +429,10 @@ func _build_commercial_hub_ui() -> void:
 	bottom_nav_panel.add_child(nav_hbox)
 
 	var nav_defs := [
-		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/target_theme/nav_clean_kampania.svg"},
-		{"id": 1, "name": "Postać", "icon": "res://assets/ui/target_theme/nav_clean_postac.svg"},
-		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/target_theme/nav_clean_ekwipunek.svg"},
-		{"id": 4, "name": "Sklep", "icon": "res://assets/ui/target_theme/nav_clean_sklep.svg"}
+		{"id": 3, "name": "Kampania", "icon": "res://assets/ui/production_icons/campaign.svg"},
+		{"id": 1, "name": "Postać", "icon": "res://assets/ui/production_icons/character.svg"},
+		{"id": 2, "name": "Ekwipunek", "icon": "res://assets/ui/production_icons/equipment.svg"},
+		{"id": 4, "name": "Sklep", "icon": "res://assets/ui/production_icons/store.svg"}
 	]
 	for nd in nav_defs:
 		var tab_id: int = int(nd["id"])
@@ -451,14 +451,15 @@ func _build_commercial_hub_ui() -> void:
 		btn_v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		btn_v.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn_v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		btn_v.add_theme_constant_override("separation", 0)
+		btn_v.add_theme_constant_override("separation", 1)
 		tab_btn.add_child(btn_v)
 
 		var ic_rect := TextureRect.new()
-		ic_rect.custom_minimum_size = Vector2(28, 28)
+		ic_rect.custom_minimum_size = Vector2(36, 36)
 		ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ic_rect.name = "ProductionNavigationIcon"
 		var icon_path: String = String(nd["icon"])
 		if ResourceLoader.exists(icon_path):
 			ic_rect.texture = load(icon_path) as Texture2D
@@ -533,13 +534,13 @@ func _build_base_overlays() -> void:
 	base_overlay.add_child(base_right_actions)
 
 	for item in [
-		{"title": "POCZTA", "path": "res://assets/ui/target_theme/icon_mail.png", "tab": -2},
-		{"title": "ZADANIA", "path": "res://assets/ui/approved/icon_daily_tasks.svg", "tab": -3},
-		{"title": "PRZEPUSTKA", "path": "res://assets/ui/approved/icon_battle_pass.svg", "tab": -4}
+		{"title": "POCZTA", "path": "res://assets/ui/production_icons/mail.svg", "tab": -2},
+		{"title": "ZADANIA", "path": "res://assets/ui/production_icons/tasks.svg", "tab": -3},
+		{"title": "PRZEPUSTKA", "path": "res://assets/ui/production_icons/pass.svg", "tab": -4}
 	]:
 		_add_base_action(base_left_actions, String(item["title"]), String(item["path"]), int(item["tab"]))
-	_add_base_action(base_right_actions, "NAGRODY", "res://assets/ms_beta_kit/ui/icons/reward_chest.png", 5)
-	_add_base_action(base_right_actions, "USTAWIENIA", "res://assets/ui/target_theme/icon_settings.png", -1)
+	_add_base_action(base_right_actions, "NAGRODY", "res://assets/ui/production_icons/rewards.svg", 5)
+	_add_base_action(base_right_actions, "USTAWIENIA", "res://assets/ui/production_icons/settings.svg", -1)
 
 func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, destination: int) -> void:
 	var action := Button.new()
@@ -559,7 +560,7 @@ func _add_base_action(parent: VBoxContainer, title: String, icon_path: String, d
 	action.add_child(action_content)
 	var action_icon := TextureRect.new()
 	action_icon.name = "SideActionIcon"
-	action_icon.custom_minimum_size = Vector2(38, 40)
+	action_icon.custom_minimum_size = Vector2(44, 44)
 	action_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	action_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	action_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -993,7 +994,7 @@ func switch_hub_tab(tab_id: int) -> void:
 					lbl.add_theme_color_override("font_color", Color(0.35, 0.95, 1.0) if active else Color(0.65, 0.75, 0.85))
 				var icon_rect := v.get_child(0) as TextureRect
 				if is_instance_valid(icon_rect):
-					icon_rect.modulate = SurvivorVisualSystem.LIME if active else Color(0.80, 0.86, 0.89)
+					icon_rect.modulate = Color(0.84, 1.0, 0.70) if active else Color.WHITE
 
 	if is_instance_valid(base_overlay):
 		base_overlay.visible = current_hub_tab == 0
@@ -1287,6 +1288,10 @@ func _apply_responsive_menu_layout() -> void:
 		top_hub_panel.offset_right = -10.0 if portrait else -24.0
 		top_hub_panel.offset_bottom = (68.0 if compact_hub else 90.0) + safe_top
 
+	for nav_button in nav_buttons:
+		var nav_art := nav_button.find_child("ProductionNavigationIcon", true, false) as TextureRect
+		if is_instance_valid(nav_art):
+			nav_art.custom_minimum_size = Vector2(30, 30) if compact_hub else Vector2(40, 40)
 	# Four real routes remain visible on every device. Home and the campaign
 	# screen share the Campaign active state; no duplicate hidden navigation.
 	if is_instance_valid(inbox_btn):
@@ -1350,9 +1355,9 @@ func _apply_responsive_menu_layout() -> void:
 					var caption := action_content.get_node_or_null("SideActionCaption") as Label
 					var icon_rect := action_content.get_node_or_null("SideActionIcon") as TextureRect
 					if is_instance_valid(caption):
-						caption.add_theme_font_size_override("font_size", 9 if compact_hub else 14)
+						caption.add_theme_font_size_override("font_size", 9 if compact_hub else 12)
 					if is_instance_valid(icon_rect):
-						icon_rect.custom_minimum_size = Vector2(30, 34) if compact_hub else Vector2(51, 53)
+						icon_rect.custom_minimum_size = Vector2(34, 36) if compact_hub else Vector2(52, 54)
 
 	# Keep the main call to action and stage card inside the actual hub content
 	# on smaller devices; do not depend on the nominal 720px design viewport.
