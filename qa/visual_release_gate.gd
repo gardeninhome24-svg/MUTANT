@@ -136,6 +136,9 @@ func _run() -> void:
 		_check(absf(currencies.offset_left - (-395.0)) < 0.1, "Narrow portrait currency bar gets a dedicated full-width row")
 	if is_instance_valid(currencies) and is_instance_valid(wave):
 		_check(currencies.offset_bottom + 2.0 <= wave.offset_top, "420px currency and wave rows do not overlap")
+	var briefing: Control = combat.get("npc_dialogue_panel") as Control
+	if is_instance_valid(briefing):
+		_check(briefing.offset_bottom <= -380.0, "420px NPC briefing stays above touch controls")
 	if is_instance_valid(goals) and is_instance_valid(currencies):
 		_check(goals.offset_bottom + 2.0 <= currencies.offset_top, "420px objectives end before second currency row")
 	if is_instance_valid(radar) and is_instance_valid(currencies):

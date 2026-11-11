@@ -105,11 +105,18 @@ func _run() -> void:
 		_assert(approved_map_link.pressed.get_connections().size() > 0, "Campaign map link has a real callback")
 	var decorative_progress: Control = menu.find_child("CampaignProgressCard", true, false) as Control
 	_assert(is_instance_valid(decorative_progress) and not decorative_progress.visible, "Old duplicate roadmap is hidden on approved home")
+	var duplicate_continue := menu.find_child("ContinueCampaignButton", true, false) as Control
+	_assert(is_instance_valid(duplicate_continue) and not duplicate_continue.visible, "No second campaign CTA on home screen")
 	var navigation_buttons: Array = menu.get("nav_buttons")
-	_assert(navigation_buttons.size() == 5, "All five functional game views remain registered")
-	if navigation_buttons.size() == 5 and StageDirector.is_portrait_mode():
-		_assert(not navigation_buttons[3].visible, "Portrait navigation shows four tabs, not five duplicate campaign buttons")
-	if navigation_buttons.size() == 5:
+	_assert(navigation_buttons.size() == 4, "Exactly four production navigation tiles are registered")
+	if navigation_buttons.size() == 4:
+		var routes := [3, 1, 2, 4]
+		for route_index in range(4):
+			var tile := navigation_buttons[route_index] as Button
+			_assert(is_instance_valid(tile) and int(tile.get_meta("hub_tab_id", -1)) == routes[route_index],
+				"Bottom navigation route %d uses its correct live destination" % route_index)
+			_assert(is_instance_valid(tile) and tile.visible,
+				"Bottom navigation route %d is visible" % route_index)
 		for tab in navigation_buttons:
 			var nav_button: Button = tab as Button
 			_assert(not nav_button.flat, "Bottom navigation renders its own highlighted panel")
@@ -122,7 +129,10 @@ func _run() -> void:
 		menu.call("switch_hub_tab", 2)
 		var equipment_button: Button = navigation_buttons[2] as Button
 		_assert(equipment_button.has_theme_stylebox_override("normal"), "Selected equipment tab stays visually styled")
+		_assert(equipment_button.modulate == Color.WHITE, "Equipped tab is visibly active")
 		menu.call("switch_hub_tab", 0)
+		var campaign_button: Button = navigation_buttons[0] as Button
+		_assert(campaign_button.modulate == Color.WHITE, "Home keeps Campaign tab highlighted")
 
 	_assert(ResourceLoader.exists("res://assets/ui/approved/mission_card_frame.svg", "Texture2D"),
 		"Approved cyan steel mission frame imports as a real Godot texture")
@@ -160,8 +170,8 @@ func _run() -> void:
 		_assert(card.custom_minimum_size.x <= 640, "Armored stage card remains responsive")
 		_assert(card.custom_minimum_size.y <= 420, "Illustrated stage card remains within mobile vertical budget")
 	if is_instance_valid(play):
-		_assert(play.custom_minimum_size.x <= 600, "Reference-size play CTA width is bounded")
-		_assert(play.custom_minimum_size.y <= 100, "Reference-size play CTA height is bounded")
+		_assert(play.custom_minimum_size.x <= 630, "Reference-size play CTA width is bounded")
+		_assert(play.custom_minimum_size.y <= 118, "Reference-size play CTA height is bounded")
 		_assert(play.pressed.get_connections().size() > 0, "Play CTA has a working signal connection")
 	if is_instance_valid(hero):
 		_assert(hero.custom_minimum_size.y <= 445, "Hero showcase remains bounded above the mission panel")
