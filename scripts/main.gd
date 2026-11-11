@@ -219,15 +219,15 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(hud_avatar):
 		hud_avatar.custom_minimum_size = Vector2(32, 32) if compact else Vector2(38, 38)
 	if is_instance_valid(stats_card):
-		stats_card.custom_minimum_size = Vector2(195, 56) if compact else Vector2(275, 72)
+		stats_card.custom_minimum_size = Vector2(195, 53) if compact else Vector2(275, 66)
 	if is_instance_valid(hp_bar):
-		hp_bar.custom_minimum_size = Vector2(96, 15) if compact else Vector2(176, 19)
+		hp_bar.custom_minimum_size = Vector2(96, 12) if compact else Vector2(162, 15)
 	if is_instance_valid(xp_bar):
-		xp_bar.custom_minimum_size = Vector2(96, 9) if compact else Vector2(176, 13)
+		xp_bar.custom_minimum_size = Vector2(96, 7) if compact else Vector2(162, 9)
 	if is_instance_valid(hp_label):
-		hp_label.add_theme_font_size_override("font_size", 12 if compact else 15)
+		hp_label.add_theme_font_size_override("font_size", 11 if compact else 12)
 	if is_instance_valid(run_level_label):
-		run_level_label.add_theme_font_size_override("font_size", 12 if compact else 16)
+		run_level_label.add_theme_font_size_override("font_size", 11 if compact else 12)
 	if is_instance_valid(wave_label):
 		wave_label.add_theme_font_size_override("font_size", 16 if compact else (19 if portrait else 24))
 		wave_label.clip_text = true
@@ -1906,9 +1906,9 @@ func _setup_extended_hud_and_profile() -> void:
 	var margin_c := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin") as MarginContainer
 	if is_instance_valid(margin_c):
 		margin_c.add_theme_constant_override("margin_left", 6)
-		margin_c.add_theme_constant_override("margin_top", 4)
+		margin_c.add_theme_constant_override("margin_top", 2)
 		margin_c.add_theme_constant_override("margin_right", 6)
-		margin_c.add_theme_constant_override("margin_bottom", 4)
+		margin_c.add_theme_constant_override("margin_bottom", 2)
 
 	var hbox_root := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot") as HBoxContainer
 	if is_instance_valid(hbox_root):
@@ -1916,7 +1916,7 @@ func _setup_extended_hud_and_profile() -> void:
 
 	var vbox_stats := get_node_or_null("HUD/HUDRoot/PlayerStatsCard/Margin/HBoxRoot/VBoxStats") as VBoxContainer
 	if is_instance_valid(vbox_stats):
-		vbox_stats.add_theme_constant_override("separation", 2)
+		vbox_stats.add_theme_constant_override("separation", 0)
 
 	if is_instance_valid(hp_bar):
 		hp_bar.custom_minimum_size = Vector2(110, 8)
