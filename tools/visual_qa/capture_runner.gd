@@ -179,6 +179,8 @@ func _capture_hud_combat_16x9() -> void:
 
 	StageDirector.selected_class_id = "soldier"
 	StageDirector.current_stage = 1
+	get_tree().paused = false
+	StageDirector.current_stage = 1
 	var main_scene := load("res://scenes/main/main.tscn") as PackedScene
 	var main_inst = main_scene.instantiate()
 	sub.add_child(main_inst)
