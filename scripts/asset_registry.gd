@@ -537,6 +537,97 @@ static func get_campaign_boss_portrait(boss_id: String) -> String:
 		return get_candidate_boss_directory(boss_id) + "boss_portrait.png"
 	return String(BOSS_CAMPAIGN_PORTRAITS.get(boss_id, ""))
 
+# Clean only *uniform*, opaque studio backgrounds around mutant animation frames.
+# Dark textured arenas and irregular enemy silhouettes must not be flood-filled.
+# Cache every texture; all work happens once during resource setup, not each frame.
+static var _mutant_matte_cache: Dictionary = {}
+
+static func _mutant_frame_without_flat_matte(tex: Texture2D) -> Texture2D:
+	if tex == null:
+		return null
+	var key: String = tex.resource_path
+	if key.is_empty():
+		key = str(tex.get_instance_id())
+	if _mutant_matte_cache.has(key):
+		return _mutant_matte_cache[key]
+	_mutant_matte_cache[key] = tex
+	var raw: Image = tex.get_image()
+	if raw == null or raw.is_empty():
+		return tex
+	var width: int = raw.get_width()
+	var height: int = raw.get_height()
+	if width < 32 or height < 32 or width * height > 262144:
+		return tex
+	var corners: Array[Color] = [
+		raw.get_pixel(0, 0), raw.get_pixel(width - 1, 0),
+		raw.get_pixel(0, height - 1), raw.get_pixel(width - 1, height - 1)
+	]
+	# Only consider fully opaque nearly identical corners, never the real
+	# alpha-transparent silhouettes present in already-prepared PNGs.
+	var matte: Color = corners[0]
+	if matte.a < 0.99:
+		return tex
+	var agreeing: int = 0
+	for corner in corners:
+		if corner.a > 0.99 and absf(corner.r - matte.r) < 0.065 and absf(corner.g - matte.g) < 0.065 and absf(corner.b - matte.b) < 0.065:
+			agreeing += 1
+	if agreeing < 3:
+		return tex
+	var sampled: int = 0
+	var matched: int = 0
+	for x in range(0, width, maxi(1, int(width / 24))):
+		for y in [0, height - 1]:
+			var p: Color = raw.get_pixel(x, y)
+			sampled += 1
+			if p.a > 0.95 and p.distance_squared_to(matte) < 0.020:
+				matched += 1
+	for y in range(0, height, maxi(1, int(height / 24))):
+		for x in [0, width - 1]:
+			var p: Color = raw.get_pixel(x, y)
+			sampled += 1
+			if p.a > 0.95 and p.distance_squared_to(matte) < 0.020:
+				matched += 1
+	if matched < int(float(sampled) * 0.82):
+		return tex
+	var image: Image = raw.duplicate()
+	image.convert(Image.FORMAT_RGBA8)
+	var visited := PackedByteArray()
+	visited.resize(width * height)
+	var queue: Array[Vector2i] = []
+	for x in range(width):
+		queue.append(Vector2i(x, 0))
+		queue.append(Vector2i(x, height - 1))
+	for y in range(1, height - 1):
+		queue.append(Vector2i(0, y))
+		queue.append(Vector2i(width - 1, y))
+	var read_idx: int = 0
+	var erased: int = 0
+	while read_idx < queue.size():
+		var pos: Vector2i = queue[read_idx]
+		read_idx += 1
+		var idx: int = pos.y * width + pos.x
+		if visited[idx] != 0:
+			continue
+		visited[idx] = 1
+		var c: Color = image.get_pixelv(pos)
+		if c.a < 0.95 or c.distance_squared_to(matte) > 0.020:
+			continue
+		c.a = 0.0
+		image.set_pixelv(pos, c)
+		erased += 1
+		if pos.x > 0: queue.append(Vector2i(pos.x - 1, pos.y))
+		if pos.x + 1 < width: queue.append(Vector2i(pos.x + 1, pos.y))
+		if pos.y > 0: queue.append(Vector2i(pos.x, pos.y - 1))
+		if pos.y + 1 < height: queue.append(Vector2i(pos.x, pos.y + 1))
+	# A uniform whole-frame texture is not a valid mutant sprite;
+	# avoid destroying borderline or already-transparent art.
+	if erased < int(width * height * 0.12) or erased > int(width * height * 0.75):
+		return tex
+	var cleaned := ImageTexture.create_from_image(image)
+	_mutant_matte_cache[key] = cleaned
+	return cleaned
+
+
 static func enemy_frame_scale(tex: Texture2D, enemy_id: String) -> Vector2:
 	if tex == null:
 		return Vector2.ONE
@@ -631,8 +722,8 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 		if not folder.is_empty():
 			var root_path := "res://assets/enemies/" + folder + "/"
 			for idx in range(1, 5):
-				var w: Texture2D = get_tex(root_path + "walk_%d.png" % idx)
-				var a: Texture2D = get_tex(root_path + "attack_%d.png" % idx)
+				var w: Texture2D = _mutant_frame_without_flat_matte(get_tex(root_path + "walk_%d.png" % idx))
+				var a: Texture2D = _mutant_frame_without_flat_matte(get_tex(root_path + "attack_%d.png" % idx))
 				if w != null: walk_frames.append(w)
 				if a != null: attack_frames.append(a)
 			spec = {"texture_path": root_path + "portrait.png", "scale": Vector2(0.60, 0.60), "status": "HD_MUTANT_V2"}

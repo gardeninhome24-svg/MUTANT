@@ -162,7 +162,7 @@ func _run() -> void:
 		_check(weapon_row.get_theme_constant("separation") == 3, "420px weapon row uses reduced separation")
 	var radio_text: Label = combat.get("npc_text_lbl") as Label
 	if is_instance_valid(radio_text):
-		_check(radio_text.get_theme_font_size("font_size") == 14, "420px radio message uses readable font")
+		_check(radio_text.get_theme_font_size("font_size") >= 14, "420px radio message uses readable font")
 	if is_instance_valid(weapons) and is_instance_valid(powers):
 		_check(weapons.offset_bottom <= powers.offset_top - 2.0, "Narrow portrait weapon and power bars occupy separate rows")
 	if is_instance_valid(joystick) and is_instance_valid(weapons):

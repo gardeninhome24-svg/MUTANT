@@ -265,7 +265,7 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(npc_speaker_lbl):
 		npc_speaker_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 	if is_instance_valid(npc_text_lbl):
-		npc_text_lbl.add_theme_font_size_override("font_size", 12 if compact else 13)
+		npc_text_lbl.add_theme_font_size_override("font_size", 14 if compact else 13)
 		npc_text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
@@ -1168,7 +1168,7 @@ func show_npc_comms(speaker: String, text: String) -> void:
 		preview = preview.substr(speaker.length() + 1).strip_edges()
 	# Full dialogue is saved to the journal below. A short radio toast
 	# keeps the tactical objectives and opponent field readable on phones.
-	var max_chars: int = 94 if StageDirector.is_portrait_mode() else 185
+	var max_chars: int = 72 if StageDirector.is_portrait_mode() else 185
 	if preview.length() > max_chars:
 		preview = preview.substr(0, max_chars - 1).strip_edges() + "…"
 	npc_text_lbl.text = preview
