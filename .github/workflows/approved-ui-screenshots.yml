@@ -58,9 +58,10 @@ jobs:
             godot --path . --rendering-driver opengl3 \
             res://tools/visual_qa/capture_runner.tscn -- --scenario=approved_ui \
             2>&1 | tee /tmp/approved-ui-render.log
-          grep -Fq 'CAPTURES PASS: 2 real viewport PNGs saved' /tmp/approved-ui-render.log
+          grep -Fq 'CAPTURES PASS: 3 real viewport PNGs saved' /tmp/approved-ui-render.log
           test -s visual_qa/captures/approved_menu_720x1280_actual.png
           test -s visual_qa/captures/hud_mobile_720x1280_actual.png
+          test -s visual_qa/captures/upgrade_mobile_720x1280_actual.png
 
       - name: Upload real screenshot evidence
         if: always()
@@ -70,6 +71,7 @@ jobs:
           path: |
             visual_qa/captures/approved_menu_720x1280_actual.png
             visual_qa/captures/hud_mobile_720x1280_actual.png
+            visual_qa/captures/upgrade_mobile_720x1280_actual.png
           if-no-files-found: warn
           retention-days: 30
 
