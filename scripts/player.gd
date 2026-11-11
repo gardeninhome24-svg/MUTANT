@@ -42,6 +42,7 @@ var has_shield: bool = false
 var shield_charges: int = 0
 var shield_recharge_timer: float = 0.0
 var shield_sprite: Sprite2D = null
+var combat_aura: Sprite2D = null
 
 # Aktywne Moce Bojowe (Granat Plazmowy [Q] oraz Wir Antygrawitacji [E])
 var grenade_cooldown: float = 6.5
@@ -103,6 +104,7 @@ var dash_direction: Vector2 = Vector2.RIGHT
 
 func _ready() -> void:
 	_setup_shield_vfx()
+	_setup_combat_aura()
 	apply_class_and_talents(true)
 	xp_to_next_level = float(StageDirector.get_run_xp_needed(level))
 	if muzzle_flash:
@@ -111,6 +113,26 @@ func _ready() -> void:
 	emit_signal("health_changed", current_health, max_health)
 	emit_signal("xp_changed", current_xp, xp_to_next_level, level)
 	queue_redraw()
+
+func _setup_combat_aura() -> void:
+	# Production blue ground ring: separate artwork beneath the character,
+	# never baked into the sprite or used as a hitbox.
+	var path := "res://assets/vfx/vfx_cyan_energy_ring.png"
+	if not ResourceLoader.exists(path):
+		return
+	var tex := load(path) as Texture2D
+	if tex == null:
+		return
+	combat_aura = Sprite2D.new()
+	combat_aura.name = "CombatGroundAura"
+	combat_aura.texture = tex
+	combat_aura.position = Vector2(0, 18)
+	var diameter: float = float(maxi(tex.get_width(), tex.get_height()))
+	combat_aura.scale = Vector2.ONE * (190.0 / maxf(1.0, diameter))
+	combat_aura.modulate = Color(0.29, 0.78, 1.0, 0.76)
+	combat_aura.material = PowerEffects.get_additive_mat()
+	combat_aura.z_index = -1
+	add_child(combat_aura)
 
 func _setup_shield_vfx() -> void:
 	shield_sprite = Sprite2D.new()
@@ -288,6 +310,10 @@ func use_antigravity_vortex() -> bool:
 	return true
 
 func _physics_process(delta: float) -> void:
+	if is_instance_valid(combat_aura):
+		combat_aura.rotation += 0.28 * delta
+		combat_aura.modulate.a = 0.65 + 0.12 * sin(anim_timer * 2.3)
+		combat_aura.visible = current_health > 0.0
 	if dash_timer > 0.0:
 		dash_timer = maxf(0.0, dash_timer - delta)
 	if has_toxic_mines and current_health > 0.0:
