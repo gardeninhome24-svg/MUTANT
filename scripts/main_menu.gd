@@ -632,7 +632,7 @@ func _build_base_tab_content() -> void:
 
 	var stage_row := HBoxContainer.new()
 	stage_row.name = "MissionStageRow"
-	stage_row.add_theme_constant_override("separation", 12)
+	stage_row.add_theme_constant_override("separation", 8)
 	card_margin.add_child(stage_row)
 	stage_preview = TextureRect.new()
 	stage_preview.name = "StageEnvironmentPreview"
@@ -1363,7 +1363,7 @@ func _apply_responsive_menu_layout() -> void:
 	# on smaller devices; do not depend on the nominal 720px design viewport.
 	var available_width := maxf(180.0, minf(size.x, get_viewport_rect().size.x) - (44.0 if portrait else 110.0))
 	if is_instance_valid(stage_card):
-		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (218.0 if compact_hub else 342.0) if portrait else 330.0)
+		stage_card.custom_minimum_size = Vector2(minf(640.0 if portrait else 680.0, available_width), (202.0 if compact_hub else 304.0) if portrait else 330.0)
 	# Compress intrinsic child minimum widths before the 420px screenshot:
 	# a wide title/navigation row used to force the whole card to 480px.
 	# Compact home must show its single primary CTA without sacrificing the
@@ -1374,9 +1374,9 @@ func _apply_responsive_menu_layout() -> void:
 		var margins := stage_card.get_node_or_null("MissionCardMargins") as MarginContainer
 		if is_instance_valid(margins):
 			for direction in ["left", "right"]:
-				margins.add_theme_constant_override("margin_" + direction, 8 if compact_hub else 30)
-			margins.add_theme_constant_override("margin_top", 8 if compact_hub else 25)
-			margins.add_theme_constant_override("margin_bottom", 8 if compact_hub else 25)
+				margins.add_theme_constant_override("margin_" + direction, 8 if compact_hub else 18)
+			margins.add_theme_constant_override("margin_top", 6 if compact_hub else 12)
+			margins.add_theme_constant_override("margin_bottom", 6 if compact_hub else 12)
 		var stage_layout := stage_card.find_child("MissionStageRow", true, false) as HBoxContainer
 		if is_instance_valid(stage_layout):
 			stage_layout.add_theme_constant_override("separation", 2 if compact_hub else 18)
@@ -1388,30 +1388,30 @@ func _apply_responsive_menu_layout() -> void:
 				direction_btn.custom_minimum_size = Vector2(26, 30) if compact_hub else Vector2(36, 36)
 		var power_lbl := stage_card.find_child("RecommendedPowerLabel", true, false) as Label
 		if is_instance_valid(power_lbl):
-			power_lbl.add_theme_font_size_override("font_size", 11 if compact_hub else 15)
+			power_lbl.add_theme_font_size_override("font_size", 10 if compact_hub else 13)
 		var reward_heading_label := stage_card.find_child("MissionRewardHeading", true, false) as Label
 		if is_instance_valid(reward_heading_label):
-			reward_heading_label.add_theme_font_size_override("font_size", 10 if compact_hub else 12)
+			reward_heading_label.add_theme_font_size_override("font_size", 9 if compact_hub else 11)
 		var stage_row := stage_card.find_child("MissionStageRow", true, false) as HBoxContainer
 		if is_instance_valid(stage_row) and stage_row.get_child_count() > 1:
 			var content_col := stage_row.get_child(1) as VBoxContainer
 			if is_instance_valid(content_col):
-				content_col.add_theme_constant_override("separation", 2 if compact_hub else 6)
+				content_col.add_theme_constant_override("separation", 1 if compact_hub else 3)
 		if is_instance_valid(stage_rewards_hbox):
 			stage_rewards_hbox.add_theme_constant_override("separation", 3 if compact_hub else 14)
 			for reward_icon in stage_rewards_hbox.get_children():
 				if reward_icon is TextureRect:
-					reward_icon.custom_minimum_size = Vector2(24, 25) if compact_hub else Vector2(46, 42)
+					reward_icon.custom_minimum_size = Vector2(22, 22) if compact_hub else Vector2(34, 32)
 	var map_link_btn := stage_card.find_child("OpenCampaignMap", true, false) as Button
 	if is_instance_valid(map_link_btn):
 		map_link_btn.text = "KAMPANIA" if compact_hub else "KAMPANIA  •  MAPA 1–100"
-		map_link_btn.add_theme_font_size_override("font_size", 10 if compact_hub else 16)
-		map_link_btn.custom_minimum_size.y = 20.0 if compact_hub else 30.0
+		map_link_btn.add_theme_font_size_override("font_size", 10 if compact_hub else 13)
+		map_link_btn.custom_minimum_size.y = 18.0 if compact_hub else 24.0
 	if is_instance_valid(mission_description):
-		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 17)
+		mission_description.add_theme_font_size_override("font_size", 10 if compact_hub else 14)
 	if is_instance_valid(stage_preview):
 		stage_preview.visible = true
-		stage_preview.custom_minimum_size = Vector2(82, 138) if compact_hub else (Vector2(165, 212) if portrait else Vector2(175, 180))
+		stage_preview.custom_minimum_size = Vector2(74, 124) if compact_hub else (Vector2(140, 184) if portrait else Vector2(175, 180))
 	if is_instance_valid(play_big_btn):
 		play_big_btn.custom_minimum_size = Vector2(minf(630.0 if portrait else 600.0, available_width), (70.0 if compact_hub else 118.0) if portrait else 100.0)
 	var campaign_continue := base_vbox.get_node_or_null("ContinueCampaignButton") as Button
@@ -1421,12 +1421,12 @@ func _apply_responsive_menu_layout() -> void:
 	if is_instance_valid(play_big_btn):
 		play_big_btn.text = "" if ResourceLoader.exists("res://assets/ui/target_theme/btn_play_gold_clean.png") else "GRAJ"
 	if is_instance_valid(hero_spacer_control):
-		hero_spacer_control.custom_minimum_size = Vector2(0, (clampf(minf(size.y, get_viewport_rect().size.y) * 0.22, 157.0, 190.0) if compact_hub else 438.0) if portrait else 145.0)
+		hero_spacer_control.custom_minimum_size = Vector2(0, (clampf(minf(size.y, get_viewport_rect().size.y) * 0.20, 145.0, 180.0) if compact_hub else 468.0) if portrait else 145.0)
 	if is_instance_valid(stage_title_lbl):
-		stage_title_lbl.add_theme_font_size_override("font_size", 18 if compact_hub else (35 if portrait else 33))
+		stage_title_lbl.add_theme_font_size_override("font_size", 17 if compact_hub else (26 if portrait else 33))
 	if is_instance_valid(stage_details_lbl):
-		stage_details_lbl.add_theme_font_size_override("font_size", 13 if compact_hub else (22 if portrait else 25))
-		stage_details_lbl.custom_minimum_size.y = 18.0 if compact_hub else 36.0
+		stage_details_lbl.add_theme_font_size_override("font_size", 12 if compact_hub else (18 if portrait else 25))
+		stage_details_lbl.custom_minimum_size.y = 18.0 if compact_hub else 28.0
 	if is_instance_valid(orient_btn):
 		orient_btn.text = "9:16" if portrait else "16:9"
 

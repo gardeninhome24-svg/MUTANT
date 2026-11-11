@@ -278,8 +278,11 @@ func _capture_hud_mobile_9x16(capture_upgrade: bool = false, compact_phone: bool
 		var enemy_index: int = 0
 		for actor in main_inst.get_node("CharactersLayer").get_children():
 			if actor is MutantEnemy:
-				var angle: float = TAU * float(enemy_index) / 10.0
-				actor.global_position = player.global_position + Vector2(cos(angle), sin(angle)) * (125.0 + float(enemy_index % 3) * 22.0)
+				var angle: float = TAU * (float(enemy_index) / 10.0 - 0.25)
+				# Place all 10 actual enemies clearly in front and around the
+				# real player, inside the portrait camera at 720 and 420 px.
+				var distance: float = 105.0 + float(enemy_index % 3) * 27.0
+				actor.global_position = player.global_position + Vector2(cos(angle), sin(angle)) * distance
 				actor.set_process(false)
 				actor.set_physics_process(false)
 				enemy_index += 1

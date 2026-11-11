@@ -386,27 +386,27 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -110.0 if compact else -115.0
-			wave_progress_box.offset_top = (242.0 if compact else 90.0) + safe_top
+			wave_progress_box.offset_top = (242.0 if compact else 105.0) + safe_top
 			wave_progress_box.offset_right = 110.0 if compact else 115.0
-			wave_progress_box.offset_bottom = (292.0 if compact else 144.0) + safe_top
+			wave_progress_box.offset_bottom = (292.0 if compact else 159.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
-			objectives_panel.offset_top = (80.0 if compact else 168.0) + safe_top
+			objectives_panel.offset_top = (80.0 if compact else 192.0) + safe_top
 			objectives_panel.offset_right = 205.0 if compact else 286.0
-			objectives_panel.offset_bottom = (181.0 if compact else 315.0) + safe_top
+			objectives_panel.offset_bottom = (181.0 if compact else 335.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 			radar_panel.offset_left = -108.0 if compact else -150.0
-			radar_panel.offset_top = (75.0 if compact else 168.0) + safe_top
+			radar_panel.offset_top = (75.0 if compact else 192.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (178.0 if compact else 315.0) + safe_top
+			radar_panel.offset_bottom = (178.0 if compact else 335.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(180.0, (view_width - 400.0) * 0.5)
-			bottom_weapons_panel.offset_top = -128.0 if compact else -102.0
-			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 105.0, (view_width + 400.0) * 0.5)
-			bottom_weapons_panel.offset_bottom = -78.0 if compact else -20.0
+			bottom_weapons_panel.offset_top = -128.0 if compact else -132.0
+			bottom_weapons_panel.offset_right = 260.0 if compact else minf(view_width - 70.0, (view_width + 470.0) * 0.5)
+			bottom_weapons_panel.offset_bottom = -78.0 if compact else -18.0
 		if powers_hbox:
 			powers_hbox.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 			powers_hbox.offset_left = -330.0 if compact else -350.0
@@ -2324,9 +2324,9 @@ func _refresh_weapon_loadout_bar() -> void:
 	# squares made working combat look unfinished in the approved screenshot.
 	# These are read-only status icons; actual skill buttons stay interactive.
 	var items: Array[Dictionary] = [
-		{"icon": "res://assets/ui/production_icons/weapon.svg", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0)), "caption": "BROŃ"},
-		{"icon": "res://assets/ui/production_icons/grenade.svg", "lvl": 1, "caption": "Q"},
-		{"icon": "res://assets/ui/production_icons/vortex.svg", "lvl": 1, "caption": "E"}
+		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_1.png", "lvl": 1 + int(upgrade_tiers.get("plasma_dmg", 0)), "caption": "BROŃ"},
+		{"icon": "res://assets/mutantsurvivor_ch01/icons/grenade.png", "lvl": 1, "caption": "Q"},
+		{"icon": "res://assets/mutantsurvivor_ch01/weapons/weapon_12.png", "lvl": 1, "caption": "E"}
 	]
 	for up_id in upgrade_tiers.keys():
 		if up_id == "plasma_dmg" or items.size() >= 5:
@@ -2339,7 +2339,7 @@ func _refresh_weapon_loadout_bar() -> void:
 
 	for slot_data in items:
 		var slot_box := PanelContainer.new()
-		slot_box.custom_minimum_size = Vector2(58, 62) if StageDirector.is_portrait_mode() else Vector2(65, 62)
+		slot_box.custom_minimum_size = Vector2(56, 60) if _is_compact_portrait_hud(get_viewport_rect().size.x) else (Vector2(76, 88) if StageDirector.is_portrait_mode() else Vector2(72, 76))
 		var st := StyleBoxFlat.new()
 		st.bg_color = Color(0.013, 0.046, 0.077, 0.98)
 		st.set_border_width_all(2)
@@ -2360,7 +2360,7 @@ func _refresh_weapon_loadout_bar() -> void:
 		if active and not String(slot_data["icon"]).is_empty():
 			var tr := TextureRect.new()
 			tr.texture = AssetRegistry.get_tex(String(slot_data["icon"]))
-			tr.custom_minimum_size = Vector2(38, 34) if StageDirector.is_portrait_mode() else Vector2(42, 38)
+			tr.custom_minimum_size = Vector2(36, 32) if _is_compact_portrait_hud(get_viewport_rect().size.x) else (Vector2(56, 58) if StageDirector.is_portrait_mode() else Vector2(50, 48))
 			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			v.add_child(tr)
