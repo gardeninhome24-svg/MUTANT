@@ -10,6 +10,9 @@ on:
       - scenes/ui/main_menu.tscn
       - scenes/main/main.tscn
       - tools/visual_qa/capture_runner.gd
+      - tools/visual_qa/compare_images.py
+      - visual_qa/references/**
+      - assets/ui/approved/**
       - .github/workflows/approved-ui-screenshots.yml
 
 concurrency:
