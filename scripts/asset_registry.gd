@@ -509,6 +509,31 @@ static func get_campaign_boss_portrait(boss_id: String) -> String:
 		return get_candidate_boss_directory(boss_id) + "boss_portrait.png"
 	return String(BOSS_CAMPAIGN_PORTRAITS.get(boss_id, ""))
 
+static func enemy_frame_scale(tex: Texture2D, enemy_id: String) -> Vector2:
+	if tex == null:
+		return Vector2.ONE
+	# Use the SAME scale target for every walk/attack/death frame.
+	# The actual visible silhouette is measured per frame and cached.
+	var cache_key: String = tex.resource_path
+	if cache_key.is_empty():
+		cache_key = str(tex.get_instance_id())
+	var extent: float = float(maxi(tex.get_width(), tex.get_height()))
+	if _enemy_visual_extents.has(cache_key):
+		extent = float(_enemy_visual_extents[cache_key])
+	else:
+		var image_data: Image = tex.get_image()
+		if image_data != null and not image_data.is_empty():
+			var used: Rect2i = image_data.get_used_rect()
+			if used.size.x > 8 and used.size.y > 8:
+				extent = float(maxi(used.size.x, used.size.y))
+		_enemy_visual_extents[cache_key] = extent
+	var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
+	var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
+	var target_extent: float = 282.0 if is_boss else (205.0 if is_large else 156.0)
+	var normalized: float = clampf(target_extent / maxf(1.0, extent), 0.35, 4.40)
+	return Vector2(normalized, normalized)
+
+
 static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary:
 	var spec: Dictionary = {}
 	var walk_frames: Array[Texture2D] = []
@@ -562,34 +587,8 @@ static func apply_enemy_visual(sprite: Sprite2D, enemy_id: String) -> Dictionary
 	sprite.vframes = 1
 	sprite.texture = walk_frames[0] if not walk_frames.is_empty() else tex
 	sprite.scale = spec.get("scale", Vector2(0.54, 0.54))
-	# Sprite source PNGs have drastically different canvas sizes. Normalize
-	# using the actual DISPLAYED frame and give priority enemies a visibly
-	# stronger silhouette relative to the player. This changes visuals only,
-	# not collisions, hit registration, movement, or gameplay balance.
-	var displayed: Texture2D = sprite.texture
-	if displayed != null:
-		# Many imported PNGs contain generous TRANSPARENT margins. Measuring
-		# canvas pixels made real monsters tiny even with a 112px target.
-		# Cache alpha bounds by resource path; do not decode on every spawn.
-		var cache_key: String = displayed.resource_path
-		var extent: float = float(maxi(displayed.get_width(), displayed.get_height()))
-		if _enemy_visual_extents.has(cache_key):
-			extent = float(_enemy_visual_extents[cache_key])
-		else:
-			var image_data: Image = displayed.get_image()
-			if image_data != null and not image_data.is_empty():
-				var used: Rect2i = image_data.get_used_rect()
-				if used.size.x > 8 and used.size.y > 8:
-					extent = float(maxi(used.size.x, used.size.y))
-			_enemy_visual_extents[cache_key] = extent
-		var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
-		var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
-		# Opaque body targets are independent of padded PNG dimensions.
-		# Raising the scale ceiling matters for tiny sprites with large
-		# transparent gutters, which previously remained tiny on 9:16.
-		var target_extent: float = 282.0 if is_boss else (205.0 if is_large else 156.0)
-		var normalized_scale: float = clampf(target_extent / maxf(1.0, extent), 0.35, 4.40)
-		sprite.scale = Vector2(normalized_scale, normalized_scale)
+	# Normalize based on the visible body, not the PNG canvas.
+	sprite.scale = enemy_frame_scale(sprite.texture, enemy_id)
 	return {
 		"is_animated": (walk_frames.size() > 0),
 		"fps": 8.0,
