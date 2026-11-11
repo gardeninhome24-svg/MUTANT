@@ -51,7 +51,8 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
             xvfb xauth libxcursor1 libxi6 libxinerama1 libxrandr2 \
             libxrender1 libxfixes3 libxext6 libx11-6 libwayland-cursor0 \
-            libgl1 libgl1-mesa-dri libfontconfig1 fonts-dejavu-core
+            libgl1 libgl1-mesa-dri libfontconfig1 fonts-dejavu-core \
+            python3 python3-pip
           ldconfig -p | grep -F 'libXcursor.so.1'
 
       - name: Capture actual portrait menu and combat HUD

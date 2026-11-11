@@ -162,6 +162,9 @@ func _capture_victory_overlay() -> void:
 	add_child(sub)
 
 	StageDirector.current_stage = 2
+	# Saving the simulated victory must satisfy current_stage <= unlocked.
+	# Otherwise the visual runner reports save verification failures.
+	StageDirector.max_unlocked_stage = maxi(2, StageDirector.max_unlocked_stage)
 	StageDirector.is_practice_mode = true
 	var main_scene := load("res://scenes/main/main.tscn") as PackedScene
 	var main_inst = main_scene.instantiate()
