@@ -258,12 +258,15 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(orient_hud_btn):
 		orient_hud_btn.text = "9:16" if portrait else "16:9"
 		orient_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(64, 30)
+		orient_hud_btn.visible = not portrait
 	if is_instance_valid(journal_hud_btn):
 		journal_hud_btn.text = "DZIENNIK" if not portrait else "LOG"
 		journal_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(78, 30)
+		journal_hud_btn.visible = not portrait
 	if is_instance_valid(profile_hud_btn):
 		profile_hud_btn.text = "RPG"
 		profile_hud_btn.custom_minimum_size = Vector2(48, 28) if portrait else Vector2(68, 30)
+		profile_hud_btn.visible = not portrait
 	if is_instance_valid(currency_bar):
 		currency_bar.add_theme_constant_override("separation", (5 if compact else 8) if portrait else 18)
 		for coin_group in [get_node_or_null("HUD/HUDRoot/CurrencyBar/EnergyHBox"), get_node_or_null("HUD/HUDRoot/CurrencyBar/DMHBox")]:
@@ -341,21 +344,21 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		if wave_progress_box:
 			wave_progress_box.set_anchors_preset(Control.PRESET_CENTER_TOP)
 			wave_progress_box.offset_left = -115.0 if compact else -145.0
-			wave_progress_box.offset_top = (242.0 if compact else 104.0) + safe_top
+			wave_progress_box.offset_top = (242.0 if compact else 110.0) + safe_top
 			wave_progress_box.offset_right = 115.0 if compact else 145.0
-			wave_progress_box.offset_bottom = (292.0 if compact else 165.0) + safe_top
+			wave_progress_box.offset_bottom = (292.0 if compact else 196.0) + safe_top
 		if objectives_panel:
 			objectives_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 			objectives_panel.offset_left = 10.0
-			objectives_panel.offset_top = (80.0 if compact else 180.0) + safe_top
+			objectives_panel.offset_top = (80.0 if compact else 213.0) + safe_top
 			objectives_panel.offset_right = 212.0 if compact else 304.0
-			objectives_panel.offset_bottom = (181.0 if compact else 349.0) + safe_top
+			objectives_panel.offset_bottom = (181.0 if compact else 390.0) + safe_top
 		if radar_panel:
 			radar_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 			radar_panel.offset_left = -112.0 if compact else -176.0
-			radar_panel.offset_top = (75.0 if compact else 170.0) + safe_top
+			radar_panel.offset_top = (75.0 if compact else 120.0) + safe_top
 			radar_panel.offset_right = -10.0
-			radar_panel.offset_bottom = (180.0 if compact else 334.0) + safe_top
+			radar_panel.offset_bottom = (180.0 if compact else 278.0) + safe_top
 		if bottom_weapons_panel:
 			bottom_weapons_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 			bottom_weapons_panel.offset_left = 12.0 if compact else maxf(185.0, (view_width - 360.0) * 0.5)
@@ -391,8 +394,8 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 			npc_dialogue_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 			npc_dialogue_panel.offset_left = -minf(220.0, view_width * 0.5 - 14.0)
 			npc_dialogue_panel.offset_right = minf(220.0, view_width * 0.5 - 14.0)
-			npc_dialogue_panel.offset_top = -382.0
-			npc_dialogue_panel.offset_bottom = -292.0
+			npc_dialogue_panel.offset_top = -316.0
+			npc_dialogue_panel.offset_bottom = -239.0
 	else:
 		# UKŁAD POZIOMY 16:9 (PC / TABLET LANDSCAPE — bez nakładania paska fali i walut)
 		if stats_card:
