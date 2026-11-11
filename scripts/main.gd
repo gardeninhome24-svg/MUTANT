@@ -287,8 +287,10 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		cards_container.add_theme_constant_override("separation", 8 if portrait else 20)
 	var upgrade_scroll := get_node_or_null("HUD/HUDRoot/UpgradePanel/CenterContainer/VBox/UpgradeScroll") as ScrollContainer
 	if is_instance_valid(upgrade_scroll):
+		# A 650px scroll strip clipped the last card at 720px. Use the
+		# full safe width and keep horizontal swipe only for narrow phones.
 		upgrade_scroll.custom_minimum_size = Vector2(
-			minf(650.0, maxf(252.0, view_width - 36.0)) if portrait else 760.0,
+			minf(696.0, maxf(252.0, view_width - 18.0)) if portrait else 760.0,
 			404.0 if portrait else 367.0
 		)
 		upgrade_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -574,7 +576,7 @@ func _style_combat_hud() -> void:
 		reroll.add_theme_color_override("font_color", Color(0.94, 0.97, 1.0))
 	var upgrade_shade := get_node_or_null("HUD/HUDRoot/UpgradePanel") as ColorRect
 	if is_instance_valid(upgrade_shade):
-		upgrade_shade.color = Color(0.005, 0.013, 0.028, 0.63)
+		upgrade_shade.color = Color(0.008, 0.020, 0.038, 0.50)
 
 	if is_instance_valid(stats_card):
 		stats_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1519,6 +1521,11 @@ func _on_player_leveled_up(_lvl: int) -> void:
 	if is_instance_valid(joystick):
 		joystick.cancel_touch()
 	get_tree().paused = true
+	# Upgrade selection is a focused modal. Hide the transient radio toast
+	# until combat resumes so it cannot sit under the reroll CTA.
+	if is_instance_valid(npc_dialogue_panel):
+		npc_dialogue_panel.visible = false
+		npc_hide_timer = 0.0
 	upgrade_panel.visible = true
 	_populate_upgrade_cards()
 
