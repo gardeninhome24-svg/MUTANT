@@ -1,6 +1,8 @@
 import os
 import sys
 import json
+import argparse
+from pathlib import Path
 import numpy as np
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 from skimage.metrics import structural_similarity as ssim
@@ -94,10 +96,11 @@ def compare_pair(ref_path: str, actual_path: str, out_dir: str, scenario_id: str
     img_ref.save(ref_copy_path)
     img_act.save(act_copy_path)
 
-    # Status classification
-    if score_ssim >= tolerance_ssim and mismatch_pct < 35.0:
+    # The legacy per-scenario SSIM thresholds (0.55–0.65) are diagnostic only.
+    # The required 97% gate must not be confused with them.
+    if score_ssim >= 0.97 and mismatch_pct <= 3.0:
         status = "ZATWIERDZONE"
-    elif score_ssim >= (tolerance_ssim * 0.8):
+    elif score_ssim >= tolerance_ssim and mismatch_pct < 35.0:
         status = "DO AKCEPTACJI"
     else:
         status = "DO POPRAWY"
@@ -127,32 +130,59 @@ def compare_pair(ref_path: str, actual_path: str, out_dir: str, scenario_id: str
 
     return report
 
-def main():
-    root = r"C:\Users\patry\Desktop\2026\MutantSurvivor"
-    manifest_p = os.path.join(root, "visual_qa", "references", "manifest.json")
-    diffs_dir = os.path.join(root, "visual_qa", "diffs")
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Compare actual Godot renders with approved references.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2],
+                        help="Godot project root (defaults to repository root)")
+    parser.add_argument("--strict", action="store_true",
+                        help="Fail unless every scenario achieves SSIM >= 0.97 and mismatch area <= 3%%")
+    parser.add_argument("--scenario", action="append", default=[],
+                        help="Only compare selected manifest scenario IDs; repeat as needed")
+    args = parser.parse_args()
+    root = args.root.resolve()
+    manifest_p = root / "visual_qa" / "references" / "manifest.json"
+    diffs_dir = root / "visual_qa" / "diffs"
+    diffs_dir.mkdir(parents=True, exist_ok=True)
+    if not manifest_p.is_file():
+        print(f"Missing reference manifest: {manifest_p}", file=sys.stderr)
+        return 2
 
-    with open(manifest_p, "r", encoding="utf-8") as f:
+    with manifest_p.open("r", encoding="utf-8") as f:
         manifest = json.load(f)
+    available = {sc["id"]: sc for sc in manifest.get("scenarios", [])}
+    unknown = set(args.scenario) - set(available)
+    if unknown:
+        print(f"Unknown scenarios: {', '.join(sorted(unknown))}", file=sys.stderr)
+        return 2
+    scenarios = [available[k] for k in args.scenario] if args.scenario else list(available.values())
+    if not scenarios:
+        print("No scenarios to compare", file=sys.stderr)
+        return 2
 
     all_reports = []
-    print("=== STARTING VISUAL QA COMPARISON SUITE ===")
-    for sc in manifest.get("scenarios", []):
+    for sc in scenarios:
         sc_id = sc["id"]
-        ref_path = os.path.join(root, sc["reference_image"])
-        act_path = os.path.join(root, sc["actual_capture"])
+        ref_path = root / sc["reference_image"]
+        act_path = root / sc["actual_capture"]
         tol = sc.get("tolerance_ssim", 0.65)
-
-        print(f"\nProcessing scenario: {sc_id}")
-        rep = compare_pair(ref_path, act_path, diffs_dir, sc_id, tol)
+        rep = compare_pair(str(ref_path), str(act_path), str(diffs_dir), sc_id, tol)
         all_reports.append(rep)
-        print(f" -> Status: {rep.get('status')} | SSIM: {rep.get('ssim')} | Diff Area: {rep.get('mismatch_area_pct')}%")
+        print(f"{sc_id}: {rep.get('status')} | SSIM={rep.get('ssim', 'n/a')} | "
+              f"mismatch={rep.get('mismatch_area_pct', 'n/a')}% | {rep.get('error', '')}")
 
-    # Global summary report
-    summary_path = os.path.join(diffs_dir, "summary_report.json")
-    with open(summary_path, "w", encoding="utf-8") as f:
+    summary_path = diffs_dir / "summary_report.json"
+    with summary_path.open("w", encoding="utf-8") as f:
         json.dump(all_reports, f, indent=2)
-    print(f"\nSaved summary report: {summary_path}")
+
+    failures = [r for r in all_reports if r.get("status") == "ERROR"]
+    if failures:
+        print(f"Visual QA failed: {len(failures)} missing/invalid image pairs", file=sys.stderr)
+        return 2
+    if args.strict and any(r["status"] != "ZATWIERDZONE" for r in all_reports):
+        print("97% visual QA gate FAILED (SSIM >= 0.97 AND mismatch <= 3% required)", file=sys.stderr)
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
