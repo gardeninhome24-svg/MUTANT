@@ -551,9 +551,32 @@ static func enemy_frame_scale(tex: Texture2D, enemy_id: String) -> Vector2:
 	else:
 		var image_data: Image = tex.get_image()
 		if image_data != null and not image_data.is_empty():
-			var used: Rect2i = image_data.get_used_rect()
-			if used.size.x > 8 and used.size.y > 8:
-				extent = float(maxi(used.size.x, used.size.y))
+			# get_used_rect() includes low-alpha dust, VFX glows, and shadows.
+			# Measure the actual mostly-opaque character silhouette instead;
+			# cache per frame so normal gameplay never repeats the scan.
+			var w: int = image_data.get_width()
+			var h: int = image_data.get_height()
+			var stride: int = maxi(2, int(ceil(float(maxi(w, h)) / 240.0)))
+			var min_x: int = w
+			var min_y: int = h
+			var max_x: int = -1
+			var max_y: int = -1
+			var solid_samples: int = 0
+			for y in range(0, h, stride):
+				for x in range(0, w, stride):
+					if image_data.get_pixel(x, y).a >= 0.40:
+						min_x = mini(min_x, x)
+						min_y = mini(min_y, y)
+						max_x = maxi(max_x, x)
+						max_y = maxi(max_y, y)
+						solid_samples += 1
+			if solid_samples >= 12 and max_x >= min_x and max_y >= min_y:
+				extent = float(maxi(max_x - min_x + stride, max_y - min_y + stride))
+			else:
+				# Legitimate transparent/glowing creatures remain visible.
+				var used: Rect2i = image_data.get_used_rect()
+				if used.size.x > 8 and used.size.y > 8:
+					extent = float(maxi(used.size.x, used.size.y))
 		_enemy_visual_extents[cache_key] = extent
 	var is_boss: bool = BOSS_ANIM_FOLDERS.has(enemy_id) or BOSS_CHAPTER_FALLBACK_KITS.has(enemy_id)
 	var is_large: bool = enemy_id in ["zdziczaly", "miniboss_ch01", "matka_roju"]
