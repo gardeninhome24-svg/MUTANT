@@ -209,7 +209,7 @@ func _physics_process(delta: float) -> void:
 			anim_timer += delta
 			if sprite and not attack_frames.is_empty():
 				sprite.texture = attack_frames[int(anim_timer * sheet_fps) % attack_frames.size()]
-				sprite.scale = base_scale
+				sprite.scale = AssetRegistry.enemy_frame_scale(sprite.texture, enemy_id)
 			queue_redraw()
 			if telegraph_elapsed >= telegraph_duration:
 				_execute_telegraphed_slam()
@@ -235,11 +235,11 @@ func _physics_process(delta: float) -> void:
 	if (is_telegraphing or attack_visual_timer > 0.0) and not attack_frames.is_empty():
 		var af_idx := int(anim_timer * sheet_fps) % attack_frames.size()
 		sprite.texture = attack_frames[af_idx]
-		sprite.scale = base_scale
+		sprite.scale = AssetRegistry.enemy_frame_scale(sprite.texture, enemy_id)
 	elif not walk_frames.is_empty():
 		var wf_idx := int(anim_timer * sheet_fps) % walk_frames.size()
 		sprite.texture = walk_frames[wf_idx]
-		sprite.scale = base_scale
+		sprite.scale = AssetRegistry.enemy_frame_scale(sprite.texture, enemy_id)
 	elif is_animated_sheet and sprite.hframes > 1:
 		sprite.frame = int(anim_timer * sheet_fps) % sprite.hframes
 		sprite.scale = base_scale
@@ -362,6 +362,7 @@ func die() -> void:
 	queue_redraw()
 	if not death_frames.is_empty() and sprite:
 		sprite.texture = death_frames[0]
+		sprite.scale = AssetRegistry.enemy_frame_scale(sprite.texture, enemy_id)
 
 	if not has_dropped_loot:
 		has_dropped_loot = true
@@ -379,14 +380,17 @@ func die() -> void:
 			var echo := Sprite2D.new()
 			echo.texture = death_frames[0]
 			echo.global_position = global_position
-			echo.scale = base_scale
+			echo.scale = AssetRegistry.enemy_frame_scale(echo.texture, enemy_id)
 			echo.flip_h = sprite.flip_h
 			parent_layer.add_child(echo)
 			var echo_tween := echo.create_tween()
 			for frame_index in range(1, death_frames.size()):
 				var frame_tex: Texture2D = death_frames[frame_index]
 				echo_tween.tween_interval(0.12)
-				echo_tween.tween_callback(func(): echo.texture = frame_tex)
+				echo_tween.tween_callback(func():
+					echo.texture = frame_tex
+					echo.scale = AssetRegistry.enemy_frame_scale(frame_tex, enemy_id)
+				)
 			echo_tween.tween_property(echo, "modulate:a", 0.0, 0.20)
 			echo_tween.tween_callback(echo.queue_free)
 		var death_fx := Sprite2D.new()
