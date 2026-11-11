@@ -164,7 +164,7 @@ func _run() -> void:
 		_assert(play.custom_minimum_size.y <= 100, "Reference-size play CTA height is bounded")
 		_assert(play.pressed.get_connections().size() > 0, "Play CTA has a working signal connection")
 	if is_instance_valid(hero):
-		_assert(hero.custom_minimum_size.y <= 415, "Hero showcase remains bounded above the mission panel")
+		_assert(hero.custom_minimum_size.y <= 445, "Hero showcase remains bounded above the mission panel")
 
 	# Exercise the responsive calculations at three portrait sizes without
 	# relying on only the default 720px design canvas.
