@@ -61,10 +61,11 @@ jobs:
             godot --path . --rendering-driver opengl3 \
             res://tools/visual_qa/capture_runner.tscn -- --scenario=approved_ui \
             2>&1 | tee /tmp/approved-ui-render.log
-          grep -Fq 'CAPTURES PASS: 3 real viewport PNGs saved' /tmp/approved-ui-render.log
+          grep -Fq 'CAPTURES PASS: 4 real viewport PNGs saved' /tmp/approved-ui-render.log
           test -s visual_qa/captures/approved_menu_720x1280_actual.png
           test -s visual_qa/captures/hud_mobile_720x1280_actual.png
           test -s visual_qa/captures/upgrade_mobile_720x1280_actual.png
+          test -s visual_qa/captures/hud_compact_420x840_actual.png
 
       - name: Compare actual HUD with approved reference — strict 97% gate
         shell: bash
@@ -91,6 +92,7 @@ jobs:
             visual_qa/captures/approved_menu_720x1280_actual.png
             visual_qa/captures/hud_mobile_720x1280_actual.png
             visual_qa/captures/upgrade_mobile_720x1280_actual.png
+            visual_qa/captures/hud_compact_420x840_actual.png
           if-no-files-found: warn
           retention-days: 30
 
