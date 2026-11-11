@@ -56,7 +56,9 @@ func _run() -> void:
 		"res://assets/ui/approved/combat_objectives_frame.svg",
 		"res://assets/ui/approved/combat_wave_frame.svg",
 		"res://assets/ui/approved/combat_radar_frame.svg",
-		"res://assets/ui/approved/combat_inventory_frame.svg"
+		"res://assets/ui/approved/combat_inventory_frame.svg",
+		"res://assets/ui/approved/combat_stats_frame.svg",
+		"res://assets/ui/approved/combat_wallet_frame.svg"
 	]:
 		_check_texture(skin)
 
@@ -82,6 +84,12 @@ func _run() -> void:
 	combat.call("_apply_responsive_hud_layout")
 	await process_frame
 
+	var stats_art: PanelContainer = combat.get("stats_card") as PanelContainer
+	_check(is_instance_valid(stats_art) and stats_art.get_theme_stylebox("panel") is StyleBoxTexture,
+		"Live HP/XP frame uses approved metallic illustration")
+	var wallet_art: Panel = combat.get_node_or_null("HUD/HUDRoot/CurrencyFrame") as Panel
+	_check(is_instance_valid(wallet_art) and wallet_art.get_theme_stylebox("panel") is StyleBoxTexture,
+		"Live currency area uses real segmented sci-fi artwork")
 	var wave_frame: Panel = combat.get_node_or_null("HUD/HUDRoot/WaveFrame") as Panel
 	_check(is_instance_valid(wave_frame), "Actual HUD has a live wave artwork panel")
 	if is_instance_valid(wave_frame):
