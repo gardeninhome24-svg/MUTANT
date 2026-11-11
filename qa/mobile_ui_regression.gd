@@ -154,6 +154,15 @@ func _run() -> void:
 			"Approved mission art is applied to the live campaign card")
 	var card: Control = menu.get("stage_card") as Control
 	var play: Button = menu.get("play_big_btn") as Button
+	var scrolling_content: ScrollContainer = menu.get("base_scroll") as ScrollContainer
+	var middle_content: Control = menu.get("middle_root") as Control
+	_assert(is_instance_valid(play) and play.get_parent() == middle_content, "PLAY must be pinned outside the scroll area")
+	if is_instance_valid(play):
+		_assert(play.pressed.get_connections().size() > 0, "PLAY retains its live scene-start callback")
+		_assert(play.mouse_filter == Control.MOUSE_FILTER_STOP and not play.disabled, "PLAY accepts mouse and touch input")
+		_assert(play.visible, "PLAY visible on home screen")
+	if is_instance_valid(scrolling_content):
+		_assert(scrolling_content.offset_bottom < -70.0, "Scrollable mission card leaves a reserved PLAY input zone")
 	var hero: Control = menu.get("hero_spacer_control") as Control
 	var progress: Label = menu.get("campaign_progress_label") as Label
 	var progress_bar: ProgressBar = menu.get("campaign_progress_bar") as ProgressBar

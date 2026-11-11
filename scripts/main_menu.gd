@@ -403,6 +403,15 @@ func _build_commercial_hub_ui() -> void:
 	middle_root.add_child(user_profile_panel)
 	user_profile_panel.set_embedded_mode(true)
 	_build_base_overlays()
+	# The PLAY artwork is an actual Button. It used to live at the bottom of
+	# an oversized ScrollContainer (468px hero spacer + stage card), so users
+	# could see parts of the graphic but not reach its actual clickable rect.
+	# Pin that same connected Button above navigation, outside the scroller.
+	if is_instance_valid(play_big_btn):
+		play_big_btn.reparent(middle_root)
+		play_big_btn.name = "PinnedPlayButton"
+		play_big_btn.mouse_filter = Control.MOUSE_FILTER_STOP
+		play_big_btn.focus_mode = Control.FOCUS_ALL
 
 	# --------------------------------------------------------------------------
 	# 3. DOLNY STAŁY PASEK NAWIGACJI (Baza | Postać | Ekwipunek | Kampania | Sklep)
@@ -998,6 +1007,8 @@ func switch_hub_tab(tab_id: int) -> void:
 
 	if is_instance_valid(base_overlay):
 		base_overlay.visible = current_hub_tab == 0
+	if is_instance_valid(play_big_btn):
+		play_big_btn.visible = current_hub_tab == 0
 	if current_hub_tab == 0:
 		base_scroll.visible = true
 		user_profile_panel.visible = false
@@ -1317,6 +1328,20 @@ func _apply_responsive_menu_layout() -> void:
 		middle_root.offset_top = (72.0 if compact_hub else 95.0) + safe_top
 		middle_root.offset_right = 0.0
 		middle_root.offset_bottom = (-84.0 if compact_hub else -100.0) if portrait else -88.0
+	# Reserve a real input zone for PLAY instead of letting the card scroller
+	# run underneath its touch/mouse rectangle.
+	if is_instance_valid(base_scroll):
+		base_scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		base_scroll.offset_bottom = -(86.0 if compact_hub else (136.0 if portrait else 118.0))
+	if is_instance_valid(play_big_btn):
+		play_big_btn.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		var play_height: float = 70.0 if compact_hub else (118.0 if portrait else 100.0)
+		var play_edge: float = 14.0 if compact_hub else 26.0
+		play_big_btn.offset_left = play_edge
+		play_big_btn.offset_right = -play_edge
+		play_big_btn.offset_top = -play_height - 8.0
+		play_big_btn.offset_bottom = -8.0
+		play_big_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	if is_instance_valid(base_overlay):
 		base_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
