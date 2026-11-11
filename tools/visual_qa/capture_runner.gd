@@ -98,6 +98,15 @@ func _capture_home_approved_9x16(width: int = 720, height: int = 1280) -> void:
 		elif bounds.position.x < -2.0 or bounds.end.x > float(width) + 2.0:
 			failed_captures += 1
 			push_error("[Visual QA] Menu element clips horizontally: %s (%s)" % [property_name, bounds])
+	if width <= 540:
+		var mission_card := menu.get("stage_card") as Control
+		var hero_space := menu.get("hero_spacer_control") as Control
+		if is_instance_valid(mission_card) and mission_card.size.y > 275.0:
+			failed_captures += 1
+			push_error("[Visual QA] Compact mission card obscures hero artwork: %s" % mission_card.size)
+		if is_instance_valid(hero_space) and hero_space.custom_minimum_size.y < 155.0:
+			failed_captures += 1
+			push_error("[Visual QA] Compact menu reserves insufficient hero area")
 	var nav_buttons: Array = menu.get("nav_buttons")
 	if nav_buttons.size() != 4:
 		failed_captures += 1
