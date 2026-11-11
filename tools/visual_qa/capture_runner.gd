@@ -181,6 +181,18 @@ func _capture_victory_overlay() -> void:
 	if String(main_inst.get("run_result_state")) != "victory":
 		failed_captures += 1
 		push_error("[Visual QA] Victory state did not activate")
+	var results_frame := main_inst.get_node_or_null("HUD/HUDRoot/WinPanel/VictoryFrame") as Panel
+	var results_title := main_inst.get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
+	var results_text := main_inst.get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/SummaryLabel") as Label
+	if not is_instance_valid(results_frame) or not results_frame.visible or results_frame.size.x < 560.0:
+		failed_captures += 1
+		push_error("[Visual QA] Victory result card is missing or too narrow")
+	if not is_instance_valid(results_title) or results_title.get_theme_font_size("font_size") < 30:
+		failed_captures += 1
+		push_error("[Visual QA] Victory title is not readable at 1280x720")
+	if not is_instance_valid(results_text) or results_text.get_theme_font_size("font_size") < 18:
+		failed_captures += 1
+		push_error("[Visual QA] Victory stats are not readable at 1280x720")
 	for frame in range(12):
 		await get_tree().process_frame
 	await _save_viewport_png(sub, "victory_overlay_1280x720_actual")

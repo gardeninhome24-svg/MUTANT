@@ -84,7 +84,11 @@ jobs:
           test -s visual_qa/captures/defeat_overlay_1280x720_actual.png
           test -s visual_qa/captures/victory_overlay_1280x720_actual.png
 
-      - name: Build visual comparisons for all available approved references
+      # The checked-in victory "reference" is an art-sheet collage (four
+      # classes, mutants, VFX), not an approved victory screenshot.
+      # Keep the live victory capture and structural checks, but do not report
+      # a mathematically meaningless SSIM against that collage.
+      - name: Build comparable approved visual reports (victory art sheet excluded)
         shell: bash
         run: |
           set -euo pipefail
@@ -92,8 +96,7 @@ jobs:
           python3 tools/visual_qa/compare_images.py --root . \
             --scenario hud_mobile_9x16 \
             --scenario hud_combat_16x9 \
-            --scenario defeat_overlay_16x9 \
-            --scenario victory_overlay_16x9
+            --scenario defeat_overlay_16x9
 
       - name: Compare actual HUD with approved reference — strict 97% gate
         shell: bash

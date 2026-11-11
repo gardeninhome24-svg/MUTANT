@@ -154,6 +154,7 @@ func _ready() -> void:
 	_build_layered_arena(current_stage_num)
 	_setup_extended_hud_and_profile()
 	_style_combat_hud()
+	_style_victory_overlay()
 
 	if not StageDirector.orientation_changed.is_connected(_on_orientation_changed):
 		StageDirector.orientation_changed.connect(_on_orientation_changed)
@@ -319,10 +320,34 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 	if is_instance_valid(up_title):
 		up_title.add_theme_font_size_override("font_size", (21 if compact else 30) if portrait else 29)
 		up_title.text = "WYBIERZ ULEPSZENIE" if portrait else "AWANS! WYBIERZ MODUŁ BOJOWY"
+	# The legacy result screen used unbounded text over the full arena.
+	# Keep a real centered gold-trimmed report with its summary and real actions.
+	var vp_height := get_viewport_rect().size.y
+	var victory_width := minf(800.0, maxf(300.0, view_width - 28.0))
+	var victory_height := minf(640.0 if portrait else 530.0, maxf(400.0, vp_height - 28.0))
+	var victory_frame := get_node_or_null("HUD/HUDRoot/WinPanel/VictoryFrame") as Panel
+	if is_instance_valid(victory_frame):
+		victory_frame.set_anchors_preset(Control.PRESET_CENTER)
+		victory_frame.offset_left = -victory_width * 0.5
+		victory_frame.offset_right = victory_width * 0.5
+		victory_frame.offset_top = -victory_height * 0.5
+		victory_frame.offset_bottom = victory_height * 0.5
+	var victory_vbox := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox") as VBoxContainer
+	if is_instance_valid(victory_vbox):
+		victory_vbox.custom_minimum_size.x = victory_width - (38.0 if compact else 70.0)
+		victory_vbox.add_theme_constant_override("separation", 18 if portrait else 24)
 	var win_title := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(win_title):
-		win_title.add_theme_font_size_override("font_size", 20 if portrait else 32)
-		win_title.text = "ETAP UKOŃCZONY" if portrait else "ETAP UKOŃCZONY! ODBLOKOWANO KOLEJNY ETAP!"
+		win_title.add_theme_font_size_override("font_size", (23 if compact else 31) if portrait else 36)
+		win_title.text = "ETAP UKOŃCZONY"
+	var summary := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/SummaryLabel") as Label
+	if is_instance_valid(summary):
+		summary.custom_minimum_size.x = victory_width - (42.0 if compact else 80.0)
+		summary.add_theme_font_size_override("font_size", (14 if compact else 18) if portrait else 18)
+	for btn_path in ["HUD/HUDRoot/WinPanel/CenterContainer/VBox/NextStageBtn", "HUD/HUDRoot/WinPanel/CenterContainer/VBox/RestartBtn"]:
+		var victory_button := get_node_or_null(btn_path) as Button
+		if is_instance_valid(victory_button):
+			victory_button.custom_minimum_size = Vector2(minf(410.0, victory_width - 64.0), 54.0 if compact else 62.0)
 	var death_title := get_node_or_null("HUD/HUDRoot/DeathPanel/CenterContainer/VBox/Title") as Label
 	if is_instance_valid(death_title):
 		death_title.add_theme_font_size_override("font_size", 20 if portrait else 32)
@@ -490,6 +515,49 @@ func _apply_responsive_hud_layout(view_width_override: float = -1.0) -> void:
 		wave_frame.offset_top = wave_progress_box.offset_top - 5.0
 		wave_frame.offset_right = wave_progress_box.offset_right + 6.0
 		wave_frame.offset_bottom = wave_progress_box.offset_bottom + 5.0
+
+
+func _style_victory_overlay() -> void:
+	# Match the approved cyan/steel UI with a single gold victory card.
+	# All data and actions remain real Godot controls, not baked-in artwork.
+	if not is_instance_valid(win_panel):
+		return
+	win_panel.color = Color(0.014, 0.025, 0.038, 0.84)
+	var frame := win_panel.get_node_or_null("VictoryFrame") as Panel
+	if not is_instance_valid(frame):
+		frame = Panel.new()
+		frame.name = "VictoryFrame"
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		win_panel.add_child(frame)
+		win_panel.move_child(frame, 0)
+	var skin := StyleBoxFlat.new()
+	skin.bg_color = Color(0.017, 0.046, 0.067, 0.985)
+	skin.border_color = Color(0.93, 0.74, 0.25, 0.97)
+	skin.set_border_width_all(3)
+	skin.set_corner_radius_all(13)
+	skin.shadow_color = Color(0.0, 0.0, 0.0, 0.77)
+	skin.shadow_size = 24
+	frame.add_theme_stylebox_override("panel", skin)
+	var title_label := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/Title") as Label
+	if is_instance_valid(title_label):
+		title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		title_label.add_theme_color_override("font_color", Color(1.0, 0.83, 0.32))
+		title_label.add_theme_color_override("font_outline_color", Color(0.08, 0.035, 0.01))
+		title_label.add_theme_constant_override("outline_size", 4)
+	if is_instance_valid(win_summary_label):
+		win_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		win_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		win_summary_label.add_theme_color_override("font_color", Color(0.91, 0.96, 0.99))
+		win_summary_label.add_theme_color_override("font_outline_color", Color(0.0, 0.02, 0.04))
+		win_summary_label.add_theme_constant_override("outline_size", 2)
+	var next_btn := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/NextStageBtn") as Button
+	var retry_btn := get_node_or_null("HUD/HUDRoot/WinPanel/CenterContainer/VBox/RestartBtn") as Button
+	if is_instance_valid(next_btn):
+		SurvivorVisualSystem.decorate_metal_button(next_btn, SurvivorVisualSystem.GOLD, 62.0)
+		next_btn.add_theme_font_size_override("font_size", 17)
+	if is_instance_valid(retry_btn):
+		SurvivorVisualSystem.decorate_metal_button(retry_btn, SurvivorVisualSystem.CYAN, 56.0)
+		retry_btn.add_theme_font_size_override("font_size", 16)
 
 
 func _style_combat_hud() -> void:
