@@ -63,6 +63,22 @@ jobs:
           test -s visual_qa/captures/hud_mobile_720x1280_actual.png
           test -s visual_qa/captures/upgrade_mobile_720x1280_actual.png
 
+      - name: Compare actual HUD with approved reference — strict 97% gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --break-system-packages --quiet numpy pillow scikit-image
+          python3 tools/visual_qa/compare_images.py --root . --scenario hud_mobile_9x16 --strict
+
+      - name: Upload visual parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MutantSurvivor-VisualParity-${{ github.run_number }}
+          path: visual_qa/diffs/
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: Upload real screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
