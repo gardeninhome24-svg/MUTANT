@@ -38,11 +38,16 @@ func _draw() -> void:
 	draw_circle(center, 6.0, Color(0.04, 0.20, 0.23))
 	draw_circle(center, 4.0, Color(0.21, 1.0, 0.65))
 	for actor in get_tree().get_nodes_in_group("enemies"):
+		# Avoid loading Player/MutantEnemy classes while compiling this UI
+		# component; clean Godot --script runs load the StageDirector autoload
+		# after some typed class dependencies, causing circular parse errors.
+		if not (actor is Node2D):
+			continue
 		var enemy := actor as Node2D
-		if not is_instance_valid(enemy) or enemy is Player:
+		if not is_instance_valid(enemy):
 			continue
 		var point: Vector2 = _radar_pos(enemy.global_position)
 		if not full.grow(-5.0).has_point(point):
 			continue
-		var elite: bool = enemy is MutantEnemy and String(enemy.get("tier")) in ["boss", "miniboss"]
+		var elite: bool = String(enemy.get("tier")) in ["boss", "miniboss"]
 		draw_circle(point, 4.4 if elite else 2.6, Color(1.0, 0.70, 0.17) if elite else Color(1.0, 0.24, 0.26))
